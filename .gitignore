@@ -9,6 +9,7 @@ scripts/plugins/
 scripts/features/
 doom/flycheck_config.el
 doom/flycheck_init.el
+doom/custom.el
 result
 qutebrowser/bookmarks/
 qutebrowser/greasemonkey/
@@ -19,3 +20,4 @@ htop/
 mail/
 ranger/
 tmux/
+git/

@@ -2,6 +2,6 @@
 #+DATE: `(format-time-string "%Y-%m-%d")`
 #+AUTHOR: Ben O.
 * ${2: Points}
-- ${3: what is it}
+- ${3: }
 * Summary
 $0

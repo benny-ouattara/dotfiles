@@ -8,8 +8,6 @@
   :group 'doom-themes)
 
 (def-doom-theme bluloco-light
-  "A light theme inspired by Bluloco"
-
   ;; name        default   256       16
   ((bg         '("#f0f0f0" nil       nil            ))
    (bg-alt     '("#fafafa" nil       nil            ))
@@ -153,14 +151,7 @@
    (lsp-ui-doc-background      :background base0)
    (lsp-face-highlight-read    :background (doom-blend red bg 0.3))
    (lsp-face-highlight-textual :inherit 'lsp-face-highlight-read)
-   (lsp-face-highlight-write   :inherit 'lsp-face-highlight-read)
-
-
-   )
-
-  ;; --- extra variables ---------------------
-  ;;()
-  )
+   (lsp-face-highlight-write   :inherit 'lsp-face-highlight-read)))
 
 (after! org
   (setq
@@ -174,8 +165,7 @@
      ("CANCELLED" :foreground "#ff6480" :weight normal :underline t))
    org-priority-faces '((65 :foreground "#e45649")
                         (66 :foreground "#da8548")
-                        (67 :foreground "#0098dd"))
-   ))
+                        (67 :foreground "#0098dd"))))
 
 ;; cursor
 (setq

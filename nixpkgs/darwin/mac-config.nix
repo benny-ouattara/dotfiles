@@ -12,6 +12,8 @@ in
 
     environment.systemPackages = packages.all;
 
+    # Note that the homebrew pkg overshadows system packages probably a bug in the mdule
+    # Comment it out in order to have system packages be applied
     homebrew = {
         enable = true;
         cleanup = "zap";
