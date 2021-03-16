@@ -82,7 +82,6 @@ in rec {
 
     extraConfig = {
       github.user           = "benny-ouattara";
-      credential.helper     = "${pkgs.pass-git-helper}/bin/pass-git-helper";
 
       color = {
         status      = "auto";

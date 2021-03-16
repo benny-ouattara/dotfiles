@@ -20,3 +20,5 @@
 (package! rainbow-mode)
 (package! mvn)
 (package! skeletor)
+(package! s)
+(package! f)
