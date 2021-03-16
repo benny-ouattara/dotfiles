@@ -24,3 +24,9 @@ switch home
 #+begin_src sh
 switch darwin
 #+end_src
+* Linking
+** link .config
+#+begin_src sh
+ln -s ~/Code/dotfiles ~/.config
+cp ~/.zsh_history ~/.config/zsh/history
+#+end_src
