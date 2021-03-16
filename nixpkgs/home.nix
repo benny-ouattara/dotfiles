@@ -144,7 +144,6 @@ in rec {
       ls     = "${pkgs.coreutils}/bin/ls --color=auto -alhrt";
       l     = "${pkgs.coreutils}/bin/ls --color=auto -alhrt";
       rX     = "${pkgs.coreutils}/bin/chmod -R ugo+rX";
-      # switch = "${pkgs.nix-scripts}/bin/u ${localconfig.hostname} switch";
       gr     = "${pkgs.git}/bin/git rm -r --cached";
       proc   = "${pkgs.darwin.ps}/bin/ps axwwww | ${pkgs.gnugrep}/bin/grep -i";
       nstat  = "${pkgs.darwin.network_cmds}/bin/netstat -nr -f inet"
