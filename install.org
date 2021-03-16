@@ -1,0 +1,26 @@
+#+TITLE: Install
+#+AUTHOR: Ben O.
+* Dependencies
+** [[https://nixos.org/download.html][install nix]]
+** [[https://github.com/LnL7/nix-darwin][install nix-darwin]]
+** [[https://github.com/nix-community/home-manager][install home-manager]]
+* Building the environment
+** First run
+#+begin_src sh
+make switch
+#+end_src
+** Subsequent build
+#+NAME: switch-home-and-darwin
+#+begin_src sh
+switch
+#+end_src
+
+#+NAME: switch-home
+#+begin_src sh
+switch home
+#+end_src
+
+#+NAME: switch-darwin
+#+begin_src sh
+switch darwin
+#+end_src
