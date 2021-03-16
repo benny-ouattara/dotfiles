@@ -55,7 +55,7 @@ in rec {
 
   programs.git = {
     enable = true;
-    userName  = "Ben O.";
+    #userName  = "Ben O.";
     # userEmail = "benny.ouattara@gmail.com";
 
     aliases = {
@@ -82,6 +82,7 @@ in rec {
 
     extraConfig = {
       github.user           = "benny-ouattara";
+      gitlab.user = "benny.ouattara";
       credential.helper     = "${pkgs.pass-git-helper}/bin/pass-git-helper";
 
       color = {
@@ -98,9 +99,6 @@ in rec {
 
       "url \"git@github.com:\"".insteadOf
       = "https://github.com/";
-
-      "url \"git://\"".insteadOf
-      = "https://";
     };
 
     ignores = [
