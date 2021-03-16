@@ -37,8 +37,6 @@ in rec {
           capath=${pkgs.cacert}/etc/ssl/certs/
           cacert=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
         '';
-
-    ".dl".source = "${home-directory}/Downloads";
   };
 
   programs.direnv = {
@@ -51,7 +49,7 @@ in rec {
     bashrcExtra = lib.mkBefore ''
         source /etc/bashrc
 
-        if [ -e /Users/bouattara/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/bouattara/.nix-profile/etc/profile.d/nix.sh; fi # required by nix to setup various paths
+        if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile.d/nix.sh; fi # required by nix to setup various paths
       '';
   };
 
@@ -190,10 +188,11 @@ in rec {
     userKnownHostsFile = "${xdg.configHome}/ssh/known_hosts";
 
     extraConfig = ''
-        Host default
-          #StrictHostKeyChecking no
-          # PasswordAuthentication no
-          # LogLevel FATAL
+        user zangao
+        Host *
+          AddKeysToAgent yes
+          StrictHostKeyChecking no
+          IdentityFile ~/.ssh/id_rsa
       '';
 
     matchBlocks = {
