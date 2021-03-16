@@ -1,0 +1,630 @@
+#+TITLE: Config
+#+PROPERTY: header-args :tangle ./config.el :results silent :lexical t
+* Setup
+We start by setting up tangling on this config file into config.el
+config.org will be changed and config.el will behave like a lock file, tracked
+in version control but only a mirror of config.org
+#+begin_src emacs-lisp
+(require 'f)
+(defun beno--org-babel-tangle-config ()
+  (when (string-equal (f-filename (buffer-file-name))
+                      "config.org")
+    (org-babel-tangle)))
+
+(defun beno--tangle-on-save ()
+  (add-hook 'after-save-hook #'beno--org-babel-tangle-config))
+
+(add-hook 'org-mode-hook #'beno--tangle-on-save)
+#+end_src
+* Variables
+Before setting a new variable, make sure that it is not already set. As the
+list of variable grows, it becomes harder to avoid repetition leading to
+overwrite conflicts
+#+begin_src emacs-lisp
+(require 's)
+(setq doom-font (font-spec :family "monaco" :size 23 :weight 'normal)
+      doom-big-font (font-spec :family "monaco" :size 37)
+      doom-variable-pitch-font (font-spec :family "Avenir Next" :size 18)
+      mac-command-modifier 'meta
+      ns-command-modifier 'meta
+      rfc-mode-directory (expand-file-name "~/rfc/")
+      lsp-java-format-settings-url "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml"
+      mu-root (s-chop-suffixes '("/mu" "/bin") (file-truename  (executable-find "mu")))
+      mu4e-path (concat mu-root "/share/emacs/site-lisp/mu4e")
+      tdlib-path "/nix/store/y27x4zzs8wm8qwskbp8y5g3gx1qkjg3m-tdlib-unstable-2020-10-25/include/td/telegram"
+      user-full-name "Ben O"
+      user-mail-address "benny.ouattara@gmail.com"
+      confirm-kill-emacs nil
+      project-dir "~/Code"
+      project-prefix "kata"
+      skeletor-project-directory project-dir
+      skeletor-user-directory (concat doom-private-dir "templates")
+      skeletor-completing-read-function 'ivy-read
+      org-directory "~/Sync/org"
+      org-spotify-directory (concat org-directory "/spotify")
+      org-mail-directory (concat org-directory "/mail.org")
+      home-dir (getenv "HOME")
+      display-line-numbers-type 'relative
+      eshell-history-size nil
+      ;; NOTE: overwrites org export options
+      org-mime-export-options '(:section-numbers nil
+                                :with-author nil
+                                :with-toc nil)
+      org-agenda-skip-scheduled-if-done t
+      projectile-project-search-path '("~/Code/")
+      org-ellipsis " ▾ "
+      org-hide-emphasis-markers t
+      org-tags-column -80
+      org-agenda-files (ignore-errors (directory-files org-directory t "\\.org$" t))
+      org-log-done 'time
+      org-pomodoro-length 45
+      org-pomodoro-short-break-length 15
+      org-refile-targets (quote ((nil :maxlevel . 3)))
+      +doom-dashboard-banner-file (expand-file-name "splash.png" doom-private-dir)
+      tramp-histfile-override "/dev/null"
+      +org-capture-todo-file "tasks.org"
+      org-super-agenda-groups '((:name "Today"
+                                 :time-grid t
+                                 :scheduled today)
+                                (:name "Due today"
+                                 :deadline today)
+                                (:name "Important"
+                                 :priority "A")
+                                (:name "Overdue"
+                                 :deadline past)
+                                (:name "Due soon"
+                                 :deadline future)
+                                (:name "Big Outcomes"
+                                 :tag "bo")))
+#+end_src
+* Appearance
+** General appearance modes
+These are general modes that affect the appearance and the way symbols and
+colors are presented
+#+begin_src emacs-lisp
+(menu-bar-mode t)
+(global-prettify-symbols-mode)
+(rainbow-mode)
+#+end_src
+** Auto theme management
+Set auto theme based on system appearance setting with default themes
+#+begin_src emacs-lisp
+(add-to-list 'default-frame-alist
+             '(ns-transparent-titlebar . t))
+(add-to-list 'default-frame-alist
+             '(ns-appearance . dark))
+
+(defun beno--auto-theme (appearance)
+  "Load theme, taking current system APPEARANCE into consideration."
+  (mapc #'disable-theme custom-enabled-themes)
+  (pcase appearance
+    ('light (load-theme 'doom-acario-light t))
+    ('dark (load-theme 'doom-dracula t))))
+
+(add-hook 'ns-system-appearance-change-functions #'beno--auto-theme)
+#+end_src
+** TTY frames theme management
+Manages look and feel on tty frames i.e emacs in the terminal
+#+begin_src emacs-lisp
+(when (not (display-graphic-p))
+  (progn
+    (menu-bar-mode -1)
+    (tool-bar-mode -1)
+    (mapc #'disable-theme custom-enabled-themes)
+    (setq doom-theme 'doom-acario-light
+          evil-emacs-state-cursor '("red" box)
+          evil-normal-state-cursor '("black" box)
+          evil-visual-state-cursor '("black" box)
+          evil-insert-state-cursor '("red" bar)
+          evil-motion-state-cursor '("gray" box))))
+#+end_src
+* Org mode
+A ton of org mode config
+#+begin_src emacs-lisp
+;; wrap lines around in org buffers
+(add-hook 'org-mode-hook #'auto-fill-mode)
+
+(global-auto-revert-mode t)
+
+(defun +org*update-cookies ()
+  (when (and buffer-file-name (file-exists-p buffer-file-name))
+    (let (org-hierarchical-todo-statistics)
+      (org-update-parent-todo-statistics))))
+
+(advice-add #'+org|update-cookies :override #'+org*update-cookies)
+
+(add-hook! 'org-mode-hook (company-mode -1))
+(add-hook! 'org-mode-hook (org-bullets-mode 1))
+(add-hook! 'org-capture-mode-hook (company-mode -1))
+
+(after! org
+  (set-face-attribute 'org-link nil
+                      :weight 'normal
+                      :background nil)
+  (set-face-attribute 'org-code nil
+                      :foreground "#a9a1e1"
+                      :background nil)
+  (set-face-attribute 'org-date nil
+                      :foreground "#5B6268"
+                      :background nil)
+  (set-face-attribute 'org-level-1 nil
+                      :foreground "Steelblue3"
+                      :background nil
+                      :height 1.2
+                      :weight 'normal)
+  (set-face-attribute 'org-level-2 nil
+                      :foreground "RoyalBlue"
+                      :background nil
+                      :height 1.0
+                      :weight 'normal)
+  (set-face-attribute 'org-level-3 nil
+                      :foreground "DeepSkyBlue"
+                      :background nil
+                      :height 1.0
+                      :weight 'normal)
+  (set-face-attribute 'org-level-4 nil
+                      :foreground "DodgerBlue3"
+                      :background nil
+                      :height 1.0
+                      :weight 'normal)
+  (set-face-attribute 'org-level-5 nil
+                      :weight 'normal)
+  (set-face-attribute 'org-level-6 nil
+                      :weight 'normal)
+  (set-face-attribute 'org-document-title nil
+                      :foreground "SlateGray4"
+                      :background nil
+                      :height 1.75
+                      :weight 'bold)
+
+  (pushnew! org-capture-templates
+            '("m" "Email workflow")
+            '("mf" "Follow up" entry (file+olp org-mail-directory "Follow up")
+              "* TODO follow up with %:fromname on %a\n\n%i"
+              :immediate-finish t)
+            '("mr" "Read later" entry (file+olp org-mail-directory "Read later")
+              "* TODO read %:subject\n%a\n\n%i"
+              :immediate-finish t)))
+
+(use-package! org-fancy-priorities
+  :hook
+  (org-mode . org-fancy-priorities-mode)
+  :config
+  (setq org-fancy-priorities-list '("⚡" "⬆" "⬇" "☕")))
+
+(set-popup-rule! "^\\*Org Agenda" :side 'bottom :size 0.90 :select t :ttl nil)
+(set-popup-rule! "^CAPTURE.*\\.org$" :side 'bottom :size 0.90 :select t :ttl nil)
+#+end_src
+* Tramp
+Tramp history file management
+#+begin_src emacs-lisp
+(when (not (file-exists-p (concat doom-cache-dir "tramp-histfile")))
+  (make-empty-file (concat doom-cache-dir "tramp-histfile")))
+#+end_src
+* Code indentation
+Indentation of =2= for most programming languages
+#+begin_src emacs-lisp
+(defun beno--indent (n)
+  (interactive "p")
+  ;; applies to java, c and c++
+  (setq c-basic-offset n)
+  (setq coffee-tab-width n)
+  (setq javascript-indent-level n)
+  (setq typescript-indent-level n)
+  (setq js-indent-level n)
+  (setq js2-basic-offset n)
+  (setq web-mode-markup-indent-offset n)
+  (setq web-mode-css-indent-offset n)
+  (setq web-mode-code-indent-offset n)
+  (setq css-indent-offset n))
+
+(beno--indent 2)
+#+end_src
+* Keybindings
+** personal workspace keybindings
+Most common keybindings I use to be more productive. The idea is to capture most
+repetitive tasks under succinct keybindings.
+#+begin_src emacs-lisp
+(defun work-window-split ()
+  (interactive)
+  "Splits frame in three. With eshell on the bottom right
+and org files on the top right. Keeps current window on the left."
+  (progn  (dired-other-window org-spotify-directory)
+          (+eshell/split-below)
+          (+evil/window-move-up)))
+
+(map! :leader
+      :desc "close current window"
+      "0" #'evil-quit)
+
+(map! :leader
+      :desc "close other window"
+      "9" #'delete-other-windows)
+
+(map! :leader
+      :desc "work window split"
+      ">" #'work-window-split)
+
+(map! :leader
+      :desc "left work window"
+      "1" #'evil-window-top-left)
+
+(map! :leader
+      :desc "right bottom work window"
+      "2" #'evil-window-bottom-right)
+
+(map! :leader
+      :desc "open file other window"
+      "V" #'projectile-find-file-other-window)
+
+(map! :leader
+      :desc "open buffer other window"
+      "v" #'switch-to-buffer-other-window)
+
+(map! "C-s" #'swiper-isearch)
+
+(map! :leader
+      :desc "delete buffer"
+      "d" #'kill-buffer)
+
+(map! :leader
+      :desc "hide in level"
+      "l" #'hs-hide-level)
+
+(map! :leader
+      :desc "show block"
+      "L" #'hs-show-block)
+
+(map! :leader
+      :desc "find file at point"
+      "/" #'find-file-at-point)
+
+(map! :leader
+      :desc "next workspace"
+      "]" #'+workspace:switch-next)
+
+(map! :leader
+      :desc "previous workspace"
+      "[" #'+workspace:switch-previous)
+#+end_src
+* Java
+I use it at work so I might as well tune it
+** Eglot
+Eglot is a minimal alternative to lsp-mode. However I haven't been able to
+configure it to navigate to classpath dependencies. So I am not using it
+for now. It will be a solid candidate when that is figured out since it doesn't
+hang emacs as often as lsp-mode. Also eglot isn't java friendly. Integrating it
+with java requires a lot of work done below.
+#+begin_src emacs-lisp
+;; setup lsp server for eglot
+;; eglot doesn't recognize ~ for user home directory
+;; (setq lsp-jar (concat home-dir  "/.emacs.d/.cache/lsp/eclipse.jdt.ls/plugins/org.eclipse.equinox.launcher_1.6.0.v20200915-1508.jar"))
+
+;; (defun set-lsp-jar ()
+;;   (setenv "CLASSPATH" lsp-jar))
+
+;; (add-hook 'java-mode-hook #'set-lsp-jar)
+#+end_src
+** Lsp-mode
+Lsp-mode is the alternative to eglot that I am using now. It constantly hangs
+emacs which is problematic but I haven't found a solution around it yet.
+#+begin_src emacs-lisp
+;; breadcrumb is a nice feature to know about, not using it now
+;; (after! lsp-mode
+;;   (lsp-headerline-breadcrumb-mode))
+
+;; makes lsp-mode a little more bearable: hide all the UI noise
+(setq lsp-ui-sideline-show-code-actions nil)
+#+end_src
+** Switch JVM
+Integrated solution to switching JVM, alternative to jenv. Sets CLASSPATH in
+current session.
+#+begin_src emacs-lisp
+(setq java-dir "/Library/Java/JavaVirtualMachines")
+(setq java-home-suffix "/Contents/Home")
+
+(defun beno--switch-jvm (chosen-jvm)
+  (interactive (list
+                (ivy-completing-read "Choose JVM:"
+                                     (-filter
+                                      (lambda (filename) (and (not (equal filename "."))
+                                                         (not (equal filename ".."))))
+                                      (directory-files java-dir)))))
+  (let ((old-env (getenv "JAVA_HOME"))
+        (home-path (concat java-dir "/" chosen-jvm java-home-suffix)))
+    (setenv "JAVA_HOME" home-path)))
+#+end_src
+* Project lifecycle
+I have started experimenting with APIs of different languages. I need to
+be able to create and delete projects in those languages on the fly.
+** foundation
+Project helper functions
+#+begin_src emacs-lisp
+;; TODO: refactor project creation logic in a =macro=
+;; Give me a random name
+(defun haikunate (token-range &optional prefix)
+  "Generate random descriptive name.
+A random adjective is chosen followed by a random nound and a random number."
+  (let* ((adjectives '(autumn hidden bitter misty silent empty dry dark summer
+                              icy delicate quiet white cool spring winter patient
+                              twilight dawn crimson wispy weathered blue billowing
+                              broken cold damp falling frosty green long late lingering
+                              bold little morning muddy old red rough still small
+                              sparkling throbbing shy wandering withered wild black
+                              young holy solitary fragrant aged snowy proud floral
+                              restless divine polished ancient purple lively nameless))
+         (nouns '(waterfall river breeze moon rain wind sea morning
+                            snow lake sunset pine shadow leaf dawn glitter forest
+                            hill cloud meadow sun glade bird brook butterfly
+                            bush dew dust field fire flower firefly feather grass
+                            haze mountain night pond darkness snowflake silence
+                            sound sky shape surf thunder violet water wildflower
+                            wave water resonance sun wood dream cherry tree fog
+                            frost voice paper frog smoke star))
+         (adjective (seq-random-elt adjectives))
+         (noun (seq-random-elt nouns))
+         (suffix (cl-random token-range)))
+    (if prefix
+        (format "%s-%s-%s-%d" prefix adjective noun suffix)
+      (format "%s-%s-%d" adjective noun suffix))))
+
+(defun haikens (limit token-range prefix)
+  "Generate LIMIT random names."
+  (-map (lambda (n) (haikunate token-range prefix)) (number-sequence 1 limit)))
+#+end_src
+** java projects
+Create java/mvn project
+#+begin_src emacs-lisp
+(defun create-java-project (artifact-id)
+  (interactive
+   (list
+    (ivy-read "Project name: "
+              (haikens 4 100 project-prefix))))
+  (let* ((default-directory project-dir)
+         (arch-version "1.4")
+         (group-id "com.example")
+         (app-version "0.1")
+         (app-dir (concat project-dir "/" artifact-id))
+         (app-projectile-path (concat app-dir "/.projectile"))
+         (cmd "mvn")
+         (args (list "archetype:generate"
+                     "-DarchetypeGroupId=org.apache.maven.archetypes"
+                     "-DarchetypeArtifactId=maven-archetype-simple"
+                     (format "-DarchetypeVersion=%s" arch-version)
+                     (format "-DgroupId=%s" group-id)
+                     (format "-DartifactId=%s" artifact-id)
+                     (format "-Dversion=%s" app-version))))
+    (if (executable-find "mvn")
+        (progn (apply #'doom-call-process cmd args)
+               (f-touch app-projectile-path)
+               (projectile-discover-projects-in-search-path)
+               (when (fboundp 'lsp-workspace-folders-add)
+                 (lsp-workspace-folders-add app-dir))
+               (message "created project %s" artifact-id))
+      (user-error "executable %s not found" cmd))))
+#+end_src
+** scala projects
+create scala/sbt project
+#+begin_src emacs-lisp
+(defun create-scala-project (name)
+  (interactive
+   (list
+    (ivy-read "Project name: "
+              (haikens 4 100 project-prefix))))
+  (let* ((default-directory project-dir)
+         (app-dir (concat project-dir "/" name))
+         (app-projectile-path (concat app-dir "/.projectile"))
+         (cmd "sbt")
+         (args (list "new"
+                     "scala/scala-seed.g8"
+                     (format "--name=%s" name))))
+    (if (executable-find cmd)
+        (progn (apply #'doom-call-process cmd args)
+               (f-touch app-projectile-path)
+               (projectile-discover-projects-in-search-path)
+               (message "created project %s" name))
+      (user-error "executable %s not found" cmd))))
+#+end_src
+** clojure projects
+Create clojure/lein project
+#+begin_src emacs-lisp
+(defun create-clojure-project (name)
+  (interactive
+   (list
+    (ivy-read "Project name: "
+              (haikens 4 100 project-prefix))))
+  (let* ((default-directory project-dir)
+         (app-dir (concat project-dir "/" name))
+         (app-projectile-path (concat app-dir "/.projectile"))
+         (cmd "lein")
+         (args (list "new"
+                     "app"
+                     name)))
+    (if (executable-find cmd)
+        (progn (apply #'doom-call-process cmd args)
+               (f-touch app-projectile-path)
+               (projectile-discover-projects-in-search-path)
+               (message "created project %s" name))
+      (user-error "executable %s not found" cmd))))
+#+end_src
+** project deletion
+Delete =haiken= projects
+#+begin_src emacs-lisp
+(defun delete-project (project-path)
+  "Delete mvn project.
+Delete mvn project at PROJECT-PATH by removing project from lsp workspaces,
+removing project from projectile and deleting project folders.
+Beware using this command given that it's destructive and non reversible."
+  (interactive
+   (list
+    (ivy-read "Project name: "
+              (if counsel-projectile-remove-current-project
+                  (projectile-relevant-known-projects)
+                projectile-known-projects))))
+  (let* ((project-name (car (last (s-split "/" (string-trim project-path "/" "/"))))))
+    (progn (when (fboundp 'lsp-workspace-folders-remove)
+             (lsp-workspace-folders-remove project-path))
+           (when (+workspace-exists-p project-name)
+             (+workspace-delete project-name))
+           (projectile-remove-known-project (concat (string-trim-right project-path "/") "/"))
+           (f-delete project-path t)
+           (message "deleted project %s" project-path))))
+
+(defun projects-cleanup ()
+  "Delete all test projects."
+  (interactive)
+  (let* ((projects (f-directories project-dir))
+         (matches  (-filter (lambda (project) (s-contains? project-prefix project)) projects)))
+    (seq-do #'delete-project matches)))
+#+end_src
+** project lifecycle keybindings
+Bring project lifecycle management to your fingertips
+#+begin_src emacs-lisp
+(map! :leader
+      (:prefix-map ("o" . "open")
+       (:prefix ("s" . "spotify")
+        (:prefix ("p" . "projects")
+         :desc "create java project" "j" #'create-java-project
+         :desc "create scala project" "s" #'create-scala-project
+         :desc "create clojure project" "c" #'create-clojure-project
+         :desc "delete project" "d" #'delete-project
+         :desc "delete all test projects" "D" #'projects-cleanup))))
+#+end_src
+* Email
+I started managing my email with mu4e
+** accounts
+#+begin_src emacs-lisp
+(add-to-list 'load-path mu4e-path)
+(set-email-account! "Spotify"
+  '((mu4e-sent-folder       . "/spotify/sent")
+    (mu4e-drafts-folder     . "/spotify/drafts")
+    (mu4e-trash-folder      . "/spotify/trash")
+    (mu4e-refile-folder     . "/spotify/All Mail")
+    (smtpmail-smtp-user     . "zangao@spotify")
+    (smtpmail-smtp-server   . "smtp.gmail.com")
+    (smtpmail-smtp-service  . 465)
+    (smtpmail-stream-type   . ssl)
+    (user-mail-address      . "zangao@spotify.com")    ;; only needed for mu < 1.4
+    )
+  t)
+
+(set-email-account! "Protonmail"
+  '((mu4e-sent-folder       . "/protonmail/sent")
+    (mu4e-drafts-folder     . "/protonmail/drafts")
+    (mu4e-trash-folder      . "/protonmail/trash")
+    (mu4e-refile-folder     . "/protonmail/All Mail")
+    (smtpmail-smtp-user     . "benny.ouattara@protonmail.com")
+    (smtpmail-smtp-server   . "127.0.0.1")
+    (smtpmail-smtp-service  . 1025)
+    (smtpmail-stream-type   . starttls)
+    (user-mail-address      . "benny.ouattara@protonmail.com")    ;; only needed for mu < 1.4
+    )
+  t)
+
+(set-email-account! "Gmail"
+  '((mu4e-sent-folder       . "/gmail/sent")
+    (mu4e-drafts-folder     . "/gmail/drafts")
+    (mu4e-trash-folder      . "/gmail/trash")
+    (mu4e-refile-folder     . "/gmail/All Mail")
+    (smtpmail-smtp-user     . "benny.ouattara@gmail.com")
+    (smtpmail-smtp-server   . "smtp.gmail.com")
+    (smtpmail-smtp-service  . 465)
+    (smtpmail-stream-type   . ssl)
+    (user-mail-address      . "benny.ouattara@gmail.com") ;; only needed for mu < 1.4
+    )
+  t)
+
+;; this won't work temporarily for protonmail as certificates are being moved to /etc/ssl/certs
+(with-eval-after-load 'gnutls
+  (add-to-list 'gnutls-trustfiles "~/.config/certificates/protonmail.crt"))
+
+;; (add-hook 'message-send-hook 'org-mime-confirm-when-no-multipart)
+#+end_src
+** Bookmarks
+#+begin_src emacs-lisp
+(setq mu4e-bookmarks
+      '((:name "Unread messages" :query "flag:unread AND NOT flag:trashed" :key 117)
+        (:name "Today's messages" :query "date:today..now" :key 116)
+        (:name "Last 7 days" :query "date:7d..now" :hide-unread t :key 119)
+        (:name "Messages with images" :query "mime:image/*" :key 112)
+        (:name "Fragomen" :query "fragomen" :hide-unread t :key 102)))
+#+end_src
+** mail management
+Quickly take actions such as read later or follow up on emails
+#+begin_src emacs-lisp
+(defun beno--capture-mail-follow-up (msg)
+  (interactive)
+  (call-interactively 'org-store-link)
+  (org-capture nil "mf"))
+
+(defun beno--capture-mail-read-later (msg)
+  (interactive)
+  (call-interactively 'org-store-link)
+  (org-capture nil "mr"))
+
+;; store query link is convenient for capturing search query for use in org mail
+(defun beno--store-mu4e-query-link ()
+  (interactive)
+  (let ((mu4e-org-link-query-in-headers-mode t))
+    (call-interactively 'org-store-link)))
+
+(after! mu4e
+  (add-to-list 'mu4e-headers-actions '("follow up" . beno--capture-mail-follow-up) t)
+  (add-to-list 'mu4e-view-actions '("follow up" . beno--capture-mail-follow-up) t)
+  (add-to-list 'mu4e-headers-actions '("read later" . beno--capture-mail-read-later) t)
+  (add-to-list 'mu4e-view-actions '("read later" . beno--capture-mail-read-later) t))
+#+end_src
+* Dired
+** dired single
+Ability to navigate in and out of directories with h and l
+#+begin_src emacs-lisp
+(after! dired-single
+  (map! :after dired-single
+        :map dired-mode-map
+        :n "h" 'dired-single-up-directory
+        :n "l" 'dired-single-buffer))
+#+end_src
+* Eshell
+I use eshell because it is more integrated in emacs therefore more extensible
+** json output formatter
+formats all json output coming through eshell, avoid the need to use tools such
+as jq since it already integrates json output right within eshell
+#+begin_src emacs-lisp
+(defun beno--valid-json? (maybe-json)
+  "Validate MAYBE-JSON is json."
+  (condition-case nil
+      (progn
+        (json-read-from-string maybe-json)
+        t)
+    (error nil)))
+
+;; TODO: refactor these variables in a cons e.g (cons beg end)
+(setq beno--eshell-output-beg nil)
+(setq beno--eshell-output-end nil)
+
+(defun beno--eshell-json-print ()
+  (let* ((start (marker-position eshell-last-output-start))
+         (end (marker-position eshell-last-output-end))
+         (partial-output (buffer-substring start end)))
+    (if (s-matches? eshell-prompt-regexp partial-output)
+        (condition-case nil
+            (progn
+              (when (and beno--eshell-output-beg
+                         beno--eshell-output-end
+                         (beno--valid-json? (buffer-substring beno--eshell-output-beg
+                                                              beno--eshell-output-end)))
+                (json-pretty-print beno--eshell-output-beg beno--eshell-output-end))
+              (setq beno--eshell-output-beg nil)
+              (setq beno--eshell-output-end nil))
+          (error (progn
+                   (setq beno--eshell-output-beg nil)
+                   (setq beno--eshell-output-end nil))))
+      (progn
+        (unless beno--eshell-output-beg
+          (setq beno--eshell-output-beg (marker-position eshell-last-output-start)))
+        (setq beno--eshell-output-end (marker-position eshell-last-output-end))))))
+
+(with-eval-after-load 'eshell
+  (add-to-list 'eshell-output-filter-functions
+               #'beno--eshell-json-print))
+#+end_src

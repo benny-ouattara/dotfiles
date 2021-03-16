@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+process="$(ps -u "$(id -u)" | grep -v grep | awk '{print $2 " - " $5}' | choose)"
+
+if [[ -n $process ]]; then
+    processid="$(echo $process | awk '{print $1}')"
+    kill -9 "$processid"
+fi

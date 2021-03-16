@@ -1,0 +1,7 @@
+#+TITLE:${1:Cheatsheet Name}
+#+DATE: `(format-time-string "%Y-%m-%d")`
+
+${2: Description}
+
+* API
+** $0

@@ -1,0 +1,16 @@
+(source melpa)
+
+(package-file "__PROJECT-NAME__.el")
+
+(files "__PROJECT-NAME__.el"
+       "doc/__PROJECT-NAME__.texi")
+
+(development
+ (depends-on "f")
+ (depends-on "s")
+ (depends-on "ert-runner")
+ (depends-on "el-mock")
+ (depends-on "undercover")
+ (depends-on "flycheck")
+ (depends-on "flycheck-cask")
+ (depends-on "cask-package-toolset"))

@@ -1,0 +1,7 @@
+#+TITLE:${1:Reflection}
+#+DATE: `(format-time-string "%Y-%m-%d")`
+#+AUTHOR: Ben O.
+* ${2: Points}
+- ${3: what is it}
+* Summary
+$0

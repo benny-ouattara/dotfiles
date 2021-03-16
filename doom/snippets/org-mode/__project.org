@@ -1,0 +1,14 @@
+#+TITLE:${1:project name}
+#+DATE: `(format-time-string "%Y-%m-%d")`
+#+AUTHOR: Ben O.
+
+${2: Description}
+
+* Tasks [0/3]
+** PROJ Milestone 1
+${3: milestone acceptance criteria: ability to...}
+- [ ] $0
+** PROJ Milestone 2
+** PROJ Milestone 3
+* Timeframe
+* Notes
