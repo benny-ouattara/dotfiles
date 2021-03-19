@@ -188,13 +188,18 @@
 
 (beno--indent 2)
 
-(defun work-window-split ()
+(defun work-window-split-three ()
   (interactive)
   "Splits frame in three. With eshell on the bottom right
 and org files on the top right. Keeps current window on the left."
   (progn  (dired-other-window org-spotify-directory)
-          (+eshell/split-below)
-          (+evil/window-move-up)))
+          (+eshell/split-below)))
+
+(defun work-window-split-two ()
+  (interactive)
+  "Splits frame in two. With eshell a third on the right."
+  (progn  (dired-other-window org-spotify-directory)
+          (+eshell/split-below)))
 
 (map! :leader
       :desc "close current window"
@@ -215,6 +220,10 @@ and org files on the top right. Keeps current window on the left."
 (map! :leader
       :desc "right bottom work window"
       "2" #'evil-window-bottom-right)
+
+(map! :leader
+      :desc "fuzzy search visible buffer"
+      "e" #'evil-avy-goto-char-2)
 
 (map! :leader
       :desc "open file other window"
