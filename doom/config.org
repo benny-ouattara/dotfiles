@@ -232,11 +232,15 @@ and org files on the top right. Keeps current window on the left."
   (progn  (dired-other-window org-spotify-directory)
           (+eshell/split-below)))
 
-(defun work-window-split-two ()
+(defun beno--eshell-split-right ()
+  "Create a new eshell window 2/3 to the right of the current one."
   (interactive)
-  "Splits frame in two. With eshell a third on the right."
-  (progn  (dired-other-window org-spotify-directory)
-          (+eshell/split-below)))
+  (let* ((ignore-window-parameters t)
+         (dedicated-p (window-dedicated-p))
+         (+eshell-enable-new-shell-on-split
+          (or +eshell-enable-new-shell-on-split (frame-parameter nil 'saved-wconf))))
+    (select-window (split-window-horizontally (* 2 (/ (window-total-width) 3))))
+    (+eshell--bury-buffer dedicated-p)))
 
 (map! :leader
       :desc "close current window"
@@ -248,7 +252,7 @@ and org files on the top right. Keeps current window on the left."
 
 (map! :leader
       :desc "work window split"
-      ">" #'work-window-split)
+      ">" #'beno--eshell-split-right)
 
 (map! :leader
       :desc "left work window"
