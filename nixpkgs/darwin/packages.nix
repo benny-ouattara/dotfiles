@@ -2,6 +2,7 @@
 
 {
   all = [
+    # pkgs.nyxt
     # stack
     pkgs.pandoc
     pkgs.cask
