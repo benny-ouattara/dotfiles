@@ -8,9 +8,9 @@
     pkgs.mu
     pkgs.isync
     pkgs.protonmail-bridge
-    pkgs.kubectl
-    pkgs.kubectx
-    pkgs.kubetail
+    # pkgs.kubectl
+    # pkgs.kubectx
+    # pkgs.kubetail
     pkgs.cloc
     pkgs.overmind
     pkgs.metals
