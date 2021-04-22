@@ -1,4 +1,7 @@
 (require 'f)
+(require 's)
+(require 'dash)
+
 (defun beno--org-babel-tangle-config ()
   (when (string-equal (f-filename (buffer-file-name))
                       "config.org")
@@ -9,7 +12,6 @@
 
 (add-hook 'org-mode-hook #'beno--tangle-on-save)
 
-(require 's)
 (setq doom-font (font-spec :family "monaco" :size 23 :weight 'normal)
       doom-big-font (font-spec :family "monaco" :size 37)
       doom-variable-pitch-font (font-spec :family "Avenir Next" :size 18)
@@ -546,3 +548,28 @@ Beware using this command given that it's destructive and non reversible."
 (with-eval-after-load 'eshell
   (add-to-list 'eshell-output-filter-functions
                #'beno--eshell-json-print))
+
+(defun project-tests (project-path)
+  "Extract java TESTS at PROJECT-PATH."
+  (-filter (lambda (filename) (s-contains? "Test.java" filename))
+           (-map (lambda (filepath) (-last-item  (s-split "/" filepath)))
+                 (f-files project-path nil t))))
+
+(defun test-to-run (test-name)
+  "Prompt for TEST-NAME to run."
+  (interactive
+   (list  (ivy-read "Test to run: "
+                    (project-tests default-directory))))
+  (format "mvn clean -Dtest=%s test" test-name))
+test-to-run
+
+(defun eshell/gst (&rest args)
+  "Quickly jumps to magit-status."
+    (magit-status (pop args) nil)
+    (eshell/echo))
+
+(defun eshell/test ()
+  "Run java tests."
+  (eshell/cd-to-project)
+  (+eshell/goto-end-of-prompt)
+  (insert (call-interactively 'test-to-run)))

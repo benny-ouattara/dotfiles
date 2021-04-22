@@ -156,14 +156,14 @@ c.url.open_base_url = True
 c.auto_save.session = True
 
 # window
-c.window.hide_decoration = True
+c.window.hide_decoration = False
 
 # dracula theme
-import dracula.draw
+# import dracula.draw
 
-dracula.draw.blood(c, {
-    'spacing': {
-        'vertical': 6,
-        'horizontal': 8
-    }
-})
+# dracula.draw.blood(c, {
+#     'spacing': {
+#         'vertical': 6,
+#         'horizontal': 8
+#     }
+# })
