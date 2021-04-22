@@ -4,6 +4,7 @@
   all = [
     # pkgs.nyxt
     # stack
+    pkgs.maven
     pkgs.pandoc
     pkgs.cask
     pkgs.mu

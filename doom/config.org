@@ -1,11 +1,16 @@
 #+TITLE: Config
 #+PROPERTY: header-args :tangle ./config.el :results silent :lexical t
+* Dependencies
+#+begin_src emacs-lisp
+(require 'f)
+(require 's)
+(require 'dash)
+#+end_src
 * Setup
 We start by setting up tangling on this config file into config.el
 config.org will be changed and config.el will behave like a lock file, tracked
 in version control but only a mirror of config.org
 #+begin_src emacs-lisp
-(require 'f)
 (defun beno--org-babel-tangle-config ()
   (when (string-equal (f-filename (buffer-file-name))
                       "config.org")
@@ -21,7 +26,6 @@ Before setting a new variable, make sure that it is not already set. As the
 list of variable grows, it becomes harder to avoid repetition leading to
 overwrite conflicts
 #+begin_src emacs-lisp
-(require 's)
 (setq doom-font (font-spec :family "monaco" :size 23 :weight 'normal)
       doom-big-font (font-spec :family "monaco" :size 37)
       doom-variable-pitch-font (font-spec :family "Avenir Next" :size 18)
@@ -640,4 +644,32 @@ as jq since it already integrates json output right within eshell
 (with-eval-after-load 'eshell
   (add-to-list 'eshell-output-filter-functions
                #'beno--eshell-json-print))
+#+end_src
+
+** making eshell java friendly
+#+begin_src emacs-lisp
+(defun project-tests (project-path)
+  "Extract java TESTS at PROJECT-PATH."
+  (-filter (lambda (filename) (s-contains? "Test.java" filename))
+           (-map (lambda (filepath) (-last-item  (s-split "/" filepath)))
+                 (f-files project-path nil t))))
+
+(defun test-to-run (test-name)
+  "Prompt for TEST-NAME to run."
+  (interactive
+   (list  (ivy-read "Test to run: "
+                    (project-tests default-directory))))
+  (format "mvn clean -Dtest=%s test" test-name))
+test-to-run
+
+(defun eshell/gst (&rest args)
+  "Quickly jumps to magit-status."
+    (magit-status (pop args) nil)
+    (eshell/echo))
+
+(defun eshell/test ()
+  "Run java tests."
+  (eshell/cd-to-project)
+  (+eshell/goto-end-of-prompt)
+  (insert (call-interactively 'test-to-run)))
 #+end_src
