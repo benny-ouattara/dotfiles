@@ -660,7 +660,6 @@ as jq since it already integrates json output right within eshell
    (list  (ivy-read "Test to run: "
                     (project-tests default-directory))))
   (format "mvn clean -Dtest=%s test" test-name))
-test-to-run
 
 (defun eshell/gst (&rest args)
   "Quickly jumps to magit-status."
