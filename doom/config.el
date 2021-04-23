@@ -561,7 +561,6 @@ Beware using this command given that it's destructive and non reversible."
    (list  (ivy-read "Test to run: "
                     (project-tests default-directory))))
   (format "mvn clean -Dtest=%s test" test-name))
-test-to-run
 
 (defun eshell/gst (&rest args)
   "Quickly jumps to magit-status."
