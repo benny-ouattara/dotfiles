@@ -14,7 +14,7 @@
     "netiquette"
     "oversight"
     "pock"
-    "qutebrowser"
+    #"qutebrowser"
     "ransomwhere"
     "reikey"
     "secretive"

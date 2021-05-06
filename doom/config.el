@@ -41,7 +41,7 @@
                                 :with-author nil
                                 :with-toc nil)
       org-agenda-skip-scheduled-if-done t
-      projectile-project-search-path '("~/Code/")
+      projectile-project-search-path '("~/Code/" "~/common-lisp")
       org-ellipsis " ▾ "
       org-hide-emphasis-markers t
       org-tags-column -80

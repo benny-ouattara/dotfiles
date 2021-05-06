@@ -5,5 +5,6 @@
     "choose-gui"
     "yabai"
     "pidof"
+    "sbcl"
   ];
 }
