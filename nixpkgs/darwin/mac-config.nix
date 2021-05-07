@@ -31,6 +31,8 @@ in
         fonts = [
             pkgs.powerline-fonts
             pkgs.jetbrains-mono
+            pkgs.roboto-mono
+            pkgs.fira-code
         ];
     };
 }
