@@ -572,3 +572,5 @@ Beware using this command given that it's destructive and non reversible."
   (eshell/cd-to-project)
   (+eshell/goto-end-of-prompt)
   (insert (call-interactively 'test-to-run)))
+
+(require 'load-nano)

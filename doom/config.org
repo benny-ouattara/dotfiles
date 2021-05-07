@@ -672,3 +672,7 @@ as jq since it already integrates json output right within eshell
   (+eshell/goto-end-of-prompt)
   (insert (call-interactively 'test-to-run)))
 #+end_src
+* Emacs nano
+#+begin_src emacs-lisp
+(require 'load-nano)
+#+end_src
