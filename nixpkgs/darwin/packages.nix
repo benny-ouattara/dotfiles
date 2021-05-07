@@ -2,6 +2,7 @@
 
 {
   all = [
+    pkgs.rlwrap
     # stack
     pkgs.maven
     pkgs.pandoc

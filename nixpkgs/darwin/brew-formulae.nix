@@ -6,5 +6,6 @@
     "yabai"
     "pidof"
     "sbcl"
+    "libfixposix"
   ];
 }
