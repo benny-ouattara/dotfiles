@@ -227,9 +227,9 @@ and org files on the top right. Keeps current window on the left."
       :desc "right bottom work window"
       "2" #'evil-window-bottom-right)
 
-(map! :leader
-      :desc "fuzzy search visible buffer"
-      "e" #'evil-avy-goto-char-2)
+(map! :desc "fuzzy search visible buffer"
+      :n
+      "`" #'evil-avy-goto-char-2)
 
 (map! :leader
       :desc "open file other window"
