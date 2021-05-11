@@ -143,8 +143,8 @@ c.bindings.key_mappings = {'<Ctrl+6>': '<Ctrl+^>', '<Ctrl+Enter>': '<Ctrl+Return
 # fonts
 c.fonts.default_size = "20pt"
 c.fonts.web.size.default = 23
-c.colors.webpage.darkmode.enabled = True
-c.zoom.default = "125%"
+c.colors.webpage.darkmode.enabled = False
+c.zoom.default = "150%"
 
 # search
 c.url.searchengines = {"DEFAULT": "https://google.com/search?q={}"}
