@@ -22,3 +22,5 @@
 (package! skeletor)
 (package! s)
 (package! f)
+(package! nano-doom
+  :recipe (:host github :repo "skyler544/doom-nano-testing"))

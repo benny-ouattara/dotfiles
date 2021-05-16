@@ -25,6 +25,7 @@
       user-full-name "Ben O"
       user-mail-address "benny.ouattara@gmail.com"
       confirm-kill-emacs nil
+      evil-insert-state-cursor 'hbar
       project-dir "~/Code"
       project-prefix "kata"
       skeletor-project-directory project-dir
@@ -41,7 +42,7 @@
                                 :with-author nil
                                 :with-toc nil)
       org-agenda-skip-scheduled-if-done t
-      projectile-project-search-path '("~/Code/")
+      projectile-project-search-path '("~/Code/" "~/common-lisp")
       org-ellipsis " ▾ "
       org-hide-emphasis-markers t
       org-tags-column -80
@@ -572,3 +573,5 @@ Beware using this command given that it's destructive and non reversible."
   (eshell/cd-to-project)
   (+eshell/goto-end-of-prompt)
   (insert (call-interactively 'test-to-run)))
+
+(require 'load-nano)

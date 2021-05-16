@@ -39,6 +39,7 @@ overwrite conflicts
       user-full-name "Ben O"
       user-mail-address "benny.ouattara@gmail.com"
       confirm-kill-emacs nil
+      evil-insert-state-cursor 'hbar
       project-dir "~/Code"
       project-prefix "kata"
       skeletor-project-directory project-dir
@@ -55,7 +56,7 @@ overwrite conflicts
                                 :with-author nil
                                 :with-toc nil)
       org-agenda-skip-scheduled-if-done t
-      projectile-project-search-path '("~/Code/")
+      projectile-project-search-path '("~/Code/" "~/common-lisp")
       org-ellipsis " ▾ "
       org-hide-emphasis-markers t
       org-tags-column -80
@@ -671,4 +672,8 @@ as jq since it already integrates json output right within eshell
   (eshell/cd-to-project)
   (+eshell/goto-end-of-prompt)
   (insert (call-interactively 'test-to-run)))
+#+end_src
+* Emacs nano
+#+begin_src emacs-lisp
+(require 'load-nano)
 #+end_src

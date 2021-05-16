@@ -2,7 +2,7 @@
 
 {
   all = [
-    # pkgs.nyxt
+    pkgs.rlwrap
     # stack
     pkgs.maven
     pkgs.pandoc
@@ -44,7 +44,7 @@
     pkgs.nixfmt
     pkgs.coreutils-full
     pkgs.tdlib
-    pkgs.sbcl
+    # pkgs.sbcl
     pkgs.clojure
     pkgs.leiningen
     pkgs.syncthing

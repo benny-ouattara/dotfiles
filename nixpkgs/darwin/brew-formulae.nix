@@ -5,5 +5,7 @@
     "choose-gui"
     "yabai"
     "pidof"
+    "sbcl"
+    "libfixposix"
   ];
 }
