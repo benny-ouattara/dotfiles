@@ -39,6 +39,7 @@ overwrite conflicts
       user-full-name "Ben O"
       user-mail-address "benny.ouattara@gmail.com"
       confirm-kill-emacs nil
+      evil-insert-state-cursor 'hbar
       project-dir "~/Code"
       project-prefix "kata"
       skeletor-project-directory project-dir
