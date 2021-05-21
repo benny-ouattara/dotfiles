@@ -2,6 +2,7 @@
 
 {
   all = [
+    pkgs.starship
     pkgs.rlwrap
     # stack
     pkgs.maven

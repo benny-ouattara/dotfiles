@@ -158,6 +158,8 @@ in rec {
     initExtra = lib.mkBefore ''
         ZSH_DISABLE_COMPFIX=true
 
+        eval "$(starship init zsh)"
+
         eval "$(jenv init -)"
         export PATH=$PATH:$HOME/.local/bin:$HOME/.emacs.d/bin:/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin:${pkgs.custom-scripts}/bin:/opt/local/bin:/Users/benouattara/Qt/5.15.2/clang_64/bin
 
