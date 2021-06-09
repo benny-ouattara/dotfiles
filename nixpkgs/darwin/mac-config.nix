@@ -22,7 +22,7 @@ in
        casks = casks.all;
        extraConfig = ''
        cask_args appdir: "${home-dir}/Applications"
-       brew "emacs-plus@27", args: ["with-no-titlebar", "with-modern-sexy-v2-icon"], link: true
+       brew "emacs-plus@26", args: ["with-no-titlebar", "with-modern-sexy-v2-icon"], link: true
        '';
     };
 

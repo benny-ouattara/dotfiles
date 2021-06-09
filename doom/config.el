@@ -229,8 +229,8 @@ and org files on the top right. Keeps current window on the left."
       "2" #'evil-window-bottom-right)
 
 (map! :desc "fuzzy search visible buffer"
-      :n
-      "`" #'evil-avy-goto-char-2)
+      :leader
+      "a" #'evil-avy-goto-char-2)
 
 (map! :leader
       :desc "open file other window"
@@ -552,7 +552,8 @@ Beware using this command given that it's destructive and non reversible."
 
 (defun project-tests (project-path)
   "Extract java TESTS at PROJECT-PATH."
-  (-filter (lambda (filename) (s-contains? "Test.java" filename))
+  (-filter (lambda (filename) (or (s-contains? "IT.java" filename)
+                             (s-contains? "Test.java" filename)))
            (-map (lambda (filepath) (-last-item  (s-split "/" filepath)))
                  (f-files project-path nil t))))
 
