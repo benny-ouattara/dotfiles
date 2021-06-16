@@ -564,6 +564,14 @@ Beware using this command given that it's destructive and non reversible."
                     (project-tests default-directory))))
   (format "mvn clean -Dtest=%s test" test-name))
 
+(defun package-no-test ()
+  "Command to package application without running tests"
+  (format "mvn -Dmaven.test.skip=true clean package"))
+
+(defun eshell/pkg ()
+  "Package java application."
+  (insert (package-no-test)))
+
 (defun eshell/gst (&rest args)
   "Quickly jumps to magit-status."
     (magit-status (pop args) nil)
