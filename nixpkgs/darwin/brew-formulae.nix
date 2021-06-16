@@ -4,8 +4,7 @@
   all = [
     "choose-gui"
     "yabai"
-    "pidof"
     "sbcl"
-    "libfixposix"
+    #"libfixposix"
   ];
 }

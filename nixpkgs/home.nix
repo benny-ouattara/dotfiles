@@ -165,8 +165,8 @@ in rec {
 
         if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then . $HOME/.nix-profile/etc/profile.d/nix.sh; fi # required by nix to configure various paths
 
-        autoload -U promptinit; promptinit
-        prompt pure
+        # autoload -U promptinit; promptinit
+        # prompt pure
 
         export EDITOR=emacs
         export VISUAL=emacs
