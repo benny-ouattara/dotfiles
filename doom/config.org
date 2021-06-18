@@ -26,9 +26,9 @@ Before setting a new variable, make sure that it is not already set. As the
 list of variable grows, it becomes harder to avoid repetition leading to
 overwrite conflicts
 #+begin_src emacs-lisp
-(setq doom-font (font-spec :family "monaco" :size 23 :weight 'normal)
-      doom-big-font (font-spec :family "monaco" :size 37)
-      doom-variable-pitch-font (font-spec :family "Avenir Next" :size 18)
+(setq doom-font (font-spec :family "Source Code Pro" :size 23 :weight 'normal)
+      doom-big-font (font-spec :family "Source Code Pro" :size 37)
+      doom-variable-pitch-font (font-spec :family "Source Code Pro" :size 18)
       mac-command-modifier 'meta
       ns-command-modifier 'meta
       rfc-mode-directory (expand-file-name "~/rfc/")
@@ -87,7 +87,7 @@ overwrite conflicts
 These are general modes that affect the appearance and the way symbols and
 colors are presented
 #+begin_src emacs-lisp
-(menu-bar-mode t)
+(menu-bar-mode -1)
 (global-prettify-symbols-mode)
 (rainbow-mode)
 #+end_src
@@ -684,5 +684,5 @@ as jq since it already integrates json output right within eshell
 #+end_src
 * Emacs nano
 #+begin_src emacs-lisp
-(require 'load-nano)
+;; (require 'load-nano)
 #+end_src

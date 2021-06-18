@@ -12,9 +12,9 @@
 
 (add-hook 'org-mode-hook #'beno--tangle-on-save)
 
-(setq doom-font (font-spec :family "monaco" :size 23 :weight 'normal)
-      doom-big-font (font-spec :family "monaco" :size 37)
-      doom-variable-pitch-font (font-spec :family "Avenir Next" :size 18)
+(setq doom-font (font-spec :family "Source Code Pro" :size 23 :weight 'normal)
+      doom-big-font (font-spec :family "Source Code Pro" :size 37)
+      doom-variable-pitch-font (font-spec :family "Source Code Pro" :size 18)
       mac-command-modifier 'meta
       ns-command-modifier 'meta
       rfc-mode-directory (expand-file-name "~/rfc/")
@@ -68,7 +68,7 @@
                                 (:name "Big Outcomes"
                                  :tag "bo")))
 
-(menu-bar-mode t)
+(menu-bar-mode -1)
 (global-prettify-symbols-mode)
 (rainbow-mode)
 
@@ -583,4 +583,4 @@ Beware using this command given that it's destructive and non reversible."
   (+eshell/goto-end-of-prompt)
   (insert (call-interactively 'test-to-run)))
 
-(require 'load-nano)
+;; (require 'load-nano)

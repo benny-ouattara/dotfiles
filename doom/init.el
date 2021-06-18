@@ -74,7 +74,7 @@
        ;;ansible
        (debugger +lsp)          ; FIXME stepping through code, to help you add bugs
        direnv
-       (hammer +spotify +container)
+       ;; (hammer +spotify +container)
        ;;darkmode
        ;; docker
        ;;editorconfig      ; let someone else argue about tabs vs spaces
@@ -126,7 +126,7 @@
        ;;latex             ; writing papers in Emacs has never been so fun
        ;;lean
        ;;ledger            ; an accounting system in Emacs
-       ;;lua               ; one-based indices? one-based indices
+       lua               ; one-based indices? one-based indices
        markdown      ; writing docs for people to ignore
        ;;nim               ; python + lisp at the speed of c
        nix           ; I hereby declare "nix geht mehr!"
