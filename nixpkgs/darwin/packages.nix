@@ -2,6 +2,7 @@
 
 {
   all = [
+    pkgs.starship
     pkgs.rlwrap
     # stack
     pkgs.maven
@@ -47,16 +48,13 @@
     # pkgs.sbcl
     pkgs.clojure
     pkgs.leiningen
-    pkgs.syncthing
+    #pkgs.syncthing
     pkgs.wireguard-tools
     pkgs.tree
     pkgs.tcpdump
     pkgs.python37
-    pkgs.python37Packages.pywal
     pkgs.python37Packages.pip
     pkgs.python37Packages.python-language-server
-    pkgs.pwgen
-    pkgs.pwgen-secure
     pkgs.mosh
     pkgs.m-cli
     pkgs.hydroxide

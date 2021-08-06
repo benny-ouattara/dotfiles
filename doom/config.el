@@ -26,6 +26,7 @@
       user-full-name "Ben O"
       user-mail-address "benny.ouattara@gmail.com"
       confirm-kill-emacs nil
+      evil-insert-state-cursor 'hbar
       project-dir "~/Code"
       project-prefix "kata"
       skeletor-project-directory project-dir
@@ -228,9 +229,9 @@ and org files on the top right. Keeps current window on the left."
       :desc "right bottom work window"
       "2" #'evil-window-bottom-right)
 
-(map! :leader
-      :desc "fuzzy search visible buffer"
-      "e" #'evil-avy-goto-char-2)
+(map! :desc "fuzzy search visible buffer"
+      :leader
+      "a" #'evil-avy-goto-char-2)
 
 (map! :leader
       :desc "open file other window"
@@ -552,7 +553,8 @@ Beware using this command given that it's destructive and non reversible."
 
 (defun project-tests (project-path)
   "Extract java TESTS at PROJECT-PATH."
-  (-filter (lambda (filename) (s-contains? "Test.java" filename))
+  (-filter (lambda (filename) (or (s-contains? "IT.java" filename)
+                             (s-contains? "Test.java" filename)))
            (-map (lambda (filepath) (-last-item  (s-split "/" filepath)))
                  (f-files project-path nil t))))
 
@@ -562,6 +564,14 @@ Beware using this command given that it's destructive and non reversible."
    (list  (ivy-read "Test to run: "
                     (project-tests default-directory))))
   (format "mvn clean -Dtest=%s test" test-name))
+
+(defun package-no-test ()
+  "Command to package application without running tests"
+  (format "mvn -Dmaven.test.skip=true clean package"))
+
+(defun eshell/pkg ()
+  "Package java application."
+  (insert (package-no-test)))
 
 (defun eshell/gst (&rest args)
   "Quickly jumps to magit-status."
