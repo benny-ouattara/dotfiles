@@ -15,12 +15,13 @@
 (setq doom-font (font-spec :family "monaco" :size 23 :weight 'normal)
       doom-big-font (font-spec :family "monaco" :size 37)
       doom-variable-pitch-font (font-spec :family "Avenir Next" :size 18)
+      org-roam-v2-ack t
       mac-command-modifier 'meta
       ns-command-modifier 'meta
       rfc-mode-directory (expand-file-name "~/rfc/")
       lsp-java-format-settings-url "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml"
-      mu-root (s-chop-suffixes '("/mu" "/bin") (file-truename  (executable-find "mu")))
-      mu4e-path (concat mu-root "/share/emacs/site-lisp/mu4e")
+      ;; mu-root (s-chop-suffixes '("/mu" "/bin") (file-truename  (executable-find "mu")))
+      ;; mu4e-path (concat mu-root "/share/emacs/site-lisp/mu4e")
       tdlib-path "/nix/store/y27x4zzs8wm8qwskbp8y5g3gx1qkjg3m-tdlib-unstable-2020-10-25/include/td/telegram"
       user-full-name "Ben O"
       user-mail-address "benny.ouattara@gmail.com"
@@ -430,7 +431,7 @@ Beware using this command given that it's destructive and non reversible."
          :desc "delete project" "d" #'delete-project
          :desc "delete all test projects" "D" #'projects-cleanup))))
 
-(add-to-list 'load-path mu4e-path)
+;; (add-to-list 'load-path mu4e-path)
 (set-email-account! "Spotify"
   '((mu4e-sent-folder       . "/spotify/sent")
     (mu4e-drafts-folder     . "/spotify/drafts")
@@ -573,4 +574,4 @@ Beware using this command given that it's destructive and non reversible."
   (+eshell/goto-end-of-prompt)
   (insert (call-interactively 'test-to-run)))
 
-(require 'load-nano)
+;; (require 'load-nano)

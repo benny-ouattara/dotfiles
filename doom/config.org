@@ -29,12 +29,13 @@ overwrite conflicts
 (setq doom-font (font-spec :family "monaco" :size 23 :weight 'normal)
       doom-big-font (font-spec :family "monaco" :size 37)
       doom-variable-pitch-font (font-spec :family "Avenir Next" :size 18)
+      org-roam-v2-ack t
       mac-command-modifier 'meta
       ns-command-modifier 'meta
       rfc-mode-directory (expand-file-name "~/rfc/")
       lsp-java-format-settings-url "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml"
-      mu-root (s-chop-suffixes '("/mu" "/bin") (file-truename  (executable-find "mu")))
-      mu4e-path (concat mu-root "/share/emacs/site-lisp/mu4e")
+      ;; mu-root (s-chop-suffixes '("/mu" "/bin") (file-truename  (executable-find "mu")))
+      ;; mu4e-path (concat mu-root "/share/emacs/site-lisp/mu4e")
       tdlib-path "/nix/store/y27x4zzs8wm8qwskbp8y5g3gx1qkjg3m-tdlib-unstable-2020-10-25/include/td/telegram"
       user-full-name "Ben O"
       user-mail-address "benny.ouattara@gmail.com"
@@ -511,7 +512,7 @@ Bring project lifecycle management to your fingertips
 I started managing my email with mu4e
 ** accounts
 #+begin_src emacs-lisp
-(add-to-list 'load-path mu4e-path)
+;; (add-to-list 'load-path mu4e-path)
 (set-email-account! "Spotify"
   '((mu4e-sent-folder       . "/spotify/sent")
     (mu4e-drafts-folder     . "/spotify/drafts")
@@ -674,5 +675,5 @@ as jq since it already integrates json output right within eshell
 #+end_src
 * Emacs nano
 #+begin_src emacs-lisp
-(require 'load-nano)
+;; (require 'load-nano)
 #+end_src
