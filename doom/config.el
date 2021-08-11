@@ -29,6 +29,36 @@
       evil-insert-state-cursor 'hbar
       project-dir "~/Code"
       project-prefix "kata"
+      org-roam-capture-templates '(("d" "default" plain
+                                    #'org-roam-capture--get-point
+                                    (file "~/Code/dotfiles/doom/snippets/org-roam/default.org")
+                                    :file-name "%<%Y%m%d%H%M%S>-${slug}"
+                                    :head "#+title: ${title}\n#+date: %U\n"
+                                    :unnarrowed t)
+                                   ("l" "programming language" plain
+                                    #'org-roam-capture--get-point
+                                    (file "~/Code/dotfiles/doom/snippets/org-roam/programming.org")
+                                    :file-name "%<%Y%m%d%H%M%S>-${slug}"
+                                    :head "#+title: ${title}\n#+date: %U\n#+filetags: programming\n"
+                                    :unnarrowed t)
+                                   ("b" "book notes" plain
+                                    #'org-roam-capture--get-point
+                                    (file "~/Code/dotfiles/doom/snippets/org-roam/book.org")
+                                    :file-name "%<%Y%m%d%H%M%S>-${slug}"
+                                    :head "#+title: ${title}\n#+date: %U\n#+filetags: book\n"
+                                    :unnarrowed t)
+                                   ("p" "project" plain
+                                    #'org-roam-capture--get-point
+                                    (file "~/Code/dotfiles/doom/snippets/org-roam/project.org")
+                                    :file-name "%<%Y%m%d%H%M%S>-${slug}"
+                                    :head "#+title: ${title}\n#+date: %U\n#+filetags: project\n"
+                                    :unnarrowed t)
+                                   ("c" "code" plain
+                                    #'org-roam-capture--get-point
+                                    (file "~/Code/dotfiles/doom/snippets/org-roam/code.org")
+                                    :file-name "%<%Y%m%d%H%M%S>-${slug}"
+                                    :head "#+title: ${title}\n#+date: %U\n#+filetags: interview\n"
+                                    :unnarrowed t))
       skeletor-project-directory project-dir
       skeletor-user-directory (concat doom-private-dir "templates")
       skeletor-completing-read-function 'ivy-read
@@ -82,7 +112,7 @@
   "Load theme, taking current system APPEARANCE into consideration."
   (mapc #'disable-theme custom-enabled-themes)
   (pcase appearance
-    ('light (load-theme 'doom-acario-light t))
+    ('light (load-theme 'tsdh-light t))
     ('dark (load-theme 'doom-dracula t))))
 
 (add-hook 'ns-system-appearance-change-functions #'beno--auto-theme)
@@ -92,7 +122,7 @@
     (menu-bar-mode -1)
     (tool-bar-mode -1)
     (mapc #'disable-theme custom-enabled-themes)
-    (setq doom-theme 'doom-acario-light
+    (setq doom-theme 'doom-
           evil-emacs-state-cursor '("red" box)
           evil-normal-state-cursor '("black" box)
           evil-visual-state-cursor '("black" box)

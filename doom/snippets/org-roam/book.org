@@ -1,0 +1,7 @@
+#+author: Ben O.
+* Book
+Author: %^{Author}
+Title: ${title}
+Year: %^{Year}
+* Summary
+%?

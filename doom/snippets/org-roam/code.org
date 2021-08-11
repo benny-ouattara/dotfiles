@@ -1,0 +1,4 @@
+#+author: Ben O.
+* Problem statement
+%?
+* Solution
