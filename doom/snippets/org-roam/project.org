@@ -1,6 +1,6 @@
 #+author: Ben O.
-* Goals
+* Overview
 %?
-* Tasks
-** TODO Add initial tasks
-* Dates
+* Tasks [/]
+* Timeframe
+* Notes
