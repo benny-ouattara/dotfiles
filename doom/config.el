@@ -271,7 +271,7 @@ and org files on the top right. Keeps current window on the left."
       :desc "open buffer other window"
       "v" #'switch-to-buffer-other-window)
 
-(map! "C-s" #'swiper-isearch)
+(map! "C-s" #'consult-line)
 
 (map! :leader
       :desc "delete buffer"
