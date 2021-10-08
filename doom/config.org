@@ -283,14 +283,6 @@ and org files on the top right. Keeps current window on the left."
       :desc "work window split"
       ">" #'beno--eshell-split-right)
 
-(map! :leader
-      :desc "left work window"
-      "1" #'evil-window-top-left)
-
-(map! :leader
-      :desc "right bottom work window"
-      "2" #'evil-window-bottom-right)
-
 (map! :desc "fuzzy search visible buffer"
       :leader
       "a" #'evil-avy-goto-char-2)
