@@ -1,25 +1,9 @@
 #+TITLE: Config
-#+PROPERTY: header-args :tangle ./config.el :results silent :lexical t
 * Dependencies
 #+begin_src emacs-lisp
 (require 'f)
 (require 's)
 (require 'dash)
-#+end_src
-* Setup
-We start by setting up tangling on this config file into config.el
-config.org will be changed and config.el will behave like a lock file, tracked
-in version control but only a mirror of config.org
-#+begin_src emacs-lisp
-(defun beno--org-babel-tangle-config ()
-  (when (string-equal (f-filename (buffer-file-name))
-                      "config.org")
-    (org-babel-tangle)))
-
-(defun beno--tangle-on-save ()
-  (add-hook 'after-save-hook #'beno--org-babel-tangle-config))
-
-(add-hook 'org-mode-hook #'beno--tangle-on-save)
 #+end_src
 * Variables
 Before setting a new variable, make sure that it is not already set. As the

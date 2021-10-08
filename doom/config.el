@@ -2,16 +2,6 @@
 (require 's)
 (require 'dash)
 
-(defun beno--org-babel-tangle-config ()
-  (when (string-equal (f-filename (buffer-file-name))
-                      "config.org")
-    (org-babel-tangle)))
-
-(defun beno--tangle-on-save ()
-  (add-hook 'after-save-hook #'beno--org-babel-tangle-config))
-
-(add-hook 'org-mode-hook #'beno--tangle-on-save)
-
 (setq doom-font (font-spec :family "monaco" :size 23 :weight 'normal)
       doom-big-font (font-spec :family "monaco" :size 37)
       doom-variable-pitch-font (font-spec :family "Avenir Next" :size 18)
