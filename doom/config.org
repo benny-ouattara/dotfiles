@@ -10,8 +10,8 @@ Before setting a new variable, make sure that it is not already set. As the
 list of variable grows, it becomes harder to avoid repetition leading to
 overwrite conflicts
 #+begin_src emacs-lisp
-(setq doom-font (font-spec :family "monaco" :size 21 :weight 'normal)
-      doom-big-font (font-spec :family "monaco" :size 24)
+(setq doom-font (font-spec :family "monaco" :size 15 :weight 'normal)
+      doom-big-font (font-spec :family "monaco" :size 23)
       doom-variable-pitch-font (font-spec :family "Avenir Next" :size 21)
       org-roam-v2-ack t
       mac-command-modifier 'meta
@@ -97,6 +97,15 @@ overwrite conflicts
                                 (:name "Big Outcomes"
                                  :tag "bo")))
 #+end_src
+
+#+RESULTS:
+| :name | Today        | :time-grid | t      | :scheduled | today |
+| :name | Due today    | :deadline  | today  |            |       |
+| :name | Important    | :priority  | A      |            |       |
+| :name | Overdue      | :deadline  | past   |            |       |
+| :name | Due soon     | :deadline  | future |            |       |
+| :name | Big Outcomes | :tag       | bo     |            |       |
+
 * Appearance
 ** General appearance modes
 These are general modes that affect the appearance and the way symbols and

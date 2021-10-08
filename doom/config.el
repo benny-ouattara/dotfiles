@@ -2,8 +2,8 @@
 (require 's)
 (require 'dash)
 
-(setq doom-font (font-spec :family "monaco" :size 21 :weight 'normal)
-      doom-big-font (font-spec :family "monaco" :size 24)
+(setq doom-font (font-spec :family "monaco" :size 15 :weight 'normal)
+      doom-big-font (font-spec :family "monaco" :size 23)
       doom-variable-pitch-font (font-spec :family "Avenir Next" :size 21)
       org-roam-v2-ack t
       mac-command-modifier 'meta
