@@ -103,7 +103,7 @@
   (mapc #'disable-theme custom-enabled-themes)
   (pcase appearance
     ('light (load-theme 'tsdh-light t))
-    ('dark (load-theme 'doom-dracula t))))
+    ('dark (load-theme 'doom-xcode t))))
 
 (add-hook 'ns-system-appearance-change-functions #'beno--auto-theme)
 
