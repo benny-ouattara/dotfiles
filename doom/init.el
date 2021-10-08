@@ -76,7 +76,6 @@
        (debugger +lsp)          ; FIXME stepping through code, to help you add bugs
        direnv
        (hammer +spotify +container)
-       ;;darkmode
        ;; docker
        ;;editorconfig      ; let someone else argue about tabs vs spaces
        ;;ein               ; tame Jupyter notebooks with emacs
@@ -117,7 +116,7 @@
        ;;faust             ; dsp, but you get to keep your soul
        ;;fsharp           ; ML stands for Microsoft's Language
        ;;go                ; the hipster dialect
-       (haskell +intero)                ; a language that's lazier than I am
+       ;; (haskell +intero)                ; a language that's lazier than I am
        ;;hy                ; readability of scheme w/ speed of python
        ;;idris             ;
        (java +lsp)                 ; the poster child for carpal tunnel syndrome
@@ -138,7 +137,7 @@
         ;;+hugo            ; use Emacs for hugo blogging
         +ipython     ; ipython/jupyter support for babel
         +pandoc      ; export-with-pandoc support
-        +pomodoro    ; be fruitful with the tomato technique
+        ;; +pomodoro    ; be fruitful with the tomato technique
         +present)    ; using org-mode for presentations
        ;;perl              ; write code no one else can comprehend
        ;;php               ; perl's insecure younger brother
@@ -160,7 +159,7 @@
        ;;web               ; the tubes
 
        :email
-       (mu4e +gmail)       ; WIP
+       ;; (mu4e +gmail)       ; WIP
        ;;notmuch             ; WIP
        ;;(wanderlust +gmail) ; WIP
 
