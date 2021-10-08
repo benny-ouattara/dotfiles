@@ -80,7 +80,7 @@ overwrite conflicts
       org-pomodoro-length 45
       org-pomodoro-short-break-length 15
       org-refile-targets (quote ((nil :maxlevel . 3)))
-      +doom-dashboard-banner-file (expand-file-name "splash.png" doom-private-dir)
+      fancy-splash-image (expand-file-name "splash.png" doom-private-dir)
       tramp-histfile-override "/dev/null"
       +org-capture-todo-file "tasks.org"
       org-super-agenda-groups '((:name "Today"
@@ -127,8 +127,8 @@ Set auto theme based on system appearance setting with default themes
   "Load theme, taking current system APPEARANCE into consideration."
   (mapc #'disable-theme custom-enabled-themes)
   (pcase appearance
-    ('light (setq doom-theme 'tsdh-light))
-    ('dark (setq doom-theme 'doom-xcode))))
+    ('light (load-theme 'tsdh-light t))
+    ('dark (load-theme 'doom-xcode t))))
 
 (add-hook 'ns-system-appearance-change-functions #'beno--auto-theme)
 #+end_src
