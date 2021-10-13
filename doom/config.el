@@ -90,7 +90,7 @@
                                  :tag "bo")))
 
 (menu-bar-mode t)
-(global-prettify-symbols-mode)
+;; (global-prettify-symbols-mode)
 (rainbow-mode)
 
 (add-to-list 'default-frame-alist
@@ -102,7 +102,7 @@
   "Load theme, taking current system APPEARANCE into consideration."
   (mapc #'disable-theme custom-enabled-themes)
   (pcase appearance
-    ('light (load-theme 'tsdh-light t))
+    ('light (load-theme 'doom-nord-light t))
     ('dark (load-theme 'doom-xcode t))))
 
 (add-hook 'ns-system-appearance-change-functions #'beno--auto-theme)

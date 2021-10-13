@@ -2,6 +2,7 @@
 
 {
   all = [
+    pkgs.qemu
     pkgs.starship
     pkgs.rlwrap
     # stack
@@ -38,13 +39,13 @@
     pkgs.jq
     pkgs.ripgrep
     pkgs.silver-searcher
-    pkgs.youtube-dl
-    pkgs.subversion
+    # pkgs.youtube-dl
+    # pkgs.subversion
     pkgs.nodejs
     pkgs.fd
     pkgs.nixfmt
     pkgs.coreutils-full
-    pkgs.tdlib
+    # pkgs.tdlib
     # pkgs.sbcl
     pkgs.clojure
     pkgs.leiningen
