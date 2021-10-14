@@ -29,7 +29,7 @@
        (hydra +hydra/window-nav/body
               +hydra/text-zoom/body)
        ;;indent-guides     ; highlighted indent columns
-       modeline    ; snazzy, Atom-inspired modeline, plus API
+       (modeline +light)    ; snazzy, Atom-inspired modeline, plus API
        nav-flash   ; blink the current line after jumping
        ;;neotree           ; a project drawer, like NERDTree for vim
        ophints                    ; highlight the region an operation acts on
@@ -76,8 +76,7 @@
        (debugger +lsp)          ; FIXME stepping through code, to help you add bugs
        direnv
        (hammer +spotify +container)
-       ;;darkmode
-       ;; docker
+       docker
        ;;editorconfig      ; let someone else argue about tabs vs spaces
        ;;ein               ; tame Jupyter notebooks with emacs
        (eval +overlay)               ; run code, run (also, repls)
@@ -90,12 +89,12 @@
        ;;macos             ; MacOS-specific commands
        magit               ; a git porcelain for Emacs
        make                     ; run make tasks from Emacs
-       ;;pass              ; password manager for nerds
+       pass              ; password manager for nerds
        ;;pdf               ; pdf enhancements
        ;;prodigy           ; FIXME managing external services & code builders
        ;;rgb               ; creating color strings
        ;;terraform         ; infrastructure as code
-       ;; tmux       ; an API for interacting with tmux
+       tmux       ; an API for interacting with tmux
        ;;upload            ; map local to remote projects via ssh/ftp
        ;;wakatime
 
@@ -117,7 +116,7 @@
        ;;faust             ; dsp, but you get to keep your soul
        ;;fsharp           ; ML stands for Microsoft's Language
        ;;go                ; the hipster dialect
-       (haskell +intero)                ; a language that's lazier than I am
+       ;; (haskell +intero)                ; a language that's lazier than I am
        ;;hy                ; readability of scheme w/ speed of python
        ;;idris             ;
        (java +lsp)                 ; the poster child for carpal tunnel syndrome
@@ -138,7 +137,7 @@
         ;;+hugo            ; use Emacs for hugo blogging
         +ipython     ; ipython/jupyter support for babel
         +pandoc      ; export-with-pandoc support
-        +pomodoro    ; be fruitful with the tomato technique
+        ;; +pomodoro    ; be fruitful with the tomato technique
         +present)    ; using org-mode for presentations
        ;;perl              ; write code no one else can comprehend
        ;;php               ; perl's insecure younger brother
@@ -160,7 +159,7 @@
        ;;web               ; the tubes
 
        :email
-       (mu4e +gmail)       ; WIP
+       ;; (mu4e +gmail)       ; WIP
        ;;notmuch             ; WIP
        ;;(wanderlust +gmail) ; WIP
 
@@ -179,7 +178,7 @@
        :config
        ;; For literate config users. This will tangle+compile a config.org
        ;; literate config in your `doom-private-dir' whenever it changes.
-       ;;literate
+       literate
 
        ;; The default module sets reasonable defaults for Emacs. It also
        ;; provides a Spacemacs-inspired keybinding scheme and a smartparens

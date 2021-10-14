@@ -2,19 +2,9 @@
 (require 's)
 (require 'dash)
 
-(defun beno--org-babel-tangle-config ()
-  (when (string-equal (f-filename (buffer-file-name))
-                      "config.org")
-    (org-babel-tangle)))
-
-(defun beno--tangle-on-save ()
-  (add-hook 'after-save-hook #'beno--org-babel-tangle-config))
-
-(add-hook 'org-mode-hook #'beno--tangle-on-save)
-
-(setq doom-font (font-spec :family "monaco" :size 23 :weight 'normal)
-      doom-big-font (font-spec :family "monaco" :size 37)
-      doom-variable-pitch-font (font-spec :family "Avenir Next" :size 18)
+(setq doom-font (font-spec :family "monaco" :size 15 :weight 'normal)
+      doom-big-font (font-spec :family "monaco" :size 23)
+      doom-variable-pitch-font (font-spec :family "Avenir Next" :size 21)
       org-roam-v2-ack t
       mac-command-modifier 'meta
       ns-command-modifier 'meta
@@ -82,7 +72,7 @@
       org-pomodoro-length 45
       org-pomodoro-short-break-length 15
       org-refile-targets (quote ((nil :maxlevel . 3)))
-      +doom-dashboard-banner-file (expand-file-name "splash.png" doom-private-dir)
+      fancy-splash-image (expand-file-name "splash.png" doom-private-dir)
       tramp-histfile-override "/dev/null"
       +org-capture-todo-file "tasks.org"
       org-super-agenda-groups '((:name "Today"
@@ -100,7 +90,7 @@
                                  :tag "bo")))
 
 (menu-bar-mode t)
-(global-prettify-symbols-mode)
+;; (global-prettify-symbols-mode)
 (rainbow-mode)
 
 (add-to-list 'default-frame-alist
@@ -112,8 +102,8 @@
   "Load theme, taking current system APPEARANCE into consideration."
   (mapc #'disable-theme custom-enabled-themes)
   (pcase appearance
-    ('light (load-theme 'tsdh-light t))
-    ('dark (load-theme 'doom-dracula t))))
+    ('light (load-theme 'doom-nord-light t))
+    ('dark (load-theme 'doom-xcode t))))
 
 (add-hook 'ns-system-appearance-change-functions #'beno--auto-theme)
 
@@ -122,7 +112,7 @@
     (menu-bar-mode -1)
     (tool-bar-mode -1)
     (mapc #'disable-theme custom-enabled-themes)
-    (setq doom-theme 'doom-
+    (setq doom-theme 'doom-one
           evil-emacs-state-cursor '("red" box)
           evil-normal-state-cursor '("black" box)
           evil-visual-state-cursor '("black" box)
@@ -250,14 +240,6 @@ and org files on the top right. Keeps current window on the left."
 (map! :leader
       :desc "work window split"
       ">" #'beno--eshell-split-right)
-
-(map! :leader
-      :desc "left work window"
-      "1" #'evil-window-top-left)
-
-(map! :leader
-      :desc "right bottom work window"
-      "2" #'evil-window-bottom-right)
 
 (map! :desc "fuzzy search visible buffer"
       :leader
