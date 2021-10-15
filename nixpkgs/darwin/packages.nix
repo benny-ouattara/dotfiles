@@ -2,6 +2,8 @@
 
 {
   all = [
+    pkgs.automake
+    pkgs.pkg-config
     pkgs.qemu
     pkgs.starship
     pkgs.rlwrap
