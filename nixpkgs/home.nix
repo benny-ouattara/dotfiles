@@ -314,15 +314,16 @@ command! Gitconfig e ~/.gitconfig
     };
 
     shellAliases = {
-      ls     = "${pkgs.coreutils}/bin/ls --color=auto -alhrt";
-      l      = "${pkgs.coreutils}/bin/ls --color=auto -alhrt";
-      rX     = "${pkgs.coreutils}/bin/chmod -R ugo+rX";
-      gr     = "${pkgs.git}/bin/git rm -r --cached";
-      proc   = "${pkgs.darwin.ps}/bin/ps axwwww | ${pkgs.gnugrep}/bin/grep -i";
-      nstat  = "${pkgs.darwin.network_cmds}/bin/netstat -nr -f inet"
+      r     = "ranger";
+      ls    = "${pkgs.coreutils}/bin/ls --color=auto -alhrt";
+      l     = "${pkgs.coreutils}/bin/ls --color=auto -alhrt";
+      rX    = "${pkgs.coreutils}/bin/chmod -R ugo+rX";
+      gr    = "${pkgs.git}/bin/git rm -r --cached";
+      proc  = "${pkgs.darwin.ps}/bin/ps axwwww | ${pkgs.gnugrep}/bin/grep -i";
+      nstat = "${pkgs.darwin.network_cmds}/bin/netstat -nr -f inet"
                + " | ${pkgs.gnugrep}/bin/egrep -v \"(lo0|vmnet|169\\.254|255\\.255)\""
                + " | ${pkgs.coreutils}/bin/tail -n +5";
-      sbcl   = "${pkgs.rlwrap}/bin/rlwrap sbcl";
+      sbcl  = "${pkgs.rlwrap}/bin/rlwrap sbcl";
     };
 
     profileExtra = ''
