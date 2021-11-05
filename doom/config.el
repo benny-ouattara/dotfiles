@@ -597,3 +597,44 @@ Beware using this command given that it's destructive and non reversible."
   (insert (call-interactively 'test-to-run)))
 
 ;; (require 'load-nano)
+
+(defun avy-action-kill-whole-line (pt)
+  (save-excursion
+    (goto-char pt)
+    (kill-whole-line))
+  (select-window
+   (cdr
+    (ring-ref avy-ring 0)))
+  t)
+
+(defun avy-action-teleport-whole-line (pt)
+    (avy-action-kill-whole-line pt)
+    (save-excursion (yank)) t)
+
+(defun avy-action-mark-to-char (pt)
+  (activate-mark)
+  (goto-char pt))
+
+(defun avy-action-helpful (pt)
+  (save-excursion
+    (goto-char pt)
+    (helpful-at-point))
+  (select-window
+   (cdr (ring-ref avy-ring 0)))
+  t)
+
+(defun avy-action-embark (pt)
+  (unwind-protect
+      (save-excursion
+        (goto-char pt)
+        (embark-act))
+    (select-window
+     (cdr (ring-ref avy-ring 0))))
+  t)
+
+(after! avy
+  (setf (alist-get ?D avy-dispatch-alist) 'avy-action-kill-whole-line
+        (alist-get ?T avy-dispatch-alist) 'avy-action-teleport-whole-line
+        (alist-get ?Z  avy-dispatch-alist) 'avy-action-mark-to-char
+        (alist-get ?H avy-dispatch-alist) 'avy-action-helpful
+        (alist-get ?. avy-dispatch-alist) 'avy-action-embark))
