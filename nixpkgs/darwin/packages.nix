@@ -2,6 +2,7 @@
 
 {
   all = [
+    pkgs.ammonite
     pkgs.qemu
     pkgs.starship
     pkgs.rlwrap
