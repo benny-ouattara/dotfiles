@@ -2,6 +2,7 @@
 
 {
   all = [
+    pkgs.ammonite
     pkgs.automake
     pkgs.pkg-config
     pkgs.qemu

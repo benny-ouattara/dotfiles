@@ -575,15 +575,23 @@ Beware using this command given that it's destructive and non reversible."
   (interactive
    (list  (ivy-read "Test to run: "
                     (project-tests default-directory))))
-  (format "mvn clean -Dtest=%s test" test-name))
+  (format "clear && mvn clean -Dtest=%s test" test-name))
 
 (defun package-no-test ()
   "Command to package application without running tests"
-  (format "mvn -Dmaven.test.skip=true clean package"))
+  (format "clear && mvn -Dmaven.test.skip=true clean package"))
+
+(defun package-verify ()
+  "Command to verify application"
+  (format "clear && mvn clean verify"))
 
 (defun eshell/pkg ()
   "Package java application."
   (insert (package-no-test)))
+
+(defun eshell/verify ()
+  "Verify java application."
+  (insert (package-verify)))
 
 (defun eshell/gst (&rest args)
   "Quickly jumps to magit-status."

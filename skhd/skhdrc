@@ -15,8 +15,10 @@ cmd + ctrl - c : ~/.emacs.d/bin/org-capture
 
 # focus window
 cmd + ctrl - j : yabai -m window --focus prev
-cmd + ctrl - h : yabai -m window --focus south || yabai -m display --focus prev
-cmd + ctrl - l : yabai -m window --focus north || yabai -m display --focus next
+# cmd + ctrl - h : yabai -m window --focus south || yabai -m display --focus prev
+cmd + ctrl - h : yabai -m space --balance && yabai -m window --ratio rel:-0.2
+# cmd + ctrl - l : yabai -m window --focus north || yabai -m display --focus next
+cmd + ctrl - l : yabai -m space --balance && yabai -m window --ratio rel:0.2
 cmd + ctrl - k : yabai -m window --focus next
 cmd + ctrl - 0x21 : yabai -m window --focus stack.prev # this is [
 cmd + ctrl - 0x1E : yabai -m window --focus stack.next # this is ]
