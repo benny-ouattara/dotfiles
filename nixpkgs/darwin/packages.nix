@@ -2,6 +2,7 @@
 
 {
   all = [
+    pkgs.micro
     pkgs.ammonite
     pkgs.automake
     pkgs.pkg-config
