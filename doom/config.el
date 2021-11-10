@@ -102,8 +102,8 @@
   "Load theme, taking current system APPEARANCE into consideration."
   (mapc #'disable-theme custom-enabled-themes)
   (pcase appearance
-    ('light (load-theme 'doom-nord-light t))
-    ('dark (load-theme 'doom-xcode t))))
+    ('light (load-theme 'doom-acario-light t))
+    ('dark (load-theme 'doom-snazzy t))))
 
 (add-hook 'ns-system-appearance-change-functions #'beno--auto-theme)
 
