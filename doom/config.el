@@ -646,4 +646,4 @@ Beware using this command given that it's destructive and non reversible."
         (alist-get ?T avy-dispatch-alist) 'avy-action-teleport-whole-line
         (alist-get ?Z  avy-dispatch-alist) 'avy-action-mark-to-char
         (alist-get ?H avy-dispatch-alist) 'avy-action-helpful
-        (alist-get ?. avy-dispatch-alist) 'avy-action-embark))
+        (alist-get ?; avy-dispatch-alist) 'avy-action-embark))
