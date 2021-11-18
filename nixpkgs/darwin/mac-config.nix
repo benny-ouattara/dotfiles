@@ -33,6 +33,7 @@ in
             pkgs.jetbrains-mono
             pkgs.roboto-mono
             pkgs.fira-code
+            pkgs.iosevka
         ];
     };
 }

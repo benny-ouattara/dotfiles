@@ -10,7 +10,9 @@ Before setting a new variable, make sure that it is not already set. As the
 list of variable grows, it becomes harder to avoid repetition leading to
 overwrite conflicts
 #+begin_src emacs-lisp
-(setq doom-font (font-spec :family "monaco" :size 15 :weight 'normal)
+(setq
+      ; doom-font (font-spec :family "monaco" :size 15 :weight 'normal)
+      doom-font (font-spec :family "Iosevka" :size 17 :width 'Regular)
       doom-big-font (font-spec :family "monaco" :size 23)
       doom-variable-pitch-font (font-spec :family "Avenir Next" :size 21)
       org-roam-v2-ack t
@@ -350,7 +352,7 @@ emacs which is problematic but I haven't found a solution around it yet.
 ;; makes lsp-mode a little more bearable: hide all the UI noise
 (setq lsp-ui-sideline-show-code-actions nil)
 (setq lsp-ui-doc-mode nil)
-(lsp-ui-doc-mode -1)
+; (lsp-ui-doc-mode -1)
 #+end_src
 ** Switch JVM
 Integrated solution to switching JVM, alternative to jenv. Sets CLASSPATH in

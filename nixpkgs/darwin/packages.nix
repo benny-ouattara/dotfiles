@@ -2,7 +2,7 @@
 
 {
   all = [
-    pkgs.texinfo
+    # pkgs.texinfo
     pkgs.guile
     pkgs.micro
     pkgs.ammonite

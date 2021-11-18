@@ -2,7 +2,9 @@
 (require 's)
 (require 'dash)
 
-(setq doom-font (font-spec :family "monaco" :size 15 :weight 'normal)
+(setq
+      ; doom-font (font-spec :family "monaco" :size 15 :weight 'normal)
+      doom-font (font-spec :family "Iosevka" :size 17 :width 'Regular)
       doom-big-font (font-spec :family "monaco" :size 23)
       doom-variable-pitch-font (font-spec :family "Avenir Next" :size 21)
       org-roam-v2-ack t
@@ -295,7 +297,7 @@ and org files on the top right. Keeps current window on the left."
 ;; makes lsp-mode a little more bearable: hide all the UI noise
 (setq lsp-ui-sideline-show-code-actions nil)
 (setq lsp-ui-doc-mode nil)
-(lsp-ui-doc-mode -1)
+; (lsp-ui-doc-mode -1)
 
 (setq java-dir "/Library/Java/JavaVirtualMachines")
 (setq java-home-suffix "/Contents/Home")
