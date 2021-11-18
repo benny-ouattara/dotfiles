@@ -2,6 +2,7 @@
 
 {
   all = [
+    pkgs.guile
     pkgs.micro
     pkgs.ammonite
     pkgs.automake
