@@ -349,6 +349,8 @@ emacs which is problematic but I haven't found a solution around it yet.
 
 ;; makes lsp-mode a little more bearable: hide all the UI noise
 (setq lsp-ui-sideline-show-code-actions nil)
+(setq lsp-ui-doc-mode nil)
+(lsp-ui-doc-mode -1)
 #+end_src
 ** Switch JVM
 Integrated solution to switching JVM, alternative to jenv. Sets CLASSPATH in
