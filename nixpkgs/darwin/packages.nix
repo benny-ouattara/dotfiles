@@ -2,6 +2,7 @@
 
 {
   all = [
+    pkgs.texinfo
     pkgs.guile
     pkgs.micro
     pkgs.ammonite
