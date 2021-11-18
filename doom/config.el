@@ -295,9 +295,10 @@ and org files on the top right. Keeps current window on the left."
 ;;   (lsp-headerline-breadcrumb-mode))
 
 ;; makes lsp-mode a little more bearable: hide all the UI noise
-(setq lsp-ui-sideline-show-code-actions nil)
-(setq lsp-ui-doc-mode nil)
-; (lsp-ui-doc-mode -1)
+(after! (lsp-mode lsp-ui)
+  (setq lsp-ui-sideline-show-code-actions nil
+        lsp-ui-doc-mode nil)
+  (lsp-ui-doc-mode -1))
 
 (setq java-dir "/Library/Java/JavaVirtualMachines")
 (setq java-home-suffix "/Contents/Home")

@@ -350,9 +350,10 @@ emacs which is problematic but I haven't found a solution around it yet.
 ;;   (lsp-headerline-breadcrumb-mode))
 
 ;; makes lsp-mode a little more bearable: hide all the UI noise
-(setq lsp-ui-sideline-show-code-actions nil)
-(setq lsp-ui-doc-mode nil)
-; (lsp-ui-doc-mode -1)
+(after! (lsp-mode lsp-ui)
+  (setq lsp-ui-sideline-show-code-actions nil
+        lsp-ui-doc-mode nil)
+  (lsp-ui-doc-mode -1))
 #+end_src
 ** Switch JVM
 Integrated solution to switching JVM, alternative to jenv. Sets CLASSPATH in
