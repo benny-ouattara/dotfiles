@@ -288,7 +288,7 @@ command! Gitconfig e ~/.gitconfig
     enable = true;
     oh-my-zsh = {
       enable = true;
-      theme = "af-magic";
+      theme = "gozilla";
     };
 
     dotDir = ".config/zsh";
@@ -335,7 +335,7 @@ command! Gitconfig e ~/.gitconfig
 
         eval "$(starship init zsh)"
 
-        eval "$(jenv init -)"
+        # eval "$(jenv init -)"
         export PATH=$PATH:$HOME/.local/bin:$HOME/.emacs.d/bin:/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin:${pkgs.custom-scripts}/bin:/opt/local/bin:/Users/benouattara/Qt/5.15.2/clang_64/bin
 
         if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then . $HOME/.nix-profile/etc/profile.d/nix.sh; fi # required by nix to configure various paths
