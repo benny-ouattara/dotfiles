@@ -1,0 +1,104 @@
+#+TITLE: Linux
+#+AUTHOR: Ben O.
+* arch install
+#+begin_src bash
+setfont ter-v32n
+
+# disk partitioning
+mkfs.fat -F32 /dev/<efi-partition>
+mkfs.ext4 /dev/<os-root-partition>
+mkswap /dev/<swap-paartition>
+
+# networking
+iwctl
+station wlan0 connect <network-name>
+
+# mounting
+mount /dev/<os-root-partition> /mnt
+swapon /dev/sda2
+
+# install packages on /mnt
+pacstrap /mnt base base-devel linux linux-firmware vim emacs i3
+
+# configure fstab to automount efi and root partitions
+genfstab -U -p /mnt >> /mnt/etc/fstab
+
+# inside the mnt
+arch-chroot /mnt
+echo "beno" > /etc/hostname
+
+# locale
+locale-gen
+echo LANG=en_US.UTF-8 > /etc/locale.conf
+export LANG=en_US.UTF-8
+
+# timezone
+ln -s /usr/share/zoneinfo/America/New_York /etc/localtime
+hwclock --systohc --utc
+
+# user
+passwd
+
+# grub
+pacman -S grub efibootmgr dosfstools os-prober mtools
+mkdir /efi
+mount /dev/<efi-partition> /efi
+
+grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB
+
+grub-mkconfig -o /boot/grub/grub.cfg
+
+systemctl enable NetworkManager
+# sudo user
+pacman -S sudo git base-devel xorg-xinit i3 network-manager-applet lightdm
+
+useradd -m ben
+passwd ben
+usermod -aG wheel,audio,video,storage ben
+EDITOR=vim visudo
+
+# AUR
+git clone https://aur.archlinux.org/yay-git.git
+makepkg -si
+yay -S dwm-git volumeicon pcmanfm lxappearance dmenu
+
+# login manager
+systemctl enable lightdm
+
+# xinitrc
+cp /etc/x11/xinit/xinitrc ~/.xinitrc
+nitrogen --restore &
+picom &
+nm-applet
+exec dwm
+#+end_src
+
+#+begin_quote
+Detecting other operating systems
+To have grub-mkconfig search for other installed systems and automatically add them to the menu, install the os-prober package and mount the partitions from which the other systems boot. Then re-run grub-mkconfig. If you get the following output: Warning: os-prober will not be executed to detect other bootable partitions then edit /etc/default/grub and add/uncomment:
+
+GRUB_DISABLE_OS_PROBER=false
+#+end_quote
+
+
+xorg is not automatically started, it should be started with a display manager
+or xinit
+#+begin_src
+pacman -S xorg nitrogen picom vim emacs qutebrowser alacritty brave
+#+end_src
+
+#+NAME: power sequence
+#+begin_quote
+- power on self test
+- bios/uefi reads boot options from nvram
+- efi application at efi partition is executed(application could be bootloader
+  like grub or kernel)
+- bootloader starts kernel
+- kernel unpacks initramfs to rootfs
+- kernel executes /init as first process(systemd)
+- systemd calls getty for terminals then calls login
+- kernel -> systemd -> login shell or kernel -> systemd -> display manager
+- login starts a session for user by setting environment variables and login shell
+- login shell calls xinit
+- xinit runs xinitrc which starts window manager
+#+end_quote
