@@ -4,9 +4,9 @@
 
 (setq
       ; doom-font (font-spec :family "monaco" :size 15 :weight 'normal)
-      doom-font (font-spec :family "Iosevka" :size 17 :width 'Regular)
-      doom-big-font (font-spec :family "monaco" :size 23)
-      doom-variable-pitch-font (font-spec :family "Avenir Next" :size 21)
+      doom-font (font-spec :family "Iosevka" :size 23 :width 'Regular)
+      doom-big-font (font-spec :family "Iosevka" :size 23)
+      doom-variable-pitch-font (font-spec :family "Iosevka" :size 21)
       org-roam-v2-ack t
       mac-command-modifier 'meta
       ns-command-modifier 'meta
@@ -91,7 +91,7 @@
                                 (:name "Big Outcomes"
                                  :tag "bo")))
 
-(menu-bar-mode t)
+(menu-bar-mode -1)
 ;; (global-prettify-symbols-mode)
 (rainbow-mode)
 
