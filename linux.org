@@ -50,7 +50,7 @@ grub-mkconfig -o /boot/grub/grub.cfg
 
 systemctl enable NetworkManager
 # sudo user
-pacman -S sudo git base-devel xorg-xinit i3 network-manager-applet lightdm
+pacman -S sudo git base-devel xorg xorg-xinit i3 network-manager-applet lightdm lightdm-webkit2-greeter
 
 useradd -m ben
 passwd ben
@@ -69,8 +69,14 @@ systemctl enable lightdm
 cp /etc/x11/xinit/xinitrc ~/.xinitrc
 nitrogen --restore &
 picom &
-nm-applet
 exec dwm
+
+# lightdm
+systemctl enable lightdm.service
+vim /etc/lightdm/lightdm.conf
+touch ~/.xprofile
+nitrogen --restore &
+picom &
 #+end_src
 
 #+begin_quote
