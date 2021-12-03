@@ -1,0 +1,5 @@
+setxkbmap us -option 'caps:ctrl_modifier'
+xcape -e 'Caps_Lock=Escape'
+xset r rate 150 60
+feh --randomize --bg-fill ~/Sync/wallpapers/*
+picom &
