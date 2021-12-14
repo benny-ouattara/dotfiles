@@ -113,3 +113,13 @@ pacman -S xorg nitrogen picom vim emacs qutebrowser alacritty brave
 - login shell calls xinit
 - xinit runs xinitrc which starts window manager
 #+end_quote
+
+* Useful commands
+#+begin_src shell
+# scale display
+xrandr --output HDMI-1 --auto --scale-from 1920x1080 --output eDP-1
+#+end_src
+
+#+begin_src shell
+sudo brightnessctl --class=backlight set 2000
+#+end_src

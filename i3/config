@@ -9,7 +9,7 @@
 #
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
-set $mod Mod1
+set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -36,6 +36,7 @@ exec --no-startup-id xcape -e 'Caps_Lock=Escape'
 exec --no-startup-id xset r rate 150 60
 exec --no-startup-id feh --randomize --bg-fill ~/Sync/wallpapers/*
 exec --no-startup-id picom
+exec --no-startup-id volumeicon
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
@@ -126,28 +127,28 @@ set $ws9 "9"
 set $ws10 "10"
 
 # switch to workspace
-bindsym $mod+1 workspace number $ws1
-bindsym $mod+2 workspace number $ws2
-bindsym $mod+3 workspace number $ws3
-bindsym $mod+4 workspace number $ws4
-bindsym $mod+5 workspace number $ws5
-bindsym $mod+6 workspace number $ws6
-bindsym $mod+7 workspace number $ws7
-bindsym $mod+8 workspace number $ws8
-bindsym $mod+9 workspace number $ws9
-bindsym $mod+0 workspace number $ws10
+# bindsym $mod+1 workspace number $ws1
+# bindsym $mod+2 workspace number $ws2
+# bindsym $mod+3 workspace number $ws3
+# bindsym $mod+4 workspace number $ws4
+# bindsym $mod+5 workspace number $ws5
+# bindsym $mod+6 workspace number $ws6
+# bindsym $mod+7 workspace number $ws7
+# bindsym $mod+8 workspace number $ws8
+# bindsym $mod+9 workspace number $ws9
+# bindsym $mod+0 workspace number $ws10
 
 # move focused container to workspace
-bindsym $mod+Shift+1 move container to workspace number $ws1
-bindsym $mod+Shift+2 move container to workspace number $ws2
-bindsym $mod+Shift+3 move container to workspace number $ws3
-bindsym $mod+Shift+4 move container to workspace number $ws4
-bindsym $mod+Shift+5 move container to workspace number $ws5
-bindsym $mod+Shift+6 move container to workspace number $ws6
-bindsym $mod+Shift+7 move container to workspace number $ws7
-bindsym $mod+Shift+8 move container to workspace number $ws8
-bindsym $mod+Shift+9 move container to workspace number $ws9
-bindsym $mod+Shift+0 move container to workspace number $ws10
+# bindsym $mod+Shift+1 move container to workspace number $ws1
+# bindsym $mod+Shift+2 move container to workspace number $ws2
+# bindsym $mod+Shift+3 move container to workspace number $ws3
+# bindsym $mod+Shift+4 move container to workspace number $ws4
+# bindsym $mod+Shift+5 move container to workspace number $ws5
+# bindsym $mod+Shift+6 move container to workspace number $ws6
+# bindsym $mod+Shift+7 move container to workspace number $ws7
+# bindsym $mod+Shift+8 move container to workspace number $ws8
+# bindsym $mod+Shift+9 move container to workspace number $ws9
+# bindsym $mod+Shift+0 move container to workspace number $ws10
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -189,3 +190,58 @@ bar {
         position top
         status_command i3status
 }
+
+for_window [class=".*"] border pixel 0
+
+gaps inner 7
+gaps outer 7
+
+# switch to workspace
+bindsym $mod+1 workspace Terminals 
+bindsym $mod+2 workspace Dev 
+bindsym $mod+3 workspace Browser 
+bindsym $mod+4 workspace Music 
+bindsym $mod+5 workspace FileManager 
+bindsym $mod+6 workspace IRC 
+bindsym $mod+7 workspace E-Mail 
+bindsym $mod+8 workspace Random
+bindsym $mod+9 workspace 9
+bindsym $mod+0 workspace 10
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace Terminals 
+bindsym $mod+Shift+2 move container to workspace Dev 
+bindsym $mod+Shift+3 move container to workspace Browser 
+bindsym $mod+Shift+4 move container to workspace Music 
+bindsym $mod+Shift+5 move container to workspace FileManager 
+bindsym $mod+Shift+6 move container to workspace IRC 
+bindsym $mod+Shift+7 move container to workspace E-Mail 
+bindsym $mod+Shift+8 move container to workspace Random
+bindsym $mod+Shift+9 move container to workspace 9
+bindsym $mod+Shift+0 move container to workspace 10
+
+# Pulse Audio Controls
+bindsym $mod+F12 exec pamixer -i 5
+bindsym $mod+F11 exec pamixer -d 5
+bindsym $mod+shift+F12 exec pamixer --set-volume 0
+
+bindsym $mod+F6 exec sudo brightnessctl --class=backlight set +1000
+bindsym $mod+F5 exec sudo brightnessctl --class=backlight set 1000-
+
+# Program exec
+bindsym $mod+F4 exec pavucontrol
+bindsym $mod+F9 exec thunar
+bindsym $mod+F8 exec xfce4-screenshooter
+
+# Floating programs
+for_window [class="Pavucontrol"] floating enable
+for_window [class="Pavucontrol"] resize shrink left 100, resize shrink right 100, resize shrink down 50, resize shrink up 50
+
+# Assign programs to specific workspace
+assign [class="qutebrowser"] Browser 
+assign [class="thunar"] FileManager 
+assign [class="alacritty"] Terminals 
+
+# Auto exec settings
+exec qutebrowser
+exec alacritty

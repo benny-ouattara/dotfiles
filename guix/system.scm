@@ -28,7 +28,8 @@
     (append
       (list (specification->package "openbox")
             (specification->package "awesome")
-            (specification->package "i3-wm")
+            ;; (specification->package "i3-wm")
+            (specification->package "i3-gaps")
             (specification->package "i3status")
             (specification->package "dmenu")
             (specification->package "st")
@@ -38,6 +39,7 @@
               "emacs-desktop-environment")
             (specification->package "nss-certs"))
       %base-packages))
+
   (services
     (append
       (list (service gnome-desktop-service-type)
@@ -46,6 +48,19 @@
               (xorg-configuration
                 (keyboard-layout keyboard-layout))))
       %desktop-services))
+
+  ;; (services
+  ;;  (modify-services %desktop-services
+  ;;                   (guix-service-type config =>
+  ;;                                      (guix-configuration
+  ;;                                       (inherit config)
+  ;;                                       (substitute-urls
+  ;;                                        (append (list "https://substitutes.nonguix.org")
+  ;;                                                %default-substitute-urls))
+  ;;                                       (authorized-keys
+  ;;                                        (append (list (local-file "./signing-key.pub"))
+  ;;                                                %default-authorized-guix-keys))))))
+
   (bootloader
     (bootloader-configuration
       (bootloader grub-efi-bootloader)
