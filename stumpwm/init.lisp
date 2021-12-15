@@ -5,7 +5,7 @@
 (stumpwm:add-to-load-path "~/.guix-profile/share/common-lisp/sbcl/stumpwm-stumptray")
 (stumpwm:add-to-load-path "~/.guix-profile/share/common-lisp/sbcl/stumpwm-kbd-layouts")
 
-(set-prefix-key (kbd "s-d"))
+(set-prefix-key (kbd "C-d"))
 (setf *mouse-focus-policy* :click
       *message-window-gravity* :center
       *input-window-gravity* :center
@@ -96,8 +96,22 @@
 (setf *mode-line-background-color* "#232635")
 (setf *mode-line-foreground-color* "#A6Accd")
 
+;; modeline
+;; (load-module "cpu")
+;; (load-module "mem")
+;; (load-module "screenshot")
 (run-commands "mode-line")
+(setf stumpwm:*screen-mode-line-format*
+      (list
+       "%n   (%c%M)"
+       "^>" '(:eval (stumpwm:run-shell-command
+                     "LANG=en_US.utf8 date +%A' '%d.%m.%Y' '%l:%M' '%p' 'GMT''%:::z'           '" t))))
 
+(stumpwm:enable-mode-line (stumpwm:current-screen)
+                          (stumpwm:current-head)
+                          t)
+
+;; system tray
 (load-module "stumptray")
 (stumptray:stumptray)
 
