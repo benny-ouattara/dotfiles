@@ -241,7 +241,9 @@ for_window [class="Pavucontrol"] resize shrink left 100, resize shrink right 100
 assign [class="qutebrowser"] Browser 
 assign [class="thunar"] FileManager 
 assign [class="alacritty"] Terminals 
+assign [class="emacs"] Dev 
 
 # Auto exec settings
 exec qutebrowser
 exec alacritty
+exec emacs

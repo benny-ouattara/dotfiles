@@ -1,13 +1,16 @@
 ;; This is an operating system configuration generated
 ;; by the graphical installer.
 
-(use-modules (gnu) (nongnu packages linux))
+(use-modules (gnu)
+             (nongnu packages linux)
+             (gnu packages lisp))
 (use-service-modules
   cups
   desktop
   networking
   ssh
   xorg)
+(use-package-modules fonts wm)
 
 (operating-system
   (kernel linux)
@@ -26,6 +29,8 @@
                 %base-user-accounts))
   (packages
     (append
+     (list sbcl stumpwm `(,stumpwm "lib"))
+     ;; sbcl-ttf-fonts font-dejavu
       (list (specification->package "openbox")
             (specification->package "awesome")
             ;; (specification->package "i3-wm")
