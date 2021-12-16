@@ -55,10 +55,12 @@
   "sbcl-stumpwm-ttf-fonts"
   "sbcl-stumpwm-stumptray"
   "sbcl-stumpwm-kbd-layouts"
-  "stumpwm"
+  "stumpwm-with-slynk"
   "stumpwm:lib"
-  "sbcl"
 
   "syncthing"
   "xmodmap"
+
+  "curl"
+  "rlwrap"
   ))

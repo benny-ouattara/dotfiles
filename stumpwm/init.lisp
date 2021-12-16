@@ -1,5 +1,8 @@
 (in-package :stumpwm)
 
+(require :slynk)
+(slynk:create-server :dont-close t)
+
 (stumpwm:add-to-load-path "~/.guix-profile/share/common-lisp/sbcl/stumpwm-swm-gaps")
 (stumpwm:add-to-load-path "~/.guix-profile/share/common-lisp/sbcl/stumpwm-ttf-fonts")
 (stumpwm:add-to-load-path "~/.guix-profile/share/common-lisp/sbcl/stumpwm-stumptray")
@@ -22,7 +25,7 @@
 ;; (run-shell-command "xmodmap -e \'keycode 133 = F20\'" t)
 ;; (set-prefix-key (kbd "F20"))
 
-(defvar *df/workspaces* (list "dev" "term" "web" "random" "misc"))
+(defvar *df/workspaces* (list "dev" "web" "term" "random" "misc"))
 (stumpwm:grename (nth 0 *df/workspaces*))
 (dolist (workspace (cdr *df/workspaces*))
   (stumpwm:gnewbg workspace))
@@ -64,10 +67,9 @@
 (define-key *top-map* (kbd "C-s-l") "run-shell-command slock")
 (define-key *top-map* (kbd "C-s-r") "iresize")
 
-(defvar *df/workspaces* (list "dev" "term" "web" "random" "misc"))
 (define-key *top-map* (kbd "s-1") "gselect dev")
-(define-key *top-map* (kbd "s-2") "gselect term")
-(define-key *top-map* (kbd "s-3") "gselect web")
+(define-key *top-map* (kbd "s-2") "gselect web")
+(define-key *top-map* (kbd "s-3") "gselect term")
 (define-key *top-map* (kbd "s-4") "gselect random")
 (define-key *top-map* (kbd "s-5") "gselect misc")
 
@@ -82,16 +84,16 @@
 (set-fg-color "#A6Accd")
 (set-msg-border-width 2)
 
-(load-module "swm-gaps")
-(setf swm-gaps:*inner-gaps-size* 7)
-(run-commands "toggle-gaps-on")
+;; (load-module "swm-gaps")
+;; (setf swm-gaps:*inner-gaps-size* 7)
+;; (run-commands "toggle-gaps-on")
 
-(load-module "ttf-fonts")
-(setf xft:*font-dirs* '("/home/ben/.guix-profile/share/fonts/"))
-(setf clx-truetype:+font-cache-filename+ "/home/ben/.local/share/fonts/font-cache.sexp")
-(xft:cache-fonts)
+;; (load-module "ttf-fonts")
+;; (setf xft:*font-dirs* '("/home/ben/.guix-profile/share/fonts/"))
+;; (setf clx-truetype:+font-cache-filename+ "/home/ben/.local/share/fonts/font-cache.sexp")
+;; (xft:cache-fonts)
 
-(set-font (make-instance 'xft:font :family "JetBrains Mono" :subfamily "Regular" :size 16))
+;; (set-font (make-instance 'xft:font :family "JetBrains Mono" :subfamily "Regular" :size 16))
 
 (setf *mode-line-background-color* "#232635")
 (setf *mode-line-foreground-color* "#A6Accd")
@@ -112,8 +114,8 @@
                           t)
 
 ;; system tray
-(load-module "stumptray")
-(stumptray:stumptray)
+;; (load-module "stumptray")
+;; (stumptray:stumptray)
 
 ;; (load-module "battery-portable")
 

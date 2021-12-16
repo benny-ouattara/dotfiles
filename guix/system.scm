@@ -29,7 +29,7 @@
                 %base-user-accounts))
   (packages
     (append
-     (list sbcl stumpwm `(,stumpwm "lib"))
+     (list sbcl stumpwm+slynk `(,stumpwm "lib"))
      ;; sbcl-ttf-fonts font-dejavu
       (list (specification->package "openbox")
             (specification->package "awesome")
