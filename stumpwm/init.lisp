@@ -1,14 +1,44 @@
+#-quicklisp
+(let ((quicklisp-init (merge-pathnames "quicklisp/setup.lisp"
+                                       (user-homedir-pathname))))
+  (when (probe-file quicklisp-init)
+    (load quicklisp-init)))
+
 (in-package :stumpwm)
 
-(require :slynk)
-(slynk:create-server :dont-close t)
+(defcommand hsplit-and-focus () ()
+            "Create a new frame on the right and focus it."
+            (hsplit)
+            (move-focus :right))
+
+(defcommand vsplit-and-focus () ()
+            "Create a new frame below and move focus to it."
+            (vsplit)
+            (move-focus :down))
+
+(defcommand delete-window-and-frame () ()
+            "Delete the current frame with its window."
+            (delete-window)
+            (remove-split))
+
+(defcommand nyxt () ()
+            "Run or raise nyxt."
+            (run-or-raise "nyxt" '(:class "Nyxt") t nil))
+
+(defcommand start-slynk (port) ((:string "Port number: "))
+  (sb-thread:make-thread
+   (lambda ()
+     (slynk:create-server :port (parse-integer port) :dont-close t))
+   :name "manual-slynk-stumpwm"))
 
 (stumpwm:add-to-load-path "~/.guix-profile/share/common-lisp/sbcl/stumpwm-swm-gaps")
 (stumpwm:add-to-load-path "~/.guix-profile/share/common-lisp/sbcl/stumpwm-ttf-fonts")
 (stumpwm:add-to-load-path "~/.guix-profile/share/common-lisp/sbcl/stumpwm-stumptray")
 (stumpwm:add-to-load-path "~/.guix-profile/share/common-lisp/sbcl/stumpwm-kbd-layouts")
 
-(set-prefix-key (kbd "C-d"))
+(setf *startup-message* nil)
+
+(set-prefix-key (kbd "C-a"))
 (setf *mouse-focus-policy* :click
       *message-window-gravity* :center
       *input-window-gravity* :center
@@ -62,7 +92,7 @@
 (define-key *top-map* (kbd "s-r") "remove")
 
 (define-key *top-map* (kbd "s-f") "fullscreen")
-(define-key *top-map* (kbd "s-s") "hsplit")
+(define-key *top-map* (kbd "s-s") "hsplit-and-focus")
 (define-key *top-map* (kbd "s-SPC") "run-shell-command dmenu_run -fn 'Droid Sans Mono-17'")
 (define-key *top-map* (kbd "C-s-l") "run-shell-command slock")
 (define-key *top-map* (kbd "C-s-r") "iresize")
@@ -84,17 +114,6 @@
 (set-fg-color "#A6Accd")
 (set-msg-border-width 2)
 
-;; (load-module "swm-gaps")
-;; (setf swm-gaps:*inner-gaps-size* 7)
-;; (run-commands "toggle-gaps-on")
-
-;; (load-module "ttf-fonts")
-;; (setf xft:*font-dirs* '("/home/ben/.guix-profile/share/fonts/"))
-;; (setf clx-truetype:+font-cache-filename+ "/home/ben/.local/share/fonts/font-cache.sexp")
-;; (xft:cache-fonts)
-
-;; (set-font (make-instance 'xft:font :family "JetBrains Mono" :subfamily "Regular" :size 16))
-
 (setf *mode-line-background-color* "#232635")
 (setf *mode-line-foreground-color* "#A6Accd")
 
@@ -113,10 +132,6 @@
                           (stumpwm:current-head)
                           t)
 
-;; system tray
-;; (load-module "stumptray")
-;; (stumptray:stumptray)
-
 ;; (load-module "battery-portable")
 
 (run-shell-command "nm-applet")
@@ -128,3 +143,23 @@
 (run-shell-command "feh --randomize --bg-fill ~/Sync/wallpapers/*")
 (run-shell-command "picom")
 (run-shell-command "volumeicon")
+
+;; load modules last so that they don't break system in failure case
+(ql:quickload :clx-truetype)
+(load-module "ttf-fonts")
+(setf xft:*font-dirs* '("/home/ben/.guix-profile/share/fonts/"))
+;; (setf clx-truetype:+font-cache-filename+ "/home/ben/.local/share/fonts/font-cache.sexp")
+(xft:cache-fonts)
+(set-font (make-instance 'xft:font :family "JetBrains Mono" :subfamily "Regular" :size 16))
+
+(load-module "swm-gaps")
+(setf swm-gaps:*inner-gaps-size* 7)
+(run-commands "toggle-gaps-on")
+
+(ql:quickload :xembed)
+(load-module "stumptray")
+(stumptray:stumptray)
+
+;; have this be the last line of config since creating server is not an idempotent operation
+(require :slynk)
+(slynk:create-server :dont-close t)
