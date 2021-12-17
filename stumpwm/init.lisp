@@ -25,6 +25,10 @@
             "Run or raise nyxt."
             (run-or-raise "nyxt" '(:class "Nyxt") t nil))
 
+(defcommand start-emacs () ()
+            "Run or raise emacs."
+            (run-or-raise "emacs" '(:class "Emacs") t nil))
+
 (defcommand start-slynk (port) ((:string "Port number: "))
   (sb-thread:make-thread
    (lambda ()
@@ -73,8 +77,8 @@
 (define-key *top-map* (kbd "M-h") "resize-direction Down")
 
 (define-key *top-map* (kbd "s-RET") "exec alacritty")
-(define-key *top-map* (kbd "s-w") "exec qutebrowser")
-(define-key *top-map* (kbd "s-e") "exec emacs")
+(define-key *top-map* (kbd "s-w") "nyxt")
+(define-key *top-map* (kbd "s-e") "emacs")
 
 (define-key *top-map* (kbd "s-j") "move-focus left")
 (define-key *top-map* (kbd "s-k") "move-focus right")
@@ -114,35 +118,16 @@
 (set-fg-color "#A6Accd")
 (set-msg-border-width 2)
 
-(setf *mode-line-background-color* "#232635")
-(setf *mode-line-foreground-color* "#A6Accd")
-
-;; modeline
-;; (load-module "cpu")
-;; (load-module "mem")
-;; (load-module "screenshot")
-(run-commands "mode-line")
-(setf stumpwm:*screen-mode-line-format*
-      (list
-       "%n   (%c%M)"
-       "^>" '(:eval (stumpwm:run-shell-command
-                     "LANG=en_US.utf8 date +%A' '%d.%m.%Y' '%l:%M' '%p' 'GMT''%:::z'           '" t))))
-
-(stumpwm:enable-mode-line (stumpwm:current-screen)
-                          (stumpwm:current-head)
-                          t)
-
-;; (load-module "battery-portable")
-
-(run-shell-command "nm-applet")
+;; start essential processes
+;; (run-shell-command "nm-applet")
 (run-shell-command "syncthing")
-;; (run-shell-command "emacs")
+(run-commands "start-emacs")
 (run-shell-command "setxkbmap us -option 'caps:ctrl_modifier'")
 (run-shell-command "xcape -e 'Caps_Lock=Escape'")
 (run-shell-command "xset r rate 150 60")
 (run-shell-command "feh --randomize --bg-fill ~/Sync/wallpapers/*")
 (run-shell-command "picom")
-(run-shell-command "volumeicon")
+;; (run-shell-command "volumeicon")
 
 ;; load modules last so that they don't break system in failure case
 (ql:quickload :clx-truetype)
@@ -152,14 +137,42 @@
 (xft:cache-fonts)
 (set-font (make-instance 'xft:font :family "JetBrains Mono" :subfamily "Regular" :size 16))
 
+;; gaps
 (load-module "swm-gaps")
 (setf swm-gaps:*inner-gaps-size* 7)
 (run-commands "toggle-gaps-on")
 
+;; tray
 (ql:quickload :xembed)
 (load-module "stumptray")
 (stumptray:stumptray)
 
+;; mode-line
+;; (load-module "cpu")
+;; (load-module "mem")
+;; (load-module "screenshot")
+;; (load-module "battery-portable")
+
+(load-module "net")
+(load-module "wifi")
+(setf *mode-line-timeout* 2)
+(setf *time-modeline-string* "%F %H:%M")
+(setf *group-format* "%t")
+(setf *window-format* "%n: %30t")
+(setf *mode-line-background-color* "#232635")
+(setf *mode-line-foreground-color* "#A6Accd")
+(setf wifi:*wifi-modeline-fmt*       "%e %P"
+      wifi:*use-colors*              nil)
+(run-commands "mode-line")
+(setf stumpwm:*screen-mode-line-format*
+      (list
+       "%n   "
+       "^>" '(:eval (stumpwm:run-shell-command
+                     "LANG=en_US.utf8 date +%A' '%d.%m.%Y' '%l:%M' '%p' 'GMT''%:::z'           '" t))))
+
+(stumpwm:enable-mode-line (stumpwm:current-screen)
+                          (stumpwm:current-head)
+                          t)
 ;; have this be the last line of config since creating server is not an idempotent operation
 (require :slynk)
 (slynk:create-server :dont-close t)

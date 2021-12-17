@@ -56,6 +56,8 @@
   "sbcl-stumpwm-stumptray"
   "sbcl-stumpwm-kbd-layouts"
   "stumpwm-with-slynk"
+  "sbcl-stumpwm-net"
+  "sbcl-stumpwm-wifi"
   "stumpwm:lib"
 
   "syncthing"
