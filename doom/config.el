@@ -5,7 +5,7 @@
 (setq
       ; doom-font (font-spec :family "monaco" :size 15 :weight 'normal)
       ;; doom-font (font-spec :family "Iosevka" :size 17 :width 'Regular)
-      doom-font (font-spec :family "JetBrains Mono" :size 17)
+      doom-font (font-spec :family "JetBrains Mono" :size 19)
       doom-big-font (font-spec :family "monaco" :size 23)
       doom-variable-pitch-font (font-spec :family "Avenir Next" :size 21)
       org-roam-v2-ack t
