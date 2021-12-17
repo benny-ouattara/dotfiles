@@ -353,7 +353,7 @@ emacs which is problematic but I haven't found a solution around it yet.
 ;; makes lsp-mode a little more bearable: hide all the UI noise
 (after! (lsp-mode lsp-ui)
   (setq lsp-ui-sideline-show-code-actions nil
-        lsp-ui-doc-mode nil)
+        lsp-ui-doc-enable nil)
   (lsp-ui-doc-mode -1))
 #+end_src
 ** Switch JVM
