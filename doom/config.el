@@ -413,6 +413,28 @@ A random adjective is chosen followed by a random nound and a random number."
                (message "created project %s" name))
       (user-error "executable %s not found" cmd))))
 
+sbcl --eval "(ql:quickload :quickproject)" --eval "(quickproject:make-project #p\"~/Code/<name>\")" --non-interactive
+(defun create-common-lisp-project (name)
+  (interactive
+   (list
+    (ivy-read "Project name: "
+              (haikens 4 100 project-prefix))))
+  (let* ((default-directory project-dir)
+         (app-dir (concat project-dir "/" name))
+         (app-projectile-path (concat app-dir "/.projectile"))
+         (cmd "sbcl")
+         (args (list "--eval"
+                     "(ql:quickload :quickproject)"
+                     "--eval"
+                     (format "(quickproject:make-project #p\"%s\"  :name \"%s\")" app-dir name)
+                     )))
+    (if (executable-find cmd)
+        (progn (apply #'doom-call-process cmd args)
+               (f-touch app-projectile-path)
+               (projectile-discover-projects-in-search-path)
+               (message "created project %s" name))
+      (user-error "executable %s not found" cmd))))
+
 (defun delete-project (project-path)
   "Delete mvn project.
 Delete mvn project at PROJECT-PATH by removing project from lsp workspaces,
@@ -447,6 +469,7 @@ Beware using this command given that it's destructive and non reversible."
          :desc "create java project" "j" #'create-java-project
          :desc "create scala project" "s" #'create-scala-project
          :desc "create clojure project" "c" #'create-clojure-project
+         :desc "create common lisp project" "l" #'create-common-lisp-project
          :desc "delete project" "d" #'delete-project
          :desc "delete all test projects" "D" #'projects-cleanup))))
 

@@ -1,10 +1,12 @@
 #+TITLE: Config
+
 * Dependencies
 #+begin_src emacs-lisp
 (require 'f)
 (require 's)
 (require 'dash)
 #+end_src
+
 * Variables
 Before setting a new variable, make sure that it is not already set. As the
 list of variable grows, it becomes harder to avoid repetition leading to
@@ -150,6 +152,7 @@ Manages look and feel on tty frames i.e emacs in the terminal
           evil-insert-state-cursor '("red" bar)
           evil-motion-state-cursor '("gray" box))))
 #+end_src
+
 * Org mode
 A ton of org mode config
 #+begin_src emacs-lisp
@@ -227,12 +230,14 @@ A ton of org mode config
 (set-popup-rule! "^\\*Org Agenda" :side 'bottom :size 0.90 :select t :ttl nil)
 (set-popup-rule! "^CAPTURE.*\\.org$" :side 'bottom :size 0.90 :select t :ttl nil)
 #+end_src
+
 * Tramp
 Tramp history file management
 #+begin_src emacs-lisp
 (when (not (file-exists-p (concat doom-cache-dir "tramp-histfile")))
   (make-empty-file (concat doom-cache-dir "tramp-histfile")))
 #+end_src
+
 * Code indentation
 Indentation of =2= for most programming languages
 #+begin_src emacs-lisp
@@ -252,6 +257,7 @@ Indentation of =2= for most programming languages
 
 (beno--indent 2)
 #+end_src
+
 * Keybindings
 ** personal workspace keybindings
 Most common keybindings I use to be more productive. The idea is to capture most
@@ -487,6 +493,31 @@ Create clojure/lein project
                (message "created project %s" name))
       (user-error "executable %s not found" cmd))))
 #+end_src
+** common lisp projects
+Create common lisp project with quickproject
+#+begin_src emacs-lisp
+sbcl --eval "(ql:quickload :quickproject)" --eval "(quickproject:make-project #p\"~/Code/<name>\")" --non-interactive
+(defun create-common-lisp-project (name)
+  (interactive
+   (list
+    (ivy-read "Project name: "
+              (haikens 4 100 project-prefix))))
+  (let* ((default-directory project-dir)
+         (app-dir (concat project-dir "/" name))
+         (app-projectile-path (concat app-dir "/.projectile"))
+         (cmd "sbcl")
+         (args (list "--eval"
+                     "(ql:quickload :quickproject)"
+                     "--eval"
+                     (format "(quickproject:make-project #p\"%s\"  :name \"%s\")" app-dir name)
+                     )))
+    (if (executable-find cmd)
+        (progn (apply #'doom-call-process cmd args)
+               (f-touch app-projectile-path)
+               (projectile-discover-projects-in-search-path)
+               (message "created project %s" name))
+      (user-error "executable %s not found" cmd))))
+#+end_src
 ** project deletion
 Delete =haiken= projects
 #+begin_src emacs-lisp
@@ -527,6 +558,7 @@ Bring project lifecycle management to your fingertips
          :desc "create java project" "j" #'create-java-project
          :desc "create scala project" "s" #'create-scala-project
          :desc "create clojure project" "c" #'create-clojure-project
+         :desc "create common lisp project" "l" #'create-common-lisp-project
          :desc "delete project" "d" #'delete-project
          :desc "delete all test projects" "D" #'projects-cleanup))))
 #+end_src
