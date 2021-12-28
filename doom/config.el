@@ -123,7 +123,7 @@
           evil-motion-state-cursor '("gray" box))))
 
 ;; wrap lines around in org buffers
-(add-hook 'org-mode-hook #'auto-fill-mode)
+;; (add-hook 'org-mode-hook #'auto-fill-mode)
 
 (global-auto-revert-mode t)
 

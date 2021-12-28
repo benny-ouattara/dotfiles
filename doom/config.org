@@ -157,7 +157,7 @@ Manages look and feel on tty frames i.e emacs in the terminal
 A ton of org mode config
 #+begin_src emacs-lisp
 ;; wrap lines around in org buffers
-(add-hook 'org-mode-hook #'auto-fill-mode)
+;; (add-hook 'org-mode-hook #'auto-fill-mode)
 
 (global-auto-revert-mode t)
 
