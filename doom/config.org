@@ -496,7 +496,6 @@ Create clojure/lein project
 ** common lisp projects
 Create common lisp project with quickproject
 #+begin_src emacs-lisp
-sbcl --eval "(ql:quickload :quickproject)" --eval "(quickproject:make-project #p\"~/Code/<name>\")" --non-interactive
 (defun create-common-lisp-project (name)
   (interactive
    (list

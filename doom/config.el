@@ -413,7 +413,6 @@ A random adjective is chosen followed by a random nound and a random number."
                (message "created project %s" name))
       (user-error "executable %s not found" cmd))))
 
-sbcl --eval "(ql:quickload :quickproject)" --eval "(quickproject:make-project #p\"~/Code/<name>\")" --non-interactive
 (defun create-common-lisp-project (name)
   (interactive
    (list
