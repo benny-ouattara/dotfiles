@@ -7,6 +7,7 @@
 (require 'dash)
 #+end_src
 
+
 * Variables
 Before setting a new variable, make sure that it is not already set. As the
 list of variable grows, it becomes harder to avoid repetition leading to
@@ -111,6 +112,7 @@ overwrite conflicts
 | :name | Due soon     | :deadline  | future |            |       |
 | :name | Big Outcomes | :tag       | bo     |            |       |
 
+
 * Appearance
 ** General appearance modes
 These are general modes that affect the appearance and the way symbols and
@@ -152,6 +154,7 @@ Manages look and feel on tty frames i.e emacs in the terminal
           evil-insert-state-cursor '("red" bar)
           evil-motion-state-cursor '("gray" box))))
 #+end_src
+
 
 * Org mode
 A ton of org mode config
@@ -231,12 +234,14 @@ A ton of org mode config
 (set-popup-rule! "^CAPTURE.*\\.org$" :side 'bottom :size 0.90 :select t :ttl nil)
 #+end_src
 
+
 * Tramp
 Tramp history file management
 #+begin_src emacs-lisp
 (when (not (file-exists-p (concat doom-cache-dir "tramp-histfile")))
   (make-empty-file (concat doom-cache-dir "tramp-histfile")))
 #+end_src
+
 
 * Code indentation
 Indentation of =2= for most programming languages
@@ -257,6 +262,7 @@ Indentation of =2= for most programming languages
 
 (beno--indent 2)
 #+end_src
+
 
 * Keybindings
 ** personal workspace keybindings
@@ -330,6 +336,8 @@ and org files on the top right. Keeps current window on the left."
       :desc "previous workspace"
       "[" #'+workspace:switch-previous)
 #+end_src
+
+
 * Java
 I use it at work so I might as well tune it
 ** Eglot
@@ -380,6 +388,8 @@ current session.
         (home-path (concat java-dir "/" chosen-jvm java-home-suffix)))
     (setenv "JAVA_HOME" home-path)))
 #+end_src
+
+
 * Project lifecycle
 I have started experimenting with APIs of different languages. I need to
 be able to create and delete projects in those languages on the fly.
@@ -561,6 +571,8 @@ Bring project lifecycle management to your fingertips
          :desc "delete project" "d" #'delete-project
          :desc "delete all test projects" "D" #'projects-cleanup))))
 #+end_src
+
+
 * Email
 I started managing my email with mu4e
 ** accounts
@@ -645,6 +657,8 @@ Quickly take actions such as read later or follow up on emails
   (add-to-list 'mu4e-headers-actions '("read later" . beno--capture-mail-read-later) t)
   (add-to-list 'mu4e-view-actions '("read later" . beno--capture-mail-read-later) t))
 #+end_src
+
+
 * Dired
 ** dired single
 Ability to navigate in and out of directories with h and l
@@ -655,6 +669,8 @@ Ability to navigate in and out of directories with h and l
         :n "h" 'dired-single-up-directory
         :n "l" 'dired-single-buffer))
 #+end_src
+
+
 * Eshell
 I use eshell because it is more integrated in emacs therefore more extensible
 ** json output formatter
@@ -743,10 +759,14 @@ as jq since it already integrates json output right within eshell
   (+eshell/goto-end-of-prompt)
   (insert (call-interactively 'test-to-run)))
 #+end_src
+
+
 * Emacs nano
 #+begin_src emacs-lisp
 ;; (require 'load-nano)
 #+end_src
+
+
 * Avy
 #+begin_src emacs-lisp
 (defun avy-action-kill-whole-line (pt)
