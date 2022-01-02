@@ -674,3 +674,58 @@ Beware using this command given that it's destructive and non reversible."
         (alist-get ?Z  avy-dispatch-alist) 'avy-action-mark-to-char
         (alist-get ?H avy-dispatch-alist) 'avy-action-helpful
         (alist-get ?; avy-dispatch-alist) 'avy-action-embark))
+
+(cl-defstruct solution-info
+  (ext nil :read-only t)
+  (dir nil :read-only t)
+  (template nil :read-only t))
+
+(defun initialize-lang-info ()
+  (let ((lang-info (make-hash-table))
+    (python-info (make-solution-info :ext "py" :dir "~/Code/algo-python" :template "import sys
+
+sys.stdin = open(\"input.txt\", \"r\")
+sys.stdout = open(\"output.txt\", \"w\")
+sys.stderr = open(\"err.txt\", \"w\")"))
+    (scala-info (make-solution-info :ext "scala" :dir "~/Code/algo-scala" :template "import sys
+
+sys.stdin = open(\"input.txt\", \"r\")
+sys.stdout = open(\"output.txt\", \"w\")
+sys.stderr = open(\"err.txt\", \"w\")")))
+    (puthash :python python-info lang-info)
+    (puthash :scala scala-info lang-info)
+    lang-info))
+
+(defun cp-solve (language problem-name)
+  (interactive "slang: \nsproblem name: \n")
+  (let* ((info-table (initialize-lang-info))
+         (lang (doom-keyword-intern language))
+         (lang-info (gethash lang info-table))
+         (solution-directory (solution-info-dir lang-info))
+         (ext (solution-info-ext lang-info))
+         (lang-template (solution-info-template lang-info))
+         (solution-directory-path (concat solution-directory "/" problem-name))
+         (solution-file-path (concat solution-directory-path "/" "sol." ext))
+         (input-file-path (concat solution-directory-path "/" "input.txt"))
+         (output-file-path (concat solution-directory-path "/" "output.txt"))
+         (error-file-path (concat solution-directory-path "/" "err.txt"))
+         (file-paths (list input-file-path output-file-path error-file-path solution-file-path))
+         (height (/ (window-total-height) 4)))
+    (make-directory solution-directory-path 'parents)
+    (-map #'f-touch file-paths)
+    (with-current-buffer (find-file solution-file-path)
+      (when (= (buffer-size) 0) (insert lang-template))
+      (save-buffer))
+    (split-window-horizontally)
+    (evil-window-next 2)
+    (+eshell/here)
+    (split-window-vertically height)
+    (evil-window-next 3)
+    (find-file input-file-path)
+    (split-window-vertically height)
+    (evil-window-next 4)
+    (find-file output-file-path)
+    (split-window-vertically height)
+    (evil-window-next 5)
+    (find-file error-file-path)
+    (evil-window-next 1)))

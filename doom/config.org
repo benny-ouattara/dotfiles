@@ -7,7 +7,6 @@
 (require 'dash)
 #+end_src
 
-
 * Variables
 Before setting a new variable, make sure that it is not already set. As the
 list of variable grows, it becomes harder to avoid repetition leading to
@@ -112,8 +111,8 @@ overwrite conflicts
 | :name | Due soon     | :deadline  | future |            |       |
 | :name | Big Outcomes | :tag       | bo     |            |       |
 
-
 * Appearance
+
 ** General appearance modes
 These are general modes that affect the appearance and the way symbols and
 colors are presented
@@ -154,7 +153,6 @@ Manages look and feel on tty frames i.e emacs in the terminal
           evil-insert-state-cursor '("red" bar)
           evil-motion-state-cursor '("gray" box))))
 #+end_src
-
 
 * Org mode
 A ton of org mode config
@@ -234,14 +232,12 @@ A ton of org mode config
 (set-popup-rule! "^CAPTURE.*\\.org$" :side 'bottom :size 0.90 :select t :ttl nil)
 #+end_src
 
-
 * Tramp
 Tramp history file management
 #+begin_src emacs-lisp
 (when (not (file-exists-p (concat doom-cache-dir "tramp-histfile")))
   (make-empty-file (concat doom-cache-dir "tramp-histfile")))
 #+end_src
-
 
 * Code indentation
 Indentation of =2= for most programming languages
@@ -262,7 +258,6 @@ Indentation of =2= for most programming languages
 
 (beno--indent 2)
 #+end_src
-
 
 * Keybindings
 ** personal workspace keybindings
@@ -337,7 +332,6 @@ and org files on the top right. Keeps current window on the left."
       "[" #'+workspace:switch-previous)
 #+end_src
 
-
 * Java
 I use it at work so I might as well tune it
 ** Eglot
@@ -388,7 +382,6 @@ current session.
         (home-path (concat java-dir "/" chosen-jvm java-home-suffix)))
     (setenv "JAVA_HOME" home-path)))
 #+end_src
-
 
 * Project lifecycle
 I have started experimenting with APIs of different languages. I need to
@@ -572,7 +565,6 @@ Bring project lifecycle management to your fingertips
          :desc "delete all test projects" "D" #'projects-cleanup))))
 #+end_src
 
-
 * Email
 I started managing my email with mu4e
 ** accounts
@@ -658,7 +650,6 @@ Quickly take actions such as read later or follow up on emails
   (add-to-list 'mu4e-view-actions '("read later" . beno--capture-mail-read-later) t))
 #+end_src
 
-
 * Dired
 ** dired single
 Ability to navigate in and out of directories with h and l
@@ -669,7 +660,6 @@ Ability to navigate in and out of directories with h and l
         :n "h" 'dired-single-up-directory
         :n "l" 'dired-single-buffer))
 #+end_src
-
 
 * Eshell
 I use eshell because it is more integrated in emacs therefore more extensible
@@ -760,12 +750,10 @@ as jq since it already integrates json output right within eshell
   (insert (call-interactively 'test-to-run)))
 #+end_src
 
-
 * Emacs nano
 #+begin_src emacs-lisp
 ;; (require 'load-nano)
 #+end_src
-
 
 * Avy
 #+begin_src emacs-lisp
@@ -809,4 +797,62 @@ as jq since it already integrates json output right within eshell
         (alist-get ?Z  avy-dispatch-alist) 'avy-action-mark-to-char
         (alist-get ?H avy-dispatch-alist) 'avy-action-helpful
         (alist-get ?; avy-dispatch-alist) 'avy-action-embark))
+#+end_src
+
+* CP
+#+begin_src emacs-lisp
+(cl-defstruct solution-info
+  (ext nil :read-only t)
+  (dir nil :read-only t)
+  (template nil :read-only t))
+
+(defun initialize-lang-info ()
+  (let ((lang-info (make-hash-table))
+    (python-info (make-solution-info :ext "py" :dir "~/Code/algo-python" :template "import sys
+
+sys.stdin = open(\"input.txt\", \"r\")
+sys.stdout = open(\"output.txt\", \"w\")
+sys.stderr = open(\"err.txt\", \"w\")"))
+    (scala-info (make-solution-info :ext "scala" :dir "~/Code/algo-scala" :template "import sys
+
+sys.stdin = open(\"input.txt\", \"r\")
+sys.stdout = open(\"output.txt\", \"w\")
+sys.stderr = open(\"err.txt\", \"w\")")))
+    (puthash :python python-info lang-info)
+    (puthash :scala scala-info lang-info)
+    lang-info))
+
+(defun cp-solve (language problem-name)
+  (interactive "slang: \nsproblem name: \n")
+  (let* ((info-table (initialize-lang-info))
+         (lang (doom-keyword-intern language))
+         (lang-info (gethash lang info-table))
+         (solution-directory (solution-info-dir lang-info))
+         (ext (solution-info-ext lang-info))
+         (lang-template (solution-info-template lang-info))
+         (solution-directory-path (concat solution-directory "/" problem-name))
+         (solution-file-path (concat solution-directory-path "/" "sol." ext))
+         (input-file-path (concat solution-directory-path "/" "input.txt"))
+         (output-file-path (concat solution-directory-path "/" "output.txt"))
+         (error-file-path (concat solution-directory-path "/" "err.txt"))
+         (file-paths (list input-file-path output-file-path error-file-path solution-file-path))
+         (height (/ (window-total-height) 4)))
+    (make-directory solution-directory-path 'parents)
+    (-map #'f-touch file-paths)
+    (with-current-buffer (find-file solution-file-path)
+      (when (= (buffer-size) 0) (insert lang-template))
+      (save-buffer))
+    (split-window-horizontally)
+    (evil-window-next 2)
+    (+eshell/here)
+    (split-window-vertically height)
+    (evil-window-next 3)
+    (find-file input-file-path)
+    (split-window-vertically height)
+    (evil-window-next 4)
+    (find-file output-file-path)
+    (split-window-vertically height)
+    (evil-window-next 5)
+    (find-file error-file-path)
+    (evil-window-next 1)))
 #+end_src
