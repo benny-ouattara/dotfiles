@@ -25,3 +25,4 @@
   :recipe (:host github :repo "skyler544/doom-nano-testing"))
 ;; temporary fix to map.el bug
 (package! map :pin "bb50dba")
+(package! keyfreq)
