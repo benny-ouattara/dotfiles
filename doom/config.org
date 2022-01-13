@@ -20,6 +20,7 @@ overwrite conflicts
       doom-big-font (font-spec :family "monaco" :size 23)
       doom-variable-pitch-font (font-spec :family "Avenir Next" :size 21)
       org-roam-v2-ack t
+      +org-roam-open-buffer-on-find-file nil
       mac-command-modifier 'meta
       ns-command-modifier 'meta
       rfc-mode-directory (expand-file-name "~/rfc/")
@@ -302,6 +303,11 @@ and org files on the top right. Keeps current window on the left."
 (map! :desc "fuzzy search visible buffer"
       :leader
       "a" #'evil-avy-goto-char-2)
+
+
+(map! :desc "line in visible buffer"
+      :leader
+      "A" #'avy-goto-line)
 
 (map! :leader
       :desc "open file other window"
