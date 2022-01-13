@@ -729,3 +729,10 @@ sys.stderr = open(\"err.txt\", \"w\")")))
     (evil-window-next 5)
     (find-file error-file-path)
     (evil-window-next 1)))
+
+(defun save-all-buffers ()
+  (save-some-buffers t))
+
+(add-to-list 'doom-switch-buffer-hook #'save-all-buffers)
+(add-to-list 'doom-switch-window-hook #'save-all-buffers)
+(add-to-list 'doom-switch-frame-hook #'save-all-buffers)
