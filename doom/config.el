@@ -223,6 +223,35 @@ and org files on the top right. Keeps current window on the left."
   (progn  (dired-other-window org-spotify-directory)
           (+eshell/split-below)))
 
+(defun beno--eshell-toggle-right (arg &optional command)
+  "Toggle eshell popup window to the right."
+  (interactive "P")
+  (let ((eshell-buffer
+         (get-buffer-create
+          (format "*doom:eshell-popup:%s*" "main")))
+        confirm-kill-processes
+        current-prefix-arg)
+    (when arg
+      (when-let (win (get-buffer-window eshell-buffer))
+        (delete-window win))
+      (when (buffer-live-p eshell-buffer)
+        (with-current-buffer eshell-buffer
+          (fundamental-mode)
+          (erase-buffer))))
+    (if-let (win (get-buffer-window eshell-buffer))
+        (let (confirm-kill-processes)
+          (delete-window win)
+          (ignore-errors (kill-buffer eshell-buffer)))
+      (with-current-buffer eshell-buffer
+        (doom-mark-buffer-as-real-h)
+        (if (eq major-mode 'eshell-mode)
+            (run-hooks 'eshell-mode-hook)
+          (eshell-mode))
+        (when command
+          (+eshell-run-command command eshell-buffer)))
+      (select-window (split-window-horizontally (* 2 (/ (window-total-width) 3))))
+      (switch-to-buffer eshell-buffer))))
+
 (defun beno--eshell-split-right ()
   "Create a new eshell window 2/3 to the right of the current one."
   (interactive)
@@ -243,7 +272,7 @@ and org files on the top right. Keeps current window on the left."
 
 (map! :leader
       :desc "work window split"
-      ">" #'beno--eshell-split-right)
+      ">" #'beno--eshell-toggle-right)
 
 (map! :desc "fuzzy search visible buffer"
       :leader
