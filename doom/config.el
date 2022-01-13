@@ -282,6 +282,10 @@ and org files on the top right. Keeps current window on the left."
       :desc "previous workspace"
       "[" #'+workspace:switch-previous)
 
+(map! :leader
+      :desc "calendar"
+      "o c" #'cfw:open-calendar-buffer)
+
 ;; setup lsp server for eglot
 ;; eglot doesn't recognize ~ for user home directory
 ;; (setq lsp-jar (concat home-dir  "/.emacs.d/.cache/lsp/eclipse.jdt.ls/plugins/org.eclipse.equinox.launcher_1.6.0.v20200915-1508.jar"))
