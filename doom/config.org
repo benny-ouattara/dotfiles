@@ -271,45 +271,6 @@ and org files on the top right. Keeps current window on the left."
   (progn  (dired-other-window org-spotify-directory)
           (+eshell/split-below)))
 
-(defun beno--eshell-toggle-right (arg &optional command)
-  "Toggle eshell popup window to the right."
-  (interactive "P")
-  (let ((eshell-buffer
-         (get-buffer-create
-          (format "*doom:eshell-popup:%s*" "main")))
-        confirm-kill-processes
-        current-prefix-arg)
-    (when arg
-      (when-let (win (get-buffer-window eshell-buffer))
-        (delete-window win))
-      (when (buffer-live-p eshell-buffer)
-        (with-current-buffer eshell-buffer
-          (fundamental-mode)
-          (erase-buffer))))
-    (if-let (win (get-buffer-window eshell-buffer))
-        (let (confirm-kill-processes)
-          (delete-window win)
-          (ignore-errors (kill-buffer eshell-buffer)))
-      (with-current-buffer eshell-buffer
-        (doom-mark-buffer-as-real-h)
-        (if (eq major-mode 'eshell-mode)
-            (run-hooks 'eshell-mode-hook)
-          (eshell-mode))
-        (when command
-          (+eshell-run-command command eshell-buffer)))
-      (select-window (split-window-horizontally (* 2 (/ (window-total-width) 3))))
-      (switch-to-buffer eshell-buffer))))
-
-(defun beno--eshell-split-right ()
-  "Create a new eshell window 2/3 to the right of the current one."
-  (interactive)
-  (let* ((ignore-window-parameters t)
-         (dedicated-p (window-dedicated-p))
-         (+eshell-enable-new-shell-on-split
-          (or +eshell-enable-new-shell-on-split (frame-parameter nil 'saved-wconf))))
-    (select-window (split-window-horizontally (* 2 (/ (window-total-width) 3))))
-    (+eshell--bury-buffer dedicated-p)))
-
 (map! :leader
       :desc "close current window"
       "0" #'evil-quit)
@@ -325,7 +286,6 @@ and org files on the top right. Keeps current window on the left."
 (map! :desc "fuzzy search visible buffer"
       :leader
       "a" #'evil-avy-goto-char-2)
-
 
 (map! :desc "line in visible buffer"
       :leader
@@ -788,6 +748,49 @@ as jq since it already integrates json output right within eshell
   (insert (call-interactively 'test-to-run)))
 #+end_src
 
+** eshell placement
+#+begin_src emacs-lisp
+(setf +main-eshell-popup+ "*doom:eshell-popup:main*")
+
+(defun beno--eshell-toggle-right (arg &optional command)
+  "Toggle eshell popup window to the right with the help of set-popup-rule!."
+  (interactive "P")
+  (let ((eshell-buffer
+         (get-buffer-create +main-eshell-popup+))
+        confirm-kill-processes
+        current-prefix-arg)
+    (when arg
+      (when-let (win (get-buffer-window eshell-buffer))
+        (delete-window win))
+      (when (buffer-live-p eshell-buffer)
+        (with-current-buffer eshell-buffer
+          (fundamental-mode)
+          (erase-buffer))))
+    (if-let (win (get-buffer-window eshell-buffer))
+        (let (confirm-kill-processes)
+          (delete-window win)
+          (ignore-errors (kill-buffer eshell-buffer)))
+      (with-current-buffer eshell-buffer
+        (doom-mark-buffer-as-real-h)
+        (if (eq major-mode 'eshell-mode)
+            (run-hooks 'eshell-mode-hook)
+          (eshell-mode))
+        (when command
+          (+eshell-run-command command eshell-buffer)))
+      (pop-to-buffer eshell-buffer))))
+
+(defun beno--eshell-split-right ()
+  "Create a new eshell window 2/3 to the right of the current one."
+  (interactive)
+  (let* ((ignore-window-parameters t)
+         (dedicated-p (window-dedicated-p))
+         (+eshell-enable-new-shell-on-split
+          (or +eshell-enable-new-shell-on-split (frame-parameter nil 'saved-wconf))))
+    (select-window (split-window-horizontally (* 2 (/ (window-total-width) 3))))
+    (+eshell--bury-buffer dedicated-p)))
+
+(set-popup-rule! +main-eshell-popup+ :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
+#+end_src
 * Emacs nano
 #+begin_src emacs-lisp
 ;; (require 'load-nano)
