@@ -776,3 +776,6 @@ sys.stderr = open(\"err.txt\", \"w\")")))
 (add-to-list 'doom-switch-buffer-hook #'save-all-buffers)
 (add-to-list 'doom-switch-window-hook #'save-all-buffers)
 (add-to-list 'doom-switch-frame-hook #'save-all-buffers)
+
+(custom-set-faces!
+  '(wgrep-face :background "#aceaac" :foreground "#004c00"))

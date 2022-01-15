@@ -1,17 +1,19 @@
 #+TITLE: Config
-* Dependencies
+* dependencies
+
 #+begin_src emacs-lisp
 (require 'f)
 (require 's)
 (require 'dash)
 #+end_src
 
-* Variables
+* variables
+
 Before setting a new variable, make sure that it is not already set. As the
 list of variable grows, it becomes harder to avoid repetition leading to
 overwrite conflicts
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :results silent
 (setq
       ; doom-font (font-spec :family "monaco" :size 15 :weight 'normal)
       ;; doom-font (font-spec :family "Iosevka" :size 17 :width 'Regular)
@@ -104,15 +106,8 @@ overwrite conflicts
                                  :tag "bo")))
 #+end_src
 
-#+RESULTS:
-| :name | Today        | :time-grid | t      | :scheduled | today |
-| :name | Due today    | :deadline  | today  |            |       |
-| :name | Important    | :priority  | A      |            |       |
-| :name | Overdue      | :deadline  | past   |            |       |
-| :name | Due soon     | :deadline  | future |            |       |
-| :name | Big Outcomes | :tag       | bo     |            |       |
+* appearance
 
-* Appearance
 ** General appearance modes
 These are general modes that affect the appearance and the way symbols and
 colors are presented
@@ -154,7 +149,8 @@ Manages look and feel on tty frames i.e emacs in the terminal
           evil-motion-state-cursor '("gray" box))))
 #+end_src
 
-* Org mode
+* org mode
+
 A ton of org mode config
 #+begin_src emacs-lisp
 ;; wrap lines around in org buffers
@@ -232,14 +228,16 @@ A ton of org mode config
 (set-popup-rule! "^CAPTURE.*\\.org$" :side 'bottom :size 0.90 :select t :ttl nil)
 #+end_src
 
-* Tramp
+* tramp
+
 Tramp history file management
 #+begin_src emacs-lisp
 (when (not (file-exists-p (concat doom-cache-dir "tramp-histfile")))
   (make-empty-file (concat doom-cache-dir "tramp-histfile")))
 #+end_src
 
-* Code indentation
+* code indentation
+
 Indentation of =2= for most programming languages
 #+begin_src emacs-lisp
 (defun beno--indent (n)
@@ -259,7 +257,8 @@ Indentation of =2= for most programming languages
 (beno--indent 2)
 #+end_src
 
-* Keybindings
+* keybindings
+
 ** personal workspace keybindings
 Most common keybindings I use to be more productive. The idea is to capture most
 repetitive tasks under succinct keybindings.
@@ -330,7 +329,8 @@ and org files on the top right. Keeps current window on the left."
       "o c" #'cfw:open-calendar-buffer)
 #+end_src
 
-* Java
+* java
+
 I use it at work so I might as well tune it
 ** Eglot
 Eglot is a minimal alternative to lsp-mode. However I haven't been able to
@@ -381,7 +381,8 @@ current session.
     (setenv "JAVA_HOME" home-path)))
 #+end_src
 
-* Project lifecycle
+* project lifecycle
+
 I have started experimenting with APIs of different languages. I need to
 be able to create and delete projects in those languages on the fly.
 ** foundation
@@ -563,7 +564,8 @@ Bring project lifecycle management to your fingertips
          :desc "delete all test projects" "D" #'projects-cleanup))))
 #+end_src
 
-* Email
+* email
+
 I started managing my email with mu4e
 ** accounts
 #+begin_src emacs-lisp
@@ -648,7 +650,8 @@ Quickly take actions such as read later or follow up on emails
   (add-to-list 'mu4e-view-actions '("read later" . beno--capture-mail-read-later) t))
 #+end_src
 
-* Dired
+* dired
+
 ** dired single
 Ability to navigate in and out of directories with h and l
 #+begin_src emacs-lisp
@@ -659,7 +662,8 @@ Ability to navigate in and out of directories with h and l
         :n "l" 'dired-single-buffer))
 #+end_src
 
-* Eshell
+* eshell
+
 I use eshell because it is more integrated in emacs therefore more extensible
 ** json output formatter
 formats all json output coming through eshell, avoid the need to use tools such
@@ -791,12 +795,14 @@ as jq since it already integrates json output right within eshell
 
 (set-popup-rule! +main-eshell-popup+ :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
 #+end_src
-* Emacs nano
+* emacs nano
+
 #+begin_src emacs-lisp
 ;; (require 'load-nano)
 #+end_src
 
-* Avy
+* avy
+
 ** avy actions
 #+begin_src emacs-lisp
 (defun avy-action-kill-whole-line (pt)
@@ -840,7 +846,8 @@ as jq since it already integrates json output right within eshell
         (alist-get ?H avy-dispatch-alist) 'avy-action-helpful
         (alist-get ?; avy-dispatch-alist) 'avy-action-embark))
 #+end_src
-* CP
+* cp
+
 #+begin_src emacs-lisp
 (cl-defstruct solution-info
   (ext nil :read-only t)
@@ -898,7 +905,8 @@ sys.stderr = open(\"err.txt\", \"w\")")))
     (evil-window-next 1)))
 #+end_src
 
-* Auto save buffers
+* auto save buffers
+
 Automatically save buffers on focus change
 #+begin_src emacs-lisp
 (defun save-all-buffers ()
@@ -909,3 +917,11 @@ Automatically save buffers on focus change
 (add-to-list 'doom-switch-frame-hook #'save-all-buffers)
 #+end_src
 
+* wgrep
+
+** sensible faces
+some doom themes don't deal well with wgrep faces, this is a sensible default
+#+begin_src emacs-lisp
+(custom-set-faces!
+  '(wgrep-face :background "#aceaac" :foreground "#004c00"))
+#+end_src
