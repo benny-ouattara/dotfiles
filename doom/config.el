@@ -3,95 +3,95 @@
 (require 'dash)
 
 (setq
-      ; doom-font (font-spec :family "monaco" :size 15 :weight 'normal)
-      ;; doom-font (font-spec :family "Iosevka" :size 17 :width 'Regular)
-      doom-font (font-spec :family "JetBrains Mono" :size 19)
-      doom-big-font (font-spec :family "monaco" :size 23)
-      doom-variable-pitch-font (font-spec :family "Avenir Next" :size 21)
-      org-roam-v2-ack t
-      +org-roam-open-buffer-on-find-file nil
-      mac-command-modifier 'meta
-      ns-command-modifier 'meta
-      rfc-mode-directory (expand-file-name "~/rfc/")
-      lsp-java-format-settings-url "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml"
-      ;; mu-root (s-chop-suffixes '("/mu" "/bin") (file-truename  (executable-find "mu")))
-      ;; mu4e-path (concat mu-root "/share/emacs/site-lisp/mu4e")
-      tdlib-path "/nix/store/y27x4zzs8wm8qwskbp8y5g3gx1qkjg3m-tdlib-unstable-2020-10-25/include/td/telegram"
-      user-full-name "Ben O"
-      user-mail-address "benny.ouattara@gmail.com"
-      confirm-kill-emacs nil
-      evil-insert-state-cursor 'hbar
-      project-dir "~/Code"
-      project-prefix "kata"
-      org-roam-capture-templates '(("d" "default" plain
-                                    #'org-roam-capture--get-point
-                                    (file "~/Code/dotfiles/doom/snippets/org-roam/default.org")
-                                    :file-name "%<%Y%m%d%H%M%S>-${slug}"
-                                    :head "#+title: ${title}\n#+date: %U\n"
-                                    :unnarrowed t)
-                                   ("l" "programming language" plain
-                                    #'org-roam-capture--get-point
-                                    (file "~/Code/dotfiles/doom/snippets/org-roam/programming.org")
-                                    :file-name "%<%Y%m%d%H%M%S>-${slug}"
-                                    :head "#+title: ${title}\n#+date: %U\n#+filetags: programming\n"
-                                    :unnarrowed t)
-                                   ("b" "book notes" plain
-                                    #'org-roam-capture--get-point
-                                    (file "~/Code/dotfiles/doom/snippets/org-roam/book.org")
-                                    :file-name "%<%Y%m%d%H%M%S>-${slug}"
-                                    :head "#+title: ${title}\n#+date: %U\n#+filetags: book\n"
-                                    :unnarrowed t)
-                                   ("p" "project" plain
-                                    #'org-roam-capture--get-point
-                                    (file "~/Code/dotfiles/doom/snippets/org-roam/project.org")
-                                    :file-name "%<%Y%m%d%H%M%S>-${slug}"
-                                    :head "#+title: ${title}\n#+date: %U\n#+filetags: project\n"
-                                    :unnarrowed t)
-                                   ("c" "code" plain
-                                    #'org-roam-capture--get-point
-                                    (file "~/Code/dotfiles/doom/snippets/org-roam/code.org")
-                                    :file-name "%<%Y%m%d%H%M%S>-${slug}"
-                                    :head "#+title: ${title}\n#+date: %U\n#+filetags: interview\n"
-                                    :unnarrowed t))
-      skeletor-project-directory project-dir
-      skeletor-user-directory (concat doom-private-dir "templates")
-      skeletor-completing-read-function 'ivy-read
-      org-directory "~/Sync/org"
-      org-spotify-directory (concat org-directory "/spotify")
-      org-mail-directory (concat org-directory "/mail.org")
-      home-dir (getenv "HOME")
-      display-line-numbers-type 'relative
-      eshell-history-size nil
-      ;; NOTE: overwrites org export options
-      org-mime-export-options '(:section-numbers nil
-                                :with-author nil
-                                :with-toc nil)
-      org-agenda-skip-scheduled-if-done t
-      projectile-project-search-path '("~/Code/" "~/common-lisp")
-      org-ellipsis " ▾ "
-      org-hide-emphasis-markers t
-      org-tags-column -80
-      org-agenda-files (ignore-errors (directory-files org-directory t "\\.org$" t))
-      org-log-done 'time
-      org-pomodoro-length 45
-      org-pomodoro-short-break-length 15
-      org-refile-targets (quote ((nil :maxlevel . 3)))
-      fancy-splash-image (expand-file-name "splash.png" doom-private-dir)
-      tramp-histfile-override "/dev/null"
-      +org-capture-todo-file "tasks.org"
-      org-super-agenda-groups '((:name "Today"
-                                 :time-grid t
-                                 :scheduled today)
-                                (:name "Due today"
-                                 :deadline today)
-                                (:name "Important"
-                                 :priority "A")
-                                (:name "Overdue"
-                                 :deadline past)
-                                (:name "Due soon"
-                                 :deadline future)
-                                (:name "Big Outcomes"
-                                 :tag "bo")))
+ ;; doom-font (font-spec :family "monaco" :size 15 :weight 'normal)
+ ;; doom-font (font-spec :family "Iosevka" :size 17 :width 'Regular)
+ doom-font (font-spec :family "JetBrains Mono" :size 19)
+ doom-big-font (font-spec :family "monaco" :size 23)
+ doom-variable-pitch-font (font-spec :family "Avenir Next" :size 21)
+ org-roam-v2-ack t
+ +org-roam-open-buffer-on-find-file nil
+ mac-command-modifier 'meta
+ ns-command-modifier 'meta
+ rfc-mode-directory (expand-file-name "~/rfc/")
+ lsp-java-format-settings-url "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml"
+ ;; mu-root (s-chop-suffixes '("/mu" "/bin") (file-truename  (executable-find "mu")))
+ ;; mu4e-path (concat mu-root "/share/emacs/site-lisp/mu4e")
+ tdlib-path "/nix/store/y27x4zzs8wm8qwskbp8y5g3gx1qkjg3m-tdlib-unstable-2020-10-25/include/td/telegram"
+ user-full-name "Ben O"
+ user-mail-address "benny.ouattara@gmail.com"
+ confirm-kill-emacs nil
+ evil-insert-state-cursor 'hbar
+ project-dir "~/Code"
+ project-prefix "kata"
+ org-roam-capture-templates '(("d" "default" plain
+                               #'org-roam-capture--get-point
+                               (file "~/Code/dotfiles/doom/snippets/org-roam/default.org")
+                               :file-name "%<%Y%m%d%H%M%S>-${slug}"
+                               :head "#+title: ${title}\n#+date: %U\n"
+                               :unnarrowed t)
+                              ("l" "programming language" plain
+                               #'org-roam-capture--get-point
+                               (file "~/Code/dotfiles/doom/snippets/org-roam/programming.org")
+                               :file-name "%<%Y%m%d%H%M%S>-${slug}"
+                               :head "#+title: ${title}\n#+date: %U\n#+filetags: programming\n"
+                               :unnarrowed t)
+                              ("b" "book notes" plain
+                               #'org-roam-capture--get-point
+                               (file "~/Code/dotfiles/doom/snippets/org-roam/book.org")
+                               :file-name "%<%Y%m%d%H%M%S>-${slug}"
+                               :head "#+title: ${title}\n#+date: %U\n#+filetags: book\n"
+                               :unnarrowed t)
+                              ("p" "project" plain
+                               #'org-roam-capture--get-point
+                               (file "~/Code/dotfiles/doom/snippets/org-roam/project.org")
+                               :file-name "%<%Y%m%d%H%M%S>-${slug}"
+                               :head "#+title: ${title}\n#+date: %U\n#+filetags: project\n"
+                               :unnarrowed t)
+                              ("c" "code" plain
+                               #'org-roam-capture--get-point
+                               (file "~/Code/dotfiles/doom/snippets/org-roam/code.org")
+                               :file-name "%<%Y%m%d%H%M%S>-${slug}"
+                               :head "#+title: ${title}\n#+date: %U\n#+filetags: interview\n"
+                               :unnarrowed t))
+ skeletor-project-directory project-dir
+ skeletor-user-directory (concat doom-private-dir "templates")
+ skeletor-completing-read-function 'ivy-read
+ org-directory "~/Sync/org"
+ org-spotify-directory (concat org-directory "/spotify")
+ org-mail-directory (concat org-directory "/mail.org")
+ home-dir (getenv "HOME")
+ display-line-numbers-type 'relative
+ eshell-history-size nil
+ ;; NOTE: overwrites org export options
+ org-mime-export-options '(:section-numbers nil
+                           :with-author nil
+                           :with-toc nil)
+ org-agenda-skip-scheduled-if-done t
+ projectile-project-search-path '("~/Code/" "~/common-lisp")
+ org-ellipsis " ▾ "
+ org-hide-emphasis-markers t
+ org-tags-column -80
+ org-agenda-files (ignore-errors (directory-files org-directory t "\\.org$" t))
+ org-log-done 'time
+ org-pomodoro-length 45
+ org-pomodoro-short-break-length 15
+ org-refile-targets (quote ((nil :maxlevel . 3)))
+ fancy-splash-image (expand-file-name "splash.png" doom-private-dir)
+ tramp-histfile-override "/dev/null"
+ +org-capture-todo-file "tasks.org"
+ org-super-agenda-groups '((:name "Today"
+                            :time-grid t
+                            :scheduled today)
+                           (:name "Due today"
+                            :deadline today)
+                           (:name "Important"
+                            :priority "A")
+                           (:name "Overdue"
+                            :deadline past)
+                           (:name "Due soon"
+                            :deadline future)
+                           (:name "Big Outcomes"
+                            :tag "bo")))
 
 (menu-bar-mode t)
 ;; (global-prettify-symbols-mode)
@@ -140,45 +140,6 @@
 (add-hook! 'org-capture-mode-hook (company-mode -1))
 
 (after! org
-  (set-face-attribute 'org-link nil
-                      :weight 'normal
-                      :background nil)
-  (set-face-attribute 'org-code nil
-                      :foreground "#a9a1e1"
-                      :background nil)
-  (set-face-attribute 'org-date nil
-                      :foreground "#5B6268"
-                      :background nil)
-  (set-face-attribute 'org-level-1 nil
-                      :foreground "Steelblue3"
-                      :background nil
-                      :height 1.2
-                      :weight 'normal)
-  (set-face-attribute 'org-level-2 nil
-                      :foreground "RoyalBlue"
-                      :background nil
-                      :height 1.0
-                      :weight 'normal)
-  (set-face-attribute 'org-level-3 nil
-                      :foreground "DeepSkyBlue"
-                      :background nil
-                      :height 1.0
-                      :weight 'normal)
-  (set-face-attribute 'org-level-4 nil
-                      :foreground "DodgerBlue3"
-                      :background nil
-                      :height 1.0
-                      :weight 'normal)
-  (set-face-attribute 'org-level-5 nil
-                      :weight 'normal)
-  (set-face-attribute 'org-level-6 nil
-                      :weight 'normal)
-  (set-face-attribute 'org-document-title nil
-                      :foreground "SlateGray4"
-                      :background nil
-                      :height 1.75
-                      :weight 'bold)
-
   (pushnew! org-capture-templates
             '("m" "Email workflow")
             '("mf" "Follow up" entry (file+olp org-mail-directory "Follow up")
@@ -194,8 +155,8 @@
   :config
   (setq org-fancy-priorities-list '("⚡" "⬆" "⬇" "☕")))
 
-(set-popup-rule! "^\\*Org Agenda" :side 'bottom :size 0.90 :select t :ttl nil)
-(set-popup-rule! "^CAPTURE.*\\.org$" :side 'bottom :size 0.90 :select t :ttl nil)
+;; (set-popup-rule! "^\\*Org Agenda" :side 'bottom :size 0.90 :select t :ttl nil)
+;; (set-popup-rule! "^CAPTURE.*\\.org$" :side 'bottom :size 0.90 :select t :ttl nil)
 
 (when (not (file-exists-p (concat doom-cache-dir "tramp-histfile")))
   (make-empty-file (concat doom-cache-dir "tramp-histfile")))
