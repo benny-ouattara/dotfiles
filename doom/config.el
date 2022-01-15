@@ -68,7 +68,13 @@
                            :with-toc nil)
  org-agenda-skip-scheduled-if-done t
  projectile-project-search-path '("~/Code/" "~/common-lisp")
- org-ellipsis " ▾ "
+ ;; org-ellipsis " ▾ "
+ ;; org-ellipsis " ⤵ "
+ ;; org-ellipsis " ↓ "
+ ;; org-ellipsis " ∵ "
+ ;; org-ellipsis " ⌄ "
+ org-ellipsis " ≡ "
+ ;; org-ellipsis " ⁂ "
  org-hide-emphasis-markers t
  org-tags-column -80
  org-agenda-files (ignore-errors (directory-files org-directory t "\\.org$" t))
@@ -147,7 +153,11 @@
               :immediate-finish t)
             '("mr" "Read later" entry (file+olp org-mail-directory "Read later")
               "* TODO read %:subject\n%a\n\n%i"
-              :immediate-finish t)))
+              :immediate-finish t))
+
+  (set-face-attribute 'org-ellipsis nil
+                      :inherit '(font-lock-comment-face default)
+                      :weight 'normal))
 
 (use-package! org-fancy-priorities
   :hook

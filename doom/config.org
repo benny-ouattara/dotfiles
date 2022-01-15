@@ -80,7 +80,13 @@ overwrite conflicts
                            :with-toc nil)
  org-agenda-skip-scheduled-if-done t
  projectile-project-search-path '("~/Code/" "~/common-lisp")
- org-ellipsis " ▾ "
+ ;; org-ellipsis " ▾ "
+ ;; org-ellipsis " ⤵ "
+ ;; org-ellipsis " ↓ "
+ ;; org-ellipsis " ∵ "
+ ;; org-ellipsis " ⌄ "
+ org-ellipsis " ≡ "
+ ;; org-ellipsis " ⁂ "
  org-hide-emphasis-markers t
  org-tags-column -80
  org-agenda-files (ignore-errors (directory-files org-directory t "\\.org$" t))
@@ -177,7 +183,11 @@ A ton of org mode config
               :immediate-finish t)
             '("mr" "Read later" entry (file+olp org-mail-directory "Read later")
               "* TODO read %:subject\n%a\n\n%i"
-              :immediate-finish t)))
+              :immediate-finish t))
+
+  (set-face-attribute 'org-ellipsis nil
+                      :inherit '(font-lock-comment-face default)
+                      :weight 'normal))
 
 (use-package! org-fancy-priorities
   :hook
@@ -293,7 +303,7 @@ and org files on the top right. Keeps current window on the left."
 * java
 
 I use it at work so I might as well tune it
-** Eglot
+** eglot
 Eglot is a minimal alternative to lsp-mode. However I haven't been able to
 configure it to navigate to classpath dependencies. So I am not using it
 for now. It will be a solid candidate when that is figured out since it doesn't
@@ -309,7 +319,7 @@ with java requires a lot of work done below.
 
 ;; (add-hook 'java-mode-hook #'set-lsp-jar)
 #+end_src
-** Lsp-mode
+** lsp-mode
 Lsp-mode is the alternative to eglot that I am using now. It constantly hangs
 emacs which is problematic but I haven't found a solution around it yet.
 #+begin_src emacs-lisp
@@ -323,7 +333,7 @@ emacs which is problematic but I haven't found a solution around it yet.
         lsp-ui-doc-enable nil)
   (lsp-ui-doc-mode -1))
 #+end_src
-** Switch JVM
+** switch jvm
 Integrated solution to switching JVM, alternative to jenv. Sets CLASSPATH in
 current session.
 #+begin_src emacs-lisp
