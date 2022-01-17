@@ -741,6 +741,16 @@ sys.stderr = open(\"err.txt\", \"w\")")))
     (find-file error-file-path)
     (evil-window-next 1)))
 
+(set-popup-rule! "*doom:eshell*" :size 0.40 :height 0.25 :slot -100 :select t :quit nil :ttl t :side 'right)
+(eshell)
+(set-popup-rule! "input.txt" :size 0.40 :height 0.25 :slot -90 :select t :quit nil :ttl t :side 'right)
+( "input.txt")
+(pop-to-buffer (get-buffer-create "input.txt"))
+(set-popup-rule! "output.txt" :size 0.40 :height 0.25 :slot -80 :select t :quit nil :ttl t :side 'right)
+(pop-to-buffer (get-buffer-create "output.txt"))
+(set-popup-rule! "err.txt" :size 0.40 :height 0.25 :slot -70 :select t :quit nil :ttl t :side 'right)
+(pop-to-buffer (get-buffer-create "err.txt"))
+
 (defun save-all-buffers ()
   (save-some-buffers t))
 
