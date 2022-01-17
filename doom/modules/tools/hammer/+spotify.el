@@ -6,7 +6,7 @@
   (progn
     (require 'sp-hosts)
     (require 'sp-shell)
-    (require 'sp-pg)
+    ;; (require 'sp-pg)
 
     (after! tramp  (tramp-set-completion-function "ssh"
                                                   (list (list 'spotify--tramp-user-hosts spotify--hostfile-path))))
@@ -28,4 +28,4 @@
              :desc "url at point" "u" #'spotify-eshell-url-at-point
              :desc "remote shell" "r" #'spotify--remote-shell
              :desc "remote shell command" "c" #'spotify--remote-shell-command
-             :desc "postgres" "p" #'spotify--postgres))))))
+             :desc "postgres" "p" #'sql-connect))))))

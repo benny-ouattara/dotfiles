@@ -56,7 +56,12 @@
  skeletor-project-directory project-dir
  skeletor-user-directory (concat doom-private-dir "templates")
  skeletor-completing-read-function 'ivy-read
- org-directory "~/Sync/org"
+ sync-dir "~/Sync/"
+ org-directory (concat sync-dir "org")
+ secrets-dir (concat sync-dir "secrets/")
+ zangao-secrets (concat secrets-dir "zangao/authinfo.gpg")
+ bouattara-secrets (concat secrets-dir "bouattara/authinfo.gpg")
+ benny-secrets (concat secrets-dir "benny/authinfo.gpg")
  org-spotify-directory (concat org-directory "/spotify")
  org-mail-directory (concat org-directory "/mail.org")
  home-dir (getenv "HOME")
@@ -641,8 +646,6 @@ Beware using this command given that it's destructive and non reversible."
     (select-window (split-window-horizontally (* 2 (/ (window-total-width) 3))))
     (+eshell--bury-buffer dedicated-p)))
 
-(set-popup-rule! +main-eshell-popup+ :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
-
 ;; (require 'load-nano)
 
 (defun avy-action-kill-whole-line (pt)
@@ -690,6 +693,8 @@ Beware using this command given that it's destructive and non reversible."
   (ext nil :read-only t)
   (dir nil :read-only t)
   (template nil :read-only t))
+
+(set-popup-rule! +main-eshell-popup+ :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
 
 (defun initialize-lang-info ()
   (let ((lang-info (make-hash-table))
@@ -741,15 +746,27 @@ sys.stderr = open(\"err.txt\", \"w\")")))
     (find-file error-file-path)
     (evil-window-next 1)))
 
-(set-popup-rule! "*doom:eshell*" :size 0.40 :height 0.25 :slot -100 :select t :quit nil :ttl t :side 'right)
-(eshell)
-(set-popup-rule! "input.txt" :size 0.40 :height 0.25 :slot -90 :select t :quit nil :ttl t :side 'right)
-( "input.txt")
-(pop-to-buffer (get-buffer-create "input.txt"))
-(set-popup-rule! "output.txt" :size 0.40 :height 0.25 :slot -80 :select t :quit nil :ttl t :side 'right)
-(pop-to-buffer (get-buffer-create "output.txt"))
-(set-popup-rule! "err.txt" :size 0.40 :height 0.25 :slot -70 :select t :quit nil :ttl t :side 'right)
-(pop-to-buffer (get-buffer-create "err.txt"))
+;; (set-popup-rule! "*doom:eshell*" :size 0.40 :height 0.25 :slot -100 :select t :quit nil :ttl t :side 'right)
+;; (eshell)
+;; (set-popup-rule! "input.txt" :size 0.40 :height 0.25 :slot -90 :select t :quit nil :ttl t :side 'right)
+;; (pop-to-buffer (get-buffer-create "input.txt"))
+;; (pop-to-buffer (get-buffer-create "input.txt"))
+;; (set-popup-rule! "output.txt" :size 0.40 :height 0.25 :slot -80 :select t :quit nil :ttl t :side 'right)
+;; (pop-to-buffer (get-buffer-create "output.txt"))
+;; (set-popup-rule! "err.txt" :size 0.40 :height 0.25 :slot -70 :select t :quit nil :ttl t :side 'right)
+;; (pop-to-buffer (get-buffer-create "err.txt"))
+
+(defun get-file-buffer-create (filename)
+  (if-let ((buf (get-file-buffer filename)))
+      buf
+    (create-file-buffer filename)))
+;; (get-file-buffer-create user-init-file)
+;; (get-file-buffer "input.txt")
+;; (get-file-buffer user-init-file)
+;; (find-buffer-visiting user-init-file)
+;; (buffer-file-name user-init-file)
+;; (create-file-buffer user-init-file)
+;; (find-buffer-visiting "input.txt")
 
 (defun save-all-buffers ()
   (save-some-buffers t))
@@ -760,3 +777,25 @@ sys.stderr = open(\"err.txt\", \"w\")")))
 
 (custom-set-faces!
   '(wgrep-face :background "#aceaac" :foreground "#004c00"))
+
+(pcase (user-login-name)
+  ("zangao" (pushnew! auth-sources zangao-secrets))
+  ("bouattara" (pushnew! auth-sources bouattara-secrets))
+  ("benny" (pushnew! auth-sources benny-secrets)))
+
+(set-popup-rule! "*SQL: Postgres*" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
+
+(defun read-password-for-host (host)
+  (funcall (plist-get  (car (auth-source-search :host host :max 1)) :secret)))
+
+(after! sql
+  (setf setcheckerpwd (read-password-for-host "setcheckerdb")
+        sql-password-wallet t)
+
+  (setf sql-connection-alist '(("setchecker-cloudsql-connection"
+                                (sql-product 'postgres)
+                                (sql-user "postgres")
+                                (sql-password setcheckerpwd)
+                                (sql-database "setchecker_runs")
+                                (sql-server "127.0.0.1")
+                                (sql-port 5432)))))
