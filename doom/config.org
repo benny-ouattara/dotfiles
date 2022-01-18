@@ -732,6 +732,8 @@ as jq since it already integrates json output right within eshell
 #+begin_src emacs-lisp
 (setf +main-eshell-popup+ "*doom:eshell-popup:main*")
 
+(set-popup-rule! +main-eshell-popup+ :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
+
 (defun beno--eshell-toggle-right (arg &optional command)
   "Toggle eshell popup window to the right with the help of set-popup-rule!."
   (interactive "P")
@@ -829,7 +831,10 @@ as jq since it already integrates json output right within eshell
   (dir nil :read-only t)
   (template nil :read-only t))
 
-(set-popup-rule! +main-eshell-popup+ :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
+(set-popup-rule! "*cp:eshell*" :size 0.40 :height 0.25 :slot 90 :select t :quit nil :ttl t :side 'right)
+(set-popup-rule! "err.txt" :size 0.40 :height 0.25 :slot 100 :select t :quit nil :ttl t :side 'right :modeline t)
+(set-popup-rule! "output.txt" :size 0.40 :height 0.25 :slot 110 :select t :quit nil :ttl t :side 'right :modeline t)
+(set-popup-rule! "input.txt" :size 0.40 :height 0.25 :slot 120 :select t :quit nil :ttl t :side 'right :modeline t)
 
 (defun initialize-lang-info ()
   (let ((lang-info (make-hash-table))
@@ -867,41 +872,11 @@ sys.stderr = open(\"err.txt\", \"w\")")))
     (with-current-buffer (find-file solution-file-path)
       (when (= (buffer-size) 0) (insert lang-template))
       (save-buffer))
-    (split-window-horizontally)
-    (evil-window-next 2)
-    (+eshell/here)
-    (split-window-vertically height)
-    (evil-window-next 3)
-    (find-file input-file-path)
-    (split-window-vertically height)
-    (evil-window-next 4)
-    (find-file output-file-path)
-    (split-window-vertically height)
-    (evil-window-next 5)
-    (find-file error-file-path)
-    (evil-window-next 1)))
-
-;; (set-popup-rule! "*doom:eshell*" :size 0.40 :height 0.25 :slot -100 :select t :quit nil :ttl t :side 'right)
-;; (eshell)
-;; (set-popup-rule! "input.txt" :size 0.40 :height 0.25 :slot -90 :select t :quit nil :ttl t :side 'right)
-;; (pop-to-buffer (get-buffer-create "input.txt"))
-;; (pop-to-buffer (get-buffer-create "input.txt"))
-;; (set-popup-rule! "output.txt" :size 0.40 :height 0.25 :slot -80 :select t :quit nil :ttl t :side 'right)
-;; (pop-to-buffer (get-buffer-create "output.txt"))
-;; (set-popup-rule! "err.txt" :size 0.40 :height 0.25 :slot -70 :select t :quit nil :ttl t :side 'right)
-;; (pop-to-buffer (get-buffer-create "err.txt"))
-
-(defun get-file-buffer-create (filename)
-  (if-let ((buf (get-file-buffer filename)))
-      buf
-    (create-file-buffer filename)))
-;; (get-file-buffer-create user-init-file)
-;; (get-file-buffer "input.txt")
-;; (get-file-buffer user-init-file)
-;; (find-buffer-visiting user-init-file)
-;; (buffer-file-name user-init-file)
-;; (create-file-buffer user-init-file)
-;; (find-buffer-visiting "input.txt")
+    (let ((eshell-buffer-name "*cp:eshell*"))
+      (eshell))
+    (display-buffer (find-file-noselect error-file-path))
+    (display-buffer (find-file-noselect output-file-path))
+    (display-buffer (find-file-noselect input-file-path))))
 #+end_src
 
 * auto save buffers
