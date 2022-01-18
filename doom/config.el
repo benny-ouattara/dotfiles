@@ -783,19 +783,27 @@ sys.stderr = open(\"err.txt\", \"w\")")))
   ("bouattara" (pushnew! auth-sources bouattara-secrets))
   ("benny" (pushnew! auth-sources benny-secrets)))
 
-(set-popup-rule! "*SQL: Postgres*" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
+(set-popup-rule! "*SQL:" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
 
-(defun read-password-for-host (host)
-  (funcall (plist-get  (car (auth-source-search :host host :max 1)) :secret)))
+(defun beno--read-db-password (db)
+  (if-let ((result (auth-source-search :database db)))
+    (funcall (plist-get  (car result) :secret))))
+
+(defun beno--sql-authenticator (wallet product user server database port)
+  (beno--read-db-password database))
 
 (after! sql
-  (setf setcheckerpwd (read-password-for-host "setcheckerdb")
-        sql-password-wallet t)
-
-  (setf sql-connection-alist '(("setchecker-cloudsql-connection"
+  (setq
+        setcheckerpwd (beno--read-db-password "setchecker_runs")
+        sql-password-search-wallet-function #'beno--sql-authenticator
+        sql-password-wallet zangao-secrets
+        sql-connection-alist `(("setchecker-cloudsql-connection"
                                 (sql-product 'postgres)
                                 (sql-user "postgres")
-                                (sql-password setcheckerpwd)
+                                ;; password reading is done through pgpass since psql cli does't support password passing
+                                ;; this line just makes sure that sql.el doesn't ask us for the a dummy password
+                                (sql-password ,setcheckerpwd)
                                 (sql-database "setchecker_runs")
-                                (sql-server "127.0.0.1")
-                                (sql-port 5432)))))
+                                (sql-server "localhost")
+                                (sql-port 5432)))
+        sql-postgres-login-params '(user password database server)))
