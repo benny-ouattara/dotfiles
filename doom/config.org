@@ -917,6 +917,7 @@ Automatically save buffers on focus change
 #+end_src
 
 * wgrep
+
 ** sensible faces
 some doom themes don't deal well with wgrep faces, this is a sensible default
 #+begin_src emacs-lisp
@@ -925,6 +926,7 @@ some doom themes don't deal well with wgrep faces, this is a sensible default
 #+end_src
 
 * authsource
+
 manage secrets
 #+begin_src emacs-lisp
 (pcase (user-login-name)
@@ -934,6 +936,7 @@ manage secrets
 #+end_src
 
 * SQL
+
 Sensible SQL configs
 #+begin_src emacs-lisp
 (set-popup-rule! "*SQL:" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'bottom)

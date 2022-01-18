@@ -6,7 +6,6 @@
   (progn
     (require 'sp-hosts)
     (require 'sp-shell)
-    ;; (require 'sp-pg)
 
     (after! tramp  (tramp-set-completion-function "ssh"
                                                   (list (list 'spotify--tramp-user-hosts spotify--hostfile-path))))
