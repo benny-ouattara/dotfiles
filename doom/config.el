@@ -4,8 +4,8 @@
 
 (setq
  ;; doom-font (font-spec :family "monaco" :size 15 :weight 'normal)
- ;; doom-font (font-spec :family "Iosevka" :size 17 :width 'Regular)
- doom-font (font-spec :family "JetBrains Mono" :size 19)
+ ;; doom-font (font-spec :family "Iosevka" :size 17 :weight 'normal)
+ doom-font (font-spec :family "JetBrains Mono" :size 19 :weight 'normal :width 'normal)
  doom-big-font (font-spec :family "monaco" :size 23)
  doom-variable-pitch-font (font-spec :family "Avenir Next" :size 21)
  org-roam-v2-ack t
@@ -578,7 +578,7 @@ Beware using this command given that it's destructive and non reversible."
   (interactive
    (list  (ivy-read "Test to run: "
                     (project-tests default-directory))))
-  (format "clear && mvn clean -Dtest=%s test" test-name))
+  (format "clear && mvn clean -Dtest=%s -DfailIfNoTests=false test" test-name))
 
 (defun package-no-test ()
   "Command to package application without running tests"
@@ -588,9 +588,17 @@ Beware using this command given that it's destructive and non reversible."
   "Command to verify application"
   (format "clear && mvn clean verify"))
 
+(defun package-compile ()
+  "Command to verify application"
+  (format "clear && mvn clean compile"))
+
 (defun eshell/pkg ()
   "Package java application."
   (insert (package-no-test)))
+
+(defun eshell/compile ()
+  "Compile java application."
+  (insert (package-compile)))
 
 (defun eshell/verify ()
   "Verify java application."
