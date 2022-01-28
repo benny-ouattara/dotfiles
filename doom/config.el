@@ -134,6 +134,19 @@
           evil-insert-state-cursor '("red" bar)
           evil-motion-state-cursor '("gray" box))))
 
+(set-popup-rule! +main-eshell-popup+ :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
+(set-popup-rule! "*cp:eshell*" :size 0.40 :height 0.25 :slot 90 :select t :quit nil :ttl t :side 'right)
+(set-popup-rule! "err.txt" :size 0.40 :height 0.25 :slot 100 :select t :quit nil :ttl t :side 'right :modeline t)
+(set-popup-rule! "output.txt" :size 0.40 :height 0.25 :slot 110 :select t :quit nil :ttl t :side 'right :modeline t)
+(set-popup-rule! "input.txt" :size 0.40 :height 0.25 :slot 120 :select t :quit nil :ttl t :side 'right :modeline t)
+(set-popup-rule! "*SQL:" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
+(set-popup-rule! "^\\*compilation.*" :size 0.44 :vslot -4 :select t :quit nil :ttl t :side 'right)
+(set-popup-rule! "^2022" :size 0.40 :vslot -4 :select t :ttl t :quit nil :side 'right)
+(set-popup-rule! "^2021" :size 0.40 :vslot -4 :select t :ttl t :quit nil :side 'right)
+;; (set-popup-rule! "^\\*Org Agenda" :side 'bottom :size 0.90 :select t :ttl nil)
+;; (set-popup-rule! "^CAPTURE.*\\.org$" :side 'bottom :size 0.90 :select t :ttl nil)
+;; (set-popup-rule! "org$" :size 0.33 :vslot -4 :select t :ttl t :quit nil :side 'right)
+
 ;; wrap lines around in org buffers
 ;; (add-hook 'org-mode-hook #'auto-fill-mode)
 
@@ -169,12 +182,6 @@
   (org-mode . org-fancy-priorities-mode)
   :config
   (setq org-fancy-priorities-list '("⚡" "⬆" "⬇" "☕")))
-
-;; (set-popup-rule! "^\\*Org Agenda" :side 'bottom :size 0.90 :select t :ttl nil)
-;; (set-popup-rule! "^CAPTURE.*\\.org$" :side 'bottom :size 0.90 :select t :ttl nil)
-;; (set-popup-rule! "org$" :size 0.33 :vslot -4 :select t :ttl t :quit nil :side 'right)
-(set-popup-rule! "^2022" :size 0.40 :vslot -4 :select t :ttl t :quit nil :side 'right)
-(set-popup-rule! "^2021" :size 0.40 :vslot -4 :select t :ttl t :quit nil :side 'right)
 
 (when (not (file-exists-p (concat doom-cache-dir "tramp-histfile")))
   (make-empty-file (concat doom-cache-dir "tramp-histfile")))
@@ -620,10 +627,8 @@ Beware using this command given that it's destructive and non reversible."
 
 (setf +main-eshell-popup+ "*doom:eshell-popup:main*")
 
-(set-popup-rule! +main-eshell-popup+ :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
-
 (defun beno--eshell-toggle-right (arg &optional command)
-  "Toggle eshell popup window to the right with the help of set-popup-rule!."
+  "Toggle eshell popup window to the right"
   (interactive "P")
   (let ((eshell-buffer
          (get-buffer-create +main-eshell-popup+))
@@ -707,11 +712,6 @@ Beware using this command given that it's destructive and non reversible."
   (dir nil :read-only t)
   (template nil :read-only t))
 
-(set-popup-rule! "*cp:eshell*" :size 0.40 :height 0.25 :slot 90 :select t :quit nil :ttl t :side 'right)
-(set-popup-rule! "err.txt" :size 0.40 :height 0.25 :slot 100 :select t :quit nil :ttl t :side 'right :modeline t)
-(set-popup-rule! "output.txt" :size 0.40 :height 0.25 :slot 110 :select t :quit nil :ttl t :side 'right :modeline t)
-(set-popup-rule! "input.txt" :size 0.40 :height 0.25 :slot 120 :select t :quit nil :ttl t :side 'right :modeline t)
-
 (defun initialize-lang-info ()
   (let ((lang-info (make-hash-table))
     (python-info (make-solution-info :ext "py" :dir "~/Code/algo-python" :template "import sys
@@ -769,8 +769,6 @@ sys.stderr = open(\"err.txt\", \"w\")")))
   ("bouattara" (pushnew! auth-sources bouattara-secrets))
   ("benny" (pushnew! auth-sources benny-secrets)))
 
-(set-popup-rule! "*SQL:" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
-
 (defun beno--read-db-password (db)
   (if-let ((result (auth-source-search :database db)))
     (funcall (plist-get  (car result) :secret))))
@@ -793,8 +791,6 @@ sys.stderr = open(\"err.txt\", \"w\")")))
                                 (sql-server "localhost")
                                 (sql-port 5432)))
         sql-postgres-login-params '(user password database server)))
-
-(set-popup-rule! "^\\*compilation.*" :size 0.44 :vslot -4 :select t :quit nil :ttl t :side 'right)
 
 (defun beno--mvn-root-dir ()
   (or (locate-dominating-file buffer-file-name ".git")
