@@ -950,3 +950,46 @@ Sensible SQL configs
                                 (sql-port 5432)))
         sql-postgres-login-params '(user password database server)))
 #+end_src
+
+* compilation
+Use ~comint~ and ~compile~ to ease project compilation
+#+begin_src emacs-lisp :results silent
+(set-popup-rule! "^\\*compilation.*" :size 0.44 :vslot -4 :select t :quit nil :ttl t :side 'right)
+
+(defun beno--mvn-root-dir ()
+  (or (locate-dominating-file buffer-file-name ".git")
+ (projectile-project-root))
+
+(defun beno--run-mvn-command (command)
+  (interactive "sCommand: ")
+  (let ((default-directory (beno--mvn-root-dir))
+        (compilation-read-command nil)
+        (compile-command (format "sh mvn %s" command)))
+    (call-interactively #'compile)))
+
+(defun beno--mvn-project-tests (project-path)
+  "Extract java TESTS at PROJECT-PATH."
+  (-filter (lambda (filename) (or (s-contains? "IT.java" filename)
+                                  (s-contains? "Test.java" filename)))
+           (-map (lambda (filepath) (-last-item  (s-split "/" filepath)))
+                 (f-files project-path nil t))))
+
+(defun beno--mvn-test-to-run (test-name)
+  "Prompt for TEST-NAME to run."
+  (interactive
+   (list  (ivy-read "Test to run: "
+                    (beno--mvn-project-tests (beno--mvn-root-dir)))))
+  (format "clean -DfailIfNoTests=false -Dtest=%s test" test-name))
+
+(map! :after cc-mode
+      :map java-mode-map
+      :localleader
+      (:prefix ("c" . "Compile")
+       :desc "Compile mvn project"  "c" (cmd! (beno--run-mvn-command "clean compile"))
+       :desc "Verify mvn project"   "v" (cmd! (beno--run-mvn-command "clean verify"))
+       :desc "Package mvn project"  "p" (cmd! (beno--run-mvn-command "clean package"))
+       :desc "Package mvn project - skip tests"  "P" (cmd! (beno--run-mvn-command "-Dmaven.test.skip=true clean package"))
+       :desc "Test mvn project"  "t" (cmd! (beno--run-mvn-command "clean test"))
+       :desc "Run test"  "T" (cmd! (beno--run-mvn-command (call-interactively #'beno--mvn-test-to-run)))
+       ))
+#+end_src
