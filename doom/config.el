@@ -791,6 +791,8 @@ sys.stderr = open(\"err.txt\", \"w\")")))
                                 (sql-port 5432)))
         sql-postgres-login-params '(user password database server)))
 
+(set-popup-rule! "^\\*compilation.*" :size 0.44 :vslot -4 :select t :quit nil :ttl t :side 'right)
+
 (defun beno--mvn-root-dir ()
   (or (locate-dominating-file buffer-file-name ".git")
  (projectile-project-root))
