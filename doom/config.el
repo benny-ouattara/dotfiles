@@ -134,19 +134,6 @@
           evil-insert-state-cursor '("red" bar)
           evil-motion-state-cursor '("gray" box))))
 
-(set-popup-rule! +main-eshell-popup+ :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
-(set-popup-rule! "*cp:eshell*" :size 0.40 :height 0.25 :slot 90 :select t :quit nil :ttl t :side 'right)
-(set-popup-rule! "err.txt" :size 0.40 :height 0.25 :slot 100 :select t :quit nil :ttl t :side 'right :modeline t)
-(set-popup-rule! "output.txt" :size 0.40 :height 0.25 :slot 110 :select t :quit nil :ttl t :side 'right :modeline t)
-(set-popup-rule! "input.txt" :size 0.40 :height 0.25 :slot 120 :select t :quit nil :ttl t :side 'right :modeline t)
-(set-popup-rule! "*SQL:" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
-(set-popup-rule! "^\\*compilation.*" :size 0.44 :vslot -4 :select t :quit nil :ttl t :side 'right)
-(set-popup-rule! "^2022" :size 0.40 :vslot -4 :select t :ttl t :quit nil :side 'right)
-(set-popup-rule! "^2021" :size 0.40 :vslot -4 :select t :ttl t :quit nil :side 'right)
-;; (set-popup-rule! "^\\*Org Agenda" :side 'bottom :size 0.90 :select t :ttl nil)
-;; (set-popup-rule! "^CAPTURE.*\\.org$" :side 'bottom :size 0.90 :select t :ttl nil)
-;; (set-popup-rule! "org$" :size 0.33 :vslot -4 :select t :ttl t :quit nil :side 'right)
-
 ;; wrap lines around in org buffers
 ;; (add-hook 'org-mode-hook #'auto-fill-mode)
 
@@ -705,7 +692,7 @@ Beware using this command given that it's destructive and non reversible."
         (alist-get ?T avy-dispatch-alist) 'avy-action-teleport-whole-line
         (alist-get ?Z  avy-dispatch-alist) 'avy-action-mark-to-char
         (alist-get ?H avy-dispatch-alist) 'avy-action-helpful
-        (alist-get ?; avy-dispatch-alist) 'avy-action-embark))
+        (alist-get ?\; avy-dispatch-alist) 'avy-action-embark))
 
 (cl-defstruct solution-info
   (ext nil :read-only t)
@@ -794,7 +781,7 @@ sys.stderr = open(\"err.txt\", \"w\")")))
 
 (defun beno--mvn-root-dir ()
   (or (locate-dominating-file buffer-file-name ".git")
- (projectile-project-root))
+ (projectile-project-root)))
 
 (defun beno--run-mvn-command (command)
   (interactive "sCommand: ")
@@ -828,3 +815,16 @@ sys.stderr = open(\"err.txt\", \"w\")")))
        :desc "Test mvn project"  "t" (cmd! (beno--run-mvn-command "clean test"))
        :desc "Run test"  "T" (cmd! (beno--run-mvn-command (call-interactively #'beno--mvn-test-to-run)))
        ))
+
+(set-popup-rule! +main-eshell-popup+ :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
+(set-popup-rule! "*cp:eshell*" :size 0.40 :height 0.25 :slot 90 :select t :quit nil :ttl t :side 'right)
+(set-popup-rule! "err.txt" :size 0.40 :height 0.25 :slot 100 :select t :quit nil :ttl t :side 'right :modeline t)
+(set-popup-rule! "output.txt" :size 0.40 :height 0.25 :slot 110 :select t :quit nil :ttl t :side 'right :modeline t)
+(set-popup-rule! "input.txt" :size 0.40 :height 0.25 :slot 120 :select t :quit nil :ttl t :side 'right :modeline t)
+(set-popup-rule! "*SQL:" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
+(set-popup-rule! "^\\*compilation.*" :size 0.44 :vslot -4 :select t :quit nil :ttl t :side 'right)
+(set-popup-rule! "^2022" :size 0.40 :vslot -4 :select t :ttl t :quit nil :side 'right)
+(set-popup-rule! "^2021" :size 0.40 :vslot -4 :select t :ttl t :quit nil :side 'right)
+;; (set-popup-rule! "^\\*Org Agenda" :side 'bottom :size 0.90 :select t :ttl nil)
+;; (set-popup-rule! "^CAPTURE.*\\.org$" :side 'bottom :size 0.90 :select t :ttl nil)
+;; (set-popup-rule! "org$" :size 0.33 :vslot -4 :select t :ttl t :quit nil :side 'right)

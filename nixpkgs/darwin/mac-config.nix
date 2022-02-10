@@ -26,14 +26,14 @@ in
     #  '';
     # };
 
-    fonts = {
-        enableFontDir = true;
-        fonts = [
-            pkgs.powerline-fonts
-            pkgs.jetbrains-mono
-            pkgs.roboto-mono
-            pkgs.fira-code
-            pkgs.iosevka
-        ];
-    };
+    # fonts = {
+    #     enableFontDir = true;
+    #     fonts = [
+    #         pkgs.powerline-fonts
+    #         pkgs.jetbrains-mono
+    #         pkgs.roboto-mono
+    #         pkgs.fira-code
+    #         pkgs.iosevka
+    #     ];
+    # };
 }

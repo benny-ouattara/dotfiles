@@ -60,9 +60,9 @@
     pkgs.wireguard-tools
     pkgs.tree
     pkgs.tcpdump
-    pkgs.python37
-    pkgs.python37Packages.pip
-    pkgs.python37Packages.python-language-server
+    # pkgs.python38
+    # pkgs.python38Packages.pip
+    # pkgs.python38Packages.python-language-server
     pkgs.mosh
     pkgs.m-cli
     pkgs.hydroxide
