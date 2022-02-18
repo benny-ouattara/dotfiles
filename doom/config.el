@@ -72,7 +72,7 @@
                            :with-author nil
                            :with-toc nil)
  org-agenda-skip-scheduled-if-done t
- projectile-project-search-path '("~/Code/" "~/common-lisp")
+ projectile-project-search-path '("~/Code/" "~/common-lisp" "~/Code/archives/Code")
  ;; org-ellipsis " ▾ "
  ;; org-ellipsis " ⤵ "
  ;; org-ellipsis " ↓ "
