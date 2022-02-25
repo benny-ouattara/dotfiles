@@ -813,6 +813,7 @@ sys.stderr = open(\"err.txt\", \"w\")")))
        :desc "Package mvn project"  "p" (cmd! (beno--run-mvn-command "clean package"))
        :desc "Package mvn project - skip tests"  "P" (cmd! (beno--run-mvn-command "-Dmaven.test.skip=true clean package"))
        :desc "Test mvn project"  "t" (cmd! (beno--run-mvn-command "clean test"))
+       :desc "Integration test mvn project"  "i" (cmd! (beno--run-mvn-command "-Dtest=SomeNonExistingTestClass -DfailIfNoTests=false integration-test"))
        :desc "Run test"  "T" (cmd! (beno--run-mvn-command (call-interactively #'beno--mvn-test-to-run)))
        ))
 
