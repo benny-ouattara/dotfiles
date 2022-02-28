@@ -117,7 +117,7 @@
   "Load theme, taking current system APPEARANCE into consideration."
   (mapc #'disable-theme custom-enabled-themes)
   (pcase appearance
-    ('light (load-theme 'doom-acario-light t))
+    ('light (load-theme 'doom-one-light t))
     ('dark (load-theme 'doom-snazzy t))))
 
 (add-hook 'ns-system-appearance-change-functions #'beno--auto-theme)
@@ -127,7 +127,7 @@
     (menu-bar-mode -1)
     (tool-bar-mode -1)
     (mapc #'disable-theme custom-enabled-themes)
-    (setq doom-theme 'doom-one
+    (setq doom-theme 'doom-one-light
           evil-emacs-state-cursor '("red" box)
           evil-normal-state-cursor '("black" box)
           evil-visual-state-cursor '("black" box)
