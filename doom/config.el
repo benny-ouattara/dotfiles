@@ -8,6 +8,7 @@
  doom-font (font-spec :family "JetBrains Mono" :size 19 :weight 'normal :width 'normal)
  doom-big-font (font-spec :family "monaco" :size 23)
  doom-variable-pitch-font (font-spec :family "Avenir Next" :size 21)
+ doom-theme 'doom-one-light
  org-roam-v2-ack t
  +org-roam-open-buffer-on-find-file nil
  mac-command-modifier 'meta
@@ -113,12 +114,12 @@
 (add-to-list 'default-frame-alist
              '(ns-appearance . dark))
 
-(defun beno--auto-theme (appearance)
-  "Load theme, taking current system APPEARANCE into consideration."
-  (mapc #'disable-theme custom-enabled-themes)
-  (pcase appearance
-    ('light (load-theme 'doom-one-light t))
-    ('dark (load-theme 'doom-snazzy t))))
+;; (defun beno--auto-theme (appearance)
+;;   "Load theme, taking current system APPEARANCE into consideration."
+;;   (mapc #'disable-theme custom-enabled-themes)
+;;   (pcase appearance
+;;     ('light (load-theme 'doom-one-light t))
+;;     ('dark (load-theme 'doom-snazzy t))))
 
 (add-hook 'ns-system-appearance-change-functions #'beno--auto-theme)
 
