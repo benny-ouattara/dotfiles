@@ -9,6 +9,7 @@
  doom-big-font (font-spec :family "monaco" :size 23)
  doom-variable-pitch-font (font-spec :family "Avenir Next" :size 21)
  doom-theme 'doom-one-light
+ evil-move-cursor-back nil
  org-roam-v2-ack t
  +org-roam-open-buffer-on-find-file nil
  mac-command-modifier 'meta
