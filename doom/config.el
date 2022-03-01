@@ -833,15 +833,28 @@ sys.stderr = open(\"err.txt\", \"w\")")))
   (setq projectile-project-root-files-bottom-up
         (remove ".project" projectile-project-root-files-bottom-up)))
 
-(set-popup-rule! +main-eshell-popup+ :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
-(set-popup-rule! "*cp:eshell*" :size 0.40 :height 0.25 :slot 90 :select t :quit nil :ttl t :side 'right)
-(set-popup-rule! "err.txt" :size 0.40 :height 0.25 :slot 100 :select t :quit nil :ttl t :side 'right :modeline t)
-(set-popup-rule! "output.txt" :size 0.40 :height 0.25 :slot 110 :select t :quit nil :ttl t :side 'right :modeline t)
-(set-popup-rule! "input.txt" :size 0.40 :height 0.25 :slot 120 :select t :quit nil :ttl t :side 'right :modeline t)
-(set-popup-rule! "*SQL:" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
-(set-popup-rule! "^\\*compilation.*" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
-;; (set-popup-rule! "^2022" :size 0.40 :vslot -4 :select t :ttl t :quit nil :side 'right)
-;; (set-popup-rule! "^2021" :size 0.40 :vslot -4 :select t :ttl t :quit nil :side 'right)
-;; (set-popup-rule! "^\\*Org Agenda" :side 'bottom :size 0.90 :select t :ttl nil)
-;; (set-popup-rule! "^CAPTURE.*\\.org$" :side 'bottom :size 0.90 :select t :ttl nil)
-;; (set-popup-rule! "org$" :size 0.33 :vslot -4 :select t :ttl t :quit nil :side 'right)
+(after! lsp-java
+  (setq  projectile-project-test-cmd "sh mvn clean test"
+         projectile-project-compilation-cmd "sh mvn clean compile"
+         projectile-project-install-cmd "sh mvn clean install"
+         projectile-project-package-cmd "sh mvn clean verify"
+         projectile-project-run-cmd "docker run --rm --dns 1.1.1.1 -p 8080:8080 -p 5990:5990 -p 5700:5700 -e SPOTIFY_DOMAIN=gew1.spotify.net $(jq -r '.image' target/jib-image.json)")
+  (map! :leader
+        :desc "Verify project"
+        :n "p P"
+        'projectile-package-project))
+
+(when (> (display-pixel-width) 3000)
+  (set-popup-rule! +main-eshell-popup+ :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
+  (set-popup-rule! "*cp:eshell*" :size 0.40 :height 0.25 :slot 90 :select t :quit nil :ttl t :side 'right)
+  (set-popup-rule! "err.txt" :size 0.40 :height 0.25 :slot 100 :select t :quit nil :ttl t :side 'right :modeline t)
+  (set-popup-rule! "output.txt" :size 0.40 :height 0.25 :slot 110 :select t :quit nil :ttl t :side 'right :modeline t)
+  (set-popup-rule! "input.txt" :size 0.40 :height 0.25 :slot 120 :select t :quit nil :ttl t :side 'right :modeline t)
+  (set-popup-rule! "*SQL:" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
+  (set-popup-rule! "^\\*compilation.*" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
+  ;; (set-popup-rule! "^2022" :size 0.40 :vslot -4 :select t :ttl t :quit nil :side 'right)
+  ;; (set-popup-rule! "^2021" :size 0.40 :vslot -4 :select t :ttl t :quit nil :side 'right)
+  ;; (set-popup-rule! "^\\*Org Agenda" :side 'bottom :size 0.90 :select t :ttl nil)
+  ;; (set-popup-rule! "^CAPTURE.*\\.org$" :side 'bottom :size 0.90 :select t :ttl nil)
+  ;; (set-popup-rule! "org$" :size 0.33 :vslot -4 :select t :ttl t :quit nil :side 'right)
+  )

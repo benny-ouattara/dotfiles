@@ -994,25 +994,42 @@ quickly access files in ~/Code/dotfiles/
   (doom-project-browse (expand-file-name "~/Code/dotfiles")))
 #+end_src
 * projectile
+** java .project conflict
 doom uses ~.project~ to mark projects so it adds it as a projectile marker. However the java language server also generates ~.project~ file for each imported module. In a multi-module java setting, projectile ends up considering each sub-module as project instead of the root project. Remove ~.project~ as a project marker since I don't use doom projects anyway
 #+begin_src emacs-lisp
 (after! projectile
   (setq projectile-project-root-files-bottom-up
         (remove ".project" projectile-project-root-files-bottom-up)))
 #+end_src
+** java project level commands
+commands run at the project level
+#+begin_src emacs-lisp
+(after! lsp-java
+  (setq  projectile-project-test-cmd "sh mvn clean test"
+         projectile-project-compilation-cmd "sh mvn clean compile"
+         projectile-project-install-cmd "sh mvn clean install"
+         projectile-project-package-cmd "sh mvn clean verify"
+         projectile-project-run-cmd "docker run --rm --dns 1.1.1.1 -p 8080:8080 -p 5990:5990 -p 5700:5700 -e SPOTIFY_DOMAIN=gew1.spotify.net $(jq -r '.image' target/jib-image.json)")
+  (map! :leader
+        :desc "Verify project"
+        :n "p P"
+        'projectile-package-project))
+#+end_src
 * window management
 Determine where windows go
 #+begin_src emacs-lisp
-(set-popup-rule! +main-eshell-popup+ :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
-(set-popup-rule! "*cp:eshell*" :size 0.40 :height 0.25 :slot 90 :select t :quit nil :ttl t :side 'right)
-(set-popup-rule! "err.txt" :size 0.40 :height 0.25 :slot 100 :select t :quit nil :ttl t :side 'right :modeline t)
-(set-popup-rule! "output.txt" :size 0.40 :height 0.25 :slot 110 :select t :quit nil :ttl t :side 'right :modeline t)
-(set-popup-rule! "input.txt" :size 0.40 :height 0.25 :slot 120 :select t :quit nil :ttl t :side 'right :modeline t)
-(set-popup-rule! "*SQL:" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
-(set-popup-rule! "^\\*compilation.*" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
-;; (set-popup-rule! "^2022" :size 0.40 :vslot -4 :select t :ttl t :quit nil :side 'right)
-;; (set-popup-rule! "^2021" :size 0.40 :vslot -4 :select t :ttl t :quit nil :side 'right)
-;; (set-popup-rule! "^\\*Org Agenda" :side 'bottom :size 0.90 :select t :ttl nil)
-;; (set-popup-rule! "^CAPTURE.*\\.org$" :side 'bottom :size 0.90 :select t :ttl nil)
-;; (set-popup-rule! "org$" :size 0.33 :vslot -4 :select t :ttl t :quit nil :side 'right)
+(when (> (display-pixel-width) 3000)
+  (set-popup-rule! +main-eshell-popup+ :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
+  (set-popup-rule! "*cp:eshell*" :size 0.40 :height 0.25 :slot 90 :select t :quit nil :ttl t :side 'right)
+  (set-popup-rule! "err.txt" :size 0.40 :height 0.25 :slot 100 :select t :quit nil :ttl t :side 'right :modeline t)
+  (set-popup-rule! "output.txt" :size 0.40 :height 0.25 :slot 110 :select t :quit nil :ttl t :side 'right :modeline t)
+  (set-popup-rule! "input.txt" :size 0.40 :height 0.25 :slot 120 :select t :quit nil :ttl t :side 'right :modeline t)
+  (set-popup-rule! "*SQL:" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
+  (set-popup-rule! "^\\*compilation.*" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
+  ;; (set-popup-rule! "^2022" :size 0.40 :vslot -4 :select t :ttl t :quit nil :side 'right)
+  ;; (set-popup-rule! "^2021" :size 0.40 :vslot -4 :select t :ttl t :quit nil :side 'right)
+  ;; (set-popup-rule! "^\\*Org Agenda" :side 'bottom :size 0.90 :select t :ttl nil)
+  ;; (set-popup-rule! "^CAPTURE.*\\.org$" :side 'bottom :size 0.90 :select t :ttl nil)
+  ;; (set-popup-rule! "org$" :size 0.33 :vslot -4 :select t :ttl t :quit nil :side 'right)
+  )
 #+end_src
