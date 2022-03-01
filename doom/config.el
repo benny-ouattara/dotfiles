@@ -819,6 +819,16 @@ sys.stderr = open(\"err.txt\", \"w\")")))
        :desc "Run test"  "T" (cmd! (beno--run-mvn-command (call-interactively #'beno--mvn-test-to-run)))
        ))
 
+(defun find-in-dotfiles ()
+  "Open a file somewhere in ~/Code/dotfiles/ via a fuzzy filename search."
+  (interactive)
+  (doom-project-find-file (expand-file-name "~/Code/dotfiles")))
+
+(defun browse-dotfiles ()
+  "Browse the files in ~/Code/dotfiles/"
+  (interactive)
+  (doom-project-browse (expand-file-name "~/Code/dotfiles")))
+
 (set-popup-rule! +main-eshell-popup+ :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
 (set-popup-rule! "*cp:eshell*" :size 0.40 :height 0.25 :slot 90 :select t :quit nil :ttl t :side 'right)
 (set-popup-rule! "err.txt" :size 0.40 :height 0.25 :slot 100 :select t :quit nil :ttl t :side 'right :modeline t)

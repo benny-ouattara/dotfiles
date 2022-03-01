@@ -980,6 +980,19 @@ Use ~comint~ and ~compile~ to ease project compilation
        ))
 #+end_src
 
+* dotfiles access
+quickly access files in ~/Code/dotfiles/
+#+begin_src emacs-lisp
+(defun find-in-dotfiles ()
+  "Open a file somewhere in ~/Code/dotfiles/ via a fuzzy filename search."
+  (interactive)
+  (doom-project-find-file (expand-file-name "~/Code/dotfiles")))
+
+(defun browse-dotfiles ()
+  "Browse the files in ~/Code/dotfiles/"
+  (interactive)
+  (doom-project-browse (expand-file-name "~/Code/dotfiles")))
+#+end_src
 * window management
 Determine where windows go
 #+begin_src emacs-lisp

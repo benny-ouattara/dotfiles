@@ -30,3 +30,5 @@ Google/
 jgit/
 .DS_Store
 doom/.DS_Store
+irb/
+rational-emacs/
