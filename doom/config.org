@@ -993,6 +993,13 @@ quickly access files in ~/Code/dotfiles/
   (interactive)
   (doom-project-browse (expand-file-name "~/Code/dotfiles")))
 #+end_src
+* projectile
+doom uses ~.project~ to mark projects so it adds it as a projectile marker. However the java language server also generates ~.project~ file for each imported module. In a multi-module java setting, projectile ends up considering each sub-module as project instead of the root project. Remove ~.project~ as a project marker since I don't use doom projects anyway
+#+begin_src emacs-lisp
+(after! projectile
+  (setq projectile-project-root-files-bottom-up
+        (remove ".project" projectile-project-root-files-bottom-up)))
+#+end_src
 * window management
 Determine where windows go
 #+begin_src emacs-lisp

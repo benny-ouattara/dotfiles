@@ -829,6 +829,10 @@ sys.stderr = open(\"err.txt\", \"w\")")))
   (interactive)
   (doom-project-browse (expand-file-name "~/Code/dotfiles")))
 
+(after! projectile
+  (setq projectile-project-root-files-bottom-up
+        (remove ".project" projectile-project-root-files-bottom-up)))
+
 (set-popup-rule! +main-eshell-popup+ :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
 (set-popup-rule! "*cp:eshell*" :size 0.40 :height 0.25 :slot 90 :select t :quit nil :ttl t :side 'right)
 (set-popup-rule! "err.txt" :size 0.40 :height 0.25 :slot 100 :select t :quit nil :ttl t :side 'right :modeline t)
