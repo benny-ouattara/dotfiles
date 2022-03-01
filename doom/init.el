@@ -48,7 +48,7 @@
        :editor
        (evil +everywhere)             ; come to the dark side, we have cookies
        file-templates                 ; auto-snippets for empty files
-       fold                           ; (nigh) universal code folding
+       ;; fold                           ; (nigh) universal code folding
        ;;(format +onsave)  ; automated prettiness
        ;;god               ; run Emacs commands without modifier keys
        lispy                       ; vim for lisp, for people who don't like vim
@@ -148,7 +148,8 @@
        ;;racket            ; a DSL for DSLs
        rest                             ; Emacs as a REST client
        ;;rst               ; ReST in peace
-       ruby              ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
+       (ruby +rbenv
+             +rails)       ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
        ;;rust              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
        (scala +lsp)      ; java, but good
        ;;scheme            ; a fully conniving family of lisps
