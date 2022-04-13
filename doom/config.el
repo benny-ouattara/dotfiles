@@ -708,13 +708,17 @@ Beware using this command given that it's destructive and non reversible."
 sys.stdin = open(\"input.txt\", \"r\")
 sys.stdout = open(\"output.txt\", \"w\")
 sys.stderr = open(\"err.txt\", \"w\")"))
+    (ruby-info (make-solution-info :ext "rb" :dir "~/Code/algo-ruby" :template "$stdin = File.open(\"input.txt\", \"r\")
+$stdout = File.open(\"output.txt\", \"w\")
+$stderr = File.open(\"err.txt\", \"w\")"))
     (scala-info (make-solution-info :ext "scala" :dir "~/Code/algo-scala" :template "import sys
 
 sys.stdin = open(\"input.txt\", \"r\")
 sys.stdout = open(\"output.txt\", \"w\")
 sys.stderr = open(\"err.txt\", \"w\")")))
-    (puthash :python python-info lang-info)
+    (puthash :py python-info lang-info)
     (puthash :scala scala-info lang-info)
+    (puthash :rb ruby-info lang-info)
     lang-info))
 
 (defun cp-solve (language problem-name)
