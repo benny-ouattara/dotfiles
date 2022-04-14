@@ -696,26 +696,36 @@ Beware using this command given that it's destructive and non reversible."
         (alist-get ?H avy-dispatch-alist) 'avy-action-helpful
         (alist-get ?\; avy-dispatch-alist) 'avy-action-embark))
 
+(when (> (display-pixel-width) 3000)
+  (set-popup-rule! "*cp:eshell*" :size 0.40 :height 0.25 :slot 90 :select t :quit nil :ttl t :side 'right)
+  (set-popup-rule! "err.txt" :size 0.40 :height 0.25 :slot 100 :select t :quit nil :ttl t :side 'right :modeline t)
+  (set-popup-rule! "output.txt" :size 0.40 :height 0.25 :slot 110 :select t :quit nil :ttl t :side 'right :modeline t)
+  (set-popup-rule! "input.txt" :size 0.40 :height 0.25 :slot 120 :select t :quit nil :ttl t :side 'right :modeline t))
+
 (cl-defstruct solution-info
   (ext nil :read-only t)
   (dir nil :read-only t)
   (template nil :read-only t))
 
 (defun initialize-lang-info ()
-  (let ((lang-info (make-hash-table))
-    (python-info (make-solution-info :ext "py" :dir "~/Code/algo-python" :template "import sys
-
+  (let* ((lang-info (make-hash-table))
+        (python-ext "py")
+        (python-dir (concat project-dir "/algo-python"))
+        (python-template "import sys
 sys.stdin = open(\"input.txt\", \"r\")
 sys.stdout = open(\"output.txt\", \"w\")
-sys.stderr = open(\"err.txt\", \"w\")"))
-    (ruby-info (make-solution-info :ext "rb" :dir "~/Code/algo-ruby" :template "$stdin = File.open(\"input.txt\", \"r\")
+sys.stderr = open(\"err.txt\", \"w\")")
+        (ruby-ext "rb")
+        (ruby-dir (concat project-dir "/algo-ruby"))
+        (ruby-template "$stdin = File.open(\"input.txt\", \"r\")
 $stdout = File.open(\"output.txt\", \"w\")
-$stderr = File.open(\"err.txt\", \"w\")"))
-    (scala-info (make-solution-info :ext "scala" :dir "~/Code/algo-scala" :template "import sys
-
-sys.stdin = open(\"input.txt\", \"r\")
-sys.stdout = open(\"output.txt\", \"w\")
-sys.stderr = open(\"err.txt\", \"w\")")))
+$stderr = File.open(\"err.txt\", \"w\")")
+        (scala-ext "scala")
+        (scala-dir (concat project-dir "/algo-scala"))
+        (scala-template "")
+    (python-info (make-solution-info :ext python-ext :dir python-dir :template python-template))
+    (ruby-info (make-solution-info :ext ruby-ext :dir ruby-dir :template ruby-template))
+    (scala-info (make-solution-info :ext scala-ext :dir scala-dir :template scala-template)))
     (puthash :py python-info lang-info)
     (puthash :scala scala-info lang-info)
     (puthash :rb ruby-info lang-info)
@@ -850,10 +860,6 @@ sys.stderr = open(\"err.txt\", \"w\")")))
 
 (when (> (display-pixel-width) 3000)
   (set-popup-rule! +main-eshell-popup+ :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
-  (set-popup-rule! "*cp:eshell*" :size 0.40 :height 0.25 :slot 90 :select t :quit nil :ttl t :side 'right)
-  (set-popup-rule! "err.txt" :size 0.40 :height 0.25 :slot 100 :select t :quit nil :ttl t :side 'right :modeline t)
-  (set-popup-rule! "output.txt" :size 0.40 :height 0.25 :slot 110 :select t :quit nil :ttl t :side 'right :modeline t)
-  (set-popup-rule! "input.txt" :size 0.40 :height 0.25 :slot 120 :select t :quit nil :ttl t :side 'right :modeline t)
   (set-popup-rule! "*SQL:" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
   (set-popup-rule! "^\\*compilation.*" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
   ;; (set-popup-rule! "^2022" :size 0.40 :vslot -4 :select t :ttl t :quit nil :side 'right)
