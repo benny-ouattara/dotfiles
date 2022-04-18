@@ -1,11 +1,11 @@
 #+author: Ben O.
-
 * book
-
 Author: %^{Author}
 Title: ${title}
 Year: %^{Year}
 
-* summary
+* notes
+- %?
 
-%?
+* concepts
+* lessons
