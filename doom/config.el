@@ -258,12 +258,12 @@ and org files on the top right. Keeps current window on the left."
 
 ;; setup lsp server for eglot
 ;; eglot doesn't recognize ~ for user home directory
-;; (setq lsp-jar (concat home-dir  "/.emacs.d/.cache/lsp/eclipse.jdt.ls/plugins/org.eclipse.equinox.launcher_1.6.0.v20200915-1508.jar"))
+(setq lsp-jar (concat home-dir  "/.emacs.d/.cache/lsp/eclipse.jdt.ls/plugins/org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar"))
 
-;; (defun set-lsp-jar ()
-;;   (setenv "CLASSPATH" lsp-jar))
+(defun set-lsp-jar ()
+  (setenv "CLASSPATH" lsp-jar))
 
-;; (add-hook 'java-mode-hook #'set-lsp-jar)
+(add-hook 'java-mode-hook #'set-lsp-jar)
 
 ;; breadcrumb is a nice feature to know about, not using it now
 ;; (after! lsp-mode

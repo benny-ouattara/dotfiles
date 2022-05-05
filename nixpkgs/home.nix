@@ -166,7 +166,7 @@ in rec {
 
         eval "$(starship init zsh)"
 
-        export PATH=$HOME/.rbenv/shims:$HOME/.rbenv/versions/3.0.3/bin:$PATH:$HOME/.jenv/bin:$HOME/.local/bin:$HOME/.emacs.d/bin:/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin:${pkgs.custom-scripts}/bin:/opt/local/bin:/Users/benouattara/Qt/5.15.2/clang_64/bin:/Users/zangao/Library/Application\ Support/Coursier/bin:~/.roswell/bin
+        export PATH=/usr/local/opt/ruby/bin:$HOME/.rbenv/shims:$HOME/.rbenv/versions/3.0.3/bin:$PATH:$HOME/.jenv/bin:$HOME/.local/bin:$HOME/.emacs.d/bin:/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin:${pkgs.custom-scripts}/bin:/opt/local/bin:/Users/benouattara/Qt/5.15.2/clang_64/bin:/Users/zangao/Library/Application\ Support/Coursier/bin:~/.roswell/bin
 
         # this needs to be after the main export as it prepends to the main path
         eval "$(pyenv init --path)"
