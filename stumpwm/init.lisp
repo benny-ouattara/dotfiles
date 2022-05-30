@@ -153,26 +153,26 @@
 ;; (load-module "screenshot")
 ;; (load-module "battery-portable")
 
-(load-module "net")
-(load-module "wifi")
-(setf *mode-line-timeout* 2)
-(setf *time-modeline-string* "%F %H:%M")
-(setf *group-format* "%t")
-(setf *window-format* "%n: %30t")
-(setf *mode-line-background-color* "#232635")
-(setf *mode-line-foreground-color* "#A6Accd")
-(setf wifi:*wifi-modeline-fmt*       "%e %P"
-      wifi:*use-colors*              nil)
-(run-commands "mode-line")
-(setf stumpwm:*screen-mode-line-format*
-      (list
-       "%n   "
-       "^>" '(:eval (stumpwm:run-shell-command
-                     "LANG=en_US.utf8 date +%A' '%d.%m.%Y' '%l:%M' '%p' 'GMT''%:::z'           '" t))))
+;; (load-module "net")
+;; (load-module "wifi")
+;; (setf *mode-line-timeout* 2)
+;; (setf *time-modeline-string* "%F %H:%M")
+;; (setf *group-format* "%t")
+;; (setf *window-format* "%n: %30t")
+;; (setf *mode-line-background-color* "#232635")
+;; (setf *mode-line-foreground-color* "#A6Accd")
+;; (setf wifi:*wifi-modeline-fmt*       "%e %P"
+;;       wifi:*use-colors*              nil)
+;; (run-commands "mode-line")
+;; (setf stumpwm:*screen-mode-line-format*
+;;       (list
+;;        "%n   "
+;;        "^>" '(:eval (stumpwm:run-shell-command
+;;                      "LANG=en_US.utf8 date +%A' '%d.%m.%Y' '%l:%M' '%p' 'GMT''%:::z'           '" t))))
 
-(stumpwm:enable-mode-line (stumpwm:current-screen)
-                          (stumpwm:current-head)
-                          t)
+;; (stumpwm:enable-mode-line (stumpwm:current-screen)
+;;                           (stumpwm:current-head)
+;;                           t)
 ;; have this be the last line of config since creating server is not an idempotent operation
 (require :slynk)
 (slynk:create-server :dont-close t)

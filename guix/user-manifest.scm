@@ -65,4 +65,6 @@
 
   "curl"
   "rlwrap"
+  ;; "emacs-ripgrep"
+  "autoconf"
   ))
