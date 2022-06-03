@@ -127,6 +127,7 @@
 (run-shell-command "xset r rate 150 60")
 (run-shell-command "feh --randomize --bg-fill ~/Sync/wallpapers/*")
 (run-shell-command "picom")
+(run-shell-command "xsetroot -cursor_name left_ptr")
 ;; (run-shell-command "volumeicon")
 
 ;; load modules last so that they don't break system in failure case

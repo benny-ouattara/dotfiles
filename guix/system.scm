@@ -3,18 +3,19 @@
 
 (use-modules (gnu)
              (nongnu packages linux)
-             (gnu packages lisp))
+             (gnu packages lisp)
+             (gnu packages wm)
+             (gnu packages fonts))
 (use-service-modules
   cups
   desktop
   networking
   ssh
   xorg)
-(use-package-modules fonts wm)
 
 (operating-system
-  (kernel linux)
-  (firmware (list linux-firmware))
+ (kernel linux)
+ (firmware (list linux-firmware))
   (locale "en_US.utf8")
   (timezone "America/New_York")
   (keyboard-layout (keyboard-layout "us"))
@@ -29,43 +30,30 @@
                 %base-user-accounts))
   (packages
     (append
-     (list sbcl stumpwm+slynk `(,stumpwm "lib"))
-     ;; sbcl-ttf-fonts font-dejavu
-      (list (specification->package "openbox")
-            (specification->package "awesome")
-            ;; (specification->package "i3-wm")
-            (specification->package "i3-gaps")
+      (list sbcl stumpwm+slynk `(,stumpwm "lib"))
+      (list (specification->package "awesome")
+            (specification->package "i3-wm")
             (specification->package "i3status")
             (specification->package "dmenu")
             (specification->package "st")
+            (specification->package "ratpoison")
+            (specification->package "xterm")
             (specification->package "emacs")
             (specification->package "emacs-exwm")
             (specification->package
               "emacs-desktop-environment")
             (specification->package "nss-certs"))
       %base-packages))
-
   (services
     (append
       (list (service gnome-desktop-service-type)
+            (service openssh-service-type)
+            (service tor-service-type)
             (service cups-service-type)
             (set-xorg-configuration
               (xorg-configuration
                 (keyboard-layout keyboard-layout))))
       %desktop-services))
-
-  ;; (services
-  ;;  (modify-services %desktop-services
-  ;;                   (guix-service-type config =>
-  ;;                                      (guix-configuration
-  ;;                                       (inherit config)
-  ;;                                       (substitute-urls
-  ;;                                        (append (list "https://substitutes.nonguix.org")
-  ;;                                                %default-substitute-urls))
-  ;;                                       (authorized-keys
-  ;;                                        (append (list (local-file "./signing-key.pub"))
-  ;;                                                %default-authorized-guix-keys))))))
-
   (bootloader
     (bootloader-configuration
       (bootloader grub-efi-bootloader)
@@ -75,7 +63,7 @@
     (cons* (file-system
              (mount-point "/")
              (device
-               (uuid "fea68479-d843-448e-9a28-1e9f45f6a519"
+               (uuid "37d46512-763b-4c4a-a119-641eea889ff2"
                      'ext4))
              (type "ext4"))
            (file-system

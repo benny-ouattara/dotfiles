@@ -65,6 +65,8 @@
 
   "curl"
   "rlwrap"
-  ;; "emacs-ripgrep"
+  "ripgrep"
   "autoconf"
+  "xsetroot"
+  "nss-certs"
   ))

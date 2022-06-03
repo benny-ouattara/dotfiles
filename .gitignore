@@ -26,3 +26,5 @@ micro/
 kfp/
 pip/
 nyxt/
+guix/.guix
+guix/current
