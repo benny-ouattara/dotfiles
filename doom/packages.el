@@ -26,3 +26,4 @@
 ;; temporary fix to map.el bug
 (package! map :pin "bb50dba")
 (package! keyfreq)
+(package! protobuf-mode)

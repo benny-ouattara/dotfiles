@@ -258,7 +258,7 @@ and org files on the top right. Keeps current window on the left."
 
 ;; setup lsp server for eglot
 ;; eglot doesn't recognize ~ for user home directory
-(setq lsp-jar (concat home-dir  "/.emacs.d/.cache/lsp/eclipse.jdt.ls/plugins/org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar"))
+(setq lsp-jar (concat home-dir "/.emacs.d/.local/etc/lsp/eclipse.jdt.ls/plugins/org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar"))
 
 (defun set-lsp-jar ()
   (setenv "CLASSPATH" lsp-jar))
