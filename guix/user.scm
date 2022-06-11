@@ -69,4 +69,7 @@
   "autoconf"
   "xsetroot"
   "nss-certs"
+  "stumpish"
+  "xdot"
+  "qutebrowser"
   ))

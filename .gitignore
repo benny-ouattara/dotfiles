@@ -28,3 +28,4 @@ pip/
 nyxt/
 guix/.guix
 guix/current
+guix/gpg/

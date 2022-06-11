@@ -25,9 +25,13 @@
             "Run or raise nyxt."
             (run-or-raise "nyxt" '(:class "Nyxt") t nil))
 
+(defcommand qutebrowser () ()
+            "Run or raise qutebrowser."
+            (run-or-raise "qutebrowser" '(:class "Qutebrowser") t nil))
+
 (defcommand start-emacs () ()
-            "Run or raise emacs."
-            (run-or-raise "emacs" '(:class "Emacs") t nil))
+  "Run or raise emacs."
+  (run-or-raise "emacs" '(:class "Emacs") t nil))
 
 (defcommand start-slynk (port) ((:string "Port number: "))
   (sb-thread:make-thread
@@ -77,7 +81,7 @@
 (define-key *top-map* (kbd "M-h") "resize-direction Down")
 
 (define-key *top-map* (kbd "s-RET") "exec alacritty")
-(define-key *top-map* (kbd "s-w") "nyxt")
+(define-key *top-map* (kbd "s-w") "qutebrowser")
 (define-key *top-map* (kbd "s-e") "emacs")
 
 (define-key *top-map* (kbd "s-j") "move-focus left")
