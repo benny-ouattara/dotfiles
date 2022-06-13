@@ -124,7 +124,7 @@
 
 ;; start essential processes
 ;; (run-shell-command "nm-applet")
-(run-shell-command "syncthing")
+;; (run-shell-command "syncthing")
 (run-commands "start-emacs")
 (run-shell-command "setxkbmap us -option 'caps:ctrl_modifier'")
 (run-shell-command "xcape -e 'Caps_Lock=Escape'")

@@ -142,7 +142,7 @@ c.bindings.key_mappings = {'<Ctrl+6>': '<Ctrl+^>', '<Ctrl+Enter>': '<Ctrl+Return
 
 # fonts
 c.fonts.default_size = "20pt"
-c.fonts.web.size.default = 23
+c.fonts.web.size.default = 20
 c.zoom.default = "150%"
 
 # search

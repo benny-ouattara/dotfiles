@@ -9,7 +9,6 @@
   "autorandr"
   "xrandr"
   "fd"
-  "qutebrowser"
   "nyxt"
   "kitty"
   "alacritty"
@@ -72,4 +71,6 @@
   "stumpish"
   "xdot"
   "qutebrowser"
+  "netstat"
+  "dstat"
   ))
