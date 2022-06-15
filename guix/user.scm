@@ -71,6 +71,10 @@
   "stumpish"
   "xdot"
   "qutebrowser"
-  "netstat"
+  "net-tools"
   "dstat"
+  "clojure"
+  "clojure-tools"
+  "leiningen"
+  "icedtea"
   ))
