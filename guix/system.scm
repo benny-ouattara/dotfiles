@@ -13,7 +13,8 @@
  networking
  ssh
  xorg
- syncthing)
+ syncthing
+ monitoring)
 
 (operating-system
   (kernel linux)
@@ -24,10 +25,18 @@
   (host-name "ben")
   (users (cons* (user-account
                  (name "ben")
-                 (comment "default user")
+                 (comment "main user account")
                  (group "users")
                  (shell (file-append zsh "/bin/zsh"))
                  (home-directory "/home/ben")
+                 (supplementary-groups
+                  '("wheel" "netdev" "audio" "video" "lp")))
+                (user-account
+                 (name "danfodio")
+                 (comment "dan fodio user account")
+                 (group "users")
+                 (shell (file-append zsh "/bin/zsh"))
+                 (home-directory "/home/danfodio")
                  (supplementary-groups
                   '("wheel" "netdev" "audio" "video")))
                 %base-user-accounts))
@@ -53,6 +62,11 @@
   (services
    (append
     (list
+     (geoclue-service)
+     (service darkstat-service-type
+              (darkstat-configuration
+               (interface "wlp0s20f3")))
+     (service bluetooth-service-type)
      (service syncthing-service-type
               (syncthing-configuration (user "ben")))
      (service gnome-desktop-service-type)
