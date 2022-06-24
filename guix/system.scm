@@ -6,7 +6,8 @@
              (gnu packages lisp)
              (gnu packages wm)
              (gnu packages fonts)
-             (gnu packages shells))
+             (gnu packages shells)
+             (gnu system setuid))
 (use-service-modules
  cups
  desktop
@@ -40,6 +41,10 @@
                  (supplementary-groups
                   '("wheel" "netdev" "audio" "video")))
                 %base-user-accounts))
+  (setuid-programs
+   (append (list (setuid-program
+                  (program (file-append stumpwm+slynk "/bin/stumpwm"))))
+           %setuid-programs))
   (packages
    (append
     (list (list stumpwm "lib"))         ; use lib output of stumpwm package
@@ -62,7 +67,6 @@
   (services
    (append
     (list
-     (geoclue-service)
      (service darkstat-service-type
               (darkstat-configuration
                (interface "wlp0s20f3")))

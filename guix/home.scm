@@ -64,7 +64,7 @@
          "sbcl-stumpwm-ttf-fonts"
          "sbcl-stumpwm-stumptray"
          "sbcl-stumpwm-kbd-layouts"
-         "stumpwm-with-slynk"
+         ;; "stumpwm-with-slynk"
          "sbcl-stumpwm-net"
          "sbcl-stumpwm-wifi"
          "stumpwm:lib"
@@ -83,8 +83,7 @@
          "clojure"
          "clojure-tools"
          "leiningen"
-         "icedtea"
-         "rust-starship-module-config-derive")))
+         "icedtea")))
  (services
   (list
    (simple-service 'environment-variables-service

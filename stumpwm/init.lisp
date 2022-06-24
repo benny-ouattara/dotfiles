@@ -6,10 +6,18 @@
 
 (in-package :stumpwm)
 
+;; enable which-key-mode
+(which-key-mode)
+
+(defcommand now-we-are-six (name age)
+  ((:string "Enter your name: ")
+   (:number "Enter your age:"))
+  (message "~a, in six years you will be ~a" name (+ 6 age)))
+
 (defcommand hsplit-and-focus () ()
-            "Create a new frame on the right and focus it."
-            (hsplit)
-            (move-focus :right))
+  "Create a new frame on the right and focus it."
+  (hsplit)
+  (move-focus :right))
 
 (defcommand vsplit-and-focus () ()
             "Create a new frame below and move focus to it."
@@ -39,6 +47,7 @@
      (slynk:create-server :port (parse-integer port) :dont-close t))
    :name "manual-slynk-stumpwm"))
 
+(stumpwm:add-to-load-path "~/.stumpwm.d/modules/acpi-backlight")
 (stumpwm:add-to-load-path "~/.guix-profile/share/common-lisp/sbcl/stumpwm-swm-gaps")
 (stumpwm:add-to-load-path "~/.guix-profile/share/common-lisp/sbcl/stumpwm-ttf-fonts")
 (stumpwm:add-to-load-path "~/.guix-profile/share/common-lisp/sbcl/stumpwm-stumptray")
@@ -75,6 +84,7 @@
     (define-key *root-map* (kbd (nth y *move-to-keybinds*)) (concat "gmove-and-follow " workspace))))
 
 (setf *resize-increment* 50)
+;; (define-key *root-map* (kbd "o") "other") exampple on defining key on root-map, C-a
 (define-key *top-map* (kbd "M-k") "resize-direction Right")
 (define-key *top-map* (kbd "M-j") "resize-direction Left")
 (define-key *top-map* (kbd "M-l") "resize-direction Up")
@@ -101,6 +111,7 @@
 
 (define-key *top-map* (kbd "s-f") "fullscreen")
 (define-key *top-map* (kbd "s-s") "hsplit-and-focus")
+(define-key *top-map* (kbd "s-S") "vsplit-and-focus")
 (define-key *top-map* (kbd "s-SPC") "run-shell-command dmenu_run -fn 'Droid Sans Mono-17'")
 (define-key *top-map* (kbd "C-s-l") "run-shell-command slock")
 (define-key *top-map* (kbd "C-s-r") "iresize")
@@ -116,6 +127,9 @@
 (define-key *top-map* (kbd "C-s-3") "gmove web")
 (define-key *top-map* (kbd "C-s-4") "gmove random")
 (define-key *top-map* (kbd "C-s-5") "gmove misc")
+
+(define-key *top-map* (kbd "XF86MonBrightnessUp") "backlight-up")
+(define-key *top-map* (kbd "XF86MonBrightnessDown") "backlight-down")
 
 (set-border-color "#c792ea")
 (set-bg-color "#232635")
@@ -135,12 +149,16 @@
 ;; (run-shell-command "volumeicon")
 
 ;; load modules last so that they don't break system in failure case
-(ql:quickload :clx-truetype)
-(load-module "ttf-fonts")
-(setf xft:*font-dirs* '("/home/ben/.guix-profile/share/fonts/"))
+;; (ql:quickload :clx-truetype)
+;; (load-module "ttf-fonts")
+;; (setf xft:*font-dirs* '("/home/ben/.guix-profile/share/fonts/"))
 ;; (setf clx-truetype:+font-cache-filename+ "/home/ben/.local/share/fonts/font-cache.sexp")
-(xft:cache-fonts)
-(set-font (make-instance 'xft:font :family "JetBrains Mono" :subfamily "Regular" :size 16))
+;; (xft:cache-fonts)
+;; (set-font (make-instance 'xft:font :family "JetBrains Mono" :subfamily "Regular" :size 16))
+
+;; backlight
+(load-module "acpi-backlight")
+(acpi-backlight:init "intel_backlight")
 
 ;; gaps
 (load-module "swm-gaps")
@@ -148,11 +166,14 @@
 (run-commands "toggle-gaps-on")
 
 ;; tray
-(ql:quickload :xembed)
-(load-module "stumptray")
-(stumptray:stumptray)
+;; (ql:quickload :xembed)
+;; (load-module "stumptray")
+;; (stumptray:stumptray)
 
 ;; mode-line
+(mode-line)
+;; (setf *screen-mode-line-format*
+;;       (list "[%n] %w | %d"))
 ;; (load-module "cpu")
 ;; (load-module "mem")
 ;; (load-module "screenshot")
