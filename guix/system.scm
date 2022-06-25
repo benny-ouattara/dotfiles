@@ -7,6 +7,8 @@
              (gnu packages wm)
              (gnu packages fonts)
              (gnu packages shells)
+             (gnu packages package-management)
+             (gnu packages pulseaudio)
              (gnu system setuid))
 (use-service-modules
  cups
@@ -15,7 +17,49 @@
  ssh
  xorg
  syncthing
- monitoring)
+ monitoring
+ pm)
+
+;; Allow members of the "video" group to change the screen brightness.
+(define %backlight-udev-rule
+  (udev-rule
+   "90-backlight.rules"
+   (string-append "ACTION==\"add\", SUBSYSTEM==\"backlight\", "
+                  "RUN+=\"/run/current-system/profile/bin/chgrp video /sys/class/backlight/%k/brightness\""
+                  "\n"
+                  "ACTION==\"add\", SUBSYSTEM==\"backlight\", "
+                  "RUN+=\"/run/current-system/profile/bin/chmod g+w /sys/class/backlight/%k/brightness\"")))
+
+(define %custom-desktop-services
+  (modify-services %desktop-services
+    (elogind-service-type config =>
+                          (elogind-configuration (inherit config)
+                                                 (handle-lid-switch-external-power 'suspend)))
+    (udev-service-type config =>
+                       (udev-configuration (inherit config)
+                                           (rules (cons %backlight-udev-rule
+                                                        (udev-configuration-rules config)))))))
+
+(define %xorg-libinput-config
+  "Section \"InputClass\"
+  Identifier \"Touchpads\"
+  Driver \"libinput\"
+  MatchDevicePath \"/dev/input/event*\"
+  MatchIsTouchpad \"on\"
+
+  Option \"Tapping\" \"on\"
+  Option \"TappingDrag\" \"on\"
+  Option \"DisableWhileTyping\" \"on\"
+  Option \"MiddleEmulation\" \"on\"
+  Option \"ScrollMethod\" \"twofinger\"
+EndSection
+Section \"InputClass\"
+  Identifier \"Keyboards\"
+  Driver \"libinput\"
+  MatchDevicePath \"/dev/input/event*\"
+  MatchIsKeyboard \"on\"
+EndSection
+")
 
 (operating-system
   (kernel linux)
@@ -26,7 +70,7 @@
   (host-name "ben")
   (users (cons* (user-account
                  (name "ben")
-                 (comment "main user account")
+                 (comment "Ben Ouattara")
                  (group "users")
                  (shell (file-append zsh "/bin/zsh"))
                  (home-directory "/home/ben")
@@ -34,12 +78,12 @@
                   '("wheel" "netdev" "audio" "video" "lp")))
                 (user-account
                  (name "danfodio")
-                 (comment "dan fodio user account")
+                 (comment "Dan Fodio")
                  (group "users")
                  (shell (file-append zsh "/bin/zsh"))
                  (home-directory "/home/danfodio")
                  (supplementary-groups
-                  '("wheel" "netdev" "audio" "video")))
+                  '("wheel" "netdev" "audio" "video" "lp")))
                 %base-user-accounts))
   (setuid-programs
    (append (list (setuid-program
@@ -49,6 +93,8 @@
    (append
     (list (list stumpwm "lib"))         ; use lib output of stumpwm package
     (list
+     stow
+     pulseaudio
      sbcl
      stumpwm+slynk
      (specification->package "awesome")
@@ -67,10 +113,11 @@
   (services
    (append
     (list
+     (service thermald-service-type)
      (service darkstat-service-type
               (darkstat-configuration
                (interface "wlp0s20f3")))
-     (service bluetooth-service-type)
+     (bluetooth-service #:auto-enable? #t)
      (service syncthing-service-type
               (syncthing-configuration (user "ben")))
      (service gnome-desktop-service-type)
@@ -87,7 +134,7 @@
      (set-xorg-configuration
       (xorg-configuration
        (keyboard-layout keyboard-layout))))
-    %desktop-services))
+    %custom-desktop-services))
   (name-service-switch %mdns-host-lookup-nss) ;; Allow resolution of '.local' host names with mDNS.
   (bootloader
    (bootloader-configuration
