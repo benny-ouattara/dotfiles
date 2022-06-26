@@ -30,7 +30,7 @@
                   "ACTION==\"add\", SUBSYSTEM==\"backlight\", "
                   "RUN+=\"/run/current-system/profile/bin/chmod g+w /sys/class/backlight/%k/brightness\"")))
 
-(define %custom-desktop-services
+(define %modified-desktop-services
   (modify-services %desktop-services
     (elogind-service-type config =>
                           (elogind-configuration (inherit config)
@@ -134,7 +134,7 @@ EndSection
      (set-xorg-configuration
       (xorg-configuration
        (keyboard-layout keyboard-layout))))
-    %custom-desktop-services))
+    %modified-desktop-services))
   (name-service-switch %mdns-host-lookup-nss) ;; Allow resolution of '.local' host names with mDNS.
   (bootloader
    (bootloader-configuration
