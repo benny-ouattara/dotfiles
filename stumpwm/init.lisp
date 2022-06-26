@@ -47,30 +47,22 @@
      (slynk:create-server :port (parse-integer port) :dont-close t))
    :name "manual-slynk-stumpwm"))
 
-(stumpwm:add-to-load-path "~/.stumpwm.d/modules/acpi-backlight")
-(stumpwm:add-to-load-path "~/.guix-profile/share/common-lisp/sbcl/stumpwm-swm-gaps")
-(stumpwm:add-to-load-path "~/.guix-profile/share/common-lisp/sbcl/stumpwm-ttf-fonts")
-(stumpwm:add-to-load-path "~/.guix-profile/share/common-lisp/sbcl/stumpwm-stumptray")
-(stumpwm:add-to-load-path "~/.guix-profile/share/common-lisp/sbcl/stumpwm-kbd-layouts")
-
-(setf *startup-message* nil)
+(set-module-dir "~/.stumpwm.d/modules")
 
 (set-prefix-key (kbd "C-a"))
-(setf *mouse-focus-policy* :click
-      *message-window-gravity* :center
-      *input-window-gravity* :center
-      *window-border-style* :thin
-      *message-window-padding* 10
-      *message-window-y-padding* 10
-      *maxsize-border-width* 2
-      *normal-border-width* 2
-      *transient-border-width* 2
-      stumpwm::*float-window-border* 4
-      stumpwm::*float-window-title-height* 20)
-
-;; (run-shell-command "xmodmap -e 'clear mod4'" t)
-;; (run-shell-command "xmodmap -e \'keycode 133 = F20\'" t)
-;; (set-prefix-key (kbd "F20"))
+(setf
+ *startup-message* nil
+ *mouse-focus-policy* :click
+ *message-window-gravity* :center
+ *input-window-gravity* :center
+ *window-border-style* :thin
+ *message-window-padding* 10
+ *message-window-y-padding* 10
+ *maxsize-border-width* 2
+ *normal-border-width* 2
+ *transient-border-width* 2
+ stumpwm::*float-window-border* 4
+ stumpwm::*float-window-title-height* 20)
 
 (defvar *df/workspaces* (list "dev" "web" "term" "random" "misc"))
 (stumpwm:grename (nth 0 *df/workspaces*))
@@ -84,7 +76,6 @@
     (define-key *root-map* (kbd (nth y *move-to-keybinds*)) (concat "gmove-and-follow " workspace))))
 
 (setf *resize-increment* 50)
-;; (define-key *root-map* (kbd "o") "other") exampple on defining key on root-map, C-a
 (define-key *top-map* (kbd "M-k") "resize-direction Right")
 (define-key *top-map* (kbd "M-j") "resize-direction Left")
 (define-key *top-map* (kbd "M-l") "resize-direction Up")
@@ -131,14 +122,16 @@
 (define-key *top-map* (kbd "XF86MonBrightnessUp") "backlight-up")
 (define-key *top-map* (kbd "XF86MonBrightnessDown") "backlight-down")
 
+(define-key *top-map* (kbd "XF86AudioRaiseVolume") "volume-up")
+(define-key *top-map* (kbd "XF86AudioLowerVolume") "volume-down")
+(define-key *top-map* (kbd "XF86AudioMute") "volume-toggle-mute")
+
 (set-border-color "#c792ea")
 (set-bg-color "#232635")
 (set-fg-color "#A6Accd")
 (set-msg-border-width 2)
 
 ;; start essential processes
-;; (run-shell-command "nm-applet")
-;; (run-shell-command "syncthing")
 (run-commands "start-emacs")
 (run-shell-command "setxkbmap us -option 'caps:ctrl_modifier'")
 (run-shell-command "xcape -e 'Caps_Lock=Escape'")
@@ -146,6 +139,8 @@
 (run-shell-command "feh --randomize --bg-fill ~/Sync/wallpapers/*")
 (run-shell-command "picom")
 (run-shell-command "xsetroot -cursor_name left_ptr")
+(run-shell-command "amixer")
+;; (run-shell-command "nm-applet")
 ;; (run-shell-command "volumeicon")
 
 ;; load modules last so that they don't break system in failure case
@@ -170,35 +165,29 @@
 ;; (load-module "stumptray")
 ;; (stumptray:stumptray)
 
-;; mode-line
+(setf *mode-line-timeout* 2)
 (mode-line)
-;; (setf *screen-mode-line-format*
-;;       (list "[%n] %w | %d"))
-;; (load-module "cpu")
-;; (load-module "mem")
+
+(load-module "wifi")
+(setf *group-format* "%t")
+(setf *window-format* "%n: %30t")
+(setf *mode-line-background-color* "#232635")
+(setf *mode-line-foreground-color* "#A6Accd")
+(setf wifi:*wifi-modeline-fmt*       "%e %P"
+      wifi:*use-colors*              nil)
+(setf *screen-mode-line-format*
+      (list
+       "[%n]: %w | %C | %M | %B | %l | %I"
+       "^>" '(:eval (stumpwm:run-shell-command
+                     "LANG=en_US.utf8 date +%A' '%d.%m.%Y' '%l:%M' '%p' 'GMT''%:::z'           '" t))))
+
+(load-module "cpu")
+(load-module "mem")
 ;; (load-module "screenshot")
-;; (load-module "battery-portable")
+(load-module "battery-portable")
+(load-module "net")
+(load-module "stump-volume-control")
 
-;; (load-module "net")
-;; (load-module "wifi")
-;; (setf *mode-line-timeout* 2)
-;; (setf *time-modeline-string* "%F %H:%M")
-;; (setf *group-format* "%t")
-;; (setf *window-format* "%n: %30t")
-;; (setf *mode-line-background-color* "#232635")
-;; (setf *mode-line-foreground-color* "#A6Accd")
-;; (setf wifi:*wifi-modeline-fmt*       "%e %P"
-;;       wifi:*use-colors*              nil)
-;; (run-commands "mode-line")
-;; (setf stumpwm:*screen-mode-line-format*
-;;       (list
-;;        "%n   "
-;;        "^>" '(:eval (stumpwm:run-shell-command
-;;                      "LANG=en_US.utf8 date +%A' '%d.%m.%Y' '%l:%M' '%p' 'GMT''%:::z'           '" t))))
-
-;; (stumpwm:enable-mode-line (stumpwm:current-screen)
-;;                           (stumpwm:current-head)
-;;                           t)
 ;; have this be the last line of config since creating server is not an idempotent operation
 (require :slynk)
 (slynk:create-server :dont-close t)

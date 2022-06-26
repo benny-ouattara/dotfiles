@@ -83,7 +83,8 @@
          "clojure"
          "clojure-tools"
          "leiningen"
-         "icedtea")))
+         "icedtea"
+         "alsa-utils")))
  (services
   (list
    (simple-service 'environment-variables-service
