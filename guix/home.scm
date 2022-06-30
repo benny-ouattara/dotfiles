@@ -67,6 +67,7 @@
          ;; "stumpwm-with-slynk"
          "sbcl-stumpwm-net"
          "sbcl-stumpwm-wifi"
+         "sbcl-slynk"
          "stumpwm:lib"
          "xmodmap"
          "curl"
@@ -83,8 +84,10 @@
          "clojure"
          "clojure-tools"
          "leiningen"
-         "icedtea"
-         "alsa-utils")))
+         "openjdk@11.0.15"
+         "alsa-utils"
+         "make"
+         "maven")))
  (services
   (list
    (simple-service 'environment-variables-service
