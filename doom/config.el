@@ -412,8 +412,31 @@ A random adjective is chosen followed by a random nound and a random number."
                (message "created project %s" name))
       (user-error "executable %s not found" cmd))))
 
+(defun create-common-lisp-project (name)
+  (interactive
+   (list
+    (ivy-read "Project name: "
+              (haikens 4 100 project-prefix))))
+  (let* ((default-directory project-dir)
+         (app-dir (concat project-dir "/" name))
+         (app-projectile-path (concat app-dir "/.projectile"))
+         (cmd "sbcl")
+         (args (list "--non-interactive"
+                     "--eval" "(ql:quickload :cl-project)"
+                     "--eval" (format "(cl-project:make-project #p\"%s\" :author %s :email %s :depends-on '())" name "\"Ben O.\"" "\"benny.ouattara@gmail.com\""))))
+    (unless (executable-find cmd)
+      (user-error "executable %s not found" cmd))
+    (let* ((result (apply #'doom-call-process cmd args))
+           (status (car result)))
+      (if (equal status 0)
+          (progn
+            (f-touch app-projectile-path)
+            (projectile-discover-projects-in-search-path)
+            (message "created project %s" name))
+        (message (format "failed to create project. exit code %d" status))))))
+
 (defun delete-project (project-path)
-  "Delete mvn project.
+  "Delete kata project.
 Delete mvn project at PROJECT-PATH by removing project from lsp workspaces,
 removing project from projectile and deleting project folders.
 Beware using this command given that it's destructive and non reversible."
@@ -446,6 +469,7 @@ Beware using this command given that it's destructive and non reversible."
          :desc "create java project" "j" #'create-java-project
          :desc "create scala project" "s" #'create-scala-project
          :desc "create clojure project" "c" #'create-clojure-project
+         :desc "create common lisp project" "l" #'create-common-lisp-project
          :desc "delete project" "d" #'delete-project
          :desc "delete all test projects" "D" #'projects-cleanup))))
 
