@@ -71,6 +71,8 @@
     pkgs.custom-scripts
     pkgs.fontconfig
 
+    pkgs.scala
+    pkgs.sbt
     # envs
     # envs.java8
     # envs.java11
