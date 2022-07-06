@@ -158,6 +158,9 @@ c.auto_save.session = True
 # window
 c.window.hide_decoration = False
 
+# tabs
+c.tabs.show = "never"
+
 # dracula theme
 # import dracula.draw
 
