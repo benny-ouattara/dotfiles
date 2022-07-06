@@ -3,6 +3,7 @@
 {
   all = [
     # pkgs.texinfo
+    pkgs.termshark
     pkgs.hugo
     pkgs.guile
     pkgs.micro
