@@ -4,6 +4,7 @@
   all = [
     # pkgs.texinfo
     pkgs.termshark
+    pkgs.nmap
     pkgs.hugo
     pkgs.guile
     pkgs.micro
