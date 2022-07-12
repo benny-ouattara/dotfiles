@@ -150,6 +150,7 @@ in rec {
                + " | ${pkgs.gnugrep}/bin/egrep -v \"(lo0|vmnet|169\\.254|255\\.255)\""
                + " | ${pkgs.coreutils}/bin/tail -n +5";
       sbcl  = "${pkgs.rlwrap}/bin/rlwrap sbcl";
+      info  = "info --vi-keys";
     };
 
     profileExtra = ''
