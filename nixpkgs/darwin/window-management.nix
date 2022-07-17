@@ -33,6 +33,15 @@ in
         };
       };
 
+      emacs = {
+        serviceConfig = {
+          RunAtLoad = true;
+          StandardErrorPath = log-dir + "/" + "emacs" + ".log";
+          StandardOutPath = log-dir + "/" + "emacs" + ".log";
+        };
+        command = "/usr/local/bin/emacs --daemon";
+      };
+
       protonmail = {
         serviceConfig = {
           RunAtLoad = true;
