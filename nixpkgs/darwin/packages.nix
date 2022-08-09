@@ -75,6 +75,7 @@
 
     pkgs.scala
     pkgs.sbt
+    pkgs.inetutils
     # envs
     # envs.java8
     # envs.java11
