@@ -8,7 +8,7 @@
  doom-font (font-spec :family "JetBrains Mono" :size 19 :weight 'normal :width 'normal)
  doom-big-font (font-spec :family "monaco" :size 23)
  doom-variable-pitch-font (font-spec :family "Avenir Next" :size 21)
- doom-theme 'doom-one-light
+ doom-theme 'doom-acario-light
  evil-move-cursor-back nil
  org-roam-v2-ack t
  +org-roam-open-buffer-on-find-file nil
@@ -129,7 +129,7 @@
     (menu-bar-mode -1)
     (tool-bar-mode -1)
     (mapc #'disable-theme custom-enabled-themes)
-    (setq doom-theme 'doom-one-light
+    (setq doom-theme 'doom-acario-light
           evil-emacs-state-cursor '("red" box)
           evil-normal-state-cursor '("black" box)
           evil-visual-state-cursor '("black" box)
@@ -868,3 +868,10 @@ $stderr = File.open(\"err.txt\", \"w\")")
   ;; (set-popup-rule! "^CAPTURE.*\\.org$" :side 'bottom :size 0.90 :select t :ttl nil)
   ;; (set-popup-rule! "org$" :size 0.33 :vslot -4 :select t :ttl t :quit nil :side 'right)
   )
+
+(vertico-posframe-mode 1)
+(setq vertico-posframe-parameters
+      '((left-fringe . 8)
+        (right-fringe . 8)))
+
+(add-to-list 'default-frame-alist '(undecorated . t))

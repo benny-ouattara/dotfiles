@@ -27,3 +27,4 @@
 (package! map :pin "bb50dba")
 (package! keyfreq)
 (package! protobuf-mode)
+(package! vertico-posframe :recipe (:host github :repo "tumashu/vertico-posframe"))
