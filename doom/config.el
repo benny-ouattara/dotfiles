@@ -4,8 +4,8 @@
 
 (setq
  ;; doom-font (font-spec :family "monaco" :size 15 :weight 'normal)
- ;; doom-font (font-spec :family "Iosevka" :size 17 :weight 'normal)
- doom-font (font-spec :family "JetBrains Mono" :size 19 :weight 'normal :width 'normal)
+ doom-font (font-spec :family "Iosevka" :size 17 :weight 'normal)
+ ;; doom-font (font-spec :family "JetBrains Mono" :size 19 :weight 'normal :width 'normal)
  doom-big-font (font-spec :family "monaco" :size 23)
  doom-variable-pitch-font (font-spec :family "Avenir Next" :size 21)
  doom-theme 'doom-acario-light

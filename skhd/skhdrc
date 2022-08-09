@@ -3,7 +3,7 @@
 # cmd + ctrl - t : open -n ~/Applications/Nix\ Apps/Alacritty.app --args --live-config-reload --config-file $HOME/.config/alacritty/alacritty.yml
 
 # cmd + ctrl - return : @tmuxEmulator@
-cmd + ctrl - return : emacsclient -c -e '(+eshell/here)'
+cmd + ctrl - return : emacsclient -c -e '(vterm)'
 cmd + ctrl - t : open -a /Applications/Telegram.app
 
 cmd + ctrl - v : open -n /Applications/kitty.app --args command ranger
