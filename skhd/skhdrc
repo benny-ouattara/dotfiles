@@ -8,8 +8,8 @@ cmd + ctrl - t : open -a /Applications/Telegram.app
 
 cmd + ctrl - v : open -n /Applications/kitty.app --args command ranger
 
-# cmd + ctrl - i : open -a /Applications/Emacs.app
-cmd + ctrl - i : emacsclient -c
+cmd + ctrl - i : open -a /Applications/Emacs.app
+# cmd + ctrl - i : emacsclient -c
 cmd + ctrl - f : open  -na "Google Chrome" --args --profile-directory=Default
 cmd + shift + ctrl - f : open -na "qutebrowser"
 cmd + ctrl - y : emacsclient -c -e '(find-file "~/Documents/org")'
