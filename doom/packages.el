@@ -29,4 +29,3 @@
 (package! protobuf-mode)
 (package! vertico-posframe :recipe (:host github :repo "tumashu/vertico-posframe"))
 (package! interaction-log :recipe (:host github :repo "michael-heerdegen/interaction-log.el"))
-(package! emacs-slack :recipe (:host github :repo "yuya373/emacs-slack"))

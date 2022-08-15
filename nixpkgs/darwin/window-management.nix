@@ -42,14 +42,14 @@ in
       #   command = "/usr/local/bin/emacs --daemon";
       # };
 
-      protonmail = {
-        serviceConfig = {
-          RunAtLoad = true;
-          KeepAlive = true;
-          StandardErrorPath = log-dir + "/" + "protonmail" + ".log";
-          StandardOutPath = log-dir + "/" + "protonmail" + ".log";
-        };
-        command = "${pkgs.protonmail-bridge}/bin/protonmail-bridge";
-      };
+      # protonmail = {
+      #   serviceConfig = {
+      #     RunAtLoad = true;
+      #     KeepAlive = true;
+      #     StandardErrorPath = log-dir + "/" + "protonmail" + ".log";
+      #     StandardOutPath = log-dir + "/" + "protonmail" + ".log";
+      #   };
+      #   command = "${pkgs.protonmail-bridge}/bin/protonmail-bridge";
+      # };
     };
 }

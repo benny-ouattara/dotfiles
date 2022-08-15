@@ -18,7 +18,7 @@
  lsp-java-format-settings-url "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml"
  mu-root (s-chop-suffixes '("/mu" "/bin") (file-truename  (executable-find "mu")))
  mu4e-path (concat mu-root "/share/emacs/site-lisp/mu4e")
- mu4e-update-interval 60
+ ;; mu4e-update-interval 60
  tdlib-path "/nix/store/y27x4zzs8wm8qwskbp8y5g3gx1qkjg3m-tdlib-unstable-2020-10-25/include/td/telegram"
  user-full-name "Ben O"
  user-mail-address "benny.ouattara@gmail.com"
