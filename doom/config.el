@@ -16,8 +16,9 @@
  ns-command-modifier 'meta
  rfc-mode-directory (expand-file-name "~/rfc/")
  lsp-java-format-settings-url "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml"
- ;; mu-root (s-chop-suffixes '("/mu" "/bin") (file-truename  (executable-find "mu")))
- ;; mu4e-path (concat mu-root "/share/emacs/site-lisp/mu4e")
+ mu-root (s-chop-suffixes '("/mu" "/bin") (file-truename  (executable-find "mu")))
+ mu4e-path (concat mu-root "/share/emacs/site-lisp/mu4e")
+ mu4e-update-interval 60
  tdlib-path "/nix/store/y27x4zzs8wm8qwskbp8y5g3gx1qkjg3m-tdlib-unstable-2020-10-25/include/td/telegram"
  user-full-name "Ben O"
  user-mail-address "benny.ouattara@gmail.com"
@@ -456,7 +457,7 @@ Beware using this command given that it's destructive and non reversible."
          :desc "delete project" "d" #'delete-project
          :desc "delete all test projects" "D" #'projects-cleanup))))
 
-;; (add-to-list 'load-path mu4e-path)
+(add-to-list 'load-path mu4e-path)
 (set-email-account! "Spotify"
   '((mu4e-sent-folder       . "/spotify/sent")
     (mu4e-drafts-folder     . "/spotify/drafts")
@@ -885,3 +886,5 @@ $stderr = File.open(\"err.txt\", \"w\")")
         (right-fringe . 8)))
 
 (add-to-list 'default-frame-alist '(undecorated . t))
+
+(add-hook 'elfeed-search-mode-hook #'elfeed-update)
