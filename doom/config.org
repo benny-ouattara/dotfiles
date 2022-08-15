@@ -37,6 +37,16 @@ overwrite conflicts
  evil-insert-state-cursor 'hbar
  project-dir "~/Code"
  project-prefix "kata"
+ org-roam-dailies-capture-templates '(("d" "default" plain
+                                       #'org-roam-capture--get-point
+                                       "* %?"
+                                       :file-name "daily/%<%Y-%m-%d>"
+                                       :head "#+title: %<%Y-%m-%d>\n")
+                                      ("a" "daily plan" plain
+                                       #'org-roam-capture--get-point
+                                       (file "~/Code/dotfiles/doom/snippets/org-roam/daily.org")
+                                       :file-name "daily/%<%Y-%m-%d>"
+                                       :head "#+title: %<%Y-%m-%d>\n"))
  org-roam-capture-templates '(("d" "default" plain
                                #'org-roam-capture--get-point
                                (file "~/Code/dotfiles/doom/snippets/org-roam/default.org")
