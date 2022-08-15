@@ -1,17 +1,10 @@
 #+author: Ben O.
-
-* Toil: email, slack, admin, meetings
-
+* Toil: email, slack, admin, meetings [/]
 %?
-
-* Review
-
+* Review [/]
 * Specification
-
-* Coding
-
-* Support
-
+* Coding [/]
+* Support [/]
 * Report
 #+BEGIN: clocktable :scope file :maxlevel 4
 #+CAPTION: Clock summary at [2022-08-14 Sun 21:29]
