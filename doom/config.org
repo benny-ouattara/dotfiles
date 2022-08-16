@@ -561,7 +561,7 @@ I started managing my email with mu4e
     (mu4e-drafts-folder     . "/spotify/drafts")
     (mu4e-trash-folder      . "/spotify/trash")
     (mu4e-refile-folder     . "/spotify/All Mail")
-    (smtpmail-smtp-user     . "zangao@spotify")
+    (smtpmail-smtp-user     . "zangao@spotify.com")
     (smtpmail-smtp-server   . "smtp.gmail.com")
     (smtpmail-smtp-service  . 465)
     (smtpmail-stream-type   . ssl)
