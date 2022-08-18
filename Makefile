@@ -38,6 +38,12 @@ home:
 
 switch: darwin home
 
+reload-keys:
+	switch darwin home
+	launchctl unload -w org.nixos.skhd.plist
+	sleep 5
+	launchctl load -w org.nixos.skhd.plist
+
 # clean:
 # 	$(call message,nix collect garbage)
 # 	@$(NIX_GC) -d
