@@ -106,7 +106,7 @@
        ;;rgb               ; creating color strings
        ;;terraform         ; infrastructure as code
        tmux       ; an API for interacting with tmux
-       ;; tree-sitter       ; syntax and parsing, sitting in a tree...
+       tree-sitter       ; syntax and parsing, sitting in a tree...
        ;;upload            ; map local to remote projects via ssh/ftp
        ;;wakatime
 
@@ -144,7 +144,8 @@
        ;;hy                ; readability of scheme w/ speed of python
        ;;idris             ;
        json              ; At least it ain't XML
-       (java +lsp)                 ; the poster child for carpal tunnel syndrome
+       (java +lsp
+             +tree-sitter)                 ; the poster child for carpal tunnel syndrome
        ;;javascript        ; all(hope(abandon(ye(who(enter(here))))))
        ;;julia             ; a better, faster MATLAB
        ;;kotlin            ; a better, slicker Java(Script)
@@ -157,7 +158,7 @@
        nix           ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
        (org          ; organize your plain life in plain text
-        +roam        ; TODO: upgrade to +roam2
+        +roam2        ; TODO: upgrade to +roam2
         +dragndrop   ; drag & drop files/images into org buffers
         ;;+hugo            ; use Emacs for hugo blogging
         +ipython     ; ipython/jupyter support for babel
@@ -175,9 +176,11 @@
        rest                             ; Emacs as a REST client
        ;;rst               ; ReST in peace
        (ruby +rbenv
-             +rails)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
+             +rails
+             +tree-sitter)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
        ;;rust              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
-       (scala +lsp)      ; java, but good
+       (scala +lsp
+              +tree-sitter)      ; java, but good
        ;scheme            ; a fully conniving family of lisps
        sh     ; she sells {ba,z,fi}sh shells on the C xor
        ;;sml
