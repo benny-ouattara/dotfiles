@@ -87,7 +87,10 @@
          "openjdk@11.0.15"
          "alsa-utils"
          "make"
-         "maven")))
+         "maven"
+         "nomad"
+         "icecat"
+         "eolie")))
  (services
   (list
    (simple-service 'environment-variables-service
