@@ -1,4 +1,7 @@
 #+author: Ben O.
-* Problem statement
+
+* problem statement
+
 %?
-* Solution
+
+* solution

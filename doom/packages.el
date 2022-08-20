@@ -27,3 +27,7 @@
 (package! map :pin "bb50dba")
 ;;(package! geiser-guile)
 ;;(package! guix)
+(package! keyfreq)
+(package! protobuf-mode)
+(package! vertico-posframe :recipe (:host github :repo "tumashu/vertico-posframe"))
+(package! interaction-log :recipe (:host github :repo "michael-heerdegen/interaction-log.el"))

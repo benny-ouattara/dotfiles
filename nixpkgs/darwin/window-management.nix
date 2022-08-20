@@ -33,14 +33,23 @@ in
         };
       };
 
-      protonmail = {
-        serviceConfig = {
-          RunAtLoad = true;
-          KeepAlive = true;
-          StandardErrorPath = log-dir + "/" + "protonmail" + ".log";
-          StandardOutPath = log-dir + "/" + "protonmail" + ".log";
-        };
-        command = "${pkgs.protonmail-bridge}/bin/protonmail-bridge";
-      };
+      # emacs = {
+      #   serviceConfig = {
+      #     RunAtLoad = true;
+      #     StandardErrorPath = log-dir + "/" + "emacs" + ".log";
+      #     StandardOutPath = log-dir + "/" + "emacs" + ".log";
+      #   };
+      #   command = "/usr/local/bin/emacs --daemon";
+      # };
+
+      # protonmail = {
+      #   serviceConfig = {
+      #     RunAtLoad = true;
+      #     KeepAlive = true;
+      #     StandardErrorPath = log-dir + "/" + "protonmail" + ".log";
+      #     StandardOutPath = log-dir + "/" + "protonmail" + ".log";
+      #   };
+      #   command = "${pkgs.protonmail-bridge}/bin/protonmail-bridge";
+      # };
     };
 }

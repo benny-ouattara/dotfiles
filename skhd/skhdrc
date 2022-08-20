@@ -2,12 +2,16 @@
 # cmd + ctrl - v : open -n ~/Applications/Nix\ Apps/Alacritty.app --args --live-config-reload --config-file $HOME/.config/alacritty/alacritty.yml --command ranger
 # cmd + ctrl - t : open -n ~/Applications/Nix\ Apps/Alacritty.app --args --live-config-reload --config-file $HOME/.config/alacritty/alacritty.yml
 
-cmd + ctrl - return : @tmuxEmulator@
-cmd + ctrl - t : open -a /Applications/Telegram.app
+# cmd + ctrl - return : @tmuxEmulator@
+cmd + ctrl - return : emacsclient -c -e '(+vterm/here "~")'
+cmd + ctrl - d :  emacsclient -c -e '(dired "~")'
+cmd + ctrl - e :  emacsclient -c -e '(elfeed)'
+cmd + ctrl - m :  emacsclient -c -e '(mu4e)'
 
-cmd + ctrl - v : open -n /Applications/kitty.app --args command ranger
+# cmd + ctrl - v : open -n /Applications/kitty.app --args command ranger
 
 cmd + ctrl - i : open -a /Applications/Emacs.app
+# cmd + ctrl - i : emacsclient -c
 cmd + ctrl - f : open  -na "Google Chrome" --args --profile-directory=Default
 cmd + shift + ctrl - f : open -na "qutebrowser"
 cmd + ctrl - y : emacsclient -c -e '(find-file "~/Documents/org")'

@@ -650,13 +650,15 @@ key_bindings:
   # (Windows only)
   #- { key: Return,   mods: Alt,           action: ToggleFullscreen }
 
+  - { key: B,         mods: Command,       chars: "\x1bb"                       }
+  - { key: F,         mods: Command,       chars: "\x1bf"                       }
   # (macOS only)
   - { key: A,         mods: Command,       chars: "\x1ba"                       }
-  #- { key: B,         mods: Command,       chars: "\x1bb"                       }
-  #- { key: C,         mods: Command,       chars: "\x1bc"                       }
+  #- { key: B,        mods: Command,       chars: "\x1bb"                       }
+  #- { key: C,        mods: Command,       chars: "\x1bc"                       }
   - { key: D,         mods: Command,       chars: "\x1bd"                       }
-  #- { key: E,         mods: Command,       chars: "\x1be"                       }
-  #- { key: F,         mods: Command,       chars: "\x1bf"                       }
+  #- { key: E,        mods: Command,       chars: "\x1be"                       }
+  #- { key: F,        mods: Command,       chars: "\x1bf"                       }
   - { key: G,         mods: Command,       chars: "\x1bg"                       }
   - { key: H,         mods: Command,       chars: "\x1bh"                       }
   - { key: I,         mods: Command,       chars: "\x1bi"                       }
@@ -672,7 +674,7 @@ key_bindings:
   - { key: S,         mods: Command,       chars: "\x1bs"                       }
   - { key: T,         mods: Command,       chars: "\x1bt"                       }
   - { key: U,         mods: Command,       chars: "\x1bu"                       }
-  #- { key: V,         mods: Command,       chars: "\x1bv"                       }
+  #- { key: V,        mods: Command,       chars: "\x1bv"                       }
   - { key: W,         mods: Command,       chars: "\x1bw"                       }
   - { key: X,         mods: Command,       chars: "\x1bx"                       }
   - { key: Y,         mods: Command,       chars: "\x1by"                       }
@@ -713,7 +715,7 @@ key_bindings:
   - { key: Key8,      mods: Command,       chars: "\x1b8"                       }
   - { key: Key9,      mods: Command,       chars: "\x1b9"                       }
   - { key: Key0,      mods: Command,       chars: "\x1b0"                       }
-  - { key: Space,     mods: Control,   chars: "\x00"                        } # Ctrl + Space
+  - { key: Space,     mods: Control,       chars: "\x00"                        } # Ctrl + Space
   - { key: Grave,     mods: Command,       chars: "\x1b`"                       } # Command + `
   - { key: Grave,     mods: Command|Shift, chars: "\x1b~"                       } # Command + ~
   - { key: Period,    mods: Command,       chars: "\x1b."                       } # Command + .
@@ -726,29 +728,29 @@ key_bindings:
   - { key: Key6,      mods: Command|Shift, chars: "\x1b^"                       } # Command + ^
   - { key: Backslash, mods: Command,       chars: "\x1b\\"                      } # Command + \
   - { key: Backslash, mods: Command|Shift, chars: "\x1b|"                       } # Command + |
+  - { key: K,         mods: Command,       chars: "\x0c"                        }
 
-  - { key: Key0,   mods: Command,         action: ResetFontSize    }
-  - { key: Equals, mods: Command,         action: IncreaseFontSize }
-  #- { key: Add,    mods: Command,         action: IncreaseFontSize }
-  - { key: Minus,  mods: Command,         action: DecreaseFontSize }
-  - { key: K,      mods: Command,         action: ClearHistory     }
-  - { key: K,      mods: Command,         chars: "\x0c"            }
-  - { key: V,      mods: Command,         action: Paste            }
-  - { key: C,      mods: Command,         action: Copy             }
-  - { key: H,      mods: Command,         action: Hide             }
-  - { key: M,      mods: Command,         action: Minimize         }
-  - { key: Q,      mods: Command,         action: Quit             }
-  - { key: W,      mods: Command,         action: Quit             }
-  - { key: F,      mods: Command|Control, action: ToggleFullscreen }
+  - { key: Key0,      mods: Command,         action: ResetFontSize              }
+  - { key: Equals,    mods: Command,         action: IncreaseFontSize           }
+  #- { key: Add,      mods: Command,         action: IncreaseFontSize           }
+  - { key: Minus,     mods: Command,         action: DecreaseFontSize           }
+  - { key: K,         mods: Command,         action: ClearHistory               }
+  - { key: V,         mods: Command,         action: Paste                      }
+  - { key: C,         mods: Command,         action: Copy                       }
+  - { key: H,         mods: Command,         action: Hide                       }
+  - { key: M,         mods: Command,         action: Minimize                   }
+  - { key: Q,         mods: Command,         action: Quit                       }
+  - { key: W,         mods: Command,         action: Quit                       }
+  - { key: F,         mods: Command|Control, action: ToggleFullscreen           }
 
-  - { key: Paste,                    action: Paste                            }
-  - { key: Copy,                     action: Copy                             }
-  #- { key: L,         mods: Control, action: ClearLogNotice                   }
-  #- { key: L,         mods: Control, chars: "\x0c"                            }
-  #- { key: PageUp,    mods: Shift,   action: ScrollPageUp,   mode: ~Alt       }
-  #- { key: PageDown,  mods: Shift,   action: ScrollPageDown, mode: ~Alt       }
-  #- { key: Home,      mods: Shift,   action: ScrollToTop,    mode: ~Alt       }
-  #- { key: End,       mods: Shift,   action: ScrollToBottom, mode: ~Alt       }
+  - { key: Paste,                            action: Paste                      }
+  - { key: Copy,                             action: Copy                       }
+  #- { key: L,        mods: Control,         action: ClearLogNotice             }
+  #- { key: L,        mods: Control,       chars: "\x0c"                        }
+  #- { key: PageUp,   mods: Shift,           action: ScrollPageUp,   mode: ~Alt }
+  #- { key: PageDown, mods: Shift,           action: ScrollPageDown, mode: ~Alt }
+  #- { key: Home,     mods: Shift,           action: ScrollToTop,    mode: ~Alt }
+  #- { key: End,      mods: Shift,           action: ScrollToBottom, mode: ~Alt }
 
 #debug:
   # Display the time it takes to redraw each frame.

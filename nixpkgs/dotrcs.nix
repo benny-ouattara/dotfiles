@@ -11,10 +11,11 @@
     PassCmd "pass Email/spotify-mu-app.com"
     AuthMechs LOGIN
     SSLType IMAPS
-    SSLVersions SSLv3
+    # SSLVersions SSLv3 # SSLv3 is deprecated, use default
     # ssl config for running mbsync as a launchd agent
     # CertificateFile /etc/ssl/certs/ca-certificates.crt
-    CertificateFile ~/.config/certificates/gmail.crt
+    # CertificateFile ~/.config/certificates/gmail.crt
+    # CertificateFile /usr/local/etc/openssl@1.1/cert.pem
 
     # THEN WE SPECIFY THE LOCAL AND REMOTE STORAGE
     # - THE REMOTE STORAGE IS WHERE WE GET THE MAIL FROM (E.G., THE
@@ -40,8 +41,8 @@
     # 3 "DIR" TO MATCH DIR
 
     Channel spotify-inbox
-    Master :spotify-remote:
-    Slave :spotify-local:
+    Far :spotify-remote:
+    Near :spotify-local:
     Patterns "INBOX"
     Create Both
     Expunge Both
@@ -49,15 +50,15 @@
 
     Channel spotify-sent
     # [Gmail]/Sent Mail doesn't seem to be the right remote folder
-    Master :spotify-remote:"[Gmail]/Sent Mail"
-    Slave :spotify-local:"sent"
+    Far :spotify-remote:"[Gmail]/Sent Mail"
+    Near :spotify-local:"sent"
     Create Both
     Expunge Both
     SyncState *
 
     # Channel spotify-all
-    # Master :spotify-remote:"[Gmail]/All Mail"
-    # Slave :spotify-local:"all"
+    # Far :spotify-remote:"[Gmail]/All Mail"
+    # Near :spotify-local:"all"
     # Create Both
     # Expunge Both
     # SyncState *
@@ -82,7 +83,7 @@
     PassCmd "pass Email/gmail-mu-app.com"
     AuthMechs LOGIN
     SSLType IMAPS
-    SSLVersions SSLv3
+    # SSLVersions SSLv3 # deprecated, use default
 
     IMAPStore gmail-remote
     Account gmail
@@ -92,16 +93,16 @@
     Inbox ~/.mail/gmail/INBOX
 
     Channel gmail-inbox
-    Master :gmail-remote:
-    Slave :gmail-local:
+    Far :gmail-remote:
+    Near :gmail-local:
     Patterns "INBOX"
     Create Both
     Expunge Both
     SyncState *
 
     Channel gmail-sent
-    Master :gmail-remote:"[Gmail]/Sent Mail"
-    Slave :gmail-local:"sent"
+    Far :gmail-remote:"[Gmail]/Sent Mail"
+    Near :gmail-local:"sent"
     Create Both
     Expunge Both
     SyncState *
@@ -110,7 +111,7 @@
     Channel gmail-inbox
     Channel gmail-sent
 
-    ################################ PROTONMAIL ##############################################
+    # ################################ PROTONMAIL ##############################################
     IMAPAccount protonmail
     Host 127.0.0.1
     Port 1143
@@ -130,30 +131,30 @@
     Inbox ~/.mail/protonmail/INBOX
 
     Channel pm-inbox
-    Master :pm-remote:
-    Slave :pm-local:
+    Far :pm-remote:
+    Near :pm-local:
     Patterns "INBOX"
     Create Both
     Expunge Both
     SyncState *
 
     Channel pm-sent
-    Master :pm-remote:"Sent"
-    Slave :pm-local:"sent"
+    Far :pm-remote:"Sent"
+    Near :pm-local:"sent"
     Create Both
     Expunge Both
     SyncState *
 
     Channel pm-trash
-    Master :pm-remote:"Trash"
-    Slave :pm-local:"trash"
+    Far :pm-remote:"Trash"
+    Near :pm-local:"trash"
     Create Both
     Expunge Both
     SyncState *
 
     Channel pm-spam
-    Master :pm-remote:"Spam"
-    Slave :pm-local:"spam"
+    Far :pm-remote:"Spam"
+    Near :pm-local:"spam"
     Create Both
     Expunge Both
     SyncState *

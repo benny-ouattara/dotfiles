@@ -30,3 +30,9 @@ guix/.guix
 guix/current
 guix/gpg/
 *.fasl
+clojure/
+Google/
+jgit/
+.DS_Store
+doom/.DS_Store
+irb/

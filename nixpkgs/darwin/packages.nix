@@ -3,6 +3,9 @@
 {
   all = [
     # pkgs.texinfo
+    pkgs.termshark
+    pkgs.nmap
+    pkgs.hugo
     pkgs.guile
     pkgs.micro
     pkgs.ammonite
@@ -17,7 +20,7 @@
     pkgs.cask
     pkgs.mu
     pkgs.isync
-    pkgs.protonmail-bridge
+    # pkgs.protonmail-bridge
     # pkgs.kubectl
     # pkgs.kubectx
     # pkgs.kubetail
@@ -59,9 +62,9 @@
     pkgs.wireguard-tools
     pkgs.tree
     pkgs.tcpdump
-    pkgs.python37
-    pkgs.python37Packages.pip
-    pkgs.python37Packages.python-language-server
+    # pkgs.python38
+    # pkgs.python38Packages.pip
+    # pkgs.python38Packages.python-language-server
     pkgs.mosh
     pkgs.m-cli
     pkgs.hydroxide
@@ -70,6 +73,9 @@
     pkgs.custom-scripts
     pkgs.fontconfig
 
+    pkgs.scala
+    pkgs.sbt
+    pkgs.inetutils
     # envs
     # envs.java8
     # envs.java11

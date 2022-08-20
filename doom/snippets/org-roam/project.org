@@ -1,6 +1,10 @@
 #+author: Ben O.
-* Overview
+
+* overview
 %?
-* Tasks [/]
-* Timeframe
-* Notes
+
+* tasks [/]
+
+* timeframe
+
+* notes
