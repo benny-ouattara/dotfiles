@@ -1119,10 +1119,10 @@ commands run at the project level
 * vertico-posframe
 
 #+begin_src emacs-lisp
-(vertico-posframe-mode 1)
-(setq vertico-posframe-parameters
-      '((left-fringe . 8)
-        (right-fringe . 8)))
+;; (vertico-posframe-mode 1)
+;; (setq vertico-posframe-parameters
+;;       '((left-fringe . 8)
+;;         (right-fringe . 8)))
 #+end_src
 
 * hide title bar

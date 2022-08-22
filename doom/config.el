@@ -904,10 +904,10 @@ $stderr = File.open(\"err.txt\", \"w\")")
   ;; (set-popup-rule! "org$" :size 0.33 :vslot -4 :select t :ttl t :quit nil :side 'right)
   )
 
-(vertico-posframe-mode 1)
-(setq vertico-posframe-parameters
-      '((left-fringe . 8)
-        (right-fringe . 8)))
+;; (vertico-posframe-mode 1)
+;; (setq vertico-posframe-parameters
+;;       '((left-fringe . 8)
+;;         (right-fringe . 8)))
 
 (add-to-list 'default-frame-alist '(undecorated . t))
 
