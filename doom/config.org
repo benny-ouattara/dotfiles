@@ -402,6 +402,8 @@ emacs which is problematic but I haven't found a solution around it yet.
        (list
         "-noverify"
         "-Xmx2G"
+        "-Xms100m"
+        "-Dsun.zip.disableMemoryMapping=true"
         "-XX:+UseG1GC"
         "-XX:+UseStringDeduplication"
         ))

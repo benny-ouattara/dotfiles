@@ -315,6 +315,8 @@ and org files on the top right. Keeps current window on the left."
        (list
         "-noverify"
         "-Xmx2G"
+        "-Xms100m"
+        "-Dsun.zip.disableMemoryMapping=true"
         "-XX:+UseG1GC"
         "-XX:+UseStringDeduplication"
         ))
