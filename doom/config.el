@@ -311,6 +311,14 @@ and org files on the top right. Keeps current window on the left."
 
 (add-hook 'java-mode-hook #'set-lsp-jar)
 
+(setq  lsp-java-vmargs
+       (list
+        "-noverify"
+        "-Xmx2G"
+        "-XX:+UseG1GC"
+        "-XX:+UseStringDeduplication"
+        ))
+
 ;; breadcrumb is a nice feature to know about, not using it now
 ;; (after! lsp-mode
 ;;   (lsp-headerline-breadcrumb-mode))

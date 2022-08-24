@@ -396,6 +396,18 @@ with java requires a lot of work done below.
 ** lsp-mode
 lsp-mode is the alternative to eglot that I am using now. It constantly hangs
 emacs which is problematic but I haven't found a solution around it yet.
+
+#+begin_src emacs-lisp
+(setq  lsp-java-vmargs
+       (list
+        "-noverify"
+        "-Xmx2G"
+        "-XX:+UseG1GC"
+        "-XX:+UseStringDeduplication"
+        ))
+
+#+end_src
+
 #+begin_src emacs-lisp
 ;; breadcrumb is a nice feature to know about, not using it now
 ;; (after! lsp-mode
