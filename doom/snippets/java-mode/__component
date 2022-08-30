@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: Dagger Component
+# --
+package `(+java-current-package)`;
+
+import dagger.Component;
+import javax.inject.Singleton;
+
+@Component(modules = {$2})
+@Singleton
+public class `(+java-current-class)` $0 {
+  $1
+}

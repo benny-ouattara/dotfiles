@@ -1,0 +1,20 @@
+# -*- mode: snippet -*-
+# name: Dagger Module
+# --
+
+package `(+java-current-package)`;
+
+import com.spotify.config.di.EnvironmentModule;
+import dagger.Module;
+import dagger.Provides;
+import javax.inject.Singleton;
+
+@Module(includes = {EnvironmentModule.class, $5})
+public class `(+java-current-class)` $0 {
+
+  @Provides
+  @Singleton
+  public $4 provide$1($2) {
+    return $3;
+  }
+}

@@ -897,7 +897,7 @@ $stderr = File.open(\"err.txt\", \"w\")")
          projectile-project-compilation-cmd "sh mvn clean compile"
          projectile-project-install-cmd "sh mvn clean install"
          projectile-project-package-cmd "sh mvn clean verify"
-         projectile-project-run-cmd "docker run --rm --dns 1.1.1.1 -p 8080:8080 -p 5990:5990 -p 5700:5700 -e SPOTIFY_DOMAIN=gew1.spotify.net $(jq -r '.image' target/jib-image.json)")
+         projectile-project-run-cmd "docker run --rm --dns 1.1.1.1 -p 8080:8080 -p 5990:5990 -p 5700:5700 -e SPOTIFY_DOMAIN=gew1.spotify.net -e SPOTIFY_POD=gew1 $(jq -r '.image' target/jib-image.json)")
   (map! :leader
         :desc "Verify project"
         :n "p P"
