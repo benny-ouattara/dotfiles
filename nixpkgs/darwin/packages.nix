@@ -3,6 +3,7 @@
 {
   all = [
     # pkgs.texinfo
+    pkgs.poppler
     pkgs.termshark
     pkgs.nmap
     pkgs.hugo
