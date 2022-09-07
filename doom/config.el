@@ -113,19 +113,6 @@
  org-refile-targets (quote ((nil :maxlevel . 3)))
  +org-capture-todo-file "tasks.org")
 
-(global-auto-revert-mode t)
-
-(defun +org*update-cookies ()
-  (when (and buffer-file-name (file-exists-p buffer-file-name))
-    (let (org-hierarchical-todo-statistics)
-      (org-update-parent-todo-statistics))))
-
-(advice-add #'+org|update-cookies :override #'+org*update-cookies)
-
-(add-hook! 'org-mode-hook (company-mode -1))
-(add-hook! 'org-mode-hook (org-bullets-mode 1))
-(add-hook! 'org-capture-mode-hook (company-mode -1))
-
 (after! org
   (pushnew! org-capture-templates
             '("m" "Email workflow")
@@ -134,60 +121,38 @@
               :immediate-finish t)
             '("mr" "Read later" entry (file+olp org-mail-directory "Read later")
               "* TODO read %:subject\n%a\n\n%i"
-              :immediate-finish t))
+              :immediate-finish t)))
 
-  (set-face-attribute 'org-ellipsis nil
-                      :inherit '(font-lock-comment-face default)
-                      :weight 'normal))
-
-(use-package! org-fancy-priorities
-  :hook
-  (org-mode . org-fancy-priorities-mode)
-  :config
+(after! org-fancy-priorities
   (setq org-fancy-priorities-list '("⚡" "⬆" "⬇" "☕")))
 
-(setq
- org-roam-dailies-capture-templates '(("d" "default" plain
-                                       #'org-roam-capture--get-point
-                                       "* %?"
-                                       :file-name "daily/%<%Y-%m-%d>"
-                                       :head "#+title: %<%Y-%m-%d>\n")
-                                      ("a" "daily plan" plain
-                                       #'org-roam-capture--get-point
-                                       (file "~/Code/dotfiles/doom/snippets/org-roam/daily.org")
-                                       :file-name "daily/%<%Y-%m-%d>"
-                                       :head "#+title: %<%Y-%m-%d>\n"))
- org-roam-capture-templates '(("d" "default" plain
-                               #'org-roam-capture--get-point
-                               (file "~/Code/dotfiles/doom/snippets/org-roam/default.org")
-                               :file-name "%<%Y%m%d%H%M%S>-${slug}"
-                               :head "#+title: ${title}\n#+date: %U\n"
-                               :unnarrowed t)
-                              ("l" "programming language" plain
-                               #'org-roam-capture--get-point
-                               (file "~/Code/dotfiles/doom/snippets/org-roam/programming.org")
-                               :file-name "%<%Y%m%d%H%M%S>-${slug}"
-                               :head "#+title: ${title}\n#+date: %U\n#+filetags: programming\n"
-                               :unnarrowed t)
-                              ("b" "book notes" plain
-                               #'org-roam-capture--get-point
-                               (file "~/Code/dotfiles/doom/snippets/org-roam/book.org")
-                               :file-name "%<%Y%m%d%H%M%S>-${slug}"
-                               :head "#+title: ${title}\n#+date: %U\n#+filetags: book\n"
-                               :unnarrowed t)
-                              ("p" "project" plain
-                               #'org-roam-capture--get-point
-                               (file "~/Code/dotfiles/doom/snippets/org-roam/project.org")
-                               :file-name "%<%Y%m%d%H%M%S>-${slug}"
-                               :head "#+title: ${title}\n#+date: %U\n#+filetags: project\n"
-                               :unnarrowed t)
-                              ("c" "code" plain
-                               #'org-roam-capture--get-point
-                               (file "~/Code/dotfiles/doom/snippets/org-roam/code.org")
-                               :file-name "%<%Y%m%d%H%M%S>-${slug}"
-                               :head "#+title: ${title}\n#+date: %U\n#+filetags: interview\n"
-                               :unnarrowed t))
- )
+(setq org-roam-dailies-capture-templates '(("d" "default" plain
+                                            "* %?"
+                                            :target (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n")
+                                            :unnarrowed t)
+                                           ("a" "daily plan" plain
+                                            (file "~/Code/dotfiles/doom/snippets/org-roam/daily.org")
+                                            :target (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))))
+(setq org-roam-capture-templates '(("d" "default" plain
+                                    (file "~/Code/dotfiles/doom/snippets/org-roam/default.org")
+                                    :target (file+head  "%<%Y%m%d%H%M%S>-${slug}.org"  "#+title: ${title}\n#+date: %U\n")
+                                    :unnarrowed t)
+                                   ("l" "programming language" plain
+                                    (file "~/Code/dotfiles/doom/snippets/org-roam/programming.org")
+                                    :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n#+filetags: programming\n")
+                                    :unnarrowed t)
+                                   ("b" "book notes" plain
+                                    (file "~/Code/dotfiles/doom/snippets/org-roam/book.org")
+                                    :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n#+filetags: book\n")
+                                    :unnarrowed t)
+                                   ("p" "project" plain
+                                    (file "~/Code/dotfiles/doom/snippets/org-roam/project.org")
+                                    :target (file+head  "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n#+filetags: project\n")
+                                    :unnarrowed t)
+                                   ("c" "code" plain
+                                    (file "~/Code/dotfiles/doom/snippets/org-roam/code.org")
+                                    :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"  "#+title: ${title}\n#+date: %U\n#+filetags: interview\n")
+                                    :unnarrowed t)))
 
 (setq
  tramp-histfile-override "/dev/null")
@@ -211,13 +176,6 @@
 
 (beno--indent 2)
 
-(defun work-window-split-three ()
-  (interactive)
-  "Splits frame in three. With eshell on the bottom right
-and org files on the top right. Keeps current window on the left."
-  (progn  (dired-other-window org-spotify-directory)
-          (+eshell/split-below)))
-
 (map! :leader
       :desc "close current window"
       "0" #'evil-quit)
@@ -227,7 +185,7 @@ and org files on the top right. Keeps current window on the left."
       "9" #'delete-other-windows)
 
 (map! :leader
-      :desc "work window split"
+      :desc "split with eshell"
       ">" #'beno--eshell-toggle-right)
 
 (map! :desc "fuzzy search visible buffer"
@@ -539,7 +497,7 @@ Beware using this command given that it's destructive and non reversible."
                     t)
 
 ;; this won't work temporarily for protonmail as certificates are being moved to /etc/ssl/certs
-(with-eval-after-load 'gnutls
+(after! gnutls
   (add-to-list 'gnutls-trustfiles "~/.config/certificates/protonmail.crt"))
 
 ;; (add-hook 'message-send-hook 'org-mime-confirm-when-no-multipart)
@@ -573,7 +531,13 @@ Beware using this command given that it's destructive and non reversible."
   (add-to-list 'mu4e-headers-actions '("read later" . beno--capture-mail-read-later) t)
   (add-to-list 'mu4e-view-actions '("read later" . beno--capture-mail-read-later) t))
 
-(after! dired-single
+(after! (dired dired-single)
+  (define-key dired-mode-map [remap dired-find-file]
+    'dired-single-buffer)
+  (define-key dired-mode-map [remap dired-mouse-find-file-other-window]
+    'dired-single-buffer-mouse)
+  (define-key dired-mode-map [remap dired-up-directory]
+    'dired-single-up-directory)
   (map! :after dired-single
         :map dired-mode-map
         :n "h" 'dired-single-up-directory
@@ -615,7 +579,7 @@ Beware using this command given that it's destructive and non reversible."
           (setq beno--eshell-output-beg (marker-position eshell-last-output-start)))
         (setq beno--eshell-output-end (marker-position eshell-last-output-end))))))
 
-(with-eval-after-load 'eshell
+(after! eshell
   (add-to-list 'eshell-output-filter-functions
                #'beno--eshell-json-print))
 
@@ -880,11 +844,6 @@ $stderr = File.open(\"err.txt\", \"w\")")
                     (beno--mvn-project-tests (beno--mvn-root-dir)))))
   (format "clean -DfailIfNoTests=false -Dtest=%s test" test-name))
 
-(defun find-in-dotfiles ()
-  "Open a file somewhere in ~/Code/dotfiles/ via a fuzzy filename search."
-  (interactive)
-  (doom-project-find-file (expand-file-name "~/Code/dotfiles")))
-
 (setq
  projectile-project-search-path '("~/Code/" "~/common-lisp" "~/Code/archives/Code"))
 
@@ -903,16 +862,23 @@ $stderr = File.open(\"err.txt\", \"w\")")
         :n "p P"
         'projectile-package-project))
 
-(when (> (display-pixel-width) 3000)
-  (set-popup-rule! +main-eshell-popup+ :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
-  (set-popup-rule! "*SQL:" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
-  (set-popup-rule! "^\\*compilation.*" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
-  ;; (set-popup-rule! "^2022" :size 0.40 :vslot -4 :select t :ttl t :quit nil :side 'right)
-  ;; (set-popup-rule! "^2021" :size 0.40 :vslot -4 :select t :ttl t :quit nil :side 'right)
-  ;; (set-popup-rule! "^\\*Org Agenda" :side 'bottom :size 0.90 :select t :ttl nil)
-  ;; (set-popup-rule! "^CAPTURE.*\\.org$" :side 'bottom :size 0.90 :select t :ttl nil)
-  ;; (set-popup-rule! "org$" :size 0.33 :vslot -4 :select t :ttl t :quit nil :side 'right)
-  )
+;; (set-popup-rule! "^2022" :size 0.40 :vslot -4 :select t :ttl t :quit nil :side 'right)
+;; (set-popup-rule! "^2021" :size 0.40 :vslot -4 :select t :ttl t :quit nil :side 'right)
+;; (set-popup-rule! "^\\*Org Agenda" :side 'bottom :size 0.90 :select t :ttl nil)
+;; (set-popup-rule! "^CAPTURE.*\\.org$" :side 'bottom :size 0.90 :select t :ttl nil)
+;; (set-popup-rule! "org$" :size 0.33 :vslot -4 :select t :ttl t :quit nil :side 'right)
+(if (> (display-pixel-width) 3000)
+    ;; large display
+    (progn
+      (set-popup-rule! +main-eshell-popup+ :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
+      (set-popup-rule! "*SQL:" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
+      (set-popup-rule! "^\\*compilation.*" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right))
+  ;; small display
+  (progn
+    (set-popup-rule! +main-eshell-popup+ :size 0.25 :vslot -4 :select t :quit nil :ttl t :side 'right)
+    (set-popup-rule! "^\\*compilation.*" :size 0.25 :vslot -4 :select t :quit nil :ttl t :side 'right)
+    (set-popup-rule! "*SQL:" :size 0.25 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
+    (set-popup-rule! "[0-9]+-[0-9]+-[0-9]+.org" :size 0.25 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)))
 
 ;; (vertico-posframe-mode 1)
 ;; (setq vertico-posframe-parameters
