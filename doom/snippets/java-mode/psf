@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: private static final
+# key: psf
+# condition: t
+# --
+private static final $0
