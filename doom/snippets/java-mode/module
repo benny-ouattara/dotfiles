@@ -1,5 +1,6 @@
 # -*- mode: snippet -*-
 # name: Dagger Module
+# key: dm
 # --
 
 package `(+java-current-package)`;
