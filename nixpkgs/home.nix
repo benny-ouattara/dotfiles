@@ -171,10 +171,14 @@ in rec {
         export PATH=/usr/local/opt/ruby/bin:$HOME/.rbenv/shims:$HOME/.rbenv/versions/3.0.3/bin:$PATH:$HOME/.jenv/bin:$HOME/.local/bin:$HOME/.emacs.d/bin:/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin:${pkgs.custom-scripts}/bin:/opt/local/bin:/Users/benouattara/Qt/5.15.2/clang_64/bin:/Users/zangao/Library/Application\ Support/Coursier/bin:~/.roswell/bin
 
         # this needs to be after the main export as it prepends to the main path
-        eval "$(pyenv init --path)"
-        eval "$(pyenv init -)"
-        eval "$(pyenv virtualenv-init -)"
-        eval "$(jenv init -)"
+        if hash pyenv 2>/dev/null; then
+           eval "$(pyenv init --path)"
+           eval "$(pyenv init -)"
+           eval "$(pyenv virtualenv-init -)"
+        fi
+        if hash jenv 2>/dev/null; then
+           eval "$(jenv init -)"
+        fi
         if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then . $HOME/.nix-profile/etc/profile.d/nix.sh; fi # required by nix to configure various paths
 
         export EDITOR=emacs
