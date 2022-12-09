@@ -90,7 +90,8 @@
          "maven"
          "nomad"
          "icecat"
-         "eolie")))
+         "eolie"
+         "cmake")))
  (services
   (list
    (simple-service 'environment-variables-service
