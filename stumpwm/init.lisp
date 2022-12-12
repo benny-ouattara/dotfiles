@@ -6,9 +6,54 @@
 
 (in-package :stumpwm)
 
-;; enable which-key-mode
-(which-key-mode)
+(defvar custom-nord0 "#2e3440")
+(defvar custom-nord1 "#3b4252")
+(defvar custom-nord2 "#434c5e")
+(defvar custom-nord3 "#4c566a")
+(defvar custom-nord4 "#d8dee9")
+(defvar custom-nord5 "#e5e9f0")
+(defvar custom-nord6 "#eceff4")
+(defvar custom-nord7 "#8fbcbb")
+(defvar custom-nord8 "#88c0d0")
+(defvar custom-nord9 "#81a1c1")
+(defvar custom-nord10 "#5e81ac")
+(defvar custom-nord11 "#bf616a")
+(defvar custom-nord12 "#d08770")
+(defvar custom-nord13 "#ebcb8b")
+(defvar custom-nord14 "#a3be8c")
+(defvar custom-nord15 "#b48ead")
 
+(set-prefix-key (kbd "C-a"))
+(setf
+ *resize-increment* 50
+ *startup-message* nil
+ *mouse-focus-policy* :click
+ *message-window-gravity* :center
+ *input-window-gravity* :center
+ *window-border-style* :thin
+ *message-window-padding* 10
+ *message-window-y-padding* 10
+ *maxsize-border-width* 2
+ *normal-border-width* 2
+ *transient-border-width* 2
+ stumpwm::*float-window-border* 4
+ stumpwm::*float-window-title-height* 20)
+(setq *colors*
+      `(,custom-nord1   ;; 0 black
+        ,custom-nord11  ;; 1 red
+        ,custom-nord14  ;; 2 green
+        ,custom-nord13  ;; 3 yellow
+        ,custom-nord10  ;; 4 blue
+        ,custom-nord14  ;; 5 magenta
+        ,custom-nord8   ;; 6 cyan
+        ,custom-nord5)) ;; 7 white
+(when *initializing*
+  (update-color-map (current-screen)))
+
+;; set modules path
+(set-module-dir "~/.stumpwm.d/modules")
+
+;; define commands
 (defcommand now-we-are-six (name age)
   ((:string "Enter your name: ")
    (:number "Enter your age:"))
@@ -47,23 +92,10 @@
      (slynk:create-server :port (parse-integer port) :dont-close t))
    :name "manual-slynk-stumpwm"))
 
-(set-module-dir "~/.stumpwm.d/modules")
+;; enable which-key-mode
+(which-key-mode)
 
-(set-prefix-key (kbd "C-a"))
-(setf
- *startup-message* nil
- *mouse-focus-policy* :click
- *message-window-gravity* :center
- *input-window-gravity* :center
- *window-border-style* :thin
- *message-window-padding* 10
- *message-window-y-padding* 10
- *maxsize-border-width* 2
- *normal-border-width* 2
- *transient-border-width* 2
- stumpwm::*float-window-border* 4
- stumpwm::*float-window-title-height* 20)
-
+;; define workspaces
 (defvar *df/workspaces* (list "dev" "web" "term" "random" "misc"))
 (stumpwm:grename (nth 0 *df/workspaces*))
 (dolist (workspace (cdr *df/workspaces*))
@@ -75,7 +107,7 @@
     (define-key *root-map* (kbd workspace) (concat "gselect " workspace))
     (define-key *root-map* (kbd (nth y *move-to-keybinds*)) (concat "gmove-and-follow " workspace))))
 
-(setf *resize-increment* 50)
+;; define keybindings
 (define-key *top-map* (kbd "M-k") "resize-direction Right")
 (define-key *top-map* (kbd "M-j") "resize-direction Left")
 (define-key *top-map* (kbd "M-l") "resize-direction Up")
@@ -126,13 +158,23 @@
 (define-key *top-map* (kbd "XF86AudioLowerVolume") "volume-down")
 (define-key *top-map* (kbd "XF86AudioMute") "volume-toggle-mute")
 
-(set-border-color "#c792ea")
-(set-bg-color "#232635")
-(set-fg-color "#A6Accd")
+;; (set-border-color "#c792ea")
+;; (set-bg-color "#232635")
+;; (set-fg-color "#A6Accd")
+(set-border-color        custom-nord1)
+(set-focus-color         custom-nord1)
+(set-unfocus-color       custom-nord3)
+(set-float-focus-color   custom-nord1)
+(set-float-unfocus-color custom-nord3)
+(set-fg-color custom-nord4)
+(set-bg-color custom-nord1)
 (set-msg-border-width 2)
 
 ;; start essential processes
-(run-commands "start-emacs")
+(defvar *emacs-started* nil)
+(unless *emacs-started*
+  (progn (run-commands "start-emacs")
+         (setf *emacs-started* t)))
 (run-shell-command "setxkbmap us -option 'caps:ctrl_modifier'")
 (run-shell-command "xcape -e 'Caps_Lock=Escape'")
 (run-shell-command "xset r rate 150 60")
@@ -145,11 +187,11 @@
 
 ;; load modules last so that they don't break system in failure case
 ;; (ql:quickload :clx-truetype)
-;; (load-module "ttf-fonts")
-;; (setf xft:*font-dirs* '("/home/ben/.guix-profile/share/fonts/"))
-;; (setf clx-truetype:+font-cache-filename+ "/home/ben/.local/share/fonts/font-cache.sexp")
 ;; (xft:cache-fonts)
+;; (setf xft:*font-dirs* '("/home/ben/.guix-profile/share/fonts/"))
+;; (load-module "ttf-fonts")
 ;; (set-font (make-instance 'xft:font :family "JetBrains Mono" :subfamily "Regular" :size 16))
+;; (setf clx-truetype:+font-cache-filename+ "/home/ben/.local/share/fonts/font-cache.sexp")
 
 ;; backlight
 (load-module "acpi-backlight")
@@ -169,15 +211,20 @@
 (mode-line)
 
 (load-module "wifi")
+(setf wifi:*use-colors* t
+      wifi:*iwconfig-path* "/run/current-system/profile/sbin/iwconfig")
 (setf *group-format* "%t")
 (setf *window-format* "%n: %30t")
-(setf *mode-line-background-color* "#232635")
-(setf *mode-line-foreground-color* "#A6Accd")
-(setf wifi:*wifi-modeline-fmt*       "%e %P"
-      wifi:*use-colors*              nil)
+;; (setf *mode-line-background-color* "#232635")
+;; (setf *mode-line-foreground-color* "#A6Accd")
+(setf *mode-line-background-color* custom-nord1
+      *mode-line-foreground-color* custom-nord5)
+(setf *mode-line-border-color* custom-nord1
+      *mode-line-border-width* 0)
+(setf wifi:*wifi-modeline-fmt*       "%e %P")
 (setf *screen-mode-line-format*
       (list
-       "[%n]: %w | %C | %M | %B | %l | %I"
+       "[%n]: %w | %C | %M | %B | %l | %I | backlight: %Q"
        "^>" '(:eval (stumpwm:run-shell-command
                      "LANG=en_US.utf8 date +%A' '%d.%m.%Y' '%l:%M' '%p' 'GMT''%:::z'           '" t))))
 
@@ -186,8 +233,9 @@
 ;; (load-module "screenshot")
 (load-module "battery-portable")
 (load-module "net")
+(load-module "mpd")
 (load-module "stump-volume-control")
 
 ;; have this be the last line of config since creating server is not an idempotent operation
 (require :slynk)
-(slynk:create-server :dont-close t)
+(slynk:create-server :port 4009 :dont-close t)
