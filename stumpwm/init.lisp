@@ -171,7 +171,7 @@
 (set-msg-border-width 2)
 
 ;; start essential processes
-(defvar *emacs-started* nil)
+(defparameter *emacs-started* nil)
 (unless *emacs-started*
   (progn (run-commands "start-emacs")
          (setf *emacs-started* t)))
@@ -185,27 +185,15 @@
 ;; (run-shell-command "nm-applet")
 ;; (run-shell-command "volumeicon")
 
-;; load modules last so that they don't break system in failure case
-;; (ql:quickload :clx-truetype)
-;; (xft:cache-fonts)
-;; (setf xft:*font-dirs* '("/home/ben/.guix-profile/share/fonts/"))
-;; (load-module "ttf-fonts")
-;; (set-font (make-instance 'xft:font :family "JetBrains Mono" :subfamily "Regular" :size 16))
-;; (setf clx-truetype:+font-cache-filename+ "/home/ben/.local/share/fonts/font-cache.sexp")
-
 ;; backlight
 (load-module "acpi-backlight")
 (acpi-backlight:init "intel_backlight")
 
 ;; gaps
 (load-module "swm-gaps")
-(setf swm-gaps:*inner-gaps-size* 7)
+(setf swm-gaps:*inner-gaps-size* 7
+      swm-gaps:*outer-gaps-size* 12)
 (run-commands "toggle-gaps-on")
-
-;; tray
-;; (ql:quickload :xembed)
-;; (load-module "stumptray")
-;; (stumptray:stumptray)
 
 (setf *mode-line-timeout* 2)
 (mode-line)
@@ -235,6 +223,38 @@
 (load-module "net")
 (load-module "mpd")
 (load-module "stump-volume-control")
+
+;; system tray
+(ql:quickload :xembed)
+(load-module "stumptray")
+(stumptray::stumptray)
+
+;; primitive and unsecure screen lock, prefer slock bound to C-s-l
+(load-module "stump-lock")
+(setf stump-lock:*password* "asdf")
+(define-key *top-map* (kbd "s-l") "lock-screen")
+
+;; password
+(load-module "pass")
+
+;; load modules last so that they don't break system in failure case
+(ql:quickload :clx-truetype)
+(setf xft:*font-dirs* '("/home/ben/.guix-profile/share/fonts/"))
+(xft:cache-fonts)
+(load-module "ttf-fonts")
+(set-font (make-instance 'xft:font :family "JetBrains Mono" :subfamily "Regular" :size 16))
+;; (setf clx-truetype:+font-cache-filename+ "/home/ben/.local/share/fonts/font-cache.sexp")
+
+;; (load-module "ttf-fonts")
+;; (ql:quickload :clx-truetype)
+;; (clx-truetype:cache-fonts)
+;; (setf xft:*font-dirs* '("/home/ben/.guix-profile/share/fonts/"))
+
+;; (set-font (make-instance 'xft:font
+;;                          :family "JetBrains Mono"
+;;                          :subfamily "Regular"
+;;                          :size 16
+;;                          :antialias t))
 
 ;; have this be the last line of config since creating server is not an idempotent operation
 (require :slynk)

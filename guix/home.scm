@@ -91,7 +91,8 @@
          "nomad"
          "icecat"
          "eolie"
-         "cmake")))
+         "cmake"
+         "network-manager-applet")))
  (services
   (list
    (simple-service 'environment-variables-service
