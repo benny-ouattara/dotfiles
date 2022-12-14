@@ -47,8 +47,7 @@
         ,custom-nord14  ;; 5 magenta
         ,custom-nord8   ;; 6 cyan
         ,custom-nord5)) ;; 7 white
-(when *initializing*
-  (update-color-map (current-screen)))
+(update-color-map (current-screen))
 
 ;; set modules path
 (set-module-dir "~/.stumpwm.d/modules")
@@ -96,7 +95,7 @@
 (which-key-mode)
 
 ;; define workspaces
-(defvar *df/workspaces* (list "dev" "web" "term" "random" "misc"))
+(defvar *df/workspaces* (list "dev" "web" "term" "random"))
 (stumpwm:grename (nth 0 *df/workspaces*))
 (dolist (workspace (cdr *df/workspaces*))
   (stumpwm:gnewbg workspace))
@@ -182,8 +181,6 @@
 (run-shell-command "picom")
 (run-shell-command "xsetroot -cursor_name left_ptr")
 (run-shell-command "amixer")
-;; (run-shell-command "nm-applet")
-;; (run-shell-command "volumeicon")
 
 ;; backlight
 (load-module "acpi-backlight")
@@ -191,8 +188,7 @@
 
 ;; gaps
 (load-module "swm-gaps")
-(setf swm-gaps:*inner-gaps-size* 7
-      swm-gaps:*outer-gaps-size* 12)
+(setf swm-gaps:*inner-gaps-size* 10)
 (run-commands "toggle-gaps-on")
 
 (setf *mode-line-timeout* 2)
@@ -203,8 +199,6 @@
       wifi:*iwconfig-path* "/run/current-system/profile/sbin/iwconfig")
 (setf *group-format* "%t")
 (setf *window-format* "%n: %30t")
-;; (setf *mode-line-background-color* "#232635")
-;; (setf *mode-line-foreground-color* "#A6Accd")
 (setf *mode-line-background-color* custom-nord1
       *mode-line-foreground-color* custom-nord5)
 (setf *mode-line-border-color* custom-nord1
@@ -212,22 +206,24 @@
 (setf wifi:*wifi-modeline-fmt*       "%e %P")
 (setf *screen-mode-line-format*
       (list
-       "[%n]: %w | %C | %M | %B | %l | %I | backlight: %Q"
+       "[%n]: %w | %B | %l | %I"
        "^>" '(:eval (stumpwm:run-shell-command
                      "LANG=en_US.utf8 date +%A' '%d.%m.%Y' '%l:%M' '%p' 'GMT''%:::z'           '" t))))
 
-(load-module "cpu")
-(load-module "mem")
+;; (load-module "cpu")
+;; (load-module "mem")
 ;; (load-module "screenshot")
+;; (load-module "mpd")
 (load-module "battery-portable")
 (load-module "net")
-(load-module "mpd")
 (load-module "stump-volume-control")
 
 ;; system tray
 (ql:quickload :xembed)
 (load-module "stumptray")
 (stumptray::stumptray)
+(run-shell-command "nm-applet")
+(run-shell-command "volumeicon")
 
 ;; primitive and unsecure screen lock, prefer slock bound to C-s-l
 (load-module "stump-lock")
@@ -244,17 +240,6 @@
 (load-module "ttf-fonts")
 (set-font (make-instance 'xft:font :family "JetBrains Mono" :subfamily "Regular" :size 16))
 ;; (setf clx-truetype:+font-cache-filename+ "/home/ben/.local/share/fonts/font-cache.sexp")
-
-;; (load-module "ttf-fonts")
-;; (ql:quickload :clx-truetype)
-;; (clx-truetype:cache-fonts)
-;; (setf xft:*font-dirs* '("/home/ben/.guix-profile/share/fonts/"))
-
-;; (set-font (make-instance 'xft:font
-;;                          :family "JetBrains Mono"
-;;                          :subfamily "Regular"
-;;                          :size 16
-;;                          :antialias t))
 
 ;; have this be the last line of config since creating server is not an idempotent operation
 (require :slynk)
