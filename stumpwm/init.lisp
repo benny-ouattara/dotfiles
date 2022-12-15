@@ -5,6 +5,7 @@
     (load quicklisp-init)))
 
 (in-package :stumpwm)
+(setf *default-package* :stumpwm)
 
 (defvar custom-nord0 "#2e3440")
 (defvar custom-nord1 "#3b4252")
@@ -218,13 +219,6 @@
 (load-module "net")
 (load-module "stump-volume-control")
 
-;; system tray
-(ql:quickload :xembed)
-(load-module "stumptray")
-(stumptray::stumptray)
-(run-shell-command "nm-applet")
-(run-shell-command "volumeicon")
-
 ;; primitive and unsecure screen lock, prefer slock bound to C-s-l
 (load-module "stump-lock")
 (setf stump-lock:*password* "asdf")
@@ -240,6 +234,17 @@
 (load-module "ttf-fonts")
 (set-font (make-instance 'xft:font :family "JetBrains Mono" :subfamily "Regular" :size 16))
 ;; (setf clx-truetype:+font-cache-filename+ "/home/ben/.local/share/fonts/font-cache.sexp")
+
+;; system tray
+(ql:quickload :xembed)
+(load-module "stumptray")
+(setf stumptray::*tray-win-background* custom-nord1)
+;; (setf stumptray::*tray-viwin-background* "#ff0000") ; red
+;; (setf stumptray::*tray-hiwin-background* "#0000ff") ; blue
+;; (setf stumptray::*tray-placeholder-pixels-per-space* 39)
+(run-shell-command "nm-applet")
+(run-shell-command "volumeicon")
+;; (stumptray::stumptray)
 
 ;; have this be the last line of config since creating server is not an idempotent operation
 (require :slynk)
