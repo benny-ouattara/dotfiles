@@ -58,7 +58,7 @@
  evil-move-cursor-back nil
  display-line-numbers-type 'relative
  fancy-splash-image (expand-file-name "splash.png" doom-private-dir)
- doom-theme 'doom-acario-light)
+ doom-theme 'doom-rouge)
 
 (menu-bar-mode -1)
 (rainbow-mode)
