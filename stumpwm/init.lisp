@@ -244,7 +244,9 @@
 ;; (setf stumptray::*tray-placeholder-pixels-per-space* 39)
 (run-shell-command "nm-applet")
 (run-shell-command "volumeicon")
-;; (stumptray::stumptray)
+(bt:make-thread (lambda ()
+                  (sleep 10)
+                  (stumptray::stumptray)))
 
 ;; have this be the last line of config since creating server is not an idempotent operation
 (require :slynk)
