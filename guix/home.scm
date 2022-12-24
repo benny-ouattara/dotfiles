@@ -47,7 +47,7 @@
          "arc-icon-theme"
          "matcha-theme"
          "hicolor-icon-theme"
-         "gnome-icon-theme"
+         "adwaita-icon-theme"
          "gnome-backgrounds"
          "papirus-icon-theme"
          "breeze-icons"
@@ -84,7 +84,7 @@
          "clojure"
          "clojure-tools"
          "leiningen"
-         "openjdk@11.0.15"
+         "openjdk@11.0.17"
          "alsa-utils"
          "make"
          "maven"
@@ -92,7 +92,8 @@
          "icecat"
          "eolie"
          "cmake"
-         "network-manager-applet")))
+         "network-manager-applet"
+         "emacs-next")))
  (services
   (list
    (simple-service 'environment-variables-service
