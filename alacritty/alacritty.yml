@@ -177,14 +177,21 @@ draw_bold_text_with_bright_colors: true
 # Daniel Pfeifer (http://github.com/purpleKarrot)
 colors:
   # Default colors
-  primary:
-    background: '0xfafafa'
-    foreground: '0x383a42'
+  # primary:
+  #   background: '0xfafafa'
+  #   foreground: '0x383a42'
 
   # Colors the cursor will use if `custom_cursor_colors` is true
+  # cursor:
+  #   text: '0xfafafa'
+  #   cursor: '0x383a42'
+
+  primary:
+    background: '#000000'
+    foreground: '#ffffff'
   cursor:
-    text: '0xfafafa'
-    cursor: '0x383a42'
+    text: '#F81CE5'
+    cursor: '#ffffff'
 
   # Normal colors
   normal:
