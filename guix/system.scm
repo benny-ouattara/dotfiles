@@ -15,6 +15,7 @@
  desktop
  networking
  ssh
+ ;; sddm
  xorg
  syncthing
  monitoring
@@ -32,6 +33,18 @@
 
 (define %modified-desktop-services
   (modify-services %desktop-services
+    (delete gdm-service-type)
+    (guix-service-type config =>
+                       (guix-configuration (inherit config)
+                                           (substitute-urls
+                                            (append (list "https://substitutes.nonguix.org")
+                                                    %default-substitute-urls))
+                                           (authorized-keys
+                                            (append (list (local-file "./signing-key.pub"))
+                                                    %default-authorized-guix-keys))))
+    (slim-service-type config =>
+                       (slim-configuration (inherit config)
+                                           (default-user "ben")))
     (elogind-service-type config =>
                           (elogind-configuration (inherit config)
                                                  (handle-lid-switch-external-power 'suspend)))
@@ -93,10 +106,10 @@ EndSection
    (append
     (list (list stumpwm "lib"))         ; use lib output of stumpwm package
     (list
-     stow
-     pulseaudio
-     sbcl
-     stumpwm+slynk
+     (specification->package "stumpwm-with-slynk")
+     (specification->package "stow")
+     (specification->package "pulseaudio")
+     (specification->package "sbcl")
      (specification->package "awesome")
      (specification->package "i3-wm")
      (specification->package "i3status")
@@ -104,7 +117,7 @@ EndSection
      (specification->package "st")
      (specification->package "ratpoison")
      (specification->package "xterm")
-     (specification->package "emacs")
+     (specification->package "emacs-next")
      (specification->package "emacs-exwm")
      (specification->package
       "emacs-desktop-environment")
@@ -113,6 +126,7 @@ EndSection
   (services
    (append
     (list
+     ;; (service slim-service-type)
      (service thermald-service-type)
      (service darkstat-service-type
               (darkstat-configuration

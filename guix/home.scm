@@ -93,7 +93,7 @@
          "eolie"
          "cmake"
          "network-manager-applet"
-         "emacs-next")))
+         "gnupg")))
  (services
   (list
    (simple-service 'environment-variables-service

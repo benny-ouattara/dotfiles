@@ -41,8 +41,8 @@
      ;; doom-font (font-spec :family "monaco" :size 15 :weight 'normal)
      ;; doom-font (font-spec :family "JetBrains Mono" :size 19 :weight 'normal :width 'normal)
      ;; doom-variable-pitch-font (font-spec :family "Avenir Next" :size 21)
-     doom-font (font-spec :family "Iosevka" :size 23 :weight 'normal)
-     doom-big-font (font-spec :family "Iosevka" :size 25))
+     doom-font (font-spec :family "Iosevka" :size 25 :weight 'normal)
+     doom-big-font (font-spec :family "Iosevka" :size 27))
   (setq
    ;; doom-font (font-spec :family "monaco" :size 15 :weight 'normal)
    ;; doom-font (font-spec :family "JetBrains Mono" :size 19 :weight 'normal :width 'normal)
