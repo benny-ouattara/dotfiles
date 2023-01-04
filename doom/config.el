@@ -912,3 +912,8 @@ $stderr = File.open(\"err.txt\", \"w\")")
 (add-to-list 'default-frame-alist '(undecorated . t))
 
 (add-hook 'elfeed-search-mode-hook #'elfeed-update)
+
+(with-eval-after-load 'geiser-guile
+  (add-to-list 'geiser-guile-load-path "/home/ben/Code/turtle")
+  ;; (add-to-list 'geiser-guile-load-path "/home/ben/Code/guix")
+  )

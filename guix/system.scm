@@ -9,7 +9,8 @@
              (gnu packages shells)
              (gnu packages package-management)
              (gnu packages pulseaudio)
-             (gnu system setuid))
+             (gnu system setuid)
+             (srfi srfi-1))
 (use-service-modules
  cups
  desktop
@@ -31,9 +32,14 @@
                   "ACTION==\"add\", SUBSYSTEM==\"backlight\", "
                   "RUN+=\"/run/current-system/profile/bin/chmod g+w /sys/class/backlight/%k/brightness\"")))
 
+(define %services-without-gdm  (remove (lambda (service)
+                                         (eq? (service-kind service) gdm-service-type))
+                                       %desktop-services))
 (define %modified-desktop-services
-  (modify-services %desktop-services
-    (delete gdm-service-type)
+  (modify-services %services-without-gdm
+    (login-service-type config =>
+                        (login-configuration (inherit config)
+                                             (motd "Welcome, Ben!")))
     (guix-service-type config =>
                        (guix-configuration (inherit config)
                                            (substitute-urls
