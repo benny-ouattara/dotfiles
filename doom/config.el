@@ -914,6 +914,6 @@ $stderr = File.open(\"err.txt\", \"w\")")
 (add-hook 'elfeed-search-mode-hook #'elfeed-update)
 
 (with-eval-after-load 'geiser-guile
-  (add-to-list 'geiser-guile-load-path "/home/ben/Code/turtle")
+  (add-to-list 'geiser-guile-load-path "/home/ben/Code/guix-turtle")
   ;; (add-to-list 'geiser-guile-load-path "/home/ben/Code/guix")
   )
