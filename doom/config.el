@@ -58,7 +58,7 @@
  evil-move-cursor-back nil
  display-line-numbers-type 'relative
  fancy-splash-image (expand-file-name "splash.png" doom-private-dir)
- doom-theme 'doom-rouge)
+ doom-theme 'doom-acario-light)
 
 (menu-bar-mode -1)
 (rainbow-mode)
@@ -173,10 +173,11 @@
                    (file-truename (buffer-file-name)))
       (org-refile nil nil (list "Completed Tasks" today-file nil pos)))))
 
-(add-to-list 'org-after-todo-state-change-hook
-             (lambda ()
-               (when (equal org-state "DONE")
-                 (beno/org-roam-copy-todo-to-today))))
+(after! org
+  (add-to-list 'org-after-todo-state-change-hook
+               (lambda ()
+                 (when (equal org-state "DONE")
+                   (beno/org-roam-copy-todo-to-today)))))
 
 (setq
  tramp-histfile-override "/dev/null")
@@ -900,16 +901,17 @@ $stderr = File.open(\"err.txt\", \"w\")")
       (set-popup-rule! "^\\*Org Agenda\\*" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
       (set-popup-rule! "[0-9]+-[0-9]+-[0-9]+.org" :size 0.33 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
       (set-popup-rule! "journal.org" :size 0.25 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
-      (set-popup-rule! "^[0-9]\\{8\\}$" :size 0.33 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t))
+      (set-popup-rule! "^[0-9]\\{8\\}$" :size 0.33 :vslot -4 :select t :quit 'other :ttl nil :side 'right :autosave t))
   ;; small display
   (progn
-    (set-popup-rule! +main-eshell-popup+ :size 0.25 :vslot -4 :select t :quit nil :ttl t :side 'right)
-    (set-popup-rule! "^\\*compilation.*" :size 0.25 :vslot -4 :select t :quit nil :ttl t :side 'right)
+    ;; (set-popup-rule! +main-eshell-popup+ :size 0.25 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
+    ;; (set-popup-rule! "^\\*compilation.*" :size 0.25 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
     (set-popup-rule! "*SQL:" :size 0.25 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
-    (set-popup-rule! "^\\*Org Agenda\\*" :size 0.25 :vslot -4 :select t :quit nil :ttl t :side 'right)
-    (set-popup-rule! "[0-9]+-[0-9]+-[0-9]+.org" :size 0.25 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
-    (set-popup-rule! "journal.org" :size 0.25 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
-    (set-popup-rule! "^[0-9]\\{8\\}$" :size 0.25 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)))
+    ;; (set-popup-rule! "^\\*Org Agenda\\*" :size 0.25 :vslot -4 :select t :quit nil :ttl t :side 'right)
+    ;; (set-popup-rule! "[0-9]+-[0-9]+-[0-9]+.org" :size 0.25 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
+    ;; (set-popup-rule! "journal.org" :size 0.25 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
+    ;; (set-popup-rule! "^[0-9]\\{8\\}$" :size 0.25 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
+    ))
 
 ;; (vertico-posframe-mode 1)
 ;; (setq vertico-posframe-parameters
