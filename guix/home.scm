@@ -93,7 +93,8 @@
          "eolie"
          "cmake"
          "network-manager-applet"
-         "gnupg")))
+         "gnupg"
+         "keychain")))
  (services
   (list
    (simple-service 'environment-variables-service
@@ -107,7 +108,8 @@
    (service
     home-zsh-service-type
     (home-zsh-configuration
-     (zshrc (list (local-file "./.zshrc" "zshrc")))))
+     (zshrc (list (local-file "./.zshrc" "zshrc")))
+     (zprofile (list (local-file "./.zprofile" "zprofile")))))
    (service
     home-bash-service-type
     (home-bash-configuration
