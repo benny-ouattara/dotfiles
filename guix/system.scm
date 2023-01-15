@@ -178,12 +178,11 @@ EndSection
         (keyboard-layout keyboard-layout)
         (extra-config (list %xorg-libinput-config)))
       sddm-service-type)
-     (service sddm-service-type)
-     ;; (service sddm-service-type
-     ;;          (sddm-configuration
-     ;;           ;; valid values are elarun, maldives or maya
-     ;;           ;; (theme "maldives")
-     ;;           ))
+     (service sddm-service-type
+              (sddm-configuration
+               ;; valid values are elarun, maldives or maya, chili, sugar-light, sugar-dark
+               (theme "chili")
+               ))
      ;; (service lightdm-service-type
      ;;          (lightdm-configuration
      ;;           (xorg-configuration
