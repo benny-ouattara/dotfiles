@@ -20,7 +20,6 @@
  networking
  ssh
  sddm
- ;; lightdm
  xorg
  syncthing
  monitoring
@@ -36,30 +35,6 @@
                   "\n"
                   "ACTION==\"add\", SUBSYSTEM==\"backlight\", "
                   "RUN+=\"/run/current-system/profile/bin/chmod g+w /sys/class/backlight/%k/brightness\"")))
-
-(define %modified-desktop-services
-  (modify-services %desktop-services
-    (delete console-font-service-type)  ;; provide other console fonts below
-    ;; (delete sddm-service-type)
-    (delete gdm-service-type)
-    (login-service-type config =>
-                        (login-configuration (inherit config)
-                                             (motd "Welcome, Ben!")))
-    (guix-service-type config =>
-                       (guix-configuration (inherit config)
-                                           (substitute-urls
-                                            (append (list "https://substitutes.nonguix.org")
-                                                    %default-substitute-urls))
-                                           (authorized-keys
-                                            (append (list (local-file "./signing-key.pub"))
-                                                    %default-authorized-guix-keys))))
-    (elogind-service-type config =>
-                          (elogind-configuration (inherit config)
-                                                 (handle-lid-switch-external-power 'suspend)))
-    (udev-service-type config =>
-                       (udev-configuration (inherit config)
-                                           (rules (cons %backlight-udev-rule
-                                                        (udev-configuration-rules config)))))))
 
 (define %xorg-libinput-config
   "Section \"InputClass\"
@@ -82,8 +57,34 @@ Section \"InputClass\"
 EndSection
 ")
 
-(define %default-console-font
+(define %beno-motd
+  (plain-file "motd" "Hi Ben, welcome!\n\n"))
+
+(define %beno-console-font
   (file-append font-tamzen "/share/kbd/consolefonts/Tamzen10x20.psf"))
+
+(define %modified-desktop-services
+  (modify-services %desktop-services
+    (delete console-font-service-type)  ;; provide other console fonts below
+    (delete gdm-service-type)
+    (login-service-type config =>
+                        (login-configuration (inherit config)
+                                             (motd %beno-motd)))
+    (guix-service-type config =>
+                       (guix-configuration (inherit config)
+                                           (substitute-urls
+                                            (append (list "https://substitutes.nonguix.org")
+                                                    %default-substitute-urls))
+                                           (authorized-keys
+                                            (append (list (local-file "./signing-key.pub"))
+                                                    %default-authorized-guix-keys))))
+    (elogind-service-type config =>
+                          (elogind-configuration (inherit config)
+                                                 (handle-lid-switch-external-power 'suspend)))
+    (udev-service-type config =>
+                       (udev-configuration (inherit config)
+                                           (rules (cons %backlight-udev-rule
+                                                        (udev-configuration-rules config)))))))
 
 (operating-system
   (kernel linux)
@@ -146,7 +147,6 @@ EndSection
   (services
    (append
     (list
-     ;; (service slim-service-type)
      ;; (dbus-service #:services (list bluez-alsa))
      (service libvirt-service-type
               (libvirt-configuration
@@ -154,7 +154,7 @@ EndSection
                (tls-port "16555")))
      (service console-font-service-type
               (map (lambda (tty)
-                     (cons tty %default-console-font))
+                     (cons tty %beno-console-font))
                    '("tty1" "tty2" "tty3" "tty4" "tty5" "tty6")))
      (service thermald-service-type)
      (service darkstat-service-type
@@ -175,29 +175,14 @@ EndSection
      (service cups-service-type)
      (set-xorg-configuration
       (xorg-configuration
-        (keyboard-layout keyboard-layout)
-        (extra-config (list %xorg-libinput-config)))
+       (keyboard-layout keyboard-layout)
+       (extra-config (list %xorg-libinput-config)))
       sddm-service-type)
      (service sddm-service-type
               (sddm-configuration
                ;; valid values are elarun, maldives or maya, chili, sugar-light, sugar-dark
                (theme "chili")
-               ))
-     ;; (service lightdm-service-type
-     ;;          (lightdm-configuration
-     ;;           (xorg-configuration
-     ;;            (xorg-configuration
-     ;;             (keyboard-layout keyboard-layout)
-     ;;             (extra-config (list %xorg-libinput-config))))
-     ;;           (allow-empty-passwords? #t)
-     ;;           (greeters (list (lightdm-gtk-greeter-configuration
-     ;;                            (allow-debugging? #t))))
-     ;;           (seats (list (lightdm-seat-configuration
-     ;;                         (name "*")
-     ;;                         (user-session "stumpwm"))))
-     ;;           )
-     ;;          )
-     )
+               )))
     %modified-desktop-services))
   (name-service-switch %mdns-host-lookup-nss) ;; Allow resolution of '.local' host names with mDNS.
   (bootloader
