@@ -7,22 +7,22 @@
 (in-package :stumpwm)
 (setf *default-package* :stumpwm)
 
-(defvar custom-nord0 "#2e3440")
-(defvar custom-nord1 "#3b4252")
-(defvar custom-nord2 "#434c5e")
-(defvar custom-nord3 "#4c566a")
-(defvar custom-nord4 "#d8dee9")
-(defvar custom-nord5 "#e5e9f0")
-(defvar custom-nord6 "#eceff4")
-(defvar custom-nord7 "#8fbcbb")
-(defvar custom-nord8 "#88c0d0")
-(defvar custom-nord9 "#81a1c1")
-(defvar custom-nord10 "#5e81ac")
-(defvar custom-nord11 "#bf616a")
-(defvar custom-nord12 "#d08770")
-(defvar custom-nord13 "#ebcb8b")
-(defvar custom-nord14 "#a3be8c")
-(defvar custom-nord15 "#b48ead")
+(defvar beno-nord0 "#2e3440")
+(defvar beno-nord1 "#3b4252")
+(defvar beno-nord2 "#434c5e")
+(defvar beno-nord3 "#4c566a")
+(defvar beno-nord4 "#d8dee9")
+(defvar beno-nord5 "#e5e9f0")
+(defvar beno-nord6 "#eceff4")
+(defvar beno-nord7 "#8fbcbb")
+(defvar beno-nord8 "#88c0d0")
+(defvar beno-nord9 "#81a1c1")
+(defvar beno-nord10 "#5e81ac")
+(defvar beno-nord11 "#bf616a")
+(defvar beno-nord12 "#d08770")
+(defvar beno-nord13 "#ebcb8b")
+(defvar beno-nord14 "#a3be8c")
+(defvar beno-nord15 "#b48ead")
 
 (set-prefix-key (kbd "C-a"))
 (setf
@@ -40,14 +40,14 @@
  stumpwm::*float-window-border* 4
  stumpwm::*float-window-title-height* 20)
 (setq *colors*
-      `(,custom-nord1   ;; 0 black
-        ,custom-nord11  ;; 1 red
-        ,custom-nord14  ;; 2 green
-        ,custom-nord13  ;; 3 yellow
-        ,custom-nord10  ;; 4 blue
-        ,custom-nord14  ;; 5 magenta
-        ,custom-nord8   ;; 6 cyan
-        ,custom-nord5)) ;; 7 white
+      `(,beno-nord1   ;; 0 black
+        ,beno-nord11  ;; 1 red
+        ,beno-nord14  ;; 2 green
+        ,beno-nord13  ;; 3 yellow
+        ,beno-nord10  ;; 4 blue
+        ,beno-nord14  ;; 5 magenta
+        ,beno-nord8   ;; 6 cyan
+        ,beno-nord5)) ;; 7 white
 (update-color-map (current-screen))
 
 ;; set modules path
@@ -81,6 +81,14 @@
 (defcommand qutebrowser () ()
             "Run or raise qutebrowser."
             (run-or-raise "qutebrowser" '(:class "Qutebrowser") t nil))
+
+(defcommand eolie () ()
+            "Run or raise eolie web browser."
+            (run-or-raise "eolie" '(:class "Eolie") t nil))
+
+(defcommand alacritty () ()
+  "Run or raise alacritty."
+  (run-or-raise "alacritty" '(:class "Alacritty") t nil))
 
 (defcommand start-emacs () ()
   "Run or raise emacs."
@@ -158,23 +166,18 @@
 (define-key *top-map* (kbd "XF86AudioLowerVolume") "volume-down")
 (define-key *top-map* (kbd "XF86AudioMute") "volume-toggle-mute")
 
-;; (set-border-color "#c792ea")
-;; (set-bg-color "#232635")
-;; (set-fg-color "#A6Accd")
-(set-border-color        custom-nord1)
-(set-focus-color         custom-nord1)
-(set-unfocus-color       custom-nord3)
-(set-float-focus-color   custom-nord1)
-(set-float-unfocus-color custom-nord3)
-(set-fg-color custom-nord4)
-(set-bg-color custom-nord1)
+(set-border-color        beno-nord1)
+(set-focus-color         beno-nord1)
+(set-unfocus-color       beno-nord3)
+(set-float-focus-color   beno-nord1)
+(set-float-unfocus-color beno-nord3)
+(set-fg-color beno-nord4)
+(set-bg-color beno-nord1)
 (set-msg-border-width 2)
 
 ;; start essential processes
-(defparameter *emacs-started* nil)
-(unless *emacs-started*
-  (progn (run-commands "start-emacs")
-         (setf *emacs-started* t)))
+(stumpwm:gselect "dev")
+(run-commands "start-emacs")
 (run-shell-command "setxkbmap us -option 'caps:ctrl_modifier'")
 (run-shell-command "xcape -e 'Caps_Lock=Escape'")
 (run-shell-command "xset r rate 150 60")
@@ -200,9 +203,9 @@
       wifi:*iwconfig-path* "/run/current-system/profile/sbin/iwconfig")
 (setf *group-format* "%t")
 (setf *window-format* "%n: %30t")
-(setf *mode-line-background-color* custom-nord1
-      *mode-line-foreground-color* custom-nord5)
-(setf *mode-line-border-color* custom-nord1
+(setf *mode-line-background-color* beno-nord1
+      *mode-line-foreground-color* beno-nord5)
+(setf *mode-line-border-color* beno-nord1
       *mode-line-border-width* 0)
 (setf wifi:*wifi-modeline-fmt*       "%e %P")
 (setf *screen-mode-line-format*
@@ -238,7 +241,7 @@
 ;; system tray
 (ql:quickload :xembed)
 (load-module "stumptray")
-(setf stumptray::*tray-win-background* custom-nord1)
+(setf stumptray::*tray-win-background* beno-nord1)
 ;; (setf stumptray::*tray-viwin-background* "#ff0000") ; red
 ;; (setf stumptray::*tray-hiwin-background* "#0000ff") ; blue
 ;; (setf stumptray::*tray-placeholder-pixels-per-space* 39)
