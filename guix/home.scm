@@ -87,9 +87,7 @@
          "openjdk@11.0.17"
          "alsa-utils"
          "make"
-         "maven"
          "nomad"
-         "icecat"
          "eolie"
          "cmake"
          "network-manager-applet"
@@ -97,7 +95,9 @@
          "keychain"
          "qemu"
          "qmpbackup"
-         "virt-manager")))
+         "virt-manager"
+         "polybar"
+         "rofi")))
  (services
   (list
    (simple-service 'environment-variables-service
