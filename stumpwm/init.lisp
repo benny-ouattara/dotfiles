@@ -8,21 +8,21 @@
 (setf *default-package* :stumpwm)
 
 (defvar beno-nord0 "#2e3440")
-(defvar beno-nord1 "#3b4252")
-(defvar beno-nord2 "#434c5e")
-(defvar beno-nord3 "#4c566a")
-(defvar beno-nord4 "#d8dee9")
-(defvar beno-nord5 "#e5e9f0")
-(defvar beno-nord6 "#eceff4")
-(defvar beno-nord7 "#8fbcbb")
-(defvar beno-nord8 "#88c0d0")
-(defvar beno-nord9 "#81a1c1")
-(defvar beno-nord10 "#5e81ac")
-(defvar beno-nord11 "#bf616a")
-(defvar beno-nord12 "#d08770")
-(defvar beno-nord13 "#ebcb8b")
-(defvar beno-nord14 "#a3be8c")
-(defvar beno-nord15 "#b48ead")
+;; (defvar beno-nord1 "#3b4252")
+;; (defvar beno-nord2 "#434c5e")
+;; (defvar beno-nord3 "#4c566a")
+;; (defvar beno-nord4 "#d8dee9")
+;; (defvar beno-nord5 "#e5e9f0")
+;; (defvar beno-nord6 "#eceff4")
+;; (defvar beno-nord7 "#8fbcbb")
+;; (defvar beno-nord8 "#88c0d0")
+;; (defvar beno-nord9 "#81a1c1")
+;; (defvar beno-nord10 "#5e81ac")
+;; (defvar beno-nord11 "#bf616a")
+;; (defvar beno-nord12 "#d08770")
+;; (defvar beno-nord13 "#ebcb8b")
+;; (defvar beno-nord14 "#a3be8c")
+;; (defvar beno-nord15 "#b48ead")
 
 (set-prefix-key (kbd "C-a"))
 (setf
@@ -38,16 +38,31 @@
  *normal-border-width* 2
  *transient-border-width* 2
  stumpwm::*float-window-border* 4
- stumpwm::*float-window-title-height* 20)
-(setq *colors*
-      `(,beno-nord1   ;; 0 black
-        ,beno-nord11  ;; 1 red
-        ,beno-nord14  ;; 2 green
-        ,beno-nord13  ;; 3 yellow
-        ,beno-nord10  ;; 4 blue
-        ,beno-nord14  ;; 5 magenta
-        ,beno-nord8   ;; 6 cyan
-        ,beno-nord5)) ;; 7 white
+ stumpwm::*float-window-title-height* 20
+ *debug-level* 10)
+;; (setq *colors*
+;;       `(,beno-nord1   ;; 0 black
+;;         ,beno-nord11  ;; 1 red
+;;         ,beno-nord14  ;; 2 green
+;;         ,beno-nord13  ;; 3 yellow
+;;         ,beno-nord10  ;; 4 blue
+;;         ,beno-nord14  ;; 5 magenta
+;;         ,beno-nord8   ;; 6 cyan
+;;         ,beno-nord5)) ;; 7 white
+(redirect-all-output (data-dir-file "debug" "log"))
+;; Message bar
+(set-fg-color "white")
+(set-bg-color "#111111")
+(set-border-color "white")
+(setf *colors*
+      '("#111111"   ; 0 black
+        "#dc322f"   ; 1 red
+        "#859900"   ; 2 green
+        "#b58900"   ; 3 yellow
+        "#268bd2"   ; 4 blue
+        "#d33682"   ; 5 magenta
+        "#2aa198"   ; 6 cyan
+        "#fdf6e3")) ; 7 white
 (update-color-map (current-screen))
 
 ;; set modules path
@@ -74,19 +89,19 @@
             (delete-window)
             (remove-split))
 
-(defcommand nyxt () ()
+(defcommand start-nyxt () ()
             "Run or raise nyxt."
             (run-or-raise "nyxt" '(:class "Nyxt") t nil))
 
-(defcommand qutebrowser () ()
+(defcommand start-qutebrowser () ()
             "Run or raise qutebrowser."
             (run-or-raise "qutebrowser" '(:class "Qutebrowser") t nil))
 
-(defcommand eolie () ()
+(defcommand start-eolie () ()
             "Run or raise eolie web browser."
             (run-or-raise "eolie" '(:class "Eolie") t nil))
 
-(defcommand alacritty () ()
+(defcommand start-alacritty () ()
   "Run or raise alacritty."
   (run-or-raise "alacritty" '(:class "Alacritty") t nil))
 
@@ -99,6 +114,10 @@
    (lambda ()
      (slynk:create-server :port (parse-integer port) :dont-close t))
    :name "manual-slynk-stumpwm"))
+
+(defcommand start-polybar () ()
+  "Run the polybar status bar."
+  (run-shell-command "polybar"))
 
 ;; enable which-key-mode
 (which-key-mode)
@@ -144,6 +163,7 @@
 (define-key *top-map* (kbd "s-s") "hsplit-and-focus")
 (define-key *top-map* (kbd "s-S") "vsplit-and-focus")
 (define-key *top-map* (kbd "s-SPC") "run-shell-command dmenu_run -fn 'Droid Sans Mono-17'")
+;; (define-key *top-map* (kbd "s-SPC") "run-shell-command rofi -show window")
 (define-key *top-map* (kbd "C-s-l") "run-shell-command slock")
 (define-key *top-map* (kbd "C-s-r") "iresize")
 
@@ -166,18 +186,34 @@
 (define-key *top-map* (kbd "XF86AudioLowerVolume") "volume-down")
 (define-key *top-map* (kbd "XF86AudioMute") "volume-toggle-mute")
 
-(set-border-color        beno-nord1)
-(set-focus-color         beno-nord1)
-(set-unfocus-color       beno-nord3)
-(set-float-focus-color   beno-nord1)
-(set-float-unfocus-color beno-nord3)
-(set-fg-color beno-nord4)
-(set-bg-color beno-nord1)
+;; (set-border-color        beno-nord1)
+;; (set-focus-color         beno-nord1)
+;; (set-unfocus-color       beno-nord3)
+;; (set-float-focus-color   beno-nord1)
+;; (set-float-unfocus-color beno-nord3)
+;; (set-fg-color beno-nord4)
+;; (set-bg-color beno-nord1)
 (set-msg-border-width 2)
 
-;; start essential processes
+;; window placement rules
+(define-frame-preference "dev"
+  (1 t t :class "Emacs"))
+
+(define-frame-preference "web"
+  (2 t t :class ".eolie-real"))
+
+(define-frame-preference "web"
+  (2 t t :class "Nyxt"))
+
+;; (define-frame-preference "term"
+;;     (3 t t :class "Alacritty"))
+
+;; start processes
 (stumpwm:gselect "dev")
-(run-commands "start-emacs")
+(run-commands
+ "start-polybar"
+ "start-nyxt"
+ "start-emacs")
 (run-shell-command "setxkbmap us -option 'caps:ctrl_modifier'")
 (run-shell-command "xcape -e 'Caps_Lock=Escape'")
 (run-shell-command "xset r rate 150 60")
@@ -196,30 +232,112 @@
 (run-commands "toggle-gaps-on")
 
 (setf *mode-line-timeout* 2)
-(mode-line)
+;; (mode-line)
 
-(load-module "wifi")
-(setf wifi:*use-colors* t
-      wifi:*iwconfig-path* "/run/current-system/profile/sbin/iwconfig")
-(setf *group-format* "%t")
-(setf *window-format* "%n: %30t")
-(setf *mode-line-background-color* beno-nord1
-      *mode-line-foreground-color* beno-nord5)
-(setf *mode-line-border-color* beno-nord1
-      *mode-line-border-width* 0)
-(setf wifi:*wifi-modeline-fmt*       "%e %P")
-(setf *screen-mode-line-format*
-      (list
-       "[%n]: %w | %B | %l | %I"
-       "^>" '(:eval (stumpwm:run-shell-command
-                     "LANG=en_US.utf8 date +%A' '%d.%m.%Y' '%l:%M' '%p' 'GMT''%:::z'           '" t))))
+;; (load-module "wifi")
+;; (setf wifi:*use-colors* t
+;;       wifi:*iwconfig-path* "/run/current-system/profile/sbin/iwconfig")
+;; (setf *group-format* "%t")
+;; (setf *window-format* "%n: %30t")
+;; (setf *mode-line-background-color* "black"
+;;       *mode-line-foreground-color* "white")
+;; (setf *mode-line-border-color* "black"
+;;       *mode-line-border-width* 0)
+;; (setf wifi:*wifi-modeline-fmt*       "%e %P")
+;; (setf *screen-mode-line-format*
+;;       (list
+;;        "[%n]: %w | %B | %l | %I"
+;;        "^>" '(:eval (stumpwm:run-shell-command
+;;                      "LANG=en_US.utf8 date +%A' '%d.%m.%Y' '%l:%M' '%p' 'GMT''%:::z'           '" t))))
+
+;; Polybar
+;; (defun icon-by-group (name)
+;;   (cond
+;;     ((string-equal name "dev")
+;;      "")
+;;     ((string-equal name "web")
+;;      "")
+;;     ((string-equal name "term")
+;;      "")
+;;     ((string-equal name "Top")
+;;      "")
+;;     ((string-equal name "Logs")
+;;      "")
+;;     (t (concat ""))))
+
+;; (defun polybar-groups ()
+;;   "Return string representation for polybar stumpgroups module"
+;;   (apply #'concatenate 'string
+;;          (mapcar
+;;           (lambda (g)
+;;             (let* ((name (group-name g))
+;;                    (number (write-to-string (group-number g)))
+;;                    (n-win (write-to-string (length (group-windows g))))
+;;                    (icon (icon-by-group name))
+;;                    (text (concat " %{F#54728E}" icon "%{F-} " number ":" name " ")))
+;;               (cond
+;;                 ((eq g (current-group)) (concat "%{F#FFFFFF B#000000 u#54728E +u}" text "[" n-win "] " "%{F- B- u- -u}"))
+;;                 ((string-equal n-win "0") "")
+;;                 (t (concat "%{F#FFFFFF}" text "[" n-win "] " "%{F-}")))))
+;;           (sort (screen-groups (current-screen)) #'< :key #'group-number))))
+
+;; (defun polybar-update-groups ()
+;;   (run-shell-command "polybar-msg hook stumpwmgroups 1"))
+
+;; (add-hook *new-window-hook* (lambda (win) (polybar-update-groups)))
+;; (add-hook *destroy-window-hook* (lambda (win) (polybar-update-groups)))
+;; (add-hook *focus-window-hook* (lambda (win lastw) (polybar-update-groups)))
+;; (add-hook *focus-group-hook* (lambda (grp lastg) (polybar-update-groups)))
+
+;; (defun shift-windows-forward (frames win)
+;;   (when frames
+;;     (let ((frame (car frames)))
+;;       (shift-windows-forward (cdr frames)
+;;                              (frame-window frame))
+;;       (when win
+;;         (pull-window win frame)))))
+
+;; (defcommand rotate-windows () ()
+;;   "Rotate windows"
+;;   (let* ((frames (group-frames (current-group)))
+;;          (win (frame-window (car (last frames)))))
+;;     (shift-windows-forward frames win)))
+
+;; (defcommand swap-windows () ()
+;;   (let* ((group (current-group))
+;;          (cur-frame (tile-group-current-frame group))
+;;          (frames (group-frames group)))
+;;     (if (eq (length frames) 2)
+;;         (progn (if (or (neighbour :left cur-frame frames)
+;;                        (neighbour :right cur-frame frames))
+;;                    (progn
+;;                      (only)
+;;                      (vsplit))
+;;                    (progn
+;;                      (only)
+;;                      (hsplit))))
+;;         (message "Works only with 2 frames"))))
+
+;; ;; Rofi
+
+;; (defun rofi (mode)
+;;   (run-shell-command (concat "rofi -show " mode " -m " (write-to-string (head-number (current-head))))))
+
+;; (defcommand rofi-run () ()
+;;   (rofi "run -sidebar-mode"))
+
+;; (defcommand rofi-window () ()
+;;   (rofi "window"))
+
+;; (defcommand rofi-windowcd () ()
+;;   (rofi "windowcd"))
 
 ;; (load-module "cpu")
 ;; (load-module "mem")
 ;; (load-module "screenshot")
 ;; (load-module "mpd")
-(load-module "battery-portable")
-(load-module "net")
+;; (load-module "battery-portable")
+;; (load-module "net")
 (load-module "stump-volume-control")
 
 ;; primitive and unsecure screen lock, prefer slock bound to C-s-l
@@ -239,17 +357,14 @@
 ;; (setf clx-truetype:+font-cache-filename+ "/home/ben/.local/share/fonts/font-cache.sexp")
 
 ;; system tray
-(ql:quickload :xembed)
-(load-module "stumptray")
-(setf stumptray::*tray-win-background* beno-nord1)
-;; (setf stumptray::*tray-viwin-background* "#ff0000") ; red
-;; (setf stumptray::*tray-hiwin-background* "#0000ff") ; blue
-;; (setf stumptray::*tray-placeholder-pixels-per-space* 39)
+;; (ql:quickload :xembed)
+;; (load-module "stumptray")
+;; (setf stumptray::*tray-win-background* beno-nord1)
 (run-shell-command "nm-applet")
 (run-shell-command "volumeicon")
-(bt:make-thread (lambda ()
-                  (sleep 10)
-                  (stumptray::stumptray)))
+;; (bt:make-thread (lambda ()
+;;                   (sleep 10)
+;;                   (stumptray::stumptray)))
 
 ;; have this be the last line of config since creating server is not an idempotent operation
 (require :slynk)
