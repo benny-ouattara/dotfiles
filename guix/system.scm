@@ -3,6 +3,8 @@
 
 (use-modules (gnu)
              (nongnu packages linux)
+             (gnu artwork)
+             (gnu packages fonts)
              (gnu packages lisp)
              (gnu packages wm)
              (gnu packages fonts)
@@ -10,17 +12,20 @@
              (gnu packages package-management)
              (gnu packages pulseaudio)
              (gnu system setuid)
+             (gnu packages audio)
              (srfi srfi-1))
 (use-service-modules
  cups
  desktop
  networking
  ssh
- ;; sddm
+ sddm
+ ;; lightdm
  xorg
  syncthing
  monitoring
- pm)
+ pm
+ virtualization)
 
 ;; Allow members of the "video" group to change the screen brightness.
 (define %backlight-udev-rule
@@ -32,11 +37,11 @@
                   "ACTION==\"add\", SUBSYSTEM==\"backlight\", "
                   "RUN+=\"/run/current-system/profile/bin/chmod g+w /sys/class/backlight/%k/brightness\"")))
 
-(define %services-without-gdm  (remove (lambda (service)
-                                         (eq? (service-kind service) gdm-service-type))
-                                       %desktop-services))
 (define %modified-desktop-services
-  (modify-services %services-without-gdm
+  (modify-services %desktop-services
+    (delete console-font-service-type)  ;; provide other console fonts below
+    ;; (delete sddm-service-type)
+    (delete gdm-service-type)
     (login-service-type config =>
                         (login-configuration (inherit config)
                                              (motd "Welcome, Ben!")))
@@ -48,9 +53,6 @@
                                            (authorized-keys
                                             (append (list (local-file "./signing-key.pub"))
                                                     %default-authorized-guix-keys))))
-    (slim-service-type config =>
-                       (slim-configuration (inherit config)
-                                           (default-user "ben")))
     (elogind-service-type config =>
                           (elogind-configuration (inherit config)
                                                  (handle-lid-switch-external-power 'suspend)))
@@ -79,6 +81,9 @@ Section \"InputClass\"
   MatchIsKeyboard \"on\"
 EndSection
 ")
+
+(define %default-console-font
+  (file-append font-tamzen "/share/kbd/consolefonts/Tamzen10x20.psf"))
 
 (operating-system
   (kernel linux)
@@ -112,6 +117,15 @@ EndSection
    (append
     (list (list stumpwm "lib"))         ; use lib output of stumpwm package
     (list
+     (specification->package "exfat-utils")
+     (specification->package "xf86-input-libinput")
+     (specification->package "sugar-light-sddm-theme")
+     (specification->package "sugar-dark-sddm-theme")
+     (specification->package "chili-sddm-theme")
+     (specification->package "lightdm-gtk-greeter")
+     (specification->package "font-tamzen")
+     (specification->package "bluez")
+     (specification->package "bluez-alsa")
      (specification->package "stumpwm-with-slynk")
      (specification->package "stow")
      (specification->package "pulseaudio")
@@ -133,6 +147,15 @@ EndSection
    (append
     (list
      ;; (service slim-service-type)
+     ;; (dbus-service #:services (list bluez-alsa))
+     (service libvirt-service-type
+              (libvirt-configuration
+               (unix-sock-group "libvirt")
+               (tls-port "16555")))
+     (service console-font-service-type
+              (map (lambda (tty)
+                     (cons tty %default-console-font))
+                   '("tty1" "tty2" "tty3" "tty4" "tty5" "tty6")))
      (service thermald-service-type)
      (service darkstat-service-type
               (darkstat-configuration
@@ -140,7 +163,6 @@ EndSection
      (bluetooth-service #:auto-enable? #t)
      (service syncthing-service-type
               (syncthing-configuration (user "ben")))
-     (service gnome-desktop-service-type)
      (service openssh-service-type
               (openssh-configuration
                (x11-forwarding? #t)
@@ -153,13 +175,41 @@ EndSection
      (service cups-service-type)
      (set-xorg-configuration
       (xorg-configuration
-       (keyboard-layout keyboard-layout))))
+        (keyboard-layout keyboard-layout)
+        (extra-config (list %xorg-libinput-config)))
+      sddm-service-type)
+     (service sddm-service-type)
+     ;; (service sddm-service-type
+     ;;          (sddm-configuration
+     ;;           ;; valid values are elarun, maldives or maya
+     ;;           ;; (theme "maldives")
+     ;;           ))
+     ;; (service lightdm-service-type
+     ;;          (lightdm-configuration
+     ;;           (xorg-configuration
+     ;;            (xorg-configuration
+     ;;             (keyboard-layout keyboard-layout)
+     ;;             (extra-config (list %xorg-libinput-config))))
+     ;;           (allow-empty-passwords? #t)
+     ;;           (greeters (list (lightdm-gtk-greeter-configuration
+     ;;                            (allow-debugging? #t))))
+     ;;           (seats (list (lightdm-seat-configuration
+     ;;                         (name "*")
+     ;;                         (user-session "stumpwm"))))
+     ;;           )
+     ;;          )
+     )
     %modified-desktop-services))
   (name-service-switch %mdns-host-lookup-nss) ;; Allow resolution of '.local' host names with mDNS.
   (bootloader
    (bootloader-configuration
     (bootloader grub-efi-bootloader)
     (targets (list "/boot/efi"))
+    (theme (grub-theme
+            (resolution '(1920 . 1080))
+            (image (file-append
+                    %artwork-repository
+                    "/grub/GuixSD-fully-black-16-9.svg"))))
     (keyboard-layout keyboard-layout)))
   (file-systems
    (cons* (file-system

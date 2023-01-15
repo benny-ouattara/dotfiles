@@ -94,7 +94,10 @@
          "cmake"
          "network-manager-applet"
          "gnupg"
-         "keychain")))
+         "keychain"
+         "qemu"
+         "qmpbackup"
+         "virt-manager")))
  (services
   (list
    (simple-service 'environment-variables-service
