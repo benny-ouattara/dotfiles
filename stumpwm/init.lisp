@@ -94,6 +94,18 @@
   "Run the polybar status bar."
   (run-shell-command "polybar"))
 
+(defun rofi (mode)
+  (run-shell-command (concat "rofi -show " mode " -m " (write-to-string (head-number (current-head))))))
+
+(defcommand rofi-run () ()
+  (rofi "run -sidebar-mode"))
+
+(defcommand rofi-window () ()
+  (rofi "window"))
+
+(defcommand rofi-windowcd () ()
+  (rofi "windowcd"))
+
 ;; enable which-key-mode
 (which-key-mode)
 
@@ -137,8 +149,8 @@
 (define-key *top-map* (kbd "s-f") "fullscreen")
 (define-key *top-map* (kbd "s-s") "hsplit-and-focus")
 (define-key *top-map* (kbd "s-S") "vsplit-and-focus")
-(define-key *top-map* (kbd "s-SPC") "run-shell-command dmenu_run -fn 'Droid Sans Mono-17'")
-;; (define-key *top-map* (kbd "s-SPC") "run-shell-command rofi -show window")
+(define-key *top-map* (kbd "s-SPC") "run-shell-command /home/ben/.config/rofi/launchers/type-4/launcher.sh")
+
 (define-key *top-map* (kbd "C-s-l") "run-shell-command slock")
 (define-key *top-map* (kbd "C-s-r") "iresize")
 
@@ -233,53 +245,10 @@
 (defun polybar-update-groups ()
   (run-shell-command "polybar-msg hook stumpwmgroups 1"))
 
-;; (add-hook *new-window-hook* (lambda (win) (polybar-update-groups)))
-;; (add-hook *destroy-window-hook* (lambda (win) (polybar-update-groups)))
-;; (add-hook *focus-window-hook* (lambda (win lastw) (polybar-update-groups)))
-;; (add-hook *focus-group-hook* (lambda (grp lastg) (polybar-update-groups)))
-
-;; (defun shift-windows-forward (frames win)
-;;   (when frames
-;;     (let ((frame (car frames)))
-;;       (shift-windows-forward (cdr frames)
-;;                              (frame-window frame))
-;;       (when win
-;;         (pull-window win frame)))))
-
-;; (defcommand rotate-windows () ()
-;;   "Rotate windows"
-;;   (let* ((frames (group-frames (current-group)))
-;;          (win (frame-window (car (last frames)))))
-;;     (shift-windows-forward frames win)))
-
-;; (defcommand swap-windows () ()
-;;   (let* ((group (current-group))
-;;          (cur-frame (tile-group-current-frame group))
-;;          (frames (group-frames group)))
-;;     (if (eq (length frames) 2)
-;;         (progn (if (or (neighbour :left cur-frame frames)
-;;                        (neighbour :right cur-frame frames))
-;;                    (progn
-;;                      (only)
-;;                      (vsplit))
-;;                    (progn
-;;                      (only)
-;;                      (hsplit))))
-;;         (message "Works only with 2 frames"))))
-
-;; ;; Rofi
-
-;; (defun rofi (mode)
-;;   (run-shell-command (concat "rofi -show " mode " -m " (write-to-string (head-number (current-head))))))
-
-;; (defcommand rofi-run () ()
-;;   (rofi "run -sidebar-mode"))
-
-;; (defcommand rofi-window () ()
-;;   (rofi "window"))
-
-;; (defcommand rofi-windowcd () ()
-;;   (rofi "windowcd"))
+(add-hook *new-window-hook* (lambda (win) (polybar-update-groups)))
+(add-hook *destroy-window-hook* (lambda (win) (polybar-update-groups)))
+(add-hook *focus-window-hook* (lambda (win lastw) (polybar-update-groups)))
+(add-hook *focus-group-hook* (lambda (grp lastg) (polybar-update-groups)))
 
 (load-module "stump-volume-control")
 
@@ -298,8 +267,8 @@
 (load-module "ttf-fonts")
 (set-font (make-instance 'xft:font :family "JetBrains Mono" :subfamily "Regular" :size 16))
 
-(run-shell-command "nm-applet")
-(run-shell-command "volumeicon")
+;; (run-shell-command "nm-applet")
+;; (run-shell-command "volumeicon")
 
 ;; load this last to avoid issues
 (require :slynk)
