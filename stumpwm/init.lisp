@@ -188,12 +188,13 @@
 ;; (define-frame-preference "term"
 ;;     (3 t t :class "Alacritty"))
 
+(mode-line)
 ;; start processes
-(stumpwm:gselect "dev")
 (run-commands
- "start-polybar"
- "start-nyxt"
- "start-emacs")
+ ;; "start-polybar"
+ ;; "start-nyxt"
+ "start-emacs"
+ "gselect dev")
 (run-shell-command "setxkbmap us -option 'caps:ctrl_modifier'")
 (run-shell-command "xcape -e 'Caps_Lock=Escape'")
 (run-shell-command "xset r rate 150 60")
@@ -245,10 +246,10 @@
 (defun polybar-update-groups ()
   (run-shell-command "polybar-msg hook stumpwmgroups 1"))
 
-(add-hook *new-window-hook* (lambda (win) (polybar-update-groups)))
-(add-hook *destroy-window-hook* (lambda (win) (polybar-update-groups)))
-(add-hook *focus-window-hook* (lambda (win lastw) (polybar-update-groups)))
-(add-hook *focus-group-hook* (lambda (grp lastg) (polybar-update-groups)))
+;; (add-hook *new-window-hook* (lambda (win) (polybar-update-groups)))
+;; (add-hook *destroy-window-hook* (lambda (win) (polybar-update-groups)))
+;; (add-hook *focus-window-hook* (lambda (win lastw) (polybar-update-groups)))
+;; (add-hook *focus-group-hook* (lambda (grp lastg) (polybar-update-groups)))
 
 (load-module "stump-volume-control")
 
