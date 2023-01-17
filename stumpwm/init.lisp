@@ -185,8 +185,8 @@
 (define-frame-preference "web"
   (2 t t :class "Nyxt"))
 
-(define-frame-preference "term"
-    (3 t t :class "Alacritty"))
+;; (define-frame-preference "term"
+;;     (3 t t :class "Alacritty"))
 
 ;; start processes
 (run-commands
@@ -266,7 +266,7 @@
 (xft:cache-fonts)
 (load-module "ttf-fonts")
 ;; the window starts shrinking when the :size >= 15
-(set-font (make-instance 'xft:font :family "JetBrains Mono" :subfamily "Regular" :size 12))
+(set-font (make-instance 'xft:font :family "JetBrains Mono" :subfamily "Regular" :size 10))
 
 (run-shell-command "nm-applet")
 (run-shell-command "volumeicon")
