@@ -185,15 +185,14 @@
 (define-frame-preference "web"
   (2 t t :class "Nyxt"))
 
-;; (define-frame-preference "term"
-;;     (3 t t :class "Alacritty"))
+(define-frame-preference "term"
+    (3 t t :class "Alacritty"))
 
-(mode-line)
 ;; start processes
 (run-commands
  ;; "start-polybar"
  ;; "start-nyxt"
- "start-emacs"
+ ;; "start-emacs"
  "gselect dev")
 (run-shell-command "setxkbmap us -option 'caps:ctrl_modifier'")
 (run-shell-command "xcape -e 'Caps_Lock=Escape'")
@@ -209,8 +208,8 @@
 
 ;; gaps
 (load-module "swm-gaps")
-(setf swm-gaps:*inner-gaps-size* 2)
-(run-commands "toggle-gaps-off")
+(setf swm-gaps:*inner-gaps-size* 5)
+(run-commands "toggle-gaps-on")
 
 ;; Polybar
 (defun icon-by-group (name)
@@ -266,11 +265,12 @@
 (setf xft:*font-dirs* '("/home/ben/.guix-profile/share/fonts/"))
 (xft:cache-fonts)
 (load-module "ttf-fonts")
-(set-font (make-instance 'xft:font :family "JetBrains Mono" :subfamily "Regular" :size 16))
+;; the window starts shrinking when the :size >= 15
+(set-font (make-instance 'xft:font :family "JetBrains Mono" :subfamily "Regular" :size 12))
 
-;; (run-shell-command "nm-applet")
-;; (run-shell-command "volumeicon")
+(run-shell-command "nm-applet")
+(run-shell-command "volumeicon")
 
 ;; load this last to avoid issues
-(require :slynk)
-(slynk:create-server :port 4009 :dont-close t)
+;; (require :slynk)
+;; (slynk:create-server :port 4009 :dont-close t)
