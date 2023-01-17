@@ -92,7 +92,7 @@
 
 (defcommand start-polybar () ()
   "Run the polybar status bar."
-  (run-shell-command "polybar"))
+  (run-shell-command "polybar --reload example"))
 
 (defun rofi (mode)
   (run-shell-command (concat "rofi -show " mode " -m " (write-to-string (head-number (current-head))))))
@@ -190,9 +190,9 @@
 
 ;; start processes
 (run-commands
- ;; "start-polybar"
+ "start-polybar"
  ;; "start-nyxt"
- ;; "start-emacs"
+ "start-emacs"
  "gselect dev")
 (run-shell-command "setxkbmap us -option 'caps:ctrl_modifier'")
 (run-shell-command "xcape -e 'Caps_Lock=Escape'")
@@ -266,7 +266,7 @@
 (xft:cache-fonts)
 (load-module "ttf-fonts")
 ;; the window starts shrinking when the :size >= 15
-(set-font (make-instance 'xft:font :family "JetBrains Mono" :subfamily "Regular" :size 10))
+(set-font (make-instance 'xft:font :family "JetBrains Mono" :subfamily "Regular" :size 14))
 
 (run-shell-command "nm-applet")
 (run-shell-command "volumeicon")
