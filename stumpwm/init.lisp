@@ -190,7 +190,7 @@
 
 ;; start processes
 (run-commands
- "start-polybar"
+ ;; "start-polybar"
  ;; "start-nyxt"
  "start-emacs"
  "gselect dev")
@@ -208,7 +208,8 @@
 
 ;; gaps
 (load-module "swm-gaps")
-(setf swm-gaps:*inner-gaps-size* 5)
+(setf swm-gaps:*inner-gaps-size* 5
+      swm-gaps:*outer-gaps-size* 15)
 (run-commands "toggle-gaps-on")
 
 ;; Polybar
@@ -265,7 +266,7 @@
 (setf xft:*font-dirs* '("/home/ben/.guix-profile/share/fonts/"))
 (xft:cache-fonts)
 (load-module "ttf-fonts")
-;; the window starts shrinking when the :size >= 15
+;; the window starts shrinking when the :size >= 15 for mode-line
 (set-font (make-instance 'xft:font :family "JetBrains Mono" :subfamily "Regular" :size 14))
 
 (run-shell-command "nm-applet")
