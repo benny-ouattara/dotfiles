@@ -190,7 +190,7 @@
 
 ;; start processes
 (run-commands
- ;; "start-polybar"
+ "start-polybar"
  ;; "start-nyxt"
  "start-emacs"
  "gselect dev")
