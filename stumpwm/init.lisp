@@ -92,7 +92,7 @@
 
 (defcommand start-polybar () ()
   "Run the polybar status bar."
-  (run-shell-command "polybar --reload example"))
+  (run-shell-command "polybar beno"))   ;; --reload doesn't work on config changes, the modeline simply disappears
 
 (defun rofi (mode)
   (run-shell-command (concat "rofi -show " mode " -m " (write-to-string (head-number (current-head))))))
