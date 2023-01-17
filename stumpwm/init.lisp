@@ -267,7 +267,7 @@
 (xft:cache-fonts)
 (load-module "ttf-fonts")
 ;; the window starts shrinking when the :size >= 15 for mode-line
-(set-font (make-instance 'xft:font :family "JetBrains Mono" :subfamily "Regular" :size 14))
+(set-font (make-instance 'xft:font :family "JetBrains Mono" :subfamily "Regular" :size 16))
 
 (run-shell-command "nm-applet")
 (run-shell-command "volumeicon")
