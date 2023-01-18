@@ -83,11 +83,8 @@
          "dstat"
          "clojure"
          "clojure-tools"
-         "leiningen"
-         "openjdk@11.0.17"
          "alsa-utils"
          "make"
-         "nomad"
          "eolie"
          "cmake"
          "network-manager-applet"
@@ -97,7 +94,13 @@
          "qmpbackup"
          "virt-manager"
          "polybar"
-         "rofi")))
+         "rofi"
+         "unzip"
+         "font-nerd-iosevka"
+         "font-nerd-jetbrains"
+         "font-nerd-meslo"
+         "font-nerd-victor"
+         )))
  (services
   (list
    (simple-service 'environment-variables-service
@@ -105,7 +108,8 @@
                    `(("LESSHISTFILE" . "$XDG_CACHE_HOME/.lesshst")
                      ("EDITOR" . "emacs")
                      ("VISUAL" . "emacs")
-                     ("SHELL" . ,(file-append zsh "/bin/zsh"))))
+                     ;; ("SHELL" . ,(file-append zsh "/bin/zsh"))
+                     ))
 
    (service home-redshift-service-type)
    (service
