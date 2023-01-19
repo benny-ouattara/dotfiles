@@ -100,6 +100,7 @@
          "font-nerd-jetbrains"
          "font-nerd-meslo"
          "font-nerd-victor"
+         "font-material-icons"
          )))
  (services
   (list
