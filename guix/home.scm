@@ -101,6 +101,8 @@
          "font-nerd-meslo"
          "font-nerd-victor"
          "font-material-icons"
+         ;; "ungoogled-chromium"
+         "firefox"
          )))
  (services
   (list

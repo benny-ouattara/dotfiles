@@ -181,7 +181,7 @@ EndSection
      (service sddm-service-type
               (sddm-configuration
                ;; valid values are elarun, maldives or maya, chili, sugar-light, sugar-dark
-               (theme "chili")
+               (theme "sugar-light")
                )))
     %modified-desktop-services))
   (name-service-switch %mdns-host-lookup-nss) ;; Allow resolution of '.local' host names with mDNS.

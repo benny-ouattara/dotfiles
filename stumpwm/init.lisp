@@ -76,6 +76,10 @@
             "Run or raise eolie web browser."
             (run-or-raise "eolie" '(:class "Eolie") t nil))
 
+(defcommand start-firefox () ()
+            "Run or raise firefox web browser."
+            (run-or-raise "firefox" '(:class "firefox-default") t nil))
+
 (defcommand start-alacritty () ()
   "Run or raise alacritty."
   (run-or-raise "alacritty" '(:class "Alacritty") t nil))
@@ -180,7 +184,7 @@
   (1 t t :class "Emacs"))
 
 (define-frame-preference "web"
-  (2 t t :class ".eolie-real"))
+    (2 t t :class "firefox-default"))
 
 (define-frame-preference "web"
   (2 t t :class "Nyxt"))
@@ -191,7 +195,7 @@
 ;; start processes
 (run-commands
  "start-polybar"
- ;; "start-nyxt"
+ "start-firefox"
  "start-emacs"
  "gselect dev")
 (run-shell-command "setxkbmap us -option 'caps:ctrl_modifier'")
