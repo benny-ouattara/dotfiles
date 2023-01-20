@@ -103,6 +103,11 @@
          "font-material-icons"
          ;; "ungoogled-chromium"
          "firefox"
+         "dunst"
+         "mpv"
+         "ncmpcpp"
+         "mpd"
+         "cava"
          )))
  (services
   (list
