@@ -274,7 +274,7 @@
 (set-font (make-instance 'xft:font :family "JetBrains Mono" :subfamily "Regular" :size 16))
 
 (run-shell-command "nm-applet")
-(run-shell-command "volumeicon")
+;; (run-shell-command "volumeicon") ;; the polybar theme used provides volume icon and partial control
 
 ;; load this last to avoid issues
 ;; (require :slynk)
