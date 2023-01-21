@@ -19,6 +19,7 @@
   (specifications->packages
    (list "recutils"
          "emacs-guix"
+         "emacs-vterm"
          "xterm"
          "volumeicon"
          "pavucontrol"
@@ -108,6 +109,8 @@
          "ncmpcpp"
          "mpd"
          "cava"
+         "sqlite"
+         "sqlitebrowser"
          )))
  (services
   (list

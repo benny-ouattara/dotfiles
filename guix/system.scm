@@ -48,6 +48,7 @@
   Option \"DisableWhileTyping\" \"on\"
   Option \"MiddleEmulation\" \"on\"
   Option \"ScrollMethod\" \"twofinger\"
+  Option \"NaturalScrolling\" \"true\"
 EndSection
 Section \"InputClass\"
   Identifier \"Keyboards\"
