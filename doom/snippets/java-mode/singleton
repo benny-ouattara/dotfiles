@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: Provide singleton
+# key: ds
+# --
+@Provides
+@Singleton
+public $4 provide$1($2) {
+    return $3;
+}$0

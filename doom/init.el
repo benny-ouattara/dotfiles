@@ -78,9 +78,9 @@
        vterm                            ; another terminals in Emacs
 
        :checkers
-       syntax              ; tasing you for every semicolon you forget
-       ;;(spell +flyspell) ; tasing you for misspelling mispelling
-       ;;grammar           ; tasing grammar mistake every you make
+       ;; syntax              ; tasing you for every semicolon you forget
+       ;; ;;(spell +flyspell) ; tasing you for misspelling mispelling
+       ;; ;;grammar           ; tasing grammar mistake every you make
 
        :tools
        ;;ansible
@@ -95,13 +95,13 @@
        ;;gist              ; interacting with github gists
        (lookup                  ; helps you navigate your code and documentation
         +docsets)               ; ...or in Dash docsets locally
-       (lsp +eglot)
+       (lsp +lsp)
        ;;macos             ; MacOS-specific commands
        magit                            ; a git porcelain for Emacs
        make                             ; run make tasks from Emacs
        (pass
         +auth)                             ; password manager for nerds
-       ;;pdf               ; pdf enhancements
+       pdf               ; pdf enhancements
        ;;prodigy           ; FIXME managing external services & code builders
        ;;rgb               ; creating color strings
        ;;terraform         ; infrastructure as code
@@ -157,14 +157,17 @@
        ;;nim               ; python + lisp at the speed of c
        nix           ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
-       (org          ; organize your plain life in plain text
-        +roam2        ; TODO: upgrade to +roam2
-        +dragndrop   ; drag & drop files/images into org buffers
+       (org              ; organize your plain life in plain text
+        +roam2           ; TODO: upgrade to +roam2
+        +dragndrop       ; drag & drop files/images into org buffers
         ;;+hugo            ; use Emacs for hugo blogging
-        +ipython     ; ipython/jupyter support for babel
-        +pandoc      ; export-with-pandoc support
+        +ipython         ; ipython/jupyter support for babel
+        +pandoc          ; export-with-pandoc support
         ;; +pomodoro    ; be fruitful with the tomato technique
-        +present)    ; using org-mode for presentations
+        +noter
+        +present
+        +pretty
+        +journal)    ; using org-mode for presentations
        ;;perl              ; write code no one else can comprehend
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
