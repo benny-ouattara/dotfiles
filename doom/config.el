@@ -901,7 +901,8 @@ $stderr = File.open(\"err.txt\", \"w\")")
       (set-popup-rule! "^\\*Org Agenda\\*" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
       (set-popup-rule! "[0-9]+-[0-9]+-[0-9]+.org" :size 0.33 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
       (set-popup-rule! "journal.org" :size 0.25 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
-      (set-popup-rule! "^[0-9]\\{8\\}$" :size 0.33 :vslot -4 :select t :quit 'other :ttl nil :side 'right :autosave t))
+      (set-popup-rule! "^[0-9]\\{8\\}$" :size 0.33 :vslot -4 :select t :quit 'other :ttl nil :side 'right :autosave t)
+      (set-popup-rule! "*kubel" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right))
   ;; small display
   (progn
     ;; (set-popup-rule! +main-eshell-popup+ :size 0.25 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
