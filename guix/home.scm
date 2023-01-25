@@ -19,7 +19,6 @@
   (specifications->packages
    (list "recutils"
          "emacs-guix"
-         "emacs-vterm"
          "xterm"
          "volumeicon"
          "pavucontrol"
@@ -111,6 +110,12 @@
          "cava"
          "sqlite"
          "sqlitebrowser"
+         "gcc"
+         "the-silver-searcher"
+         "ack"
+         "emacs-vterm"
+         "lsof"
+         "gcc-toolchain"
          )))
  (services
   (list
