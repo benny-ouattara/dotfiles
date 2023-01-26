@@ -196,7 +196,7 @@
 
        :email
        ;; (mu4e +org +gmail)
-       notmuch
+       (notmuch +afew +org)
        ;;(wanderlust +gmail)
 
        ;; Applications are complex and opinionated modules that transform Emacs

@@ -2,6 +2,8 @@
 
 {
   all = [
+    # notmuch email
+    pkgs.afew
     pkgs.notmuch
     # pkgs.texinfo
     pkgs.stow
