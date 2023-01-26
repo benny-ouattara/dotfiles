@@ -902,7 +902,7 @@ $stderr = File.open(\"err.txt\", \"w\")")
       (set-popup-rule! "[0-9]+-[0-9]+-[0-9]+.org" :size 0.33 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
       (set-popup-rule! "journal.org" :size 0.25 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
       (set-popup-rule! "^[0-9]\\{8\\}$" :size 0.33 :vslot -4 :select t :quit 'other :ttl nil :side 'right :autosave t)
-      (set-popup-rule! "*kubel" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right))
+      (set-popup-rule! "*kubel" :size 0.50 :vslot -4 :select t :quit nil :ttl t :side 'right))
   ;; small display
   (progn
     ;; (set-popup-rule! +main-eshell-popup+ :size 0.25 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
@@ -922,3 +922,11 @@ $stderr = File.open(\"err.txt\", \"w\")")
 (add-to-list 'default-frame-alist '(undecorated . t))
 
 (add-hook 'elfeed-search-mode-hook #'elfeed-update)
+
+(setq +notmuch-sync-backend 'mbsync)
+;; (after! notmuch
+;;   (setq notmuch-show-log nil
+;;         notmuch-hello-sections `(notmuch-hello-insert-saved-searches
+;;                                  notmuch-hello-insert-alltags)
+;;         ;; To hide headers while composing an email
+;;         notmuch-message-headers-visible nil))

@@ -2,6 +2,7 @@
 
 {
   all = [
+    pkgs.notmuch
     # pkgs.texinfo
     pkgs.stow
     pkgs.poppler
