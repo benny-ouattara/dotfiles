@@ -951,27 +951,29 @@ $stderr = File.open(\"err.txt\", \"w\")")
 ;;   :commands (info-colors-fontify-node)
 ;;   :hook (Info-selection . info-colors-fontify-node))
 
-(setq +notmuch-sync-backend 'mbsync)
-;; (after! notmuch
-;;   (setq notmuch-show-log nil
-;;         notmuch-hello-sections `(notmuch-hello-insert-saved-searches
-;;                                  notmuch-hello-insert-alltags)
-;;         ;; To hide headers while composing an email
-;;         notmuch-message-headers-visible nil))
-(setq notmuch-saved-searches '((:name "inbox" :query "tag:inbox not tag:trash" :key "i")
-                               ;; (:name "flagged" :query "tag:flagged" :key "f")
-                               ;; (:name "sent" :query "tag:sent" :key "s")
-                               ;; (:name "drafts" :query "tag:draft" :key "d")
-                               (:name "spotify" :query "tag:spotify" :key "s")
-                               (:name "gmail" :query "tag:gmail" :key "g")
-                               (:name "protonmail" :query "tag:protonmail" :key "p")
-                               (:name "spotify-unread" :query "tag:spotify and tag:unread" :key "S")
-                               (:name "gmail-unread" :query "tag:gmail and tag:unread" :key "G")
-                               (:name "protonmail-unread" :query "tag:protonmail and tag:unread" :key "P")))
+(after! notmuch
+  (setq +notmuch-sync-backend 'mbsync)
+  ;; (after! notmuch
+  ;;   (setq notmuch-show-log nil
+  ;;         notmuch-hello-sections `(notmuch-hello-insert-saved-searches
+  ;;                                  notmuch-hello-insert-alltags)
+  ;;         ;; To hide headers while composing an email
+  ;;         notmuch-message-headers-visible nil))
+  (setq notmuch-saved-searches '((:name "inbox" :query "tag:inbox not tag:trash" :key "i")
+                                 ;; (:name "flagged" :query "tag:flagged" :key "f")
+                                 ;; (:name "sent" :query "tag:sent" :key "s")
+                                 ;; (:name "drafts" :query "tag:draft" :key "d")
+                                 (:name "spotify" :query "tag:spotify" :key "s")
+                                 (:name "gmail" :query "tag:gmail" :key "g")
+                                 (:name "protonmail" :query "tag:protonmail" :key "p")
+                                 (:name "spotify-unread" :query "tag:spotify and tag:unread" :key "S")
+                                 (:name "gmail-unread" :query "tag:gmail and tag:unread" :key "G")
+                                 (:name "protonmail-unread" :query "tag:protonmail and tag:unread" :key "P")))
 
-(set-popup-rule! "^\\*notmuch-hello" :side 'right :size 0.5 :ttl 0)
+  (set-popup-rule! "^\\*notmuch-hello" :ignore t)
+  (set-popup-rule! "^\\*notmuch-saved" :ignore t)
 
-(map! :localleader
+  (map! :localleader
         :map (notmuch-hello-mode-map notmuch-search-mode-map notmuch-tree-mode-map notmuch-show-mode-map)
         :desc "Compose email"   "c" #'+notmuch/compose
         :desc "Sync email"      "u" #'+notmuch/update
@@ -982,7 +984,7 @@ $stderr = File.open(\"err.txt\", \"w\")")
         :desc "Mark as spam"    "s" #'+notmuch/search-spam
         :map notmuch-tree-mode-map
         :desc "Mark as deleted" "d" #'+notmuch/tree-delete
-        :desc "Mark as spam"    "s" #'+notmuch/tree-spam)
+        :desc "Mark as spam"    "s" #'+notmuch/tree-spam))
 
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-footer)
