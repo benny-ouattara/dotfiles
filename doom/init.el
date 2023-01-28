@@ -166,7 +166,7 @@
             ;; +pomodoro    ; be fruitful with the tomato technique
             +noter
             +present
-            +pretty
+            ;; +pretty
             +journal)                   ; using org-mode for presentations
            ;;perl              ; write code no one else can comprehend
            ;;php               ; perl's insecure younger brother

@@ -82,7 +82,7 @@ ensure that we have these libraries loaded before proceeding
  evil-move-cursor-back nil
  display-line-numbers-type 'relative
  fancy-splash-image (expand-file-name "splash.png" doom-private-dir)
- doom-theme 'doom-rouge)
+ doom-theme 'modus-operandi)
 
 (menu-bar-mode -1)
 (rainbow-mode)
@@ -132,6 +132,8 @@ Manages look and feel on tty frames i.e emacs in the terminal
  ;; org-ellipsis " ∵ "
  ;; org-ellipsis " ⌄ "
  ;; org-ellipsis " ⁂ "
+ org-startup-folded 'content
+ org-auto-align-tags nil
  org-roam-v2-ack t
  +org-roam-open-buffer-on-find-file nil
  sync-dir "~/Sync/"
@@ -142,7 +144,8 @@ Manages look and feel on tty frames i.e emacs in the terminal
                            :with-author nil
                            :with-toc nil)
  org-agenda-files (ignore-errors (directory-files org-directory t "\\.org$" t))
- org-ellipsis " ≡ "
+ ;; org-ellipsis " ≡ "
+ org-ellipsis " ▾"
  org-hide-emphasis-markers t
  org-tags-column -80
  org-log-done 'time
@@ -161,6 +164,21 @@ Manages look and feel on tty frames i.e emacs in the terminal
             '("mr" "Read later" entry (file+olp org-mail-directory "Read later")
               "* TODO read %:subject\n%a\n\n%i"
               :immediate-finish t)))
+#+end_src
+
+** prettify block names
+#+begin_src emacs-lisp
+(setq-hook! org-mode
+  prettify-symbols-alist '(("#+end_quote" . "”")
+                           ("#+END_QUOTE" . "”")
+                           ("#+begin_quote" . "“")
+                           ("#+BEGIN_QUOTE" . "“")
+                           ("#+end_src" . "«")
+                           ("#+END_SRC" . "«")
+                           ("#+begin_src" . "»")
+                           ("#+BEGIN_SRC" . "»")
+                           ("#+name:" . "»")
+                           ("#+NAME:" . "»")))
 #+end_src
 
 * org fancy priority
@@ -227,6 +245,13 @@ Manages look and feel on tty frames i.e emacs in the terminal
                (lambda ()
                  (when (equal org-state "DONE")
                    (beno/org-roam-copy-todo-to-today)))))
+#+end_src
+
+* org journal
+
+#+begin_src emacs-lisp
+(after! org-journal
+  (map! :leader :desc "Open current journal" "j" #'org-journal-open-current-journal-file))
 #+end_src
 
 * tramp
@@ -1577,7 +1602,7 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
             ;; +pomodoro    ; be fruitful with the tomato technique
             +noter
             +present
-            +pretty
+            ;; +pretty
             +journal)                   ; using org-mode for presentations
            ;;perl              ; write code no one else can comprehend
            ;;php               ; perl's insecure younger brother
@@ -1852,4 +1877,31 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-footer)
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-loaded)
+#+end_src
+
+* global subword mode
+
+#+begin_src emacs-lisp
+(global-subword-mode 1)
+#+end_src
+
+* splits
+
+#+begin_src emacs-lisp
+(setq evil-split-window-below t
+      evil-vsplit-window-right t)
+#+end_src
+
+* transparency
+
+#+begin_src emacs-lisp
+(unless (string= "" (shell-command-to-string "pgrep stumpwm"))
+  (set-frame-parameter (selected-frame) 'alpha-background 90)
+  (add-to-list 'default-frame-alist '(alpha-background . 90)))
+#+end_src
+
+* org modern
+
+#+begin_src emacs-lisp
+(global-org-modern-mode)
 #+end_src

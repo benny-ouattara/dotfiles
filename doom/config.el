@@ -58,7 +58,7 @@
  evil-move-cursor-back nil
  display-line-numbers-type 'relative
  fancy-splash-image (expand-file-name "splash.png" doom-private-dir)
- doom-theme 'doom-rouge)
+ doom-theme 'modus-operandi)
 
 (menu-bar-mode -1)
 (rainbow-mode)
@@ -96,6 +96,8 @@
  ;; org-ellipsis " ∵ "
  ;; org-ellipsis " ⌄ "
  ;; org-ellipsis " ⁂ "
+ org-startup-folded 'content
+ org-auto-align-tags nil
  org-roam-v2-ack t
  +org-roam-open-buffer-on-find-file nil
  sync-dir "~/Sync/"
@@ -106,7 +108,8 @@
                            :with-author nil
                            :with-toc nil)
  org-agenda-files (ignore-errors (directory-files org-directory t "\\.org$" t))
- org-ellipsis " ≡ "
+ ;; org-ellipsis " ≡ "
+ org-ellipsis " ▾"
  org-hide-emphasis-markers t
  org-tags-column -80
  org-log-done 'time
@@ -122,6 +125,18 @@
             '("mr" "Read later" entry (file+olp org-mail-directory "Read later")
               "* TODO read %:subject\n%a\n\n%i"
               :immediate-finish t)))
+
+(setq-hook! org-mode
+  prettify-symbols-alist '(("#+end_quote" . "”")
+                           ("#+END_QUOTE" . "”")
+                           ("#+begin_quote" . "“")
+                           ("#+BEGIN_QUOTE" . "“")
+                           ("#+end_src" . "«")
+                           ("#+END_SRC" . "«")
+                           ("#+begin_src" . "»")
+                           ("#+BEGIN_SRC" . "»")
+                           ("#+name:" . "»")
+                           ("#+NAME:" . "»")))
 
 (after! org-fancy-priorities
   (setq org-fancy-priorities-list '("⚡" "⬆" "⬇" "☕")))
@@ -178,6 +193,9 @@
                (lambda ()
                  (when (equal org-state "DONE")
                    (beno/org-roam-copy-todo-to-today)))))
+
+(after! org-journal
+  (map! :leader :desc "Open current journal" "j" #'org-journal-open-current-journal-file))
 
 (setq
  tramp-histfile-override "/dev/null")
@@ -969,3 +987,14 @@ $stderr = File.open(\"err.txt\", \"w\")")
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-footer)
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-loaded)
+
+(global-subword-mode 1)
+
+(setq evil-split-window-below t
+      evil-vsplit-window-right t)
+
+(unless (string= "" (shell-command-to-string "pgrep stumpwm"))
+  (set-frame-parameter (selected-frame) 'alpha-background 90)
+  (add-to-list 'default-frame-alist '(alpha-background . 90)))
+
+(global-org-modern-mode)
