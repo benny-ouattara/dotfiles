@@ -1139,3 +1139,12 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
   ;; (add-to-list 'geiser-guile-load-path "/home/ben/Code/guix")
   )
 #+end_src
+
+* info colors
+
+#+begin_src emacs-lisp
+;; (use-package! info-colors
+;;   :after info
+;;   :commands (info-colors-fontify-node)
+;;   :hook (Info-selection . info-colors-fontify-node))
+#+end_src

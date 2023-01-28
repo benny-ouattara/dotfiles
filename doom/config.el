@@ -927,3 +927,8 @@ $stderr = File.open(\"err.txt\", \"w\")")
   (add-to-list 'geiser-guile-load-path "/home/ben/Code/guix-turtle")
   ;; (add-to-list 'geiser-guile-load-path "/home/ben/Code/guix")
   )
+
+;; (use-package! info-colors
+;;   :after info
+;;   :commands (info-colors-fontify-node)
+;;   :hook (Info-selection . info-colors-fontify-node))
