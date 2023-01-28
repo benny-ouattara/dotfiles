@@ -965,3 +965,7 @@ $stderr = File.open(\"err.txt\", \"w\")")
         :map notmuch-tree-mode-map
         :desc "Mark as deleted" "d" #'+notmuch/tree-delete
         :desc "Mark as spam"    "s" #'+notmuch/tree-spam)
+
+(remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
+(remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-footer)
+(remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-loaded)

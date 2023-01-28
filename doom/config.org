@@ -1844,5 +1844,12 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
            :config
            literate
            (default +bindings +smartparens))
->>>>>>> master
+#+end_src
+
+* doom dashboard
+
+#+begin_src emacs-lisp
+(remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
+(remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-footer)
+(remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-loaded)
 #+end_src
