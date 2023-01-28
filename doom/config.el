@@ -902,7 +902,7 @@ $stderr = File.open(\"err.txt\", \"w\")")
       (set-popup-rule! "[0-9]+-[0-9]+-[0-9]+.org" :size 0.33 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
       (set-popup-rule! "journal.org" :size 0.25 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
       (set-popup-rule! "^[0-9]\\{8\\}$" :size 0.33 :vslot -4 :select t :quit 'other :ttl nil :side 'right :autosave t)
-      (set-popup-rule! "*kubel" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right))
+      (set-popup-rule! "*kubel" :size 0.50 :vslot -4 :select t :quit nil :ttl t :side 'right))
   ;; small display
   (progn
     ;; (set-popup-rule! +main-eshell-popup+ :size 0.25 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
@@ -932,3 +932,36 @@ $stderr = File.open(\"err.txt\", \"w\")")
 ;;   :after info
 ;;   :commands (info-colors-fontify-node)
 ;;   :hook (Info-selection . info-colors-fontify-node))
+
+(setq +notmuch-sync-backend 'mbsync)
+;; (after! notmuch
+;;   (setq notmuch-show-log nil
+;;         notmuch-hello-sections `(notmuch-hello-insert-saved-searches
+;;                                  notmuch-hello-insert-alltags)
+;;         ;; To hide headers while composing an email
+;;         notmuch-message-headers-visible nil))
+(setq notmuch-saved-searches '((:name "inbox" :query "tag:inbox not tag:trash" :key "i")
+                               ;; (:name "flagged" :query "tag:flagged" :key "f")
+                               ;; (:name "sent" :query "tag:sent" :key "s")
+                               ;; (:name "drafts" :query "tag:draft" :key "d")
+                               (:name "spotify" :query "tag:spotify" :key "s")
+                               (:name "gmail" :query "tag:gmail" :key "g")
+                               (:name "protonmail" :query "tag:protonmail" :key "p")
+                               (:name "spotify-unread" :query "tag:spotify and tag:unread" :key "S")
+                               (:name "gmail-unread" :query "tag:gmail and tag:unread" :key "G")
+                               (:name "protonmail-unread" :query "tag:protonmail and tag:unread" :key "P")))
+
+(set-popup-rule! "^\\*notmuch-hello" :side 'right :size 0.5 :ttl 0)
+
+(map! :localleader
+        :map (notmuch-hello-mode-map notmuch-search-mode-map notmuch-tree-mode-map notmuch-show-mode-map)
+        :desc "Compose email"   "c" #'+notmuch/compose
+        :desc "Sync email"      "u" #'+notmuch/update
+        :desc "Quit notmuch"    "q" #'+notmuch/quit
+        :desc "Mark as read"    "r" #'notmuch-show-mark-read
+        :map notmuch-search-mode-map
+        :desc "Mark as deleted" "d" #'+notmuch/search-delete
+        :desc "Mark as spam"    "s" #'+notmuch/search-spam
+        :map notmuch-tree-mode-map
+        :desc "Mark as deleted" "d" #'+notmuch/tree-delete
+        :desc "Mark as spam"    "s" #'+notmuch/tree-spam)

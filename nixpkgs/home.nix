@@ -150,8 +150,9 @@ in rec {
                + " | ${pkgs.gnugrep}/bin/egrep -v \"(lo0|vmnet|169\\.254|255\\.255)\""
                + " | ${pkgs.coreutils}/bin/tail -n +5";
       sbcl  = "${pkgs.rlwrap}/bin/rlwrap sbcl";
-      guile  = "${pkgs.rlwrap}/bin/rlwrap guile";
+      guile = "${pkgs.rlwrap}/bin/rlwrap guile";
       info  = "info --vi-keys";
+      git   = "/usr/local/Cellar/git/2.39.1/bin/git";
     };
 
     profileExtra = ''

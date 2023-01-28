@@ -1,0 +1,25 @@
+[SpamFilter]
+[KillThreadsFilter]
+[ListMailsFilter]
+[ArchiveSentMailsFilter]
+[InboxFilter]
+
+[Filter.1]
+query = 'zangao@spotify.com'
+tags = +spotify
+message = Spotify mail
+
+[Filter.2]
+query = 'benny.ouattara@gmail.com'
+tags = +gmail
+message = Personal gmail
+
+[Filter.3]
+query = 'benny.ouattara@protonmail.com'
+tags = +protonmail
+message = Personal protonmail
+
+[Filter.4]
+query = 'subject:fleetshift-bot'
+tags = -new
+message = Auto mark fleetshift bot emails
