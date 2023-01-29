@@ -1656,9 +1656,9 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
            (default +bindings +smartparens))
 #+end_src
 
-* zangao macos init.el
+* C02Z965QLVDQ macos init.el
 
-#+begin_src emacs-lisp :tangle (if (equal (system-name) "zangao") "init.el" "no")
+#+begin_src emacs-lisp :tangle (if (equal (system-name) "C02Z965QLVDQ") "init.el" "no")
 ;;; init.el -*- lexical-binding: t; -*-
 
 ;; Copy this file to ~/.doom.d/init.el or ~/.config/doom/init.el ('doom install'
