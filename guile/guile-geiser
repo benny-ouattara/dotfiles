@@ -1,0 +1,5 @@
+(use-modules (guix))
+(use-modules (guix hash))
+(use-modules (guix build-system))
+(use-modules (gnu packages base))
+(use-modules (turtle packages search))

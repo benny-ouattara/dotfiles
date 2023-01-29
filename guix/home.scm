@@ -47,7 +47,7 @@
          "arc-icon-theme"
          "matcha-theme"
          "hicolor-icon-theme"
-         "gnome-icon-theme"
+         "adwaita-icon-theme"
          "gnome-backgrounds"
          "papirus-icon-theme"
          "breeze-icons"
@@ -83,14 +83,40 @@
          "dstat"
          "clojure"
          "clojure-tools"
-         "leiningen"
-         "openjdk@11.0.15"
          "alsa-utils"
          "make"
-         "maven"
-         "nomad"
-         "icecat"
-         "eolie")))
+         "eolie"
+         "cmake"
+         "network-manager-applet"
+         "gnupg"
+         "keychain"
+         "qemu"
+         "qmpbackup"
+         "virt-manager"
+         "polybar"
+         "rofi"
+         "unzip"
+         "font-nerd-iosevka"
+         "font-nerd-jetbrains"
+         "font-nerd-meslo"
+         "font-nerd-victor"
+         "font-material-icons"
+         ;; "ungoogled-chromium"
+         "firefox"
+         "dunst"
+         "mpv"
+         "ncmpcpp"
+         "mpd"
+         "cava"
+         "sqlite"
+         "sqlitebrowser"
+         "gcc"
+         "the-silver-searcher"
+         "ack"
+         "emacs-vterm"
+         "lsof"
+         "gcc-toolchain"
+         )))
  (services
   (list
    (simple-service 'environment-variables-service
@@ -98,13 +124,15 @@
                    `(("LESSHISTFILE" . "$XDG_CACHE_HOME/.lesshst")
                      ("EDITOR" . "emacs")
                      ("VISUAL" . "emacs")
-                     ("SHELL" . ,(file-append zsh "/bin/zsh"))))
+                     ;; ("SHELL" . ,(file-append zsh "/bin/zsh"))
+                     ))
 
    (service home-redshift-service-type)
    (service
     home-zsh-service-type
     (home-zsh-configuration
-     (zshrc (list (local-file "./.zshrc" "zshrc")))))
+     (zshrc (list (local-file "./.zshrc" "zshrc")))
+     (zprofile (list (local-file "./.zprofile" "zprofile")))))
    (service
     home-bash-service-type
     (home-bash-configuration

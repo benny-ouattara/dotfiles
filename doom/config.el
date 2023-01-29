@@ -41,8 +41,8 @@
      ;; doom-font (font-spec :family "monaco" :size 15 :weight 'normal)
      ;; doom-font (font-spec :family "JetBrains Mono" :size 19 :weight 'normal :width 'normal)
      ;; doom-variable-pitch-font (font-spec :family "Avenir Next" :size 21)
-     doom-font (font-spec :family "Iosevka" :size 23 :weight 'normal)
-     doom-big-font (font-spec :family "Iosevka" :size 25))
+     doom-font (font-spec :family "Iosevka" :size 25 :weight 'normal)
+     doom-big-font (font-spec :family "Iosevka" :size 27))
   (setq
    ;; doom-font (font-spec :family "monaco" :size 15 :weight 'normal)
    ;; doom-font (font-spec :family "JetBrains Mono" :size 19 :weight 'normal :width 'normal)
@@ -58,7 +58,7 @@
  evil-move-cursor-back nil
  display-line-numbers-type 'relative
  fancy-splash-image (expand-file-name "splash.png" doom-private-dir)
- doom-theme 'doom-acario-light)
+ doom-theme 'modus-operandi)
 
 (menu-bar-mode -1)
 (rainbow-mode)
@@ -96,6 +96,8 @@
  ;; org-ellipsis " ∵ "
  ;; org-ellipsis " ⌄ "
  ;; org-ellipsis " ⁂ "
+ org-startup-folded 'content
+ org-auto-align-tags nil
  org-roam-v2-ack t
  +org-roam-open-buffer-on-find-file nil
  sync-dir "~/Sync/"
@@ -106,7 +108,8 @@
                            :with-author nil
                            :with-toc nil)
  org-agenda-files (ignore-errors (directory-files org-directory t "\\.org$" t))
- org-ellipsis " ≡ "
+ ;; org-ellipsis " ≡ "
+ org-ellipsis " ▾"
  org-hide-emphasis-markers t
  org-tags-column -80
  org-log-done 'time
@@ -122,6 +125,18 @@
             '("mr" "Read later" entry (file+olp org-mail-directory "Read later")
               "* TODO read %:subject\n%a\n\n%i"
               :immediate-finish t)))
+
+(setq-hook! org-mode
+  prettify-symbols-alist '(("#+end_quote" . "”")
+                           ("#+END_QUOTE" . "”")
+                           ("#+begin_quote" . "“")
+                           ("#+BEGIN_QUOTE" . "“")
+                           ("#+end_src" . "«")
+                           ("#+END_SRC" . "«")
+                           ("#+begin_src" . "»")
+                           ("#+BEGIN_SRC" . "»")
+                           ("#+name:" . "»")
+                           ("#+NAME:" . "»")))
 
 (after! org-fancy-priorities
   (setq org-fancy-priorities-list '("⚡" "⬆" "⬇" "☕")))
@@ -180,6 +195,9 @@
                    (beno/org-roam-copy-todo-to-today)))))
 
 (setq org-fold-core-style 'overlays)
+
+(after! org-journal
+  (map! :leader :desc "Open current journal" "j" #'org-journal-open-current-journal-file))
 
 (setq
  tramp-histfile-override "/dev/null")
@@ -925,27 +943,39 @@ $stderr = File.open(\"err.txt\", \"w\")")
 
 (add-hook 'elfeed-search-mode-hook #'elfeed-update)
 
-(setq +notmuch-sync-backend 'mbsync)
-;; (after! notmuch
-;;   (setq notmuch-show-log nil
-;;         notmuch-hello-sections `(notmuch-hello-insert-saved-searches
-;;                                  notmuch-hello-insert-alltags)
-;;         ;; To hide headers while composing an email
-;;         notmuch-message-headers-visible nil))
-(setq notmuch-saved-searches '((:name "inbox" :query "tag:inbox not tag:trash" :key "i")
-                               ;; (:name "flagged" :query "tag:flagged" :key "f")
-                               ;; (:name "sent" :query "tag:sent" :key "s")
-                               ;; (:name "drafts" :query "tag:draft" :key "d")
-                               (:name "spotify" :query "tag:spotify" :key "s")
-                               (:name "gmail" :query "tag:gmail" :key "g")
-                               (:name "protonmail" :query "tag:protonmail" :key "p")
-                               (:name "spotify-unread" :query "tag:spotify and tag:unread" :key "S")
-                               (:name "gmail-unread" :query "tag:gmail and tag:unread" :key "G")
-                               (:name "protonmail-unread" :query "tag:protonmail and tag:unread" :key "P")))
+(with-eval-after-load 'geiser-guile
+  (add-to-list 'geiser-guile-load-path "/home/ben/Code/guix-turtle")
+  ;; (add-to-list 'geiser-guile-load-path "/home/ben/Code/guix")
+  )
 
-(set-popup-rule! "^\\*notmuch-hello" :side 'right :size 0.5 :ttl 0)
+;; (use-package! info-colors
+;;   :after info
+;;   :commands (info-colors-fontify-node)
+;;   :hook (Info-selection . info-colors-fontify-node))
 
-(map! :localleader
+(after! notmuch
+  (setq +notmuch-sync-backend 'mbsync)
+  ;; (after! notmuch
+  ;;   (setq notmuch-show-log nil
+  ;;         notmuch-hello-sections `(notmuch-hello-insert-saved-searches
+  ;;                                  notmuch-hello-insert-alltags)
+  ;;         ;; To hide headers while composing an email
+  ;;         notmuch-message-headers-visible nil))
+  (setq notmuch-saved-searches '((:name "inbox" :query "tag:inbox not tag:trash" :key "i")
+                                 ;; (:name "flagged" :query "tag:flagged" :key "f")
+                                 ;; (:name "sent" :query "tag:sent" :key "s")
+                                 ;; (:name "drafts" :query "tag:draft" :key "d")
+                                 (:name "spotify" :query "tag:spotify" :key "s")
+                                 (:name "gmail" :query "tag:gmail" :key "g")
+                                 (:name "protonmail" :query "tag:protonmail" :key "p")
+                                 (:name "spotify-unread" :query "tag:spotify and tag:unread" :key "S")
+                                 (:name "gmail-unread" :query "tag:gmail and tag:unread" :key "G")
+                                 (:name "protonmail-unread" :query "tag:protonmail and tag:unread" :key "P")))
+
+  (set-popup-rule! "^\\*notmuch-hello" :ignore t)
+  (set-popup-rule! "^\\*notmuch-saved" :ignore t)
+
+  (map! :localleader
         :map (notmuch-hello-mode-map notmuch-search-mode-map notmuch-tree-mode-map notmuch-show-mode-map)
         :desc "Compose email"   "c" #'+notmuch/compose
         :desc "Sync email"      "u" #'+notmuch/update
@@ -956,4 +986,19 @@ $stderr = File.open(\"err.txt\", \"w\")")
         :desc "Mark as spam"    "s" #'+notmuch/search-spam
         :map notmuch-tree-mode-map
         :desc "Mark as deleted" "d" #'+notmuch/tree-delete
-        :desc "Mark as spam"    "s" #'+notmuch/tree-spam)
+        :desc "Mark as spam"    "s" #'+notmuch/tree-spam))
+
+(remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
+(remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-footer)
+(remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-loaded)
+
+(global-subword-mode 1)
+
+(setq evil-split-window-below t
+      evil-vsplit-window-right t)
+
+(unless (string= "" (shell-command-to-string "pgrep stumpwm"))
+  (set-frame-parameter (selected-frame) 'alpha-background 90)
+  (add-to-list 'default-frame-alist '(alpha-background . 90)))
+
+(global-org-modern-mode)

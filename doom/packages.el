@@ -30,3 +30,6 @@
 (package! protobuf-mode)
 (package! vertico-posframe :recipe (:host github :repo "tumashu/vertico-posframe"))
 (package! interaction-log :recipe (:host github :repo "michael-heerdegen/interaction-log.el"))
+(package! guix :recipe (:host github :repo "alezost/guix.el"))
+(package! info-colors)
+(package! org-modern :recipe (:host github :repo "minad/org-modern"))
