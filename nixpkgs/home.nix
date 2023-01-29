@@ -82,6 +82,7 @@ in rec {
 
     extraConfig = {
       github.user           = "benny-ouattara";
+      pull.rebase = false;  # merge
 
       color = {
         status      = "auto";
