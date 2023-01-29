@@ -229,6 +229,13 @@ Manages look and feel on tty frames i.e emacs in the terminal
                    (beno/org-roam-copy-todo-to-today)))))
 #+end_src
 
+* org journal
+This should fix a [[https://github.com/bastibe/org-journal/issues/392][bug]] in org-journal where ~org-cycle~ doesn't work when adding a new entry
+
+#+begin_src emacs-lisp
+(setq org-fold-core-style 'overlays)
+#+end_src
+
 * tramp
 #+begin_src emacs-lisp
 (setq

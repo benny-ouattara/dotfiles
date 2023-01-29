@@ -179,6 +179,8 @@
                  (when (equal org-state "DONE")
                    (beno/org-roam-copy-todo-to-today)))))
 
+(setq org-fold-core-style 'overlays)
+
 (setq
  tramp-histfile-override "/dev/null")
 
