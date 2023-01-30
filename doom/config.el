@@ -36,12 +36,12 @@
  org-pomodoro-length 45
  org-pomodoro-short-break-length 15)
 
-(if (equal "ben" (user-login-name))
+(if (equal "zangao" (user-login-name))
     (setq
      ;; doom-font (font-spec :family "monaco" :size 15 :weight 'normal)
      ;; doom-font (font-spec :family "JetBrains Mono" :size 19 :weight 'normal :width 'normal)
      ;; doom-variable-pitch-font (font-spec :family "Avenir Next" :size 21)
-     doom-font (font-spec :family "Iosevka" :size 25 :weight 'normal)
+     doom-font (font-spec :family "Iosevka" :size 21 :weight 'normal)
      doom-big-font (font-spec :family "Iosevka" :size 27)
      doom-theme 'modus-operandi)
   (setq
@@ -993,7 +993,7 @@ $stderr = File.open(\"err.txt\", \"w\")")
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-footer)
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-loaded)
 
-(global-subword-mode 1)
+;; (global-subword-mode 1)
 
 (setq evil-split-window-below t
       evil-vsplit-window-right t)
