@@ -42,13 +42,15 @@
      ;; doom-font (font-spec :family "JetBrains Mono" :size 19 :weight 'normal :width 'normal)
      ;; doom-variable-pitch-font (font-spec :family "Avenir Next" :size 21)
      doom-font (font-spec :family "Iosevka" :size 25 :weight 'normal)
-     doom-big-font (font-spec :family "Iosevka" :size 27))
+     doom-big-font (font-spec :family "Iosevka" :size 27)
+     doom-theme 'modus-operandi)
   (setq
    ;; doom-font (font-spec :family "monaco" :size 15 :weight 'normal)
    ;; doom-font (font-spec :family "JetBrains Mono" :size 19 :weight 'normal :width 'normal)
    ;; doom-variable-pitch-font (font-spec :family "Avenir Next" :size 21)
    doom-font (font-spec :family "Iosevka" :size 19 :weight 'normal)
-   doom-big-font (font-spec :family "Iosevka" :size 25)))
+   doom-big-font (font-spec :family "Iosevka" :size 25)
+   doom-theme 'doom-palenight))
 
 (setq
  mac-command-modifier 'meta
@@ -58,13 +60,6 @@
  evil-move-cursor-back nil
  display-line-numbers-type 'relative
  fancy-splash-image (expand-file-name "splash.png" doom-private-dir))
-
-(if (equal "Bens-MacBook-Pro.local" (system-name))
-    (setq doom-theme 'doom-palenight))
-(if (equal "ben" (system-name))
-    (setq doom-theme 'modus-vivendi))
-(if (equal "C02Z965QLVDQ" (system-name))
-    (setq doom-theme 'modus-operandi))
 
 (menu-bar-mode -1)
 (rainbow-mode)
