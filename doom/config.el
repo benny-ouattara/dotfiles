@@ -1002,3 +1002,14 @@ $stderr = File.open(\"err.txt\", \"w\")")
   (add-to-list 'default-frame-alist '(alpha-background . 90)))
 
 (global-org-modern-mode)
+
+(after! modus-themes
+  (setq modus-themes-syntax '(faint alt-syntax green-strings yellow-comments))
+  (setq modus-themes-italic-constructs nil
+        modus-themes-bold-constructs nil
+        modus-themes-variable-pitch-ui nil
+        modus-themes-mixed-fonts nil)
+
+  (setq modus-themes-prompts '(bold))
+  (setq modus-themes-completions nil)
+  (setq modus-themes-org-blocks 'gray-background))
