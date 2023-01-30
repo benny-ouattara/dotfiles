@@ -57,8 +57,14 @@
  evil-insert-state-cursor 'hbar
  evil-move-cursor-back nil
  display-line-numbers-type 'relative
- fancy-splash-image (expand-file-name "splash.png" doom-private-dir)
- doom-theme 'modus-operandi)
+ fancy-splash-image (expand-file-name "splash.png" doom-private-dir))
+
+(if (equal "Bens-MacBook-Pro.local" (system-name))
+    (setq doom-theme 'doom-palenight))
+(if (equal "ben" (system-name))
+    (setq doom-theme 'modus-vivendi))
+(if (equal "C02Z965QLVDQ" (system-name))
+    (setq doom-theme 'modus-operandi))
 
 (menu-bar-mode -1)
 (rainbow-mode)
