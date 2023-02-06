@@ -20,6 +20,6 @@ tags = +protonmail
 message = Personal protonmail
 
 [Filter.4]
-query = 'subject:fleetshift-bot'
-tags = -new
+query = 'subject:fleetshift-bot OR subject:"Use Spotify BOM version" OR subject:"Use Spotify root version" OR subject:"Update dependent library versions"'
+tags = -new;-unread
 message = Auto mark fleetshift bot emails
