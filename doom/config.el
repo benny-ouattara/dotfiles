@@ -300,7 +300,7 @@
        :desc "Package mvn project"  "p" (cmd! (beno--run-mvn-command "clean package"))
        :desc "Package mvn project - skip tests"  "P" (cmd! (beno--run-mvn-command "-Dmaven.test.skip=true clean package"))
        :desc "Test mvn project"  "t" (cmd! (beno--run-mvn-command "clean test"))
-       :desc "Integration test mvn project"  "i" (cmd! (beno--run-mvn-command "-Dtest=SomeNonExistingTestClass -DfailIfNoTests=false integration-test"))
+       :desc "Integration test mvn project"  "i" (cmd! (beno--run-mvn-command "clean integration-test"))
        :desc "Run test"  "T" (cmd! (beno--run-mvn-command (call-interactively #'beno--mvn-test-to-run)))))
 
 (setq
@@ -348,6 +348,20 @@
   (let ((old-env (getenv "JAVA_HOME"))
         (home-path (concat java-dir "/" chosen-jvm java-home-suffix)))
     (setenv "JAVA_HOME" home-path)))
+
+(after! dap-java
+  (add-hook 'dap-stopped-hook
+            (lambda (arg) (call-interactively #'dap-hydra)))
+
+  (dap-register-debug-template "Custom Runner"
+                               (list :type "java"
+                                     :request "launch"
+                                     :args ""
+                                     :vmArgs "-ea -Dmyapp.instance.name=myapp_1"
+                                     :projectName "sp"
+                                     :classPaths nil
+                                     :mainClass ""
+                                     :env '(("DEV" . "1")))))
 
 ;; TODO: refactor project creation logic in a =macro=
 (defun haikunate (token-range &optional prefix)
@@ -888,7 +902,10 @@ $stderr = File.open(\"err.txt\", \"w\")")
   (interactive
    (list  (ivy-read "Test to run: "
                     (beno--mvn-project-tests (beno--mvn-root-dir)))))
-  (format "clean -DfailIfNoTests=false -Dtest=%s test" test-name))
+  (if (s-contains? "Test.java" test-name) ;; surefire unit test
+      (format "clean -DfailIfNoTests=false -Dtest=%s test" test-name)
+    ;; failsafe integration test
+    (format "clean -DfailIfNoTests=false -Dit.test=%s verify" test-name)))
 
 (setq
  projectile-project-search-path '("~/Code/" "~/common-lisp" "~/Code/archives/Code"))
