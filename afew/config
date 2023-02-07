@@ -21,5 +21,5 @@ message = Personal protonmail
 
 [Filter.4]
 query = 'subject:fleetshift-bot OR subject:"Use Spotify BOM version" OR subject:"Use Spotify root version" OR subject:"Update dependent library versions"'
-tags = -new;-unread
+tags = -new;+fleetshift
 message = Auto mark fleetshift bot emails
