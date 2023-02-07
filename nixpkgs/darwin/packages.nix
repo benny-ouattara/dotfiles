@@ -2,6 +2,7 @@
 
 {
   all = [
+    pkgs.mcron
     # notmuch email
     pkgs.afew
     pkgs.notmuch

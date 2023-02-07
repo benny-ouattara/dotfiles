@@ -33,6 +33,15 @@ in
         };
       };
 
+      mcron = {
+        serviceConfig = {
+          RunAtLoad = true;
+          StandardErrorPath = log-dir + "/" + "mcron" + ".log";
+          StandardOutPath = log-dir + "/" + "mcron" + ".log";
+        };
+        command = "/run/current-system/sw/bin/mcron --daemon";
+      };
+
       # emacs = {
       #   serviceConfig = {
       #     RunAtLoad = true;
