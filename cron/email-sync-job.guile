@@ -1,1 +1,1 @@
-(job '(next-hour) "/run/current-system/sw/bin/mbsync -a && /run/current-system/sw/bin/notmuch new && /run/current-system/sw/bin/afew -a -t")
+(job '(next-minute (range 0 60 10)) "/run/current-system/sw/bin/mbsync -a && /run/current-system/sw/bin/notmuch new && /run/current-system/sw/bin/afew --tag --new")

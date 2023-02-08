@@ -2,7 +2,6 @@
 [KillThreadsFilter]
 [ListMailsFilter]
 [ArchiveSentMailsFilter]
-[InboxFilter]
 
 [Filter.1]
 query = 'zangao@spotify.com'
@@ -23,3 +22,5 @@ message = Personal protonmail
 query = 'subject:fleetshift-bot OR subject:"Use Spotify BOM version" OR subject:"Use Spotify root version" OR subject:"Update dependent library versions"'
 tags = -new;+fleetshift
 message = Auto mark fleetshift bot emails
+
+[InboxFilter]
