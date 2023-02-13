@@ -514,7 +514,7 @@ Beware using this command given that it's destructive and non reversible."
     (progn (setq
             mu-root (s-chop-suffixes '("/mu" "/bin") (file-truename  (executable-find "mu")))
             mu4e-path (concat mu-root "/share/emacs/site-lisp/mu4e")
-            mu4e-update-interval 60)
+            mu4e-update-interval 180)
            (add-to-list 'load-path mu4e-path)))
 
 (set-email-account! "Gmail"
