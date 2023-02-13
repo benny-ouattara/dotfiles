@@ -87,7 +87,7 @@
            ;;biblio            ; Writes a PhD for you (citation needed)
            (debugger +lsp)   ; FIXME stepping through code, to help you add bugs
            direnv
-           (hammer +spotify +container)
+           ;; (hammer +spotify +container)
            docker
            ;;editorconfig      ; let someone else argue about tabs vs spaces
            ;;ein               ; tame Jupyter notebooks with emacs
@@ -195,8 +195,8 @@
            ;;zig               ; C, but simpler
 
            :email
-           ;; (mu4e +org +gmail)
-           (notmuch +afew +org)
+           (mu4e +org +gmail)
+           ;; (notmuch +afew +org)
            ;;(wanderlust +gmail)
 
            ;; Applications are complex and opinionated modules that transform Emacs

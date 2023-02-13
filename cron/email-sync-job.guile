@@ -1,1 +1,1 @@
-(job '(next-minute (range 0 60 10)) "/run/current-system/sw/bin/mbsync -a && /run/current-system/sw/bin/notmuch new && /run/current-system/sw/bin/afew --tag --new")
+(job '(next-second (range 0 60 20)) "sh /Users/benouattara/test.sh")

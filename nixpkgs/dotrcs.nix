@@ -8,7 +8,7 @@
     # Address to connect to
     Host imap.gmail.com
     User zangao@spotify.com
-    PassCmd "pass Email/spotify-mu-app.com"
+    PassCmd "/run/current-system/sw/bin/pass Email/spotify-mu-app.com"
     AuthMechs LOGIN
     SSLType IMAPS
     # SSLVersions SSLv3 # SSLv3 is deprecated, use default
@@ -16,6 +16,8 @@
     # CertificateFile /etc/ssl/certs/ca-certificates.crt
     # CertificateFile ~/.config/certificates/gmail.crt
     # CertificateFile /usr/local/etc/openssl@1.1/cert.pem
+    # CertificateFile /usr/local/etc/ca-certificates/cert.pem
+    # CertificateFile /usr/local/etc/openssl/cert.pem
 
     # THEN WE SPECIFY THE LOCAL AND REMOTE STORAGE
     # - THE REMOTE STORAGE IS WHERE WE GET THE MAIL FROM (E.G., THE
@@ -80,10 +82,18 @@
     # Address to connect to
     Host imap.gmail.com
     User benny.ouattara@gmail.com
-    PassCmd "pass Email/gmail-mu-app.com"
+    PassCmd "/run/current-system/sw/bin/pass Email/gmail-mu-app.com"
     AuthMechs LOGIN
     SSLType IMAPS
     # SSLVersions SSLv3 # deprecated, use default
+    # ssl config for running mbsync as a launchd agent
+    # CertificateFile /etc/ssl/certs/ca-certificates.crt
+    # CertificateFile ~/.config/certificates/gmail.crt
+    # CertificateFile ~/Sync/certificates/gmail.crt
+    # CertificateFile /Users/benouattara/gmail.crt
+    # CertificateFile /usr/local/etc/openssl@1.1/cert.pem
+    # CertificateFile /usr/local/etc/ca-certificates/cert.pem
+    # CertificateFile /usr/local/etc/openssl/cert.pem
 
     IMAPStore gmail-remote
     Account gmail
@@ -117,7 +127,7 @@
     Port 1143
     User benny.ouattara@protonmail.com
     # PassCmd "gpg --quiet --decrypt ~/.mbsync-pw-mailbox.gpg"
-    PassCmd "pass Email/protonmail-mu-app.com"
+    PassCmd "/run/current-system/sw/bin/pass Email/protonmail-mu-app.com"
     SSLType NONE
     #SSLVersions SSLv3
     #SSLVersions SSLv3

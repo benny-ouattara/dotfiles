@@ -1437,8 +1437,8 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
            ;;zig               ; C, but simpler
 
            :email
-           ;; (mu4e +org +gmail)
-           (notmuch +afew +org)
+           (mu4e +org +gmail)
+           ;; (notmuch +afew +org)
            ;;(wanderlust +gmail)
 
            ;; Applications are complex and opinionated modules that transform Emacs
@@ -1657,8 +1657,8 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
            ;;zig               ; C, but simpler
 
            :email
-           ;; (mu4e +org +gmail)
-           (notmuch +afew +org)
+           (mu4e +org +gmail)
+           ;; (notmuch +afew +org)
            ;;(wanderlust +gmail)
 
            ;; Applications are complex and opinionated modules that transform Emacs
@@ -1877,8 +1877,8 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
            ;;zig               ; C, but simpler
 
            :email
-           ;; (mu4e +org +gmail)
-           (notmuch +afew +org)
+           (mu4e +org +gmail)
+           ;; (notmuch +afew +org)
            ;;(wanderlust +gmail)
 
            ;; Applications are complex and opinionated modules that transform Emacs
