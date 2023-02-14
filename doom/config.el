@@ -513,9 +513,11 @@ Beware using this command given that it's destructive and non reversible."
 (if (not (equal "ben" (user-login-name)))
     (progn (setq
             mu-root (s-chop-suffixes '("/mu" "/bin") (file-truename  (executable-find "mu")))
-            mu4e-path (concat mu-root "/share/emacs/site-lisp/mu4e")
-            mu4e-update-interval 180)
+            mu4e-path (concat mu-root "/share/emacs/site-lisp/mu4e"))
            (add-to-list 'load-path mu4e-path)))
+
+(after! mu4e
+  (setq mu4e-update-interval 180))
 
 (set-email-account! "Gmail"
                     '((mu4e-sent-folder       . "/gmail/sent")
@@ -854,7 +856,7 @@ $stderr = File.open(\"err.txt\", \"w\")")
 (pcase (user-login-name)
   ("zangao" (pushnew! auth-sources zangao-secrets))
   ("bouattara" (pushnew! auth-sources bouattara-secrets))
-  ("benny" (pushnew! auth-sources benny-secrets)))
+  ("benouattara" (pushnew! auth-sources benny-secrets)))
 
 (defun beno--read-db-password (db)
   (if-let ((result (auth-source-search :database db)))
