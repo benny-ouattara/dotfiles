@@ -104,7 +104,6 @@
  sync-dir "~/Sync/"
  org-directory (concat sync-dir "org")
  org-spotify-directory (concat org-directory "/spotify")
- org-mail-directory (concat org-directory "/mail.org")
  org-mime-export-options '(:section-numbers nil
                            :with-author nil
                            :with-toc nil)
@@ -116,16 +115,6 @@
  org-log-done 'time
  org-refile-targets (quote ((nil :maxlevel . 3)))
  +org-capture-todo-file "tasks.org")
-
-(after! org
-  (pushnew! org-capture-templates
-            '("m" "Email workflow")
-            '("mf" "Follow up" entry (file+olp org-mail-directory "Follow up")
-              "* TODO follow up with %:fromname on %a\n\n%i"
-              :immediate-finish t)
-            '("mr" "Read later" entry (file+olp org-mail-directory "Read later")
-              "* TODO read %:subject\n%a\n\n%i"
-              :immediate-finish t)))
 
 (setq-hook! org-mode
   prettify-symbols-alist '(("#+end_quote" . "”")
@@ -519,6 +508,8 @@ Beware using this command given that it's destructive and non reversible."
 (after! mu4e
   (setq mu4e-update-interval 180))
 
+(setq +org-capture-emails-file "tasks.org")
+
 (set-email-account! "Gmail"
                     '((mu4e-sent-folder       . "/gmail/sent")
                       (mu4e-drafts-folder     . "/gmail/drafts")
@@ -570,28 +561,6 @@ Beware using this command given that it's destructive and non reversible."
         (:name "Last 7 days" :query "date:7d..now" :hide-unread t :key 119)
         (:name "Messages with images" :query "mime:image/*" :key 112)
         (:name "Fragomen" :query "fragomen" :hide-unread t :key 102)))
-
-(defun beno--capture-mail-follow-up (msg)
-  (interactive)
-  (call-interactively 'org-store-link)
-  (org-capture nil "mf"))
-
-(defun beno--capture-mail-read-later (msg)
-  (interactive)
-  (call-interactively 'org-store-link)
-  (org-capture nil "mr"))
-
-;; store query link is convenient for capturing search query for use in org mail
-(defun beno--store-mu4e-query-link ()
-  (interactive)
-  (let ((mu4e-org-link-query-in-headers-mode t))
-    (call-interactively 'org-store-link)))
-
-(after! mu4e
-  (add-to-list 'mu4e-headers-actions '("follow up" . beno--capture-mail-follow-up) t)
-  (add-to-list 'mu4e-view-actions '("follow up" . beno--capture-mail-follow-up) t)
-  (add-to-list 'mu4e-headers-actions '("read later" . beno--capture-mail-read-later) t)
-  (add-to-list 'mu4e-view-actions '("read later" . beno--capture-mail-read-later) t))
 
 (after! (dired dired-single)
   (define-key dired-mode-map [remap dired-find-file]

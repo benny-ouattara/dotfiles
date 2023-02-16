@@ -140,7 +140,6 @@ Manages look and feel on tty frames i.e emacs in the terminal
  sync-dir "~/Sync/"
  org-directory (concat sync-dir "org")
  org-spotify-directory (concat org-directory "/spotify")
- org-mail-directory (concat org-directory "/mail.org")
  org-mime-export-options '(:section-numbers nil
                            :with-author nil
                            :with-toc nil)
@@ -152,19 +151,6 @@ Manages look and feel on tty frames i.e emacs in the terminal
  org-log-done 'time
  org-refile-targets (quote ((nil :maxlevel . 3)))
  +org-capture-todo-file "tasks.org")
-#+end_src
-
-** org capture templates
-#+begin_src emacs-lisp
-(after! org
-  (pushnew! org-capture-templates
-            '("m" "Email workflow")
-            '("mf" "Follow up" entry (file+olp org-mail-directory "Follow up")
-              "* TODO follow up with %:fromname on %a\n\n%i"
-              :immediate-finish t)
-            '("mr" "Read later" entry (file+olp org-mail-directory "Read later")
-              "* TODO read %:subject\n%a\n\n%i"
-              :immediate-finish t)))
 #+end_src
 
 ** prettify block names
@@ -651,6 +637,11 @@ Beware using this command given that it's destructive and non reversible."
   (setq mu4e-update-interval 180))
 #+end_src
 
+** mu4e capture target
+#+begin_src emacs-lisp
+(setq +org-capture-emails-file "tasks.org")
+#+end_src
+
 ** accounts
 #+begin_src emacs-lisp
 (set-email-account! "Gmail"
@@ -711,29 +702,7 @@ Beware using this command given that it's destructive and non reversible."
 
 ** mail management
 Quickly take actions such as read later or follow up on emails
-#+begin_src emacs-lisp
-(defun beno--capture-mail-follow-up (msg)
-  (interactive)
-  (call-interactively 'org-store-link)
-  (org-capture nil "mf"))
-
-(defun beno--capture-mail-read-later (msg)
-  (interactive)
-  (call-interactively 'org-store-link)
-  (org-capture nil "mr"))
-
-;; store query link is convenient for capturing search query for use in org mail
-(defun beno--store-mu4e-query-link ()
-  (interactive)
-  (let ((mu4e-org-link-query-in-headers-mode t))
-    (call-interactively 'org-store-link)))
-
-(after! mu4e
-  (add-to-list 'mu4e-headers-actions '("follow up" . beno--capture-mail-follow-up) t)
-  (add-to-list 'mu4e-view-actions '("follow up" . beno--capture-mail-follow-up) t)
-  (add-to-list 'mu4e-headers-actions '("read later" . beno--capture-mail-read-later) t)
-  (add-to-list 'mu4e-view-actions '("read later" . beno--capture-mail-read-later) t))
-#+end_src
+This has been superseded by ~+mu4e/capture-msg-to-agenda~ which adds the =msg= as task in the global ~tasks.org~ which is registered with org agenda
 
 * dired
 ** dired single
