@@ -507,6 +507,7 @@ Beware using this command given that it's destructive and non reversible."
 
 (after! mu4e
   (setq mu4e-update-interval 180))
+(setq +mu4e-workspace-name "*mail*")
 
 (setq +org-capture-emails-file "tasks.org")
 
@@ -879,7 +880,7 @@ $stderr = File.open(\"err.txt\", \"w\")")
     (format "clean -DfailIfNoTests=false -Dit.test=%s verify" test-name)))
 
 (setq
- projectile-project-search-path '("~/Code/" "~/common-lisp" "~/Code/archives/Code"))
+ projectile-project-search-path '(("~/Code/" . 1) ("~/common-lisp" . 1) ("~/Code/archives/Code" . 1)))
 
 (after! projectile
   (setq projectile-project-root-files-bottom-up

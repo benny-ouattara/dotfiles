@@ -635,6 +635,7 @@ Beware using this command given that it's destructive and non reversible."
 
 (after! mu4e
   (setq mu4e-update-interval 180))
+(setq +mu4e-workspace-name "*mail*")
 #+end_src
 
 ** mu4e capture target
@@ -1075,7 +1076,7 @@ Use ~comint~ and ~compile~ to ease project compilation
 ** variable
 #+begin_src emacs-lisp
 (setq
- projectile-project-search-path '("~/Code/" "~/common-lisp" "~/Code/archives/Code"))
+ projectile-project-search-path '(("~/Code/" . 1) ("~/common-lisp" . 1) ("~/Code/archives/Code" . 1)))
 #+end_src
 
 ** java .project conflict
