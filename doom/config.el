@@ -931,6 +931,8 @@ $stderr = File.open(\"err.txt\", \"w\")")
 
 (add-to-list 'default-frame-alist '(undecorated . t))
 
+(after! elfeed
+  (setq elfeed-search-filter "@2-weeks-ago +unread"))
 (add-hook 'elfeed-search-mode-hook #'elfeed-update)
 
 (with-eval-after-load 'geiser-guile
