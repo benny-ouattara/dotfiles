@@ -43,14 +43,14 @@
      ;; doom-variable-pitch-font (font-spec :family "Avenir Next" :size 21)
      doom-font (font-spec :family "Iosevka" :size 21 :weight 'normal)
      doom-big-font (font-spec :family "Iosevka" :size 27)
-     doom-theme 'modus-operandi)
+     doom-theme 'modus-operandi-tinted)
   (setq
    ;; doom-font (font-spec :family "monaco" :size 15 :weight 'normal)
    ;; doom-font (font-spec :family "JetBrains Mono" :size 19 :weight 'normal :width 'normal)
    ;; doom-variable-pitch-font (font-spec :family "Avenir Next" :size 21)
    doom-font (font-spec :family "Iosevka" :size 19 :weight 'normal)
    doom-big-font (font-spec :family "Iosevka" :size 25)
-   doom-theme 'doom-palenight))
+   doom-theme 'modus-operandi-tinted))
 
 (setq
  mac-command-modifier 'meta
@@ -905,13 +905,14 @@ $stderr = File.open(\"err.txt\", \"w\")")
 (if (> (display-pixel-width) 3000)
     ;; large display
     (progn
-      (set-popup-rule! +main-eshell-popup+ :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
-      (set-popup-rule! "*SQL:" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
-      (set-popup-rule! "^\\*compilation.*" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
-      (set-popup-rule! "^\\*Org Agenda\\*" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
-      (set-popup-rule! "[0-9]+-[0-9]+-[0-9]+.org" :size 0.33 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
+      (set-popup-rule! +main-eshell-popup+ :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
+      (set-popup-rule! "*SQL:" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
+      (set-popup-rule! "^\\*compilation.*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
+      (set-popup-rule! "^\\*helpful.*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
+      (set-popup-rule! "^\\*Org Agenda\\*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
+      (set-popup-rule! "[0-9]+-[0-9]+-[0-9]+.org" :size 0.40 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
       (set-popup-rule! "journal.org" :size 0.25 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
-      (set-popup-rule! "^[0-9]\\{8\\}$" :size 0.33 :vslot -4 :select t :quit 'other :ttl nil :side 'right :autosave t)
+      (set-popup-rule! "^[0-9]\\{8\\}$" :size 0.40 :vslot -4 :select t :quit 'other :ttl nil :side 'right :autosave t)
       (set-popup-rule! "*kubel" :size 0.50 :vslot -4 :select t :quit nil :ttl t :side 'right))
   ;; small display
   (progn
