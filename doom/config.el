@@ -851,6 +851,8 @@ $stderr = File.open(\"err.txt\", \"w\")")
                            (sql-port 5432)))
    sql-postgres-login-params '(user password database server)))
 
+(compilation-set-skip-threshold 2) ;; skip warning an info
+
 (defun beno--mvn-root-dir ()
   (or (locate-dominating-file buffer-file-name ".git")
       (projectile-project-root)))
@@ -908,7 +910,8 @@ $stderr = File.open(\"err.txt\", \"w\")")
       (set-popup-rule! +main-eshell-popup+ :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
       (set-popup-rule! "*SQL:" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
       (set-popup-rule! "^\\*compilation.*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
-      (set-popup-rule! "^\\*helpful.*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
+      (set-popup-rule! "^\\*Shell Command.*" :size 0.40 :vslot -4 :select t :quit t :ttl t :side 'right)
+      (set-popup-rule! "^\\*helpful.*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right :select nil)
       (set-popup-rule! "^\\*Org Agenda\\*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
       (set-popup-rule! "[0-9]+-[0-9]+-[0-9]+.org" :size 0.40 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
       (set-popup-rule! "journal.org" :size 0.25 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
