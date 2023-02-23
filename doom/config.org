@@ -1044,7 +1044,8 @@ some doom themes don't deal well with wgrep faces, this is a sensible default
 Use ~comint~ and ~compile~ to ease project compilation
 ** compilation variables
 #+begin_src emacs-lisp
-(compilation-set-skip-threshold 2) ;; skip warning an info
+(after! compile
+  (compilation-set-skip-threshold 2)) ;; skip warning an info
 #+end_src
 
 ** compilation with mvn

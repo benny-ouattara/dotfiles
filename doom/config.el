@@ -851,7 +851,8 @@ $stderr = File.open(\"err.txt\", \"w\")")
                            (sql-port 5432)))
    sql-postgres-login-params '(user password database server)))
 
-(compilation-set-skip-threshold 2) ;; skip warning an info
+(after! compile
+  (compilation-set-skip-threshold 2)) ;; skip warning an info
 
 (defun beno--mvn-root-dir ()
   (or (locate-dominating-file buffer-file-name ".git")
