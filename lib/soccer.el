@@ -214,8 +214,12 @@ Filename is a symbol representing the file."
 Assumes that response is json formatted, tries to read body with (json-read)"
   (let* ((url-request-method "GET")
         (url-user-agent (format "%s Agent" user-full-name))
-        ;; TODO: obfuscate the API key in authsecrets
-        (url-request-extra-headers '(("X-Rapidapi-Host" . "api-football-v1.p.rapidapi.com")))
+        (url-request-extra-headers `(("X-Rapidapi-Key" .
+                                      ,(funcall
+                                        (plist-get (car
+                                                    (auth-source-search :host "api.football.com"))
+                                                   :secret)))
+                                     ("X-Rapidapi-Host" . "api-football-v1.p.rapidapi.com")))
         (response-buffer (url-retrieve-synchronously url 'silent 'inhibit-cookies)))
     (with-current-buffer (get-buffer-create "*api-call*")
       (insert (format "===================API CALL: %s===================" url))
@@ -348,6 +352,7 @@ Assumes that response is json formatted, tries to read body with (json-read)"
                                   (soccer-fixture-round fixture)))
             tabulated-list-entries))))
 
+;; (soccer-fetch-fixtures 39)
 ;; (soccer-fixtures--refresh 39)
 
 (define-derived-mode soccer-fixture-mode tabulated-list-mode "SoccerFixture"
