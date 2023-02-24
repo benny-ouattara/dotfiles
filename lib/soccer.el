@@ -384,7 +384,7 @@ The number of fixtures is capped by `soccer-fixtures-limit'."
 ;;;###autoload
 (define-derived-mode soccer-team-mode tabulated-list-mode "SoccerTeam"
   "Mode to view teams within a league."
-  (setq tabulated-list-format (vector '("Name" 15 t)
+  (setq tabulated-list-format (vector '("Name" 25 t)
                                       '("Code" 15 t)
                                       '("Country" 15 t)
                                       '("Founded" 0 t)))
@@ -421,13 +421,13 @@ The fixtures are sorted in ascending order of schedule."
                                (soccer-fixture-timestamp y)))
                          (soccer-fetch-fixtures team-id))))
     (dolist (fixture fixtures)
-      (push (list fixture (vector (soccer-fixture-league fixture)
+      (push (list fixture (vector (s-truncate 15 (soccer-fixture-league fixture))
                                   (format-time-string "%a, %b %d" (soccer-fixture-timestamp fixture))
                                   (format-time-string "%I:%M %p" (soccer-fixture-timestamp fixture))
-                                  (soccer-fixture-venue fixture)
-                                  (soccer-fixture-home fixture)
-                                  (soccer-fixture-away fixture)
-                                  (soccer-fixture-status fixture)
+                                  (s-truncate 12 (soccer-fixture-venue fixture))
+                                  (s-truncate 12 (soccer-fixture-home fixture))
+                                  (s-truncate 12 (soccer-fixture-away fixture))
+                                  (s-truncate 17 (soccer-fixture-status fixture))
                                   (soccer-fixture-round fixture)))
             tabulated-list-entries))))
 
@@ -464,6 +464,5 @@ Known teams are teams whose leagues have been viewed before and in the database.
 
 ;; (list-soccer-fixtures 798)
 
-;; id name code country founded logo
 (provide 'soccer)
 ;;; soccer.el ends here
