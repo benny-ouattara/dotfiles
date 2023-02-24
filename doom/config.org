@@ -1122,6 +1122,7 @@ commands run at the project level
     (progn
       (set-popup-rule! +main-eshell-popup+ :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
       (set-popup-rule! "*SQL:" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
+      (set-popup-rule! "^\\*com.spotify.*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
       (set-popup-rule! "^\\*compilation.*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
       (set-popup-rule! "^\\*Shell Command.*" :size 0.40 :vslot -4 :select t :quit t :ttl t :side 'right)
       (set-popup-rule! "^\\*helpful.*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right :select nil)
