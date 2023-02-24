@@ -307,6 +307,19 @@ Logs the full API response if `soccer-debug' is non nil."
       (insert content)
       (newline))))
 
+(defun soccer--known-teams ()
+  "Return a list of known teams.
+Known teams are teams present in the local database
+which means that their leagues have been accessed at some point."
+  (let* ((sources (soccer-cache-sources))
+         (raw-teams (alist-get 'teams sources))
+         (teams (car-safe (cl-loop for raw-team in raw-teams
+                       collect (cl-destructuring-bind (id . filename) raw-team
+                                 (soccer-parse-teams (soccer-load-file filename)))))))
+    (cl-loop for team in teams
+             collect (cons (soccer-team-name team)
+                           (soccer-team-id team)))))
+
 (defun soccer-leagues-visit-teams (button)
   "Action when a league is selected from the table.
 Show all the teams that play in that league for that season."
@@ -391,6 +404,7 @@ The number of fixtures is capped by `soccer-fixtures-limit'."
   ;; (add-hook 'tabulated-list-revert-hook 'soccer-teams--refresh nil t)
   (tabulated-list-init-header))
 
+;;;###autoload
 (defun list-soccer-teams (league-id &optional buff)
   "Entry point to list all soccer teams playing in LEAGUE-ID.
 It reads the desired league from the minibuffer if none is provided."
@@ -449,13 +463,16 @@ The fixtures are sorted in ascending order of schedule."
   ;; (setq tabulated-list-sort-key (cons "Time" t))
   (tabulated-list-init-header))
 
+;;;###autoload
 (defun list-soccer-fixtures (team-id &optional buff)
-  "Entry point to list upcoming fixtures of a team identified by TEAM-ID.
-
-There is no way to select a specific team for now, interactive support for known needs to be added.
-Known teams are teams whose leagues have been viewed before and in the database."
+  "Entry point to list upcoming fixtures of a team identified by TEAM-ID."
+  (interactive (list (let* ((teams (soccer--known-teams))
+                            (team-name  (completing-read "Team: "
+                                                         (mapcar #'car teams))))
+                       (cdr (assoc team-name teams)))))
   (unless buff
     (setq buff (get-buffer-create soccer-fixtures-buffer)))
+  (message "team-id: %d" team-id)
   (with-current-buffer soccer-fixtures-buffer
     (soccer-fixture-mode)
     (soccer-fixtures--refresh team-id)
