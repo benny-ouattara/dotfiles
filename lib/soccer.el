@@ -65,6 +65,9 @@
 (defvar soccer-fixtures-buffer "*Soccer Fixtures*"
   "Fixtures buffer name.")
 
+(defvar soccer-favorite-fixtures-buffer "*Soccer Favorites*"
+  "Favorite fixtures buffer name.")
+
 (defvar soccer-local-cache-path (concat doom-cache-dir (concat "soccer" "/" (int-to-string soccer-season)))
   "Soccer db path prefixed by season.")
 
@@ -526,7 +529,7 @@ The fixtures are sorted in ascending order of schedule."
   (interactive (list (let* ((teams (soccer--fetch-teams-all))
                             (team-name  (completing-read "Team: "
                                                          (-map #'car teams))))
-                       (cdr (assoc team-name teams)))))
+                       (soccer-team-id (cdr (assoc team-name teams))))))
   (unless buff
     (setq buff (get-buffer-create soccer-fixtures-buffer)))
   (with-current-buffer soccer-fixtures-buffer
@@ -616,7 +619,6 @@ Load alist from local database at `soccer-local-cache-leagues-path/followed.data
 (defun soccer--fetch-favorite-fixtures (limit)
   "Fetch upcoming fixtures for teams defined in `soccer-followed-teams'.
 If non nil, gets up to LIMIT fixtures per team, otherwise gets only one upcoming fixture."
-  (setq limit 2)
   (let ((result))
     (dolist (raw-team (soccer--followed-teams) result)
       (let* ((team (cdr raw-team))
@@ -667,6 +669,48 @@ These are considered as favorite teams and their next fixtures can be queried."
       (push indexed-team current-teams)
       (soccer--write-to soccer-local-cache-teams-followed-path
                         current-teams))))
+
+(defun soccer-favorite-fixtures--refresh (limit)
+  "Populate table entries with upcoming fixtures for `followed' teams."
+  (setq tabulated-list-entries nil)
+  (let ((fixtures (soccer--fetch-favorite-fixtures limit)))
+    (dolist (fixture fixtures)
+      (push (list fixture (vector (s-truncate 15 (soccer-fixture-league fixture))
+                                  (format-time-string "%a, %b %d" (soccer-fixture-timestamp fixture))
+                                  (format-time-string "%I:%M %p" (soccer-fixture-timestamp fixture))
+                                  (s-truncate 12 (soccer-fixture-venue fixture))
+                                  (s-truncate 12 (soccer-fixture-home fixture))
+                                  (s-truncate 12 (soccer-fixture-away fixture))
+                                  (s-truncate 17 (soccer-fixture-status fixture))
+                                  (soccer-fixture-round fixture)))
+            tabulated-list-entries))))
+
+;;;###autoload
+(define-derived-mode soccer-favorite-fixture-mode tabulated-list-mode "SoccerFavorite"
+  "Mode to view upcoming fixtures of favorite teams."
+  (setq tabulated-list-format (vector '("League" 15 t)
+                                      '("Date" 15 t)
+                                      '("Time" 10 t)
+                                      '("Venue" 15 t)
+                                      '("Home" 15 t)
+                                      '("Away" 15 t)
+                                      '("Status" 20 t)
+                                      '("Round" 0 t)))
+  ;; (add-hook 'tabulated-list-revert-hook 'soccer-teams--refresh nil t)
+  ;; (setq tabulated-list-sort-key (cons "Time" t))
+  (tabulated-list-init-header))
+
+;;;###autoload
+(defun list-soccer-favorite-fixtures (&optional buff)
+  "Entry point to list upcoming fixtures for `followed' teams."
+  (interactive)
+  (unless buff
+    (setq buff (get-buffer-create soccer-favorite-fixtures-buffer)))
+  (with-current-buffer soccer-favorite-fixtures-buffer
+    (soccer-favorite-fixture-mode)
+    (soccer-favorite-fixtures--refresh 3)
+    (tabulated-list-print))
+  (display-buffer soccer-favorite-fixtures-buffer))
 
 (provide 'soccer)
 ;;; soccer.el ends here
