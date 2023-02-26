@@ -39,13 +39,16 @@
   "API calls header template.")
 
 ;; NOTE: to get the league id and name, checkout out this endpoint GET /v3/leagues
-(defvar leagues '((:name "Premier League" :id 39)
-                  (:name "Primera Division" :id 140)
-                  (:name "Ligue 1" :id 61))
-  "The leagues that can be explored.")
+;; (defvar leagues '((:name "Premier League" :id 39)
+;;                   (:name "Primera Division" :id 140)
+;;                   (:name "Ligue 1" :id 61))
+;;   "The leagues that can be explored.")
 
 (defvar soccer-fixtures-limit 25
   "Max number of upcoming fixtures to fetch.")
+
+(defvar soccer-favorite-fixtures-limit 5
+  "Max number of upcoming favorite fixtures to fetch.")
 
 (defvar soccer-team-fixtures-url-template "/v3/fixtures?season=%s&team=%d&timezone=%s&next=%d"
   "Fixtures URL path template")
@@ -678,9 +681,9 @@ These are considered as favorite teams and their next fixtures can be queried."
       (push (list fixture (vector (s-truncate 15 (soccer-fixture-league fixture))
                                   (format-time-string "%a, %b %d" (soccer-fixture-timestamp fixture))
                                   (format-time-string "%I:%M %p" (soccer-fixture-timestamp fixture))
-                                  (s-truncate 12 (soccer-fixture-venue fixture))
-                                  (s-truncate 12 (soccer-fixture-home fixture))
-                                  (s-truncate 12 (soccer-fixture-away fixture))
+                                  ;; (s-truncate 12 (soccer-fixture-venue fixture))
+                                  (s-truncate 22 (soccer-fixture-home fixture))
+                                  (s-truncate 22 (soccer-fixture-away fixture))
                                   (s-truncate 17 (soccer-fixture-status fixture))
                                   (soccer-fixture-round fixture)))
             tabulated-list-entries))))
@@ -691,9 +694,9 @@ These are considered as favorite teams and their next fixtures can be queried."
   (setq tabulated-list-format (vector '("League" 15 t)
                                       '("Date" 15 t)
                                       '("Time" 10 t)
-                                      '("Venue" 15 t)
-                                      '("Home" 15 t)
-                                      '("Away" 15 t)
+                                      ;; '("Venue" 15 t)
+                                      '("Home" 22 t)
+                                      '("Away" 22 t)
                                       '("Status" 20 t)
                                       '("Round" 0 t)))
   ;; (add-hook 'tabulated-list-revert-hook 'soccer-teams--refresh nil t)
@@ -701,14 +704,15 @@ These are considered as favorite teams and their next fixtures can be queried."
   (tabulated-list-init-header))
 
 ;;;###autoload
-(defun list-soccer-favorite-fixtures (&optional buff)
+(defun list-soccer-favorite-fixtures (limit &optional buff)
   "Entry point to list upcoming fixtures for `followed' teams."
-  (interactive)
+  (interactive "p")
   (unless buff
     (setq buff (get-buffer-create soccer-favorite-fixtures-buffer)))
   (with-current-buffer soccer-favorite-fixtures-buffer
     (soccer-favorite-fixture-mode)
-    (soccer-favorite-fixtures--refresh 3)
+    (soccer-favorite-fixtures--refresh (or limit
+                                           soccer-favorite-fixtures-limit))
     (tabulated-list-print))
   (display-buffer soccer-favorite-fixtures-buffer))
 
