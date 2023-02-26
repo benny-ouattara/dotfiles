@@ -257,9 +257,11 @@ It creates the base databse directory if it doesn't exist alongside its subdirec
 The content of FILENAME is expected to be an alist of soccer API response.
 It makes sure to return a list and not a vector."
   (when (file-exists-p filename)
-    (let ((raw (with-current-buffer (find-file-noselect filename)
-                 (goto-char (point-min))
-                 (read (buffer-string)))))
+    (let* ((buff (find-file-noselect filename))
+           (raw (with-current-buffer buff
+                       (goto-char (point-min))
+                       (read (buffer-string)))))
+      (kill-buffer buff)
       raw)))
 
 (defun soccer-fetch-url (url)
