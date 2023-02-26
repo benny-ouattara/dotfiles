@@ -65,14 +65,47 @@
 (defvar soccer-fixtures-buffer "*Soccer Fixtures*"
   "Fixtures buffer name.")
 
-(defvar soccer-local-cache-path (concat doom-cache-dir "soccer")
-  "Soccer db path.")
+(defvar soccer-local-cache-path (concat doom-cache-dir (concat "soccer" "/" (int-to-string soccer-season)))
+  "Soccer db path prefixed by season.")
 
 (defconst soccer-local-cache-leagues-path (concat soccer-local-cache-path "/leagues")
   "Leagues db path.")
 
 (defconst soccer-local-cache-teams-path (concat soccer-local-cache-path "/teams")
   "Teams db path.")
+
+(defvar soccer-leagues-list-url (concat soccer-base-url "/v3/leagues")
+  "Endpoint for all leagues worldwide.")
+
+(defvar soccer-local-cache-leagues-all-path (concat soccer-local-cache-leagues-path
+                                                    "/all.data")
+  "Absolute path where all leagues are stored.")
+
+(defun soccer-local-cache-teams-all-path (league-id)
+  "Determines absolute path where all teams belonging to LEAGUE-ID are stored."
+  (concat soccer-local-cache-teams-path
+          "/"
+          (int-to-string league-id)
+          "-all.data"))
+
+(defvar soccer-local-cache-leagues-followed-path (concat soccer-local-cache-leagues-path
+                                                         "/followed.data")
+  "Absolute path where followed leagues are stored.")
+
+(defvar soccer-local-cache-teams-followed-path (concat soccer-local-cache-teams-path
+                                                         "/followed.data")
+  "Absolute path where followed teams are stored.")
+
+(defvar soccer-league-name-delimiter " - "
+  "Delimiter between league name and league country.")
+
+(defvar soccer-league-download-message
+  "No leagues found locally, downloading will take a while. Would you like to proceed?"
+  "Prompt to get user consent for download.")
+
+(defvar soccer-downloaded-leagues-path (concat soccer-local-cache-teams-path
+                                               "/downloaded-leagues.data")
+  "Absolute path where already downloaded leagues's teams are stored.")
 
 ;; models
 (cl-defstruct (soccer-team (:constructor soccer-team--create))
@@ -107,39 +140,53 @@
                                   soccer-tz
                                   soccer-fixtures-limit)))
 
+(defun soccer-league-filename (league-id)
+  "Determine specific league absolute path."
+  (concat soccer-local-cache-leagues-path
+          "/"
+          (int-to-string league-id)
+          ".data"))
+
+(defun soccer-team-filename (team-id)
+  "Determine specific team absolute path."
+  (concat soccer-local-cache-teams-path
+          "/"
+          (int-to-string team-id)
+          ".data"))
+
 ;; leagues
-(defun soccer-parse-league (payload)
-  "Parse a league PAYLOAD that is an alist of the API response into a soccer league."
-  (let ((raw-leagues (append (alist-get 'response payload) nil)))
-    (cl-loop for raw-league in raw-leagues
-             collect (let* ((league (alist-get 'league raw-league))
-                            (id (alist-get 'id league))
-                            (name (alist-get 'name league))
-                            (type (alist-get 'type league))
-                            (logo (alist-get 'logo league))
-                            (country (alist-get 'name (alist-get 'country raw-league))))
-                       (soccer-league--create :id id
-                                              :name name
-                                              :type type
-                                              :logo logo
-                                              :country country)))))
+;; (defun soccer-parse-league (payload)
+;;   "Parse a league PAYLOAD that is an alist of the API response into a soccer league."
+;;   (let ((raw-leagues (append (alist-get 'response payload) nil)))
+;;     (cl-loop for raw-league in raw-leagues
+;;              collect (let* ((league (alist-get 'league raw-league))
+;;                             (id (alist-get 'id league))
+;;                             (name (alist-get 'name league))
+;;                             (type (alist-get 'type league))
+;;                             (logo (alist-get 'logo league))
+;;                             (country (alist-get 'name (alist-get 'country raw-league))))
+;;                        (soccer-league--create :id id
+;;                                               :name name
+;;                                               :type type
+;;                                               :logo logo
+;;                                               :country country)))))
 
-(defun soccer-fetch-league (league-id)
-  "Given a LEAGUE-ID integer, retrieves the league from the cache or from remote."
-  (let* ((league-url (soccer-leagues-url league-id))
-         (payload    (if-let ((cached (soccer-cache-get league-id
-                                                        :resource-type 'leagues)))
-                         cached
-                       (log "cache miss, consuming request quota")
-                       (soccer-cache-set league-id
-                                         (soccer-fetch-url league-url)
-                                         :resource-type 'leagues))))
-    (car (soccer-parse-league payload))))
+;; (defun soccer-fetch-league (league-id)
+;;   "Given a LEAGUE-ID integer, retrieves the league from the cache or from remote."
+;;   (let* ((league-url (soccer-leagues-url league-id))
+;;          (payload    (if-let ((cached (soccer-cache-get league-id
+;;                                                         :resource-type 'leagues)))
+;;                          cached
+;;                        (log "cache miss, consuming request quota")
+;;                        (soccer-cache-set league-id
+;;                                          (soccer-fetch-url league-url)
+;;                                          :resource-type 'leagues))))
+;;     (car (soccer-parse-league payload))))
 
-(defun soccer-fetch-leagues ()
-  "Fetch all the predefined leagues."
-  (cl-loop for league in leagues
-           collect (soccer-fetch-league (plist-get league :id))))
+;; (defun soccer-fetch-leagues ()
+;;   "Fetch all the predefined leagues."
+;;   (cl-loop for league in leagues
+;;            collect (soccer-fetch-league (plist-get league :id))))
 
 ;; (soccer-fetch-url (soccer-leagues-url 39))
 ;; (soccer-fetch-league 39)
@@ -159,15 +206,27 @@
                                             :logo (alist-get 'logo team))))))
 
 (defun soccer-fetch-teams (league-id)
-  "Fetch all the teams in a LEAGUE-ID."
+  "Fetch all the teams in a LEAGUE-ID.
+Return an alist of (TEAM-NAME . TEAM)."
   (if-let* ((url (soccer-teams-url league-id))
-            (cached (soccer-cache-get league-id
-                                      :resource-type 'teams)))
-      (soccer-parse-teams cached)
+            (path (soccer-local-cache-teams-all-path league-id))
+            (cached (file-exists-p path)))
+      (soccer-load-file path)
     (log (format "team cache miss for league %d, remote call made" league-id))
-    (soccer-parse-teams (soccer-cache-set league-id
-                                          (soccer-fetch-url url)
-                                          :resource-type 'teams))))
+    (let* ((teams  (soccer-parse-teams (soccer-fetch-url url)))
+           (pairs (-map (lambda (team)
+                                (cons (soccer-team-name team)
+                                      team))
+                              teams)))
+      (soccer--write-to (soccer-local-cache-teams-all-path league-id)
+                        pairs)
+      (dolist (team teams)
+        (soccer--write-to (soccer-team-filename (soccer-team-id team))
+                          (cons (soccer-team-name team)
+                                team)))
+      pairs)))
+
+;; (soccer-fetch-teams 314)
 
 (defun soccer-fetch-fixtures (team-id)
   "Fetch upcoming fixtures of TEAM-ID.
@@ -195,44 +254,44 @@ We want to always see the latest and greatest in fixture details."
                                                :home home
                                                :away away)))))
 
-(cl-defun soccer-cache-get (id &key resource-type)
-  "Return cache result for RESOURCE-TYPE.
+;; (cl-defun soccer-cache-get (id &key resource-type)
+;;   "Return cache result for RESOURCE-TYPE.
 
-RESOURCE-TYPE can be one of 'leagues or 'teams.
-ID must be an integer that identifies the resource when it was stored in the database.
-The returned value is the original response alist as it was written when the API call was made."
-  (let* ((sources (soccer-cache-sources))
-        (stored-leagues (alist-get 'leagues sources))
-        (stored-teams (alist-get 'teams sources)))
-    (pcase resource-type
-      ('leagues
-       (when-let ((raw  (alist-get id stored-leagues)))
-         (soccer-load-file raw)))
-      ('teams
-       (when-let ((raw (alist-get id stored-teams)))
-         (soccer-load-file raw))))))
+;; RESOURCE-TYPE can be one of 'leagues or 'teams.
+;; ID must be an integer that identifies the resource when it was stored in the database.
+;; The returned value is the original response alist as it was written when the API call was made."
+;;   (let* ((sources (soccer-cache-sources))
+;;         (stored-leagues (alist-get 'leagues sources))
+;;         (stored-teams (alist-get 'teams sources)))
+;;     (pcase resource-type
+;;       ('leagues
+;;        (when-let ((raw  (alist-get id stored-leagues)))
+;;          (soccer-load-file raw)))
+;;       ('teams
+;;        (when-let ((raw (alist-get id stored-teams)))
+;;          (soccer-load-file raw))))))
 
-(cl-defun soccer-cache-set (id payload &key resource-type)
-  "Set cache for RESOURCE-TYPE with ID and returns the cached PAYLOAD.
+;; (cl-defun soccer-cache-set (id payload &key resource-type)
+;;   "Set cache for RESOURCE-TYPE with ID and returns the cached PAYLOAD.
 
-RESOURCE-TYPE can be one of 'leagues or 'teams.
-ID must be an integer that uniquely identifies the resource being written.
-The PAYLOAD is returned after the write is completed."
-  (pcase resource-type
-    ('leagues
-     (soccer--write-to (concat soccer-local-cache-leagues-path
-                               "/"
-                               (number-to-string id)
-                               ".data")
-                       payload)
-     payload)
-    ('teams
-     (soccer--write-to (concat soccer-local-cache-teams-path
-                               "/"
-                               (number-to-string id)
-                               ".data")
-                       payload)
-     payload)))
+;; RESOURCE-TYPE can be one of 'leagues or 'teams.
+;; ID must be an integer that uniquely identifies the resource being written.
+;; The PAYLOAD is returned after the write is completed."
+;;   (pcase resource-type
+;;     ('leagues
+;;      (soccer--write-to (concat soccer-local-cache-leagues-path
+;;                                "/"
+;;                                (number-to-string id)
+;;                                ".data")
+;;                        payload)
+;;      payload)
+;;     ('teams
+;;      (soccer--write-to (concat soccer-local-cache-teams-path
+;;                                "/"
+;;                                (number-to-string id)
+;;                                ".data")
+;;                        payload)
+;;      payload)))
 
 (defun soccer--write-to (filepath content)
   "Write CONTENT to FILEPATH.
@@ -248,6 +307,8 @@ CONTENT can be any elisp object."
 
 DIRPATH is a directory that stores `.data' extended files which contain alist of soccer API responses.
 It returns a list of (FILENAME<.data> . ABSOLUTE-FILEPATH) found at DIRPATH."
+  (unless (file-directory-p dirpath)
+    (mkdir dirpath t))
   (mapcar (lambda (filepath)
             (cons (string-to-number (downcase (file-name-base filepath)))
                   filepath))
@@ -260,10 +321,10 @@ It returns a list of (FILENAME<.data> . ABSOLUTE-FILEPATH) found at DIRPATH."
 fILEPATH contains a soccer endpoint API response.
 FILENAME is a symbol representing the file.
 It creates the base databse directory if it doesn't exist alongside its subdirectories."
-  (unless  (file-directory-p soccer-local-cache-path)
-    (mkdir soccer-local-cache-path)
-    (mkdir soccer-local-cache-leagues-path)
-    (mkdir soccer-local-cache-teams-path))
+  ;; (unless  (file-directory-p soccer-local-cache-path)
+  ;;   (mkdir soccer-local-cache-path)
+  ;;   (mkdir soccer-local-cache-leagues-path)
+  ;;   (mkdir soccer-local-cache-teams-path))
   (let* ((leagues-raw (soccer-cache-source soccer-local-cache-leagues-path))
          (teams-raw (soccer-cache-source soccer-local-cache-teams-path)))
     `((leagues . ,leagues-raw) (teams . ,teams-raw))))
@@ -272,10 +333,11 @@ It creates the base databse directory if it doesn't exist alongside its subdirec
   "Return content stored in FILENAME.
 The content of FILENAME is expected to be an alist of soccer API response.
 It makes sure to return a list and not a vector."
-  (let ((raw (with-current-buffer (find-file-noselect filename)
-               (goto-char (point-min))
-               (read (buffer-string)))))
-    (append raw nil)))
+  (when (file-exists-p filename)
+    (let ((raw (with-current-buffer (find-file-noselect filename)
+                 (goto-char (point-min))
+                 (read (buffer-string)))))
+      raw)))
 
 (defun soccer-fetch-url (url)
   "Fetch content at URL.
@@ -307,18 +369,18 @@ Logs the full API response if `soccer-debug' is non nil."
       (insert content)
       (newline))))
 
-(defun soccer--known-teams ()
-  "Return a list of known teams.
-Known teams are teams present in the local database
-which means that their leagues have been accessed at some point."
-  (let* ((sources (soccer-cache-sources))
-         (raw-teams (alist-get 'teams sources))
-         (teams (car-safe (cl-loop for raw-team in raw-teams
-                       collect (cl-destructuring-bind (id . filename) raw-team
-                                 (soccer-parse-teams (soccer-load-file filename)))))))
-    (cl-loop for team in teams
-             collect (cons (soccer-team-name team)
-                           (soccer-team-id team)))))
+;; (defun soccer--known-teams ()
+;;   "Return a list of known teams.
+;; Known teams are teams present in the local database
+;; which means that their leagues have been accessed at some point."
+;;   (let* ((sources (soccer-cache-sources))
+;;          (raw-teams (alist-get 'teams sources))
+;;          (teams (car-safe (cl-loop for raw-team in raw-teams
+;;                        collect (cl-destructuring-bind (id . filename) raw-team
+;;                                  (soccer-parse-teams (soccer-load-file filename)))))))
+;;     (cl-loop for team in teams
+;;              collect (cons (soccer-team-name team)
+;;                            (soccer-team-id team)))))
 
 (defun soccer-leagues-visit-teams (button)
   "Action when a league is selected from the table.
@@ -329,7 +391,7 @@ Show all the teams that play in that league for that season."
 (defun soccer-leagues--refresh ()
   "Populate league table entries with leagues info."
   (setq tabulated-list-entries nil)
-  (let ((leagues (soccer-fetch-leagues)))
+  (let ((leagues (-map #'cdr (soccer--followed-leagues))))
     (dolist (league leagues)
       (push (list league (vector `(,(soccer-league-name league)
                                    face link
@@ -380,7 +442,7 @@ The number of fixtures is capped by `soccer-fixtures-limit'."
 (defun soccer-teams--refresh (league-id)
   "Populate table entries with the teams of the league identified by LEAGUE-ID."
   (setq tabulated-list-entries nil)
-  (let ((teams (soccer-fetch-teams league-id)))
+  (let ((teams (-map #'cdr (soccer-fetch-teams league-id))))
     (dolist (team teams)
       (push (list team (vector `(,(soccer-team-name team)
                                  face link
@@ -404,19 +466,14 @@ The number of fixtures is capped by `soccer-fixtures-limit'."
   ;; (add-hook 'tabulated-list-revert-hook 'soccer-teams--refresh nil t)
   (tabulated-list-init-header))
 
-;;;###autoload
+;;;autoload
 (defun list-soccer-teams (league-id &optional buff)
   "Entry point to list all soccer teams playing in LEAGUE-ID.
 It reads the desired league from the minibuffer if none is provided."
   (interactive (list (let ((league-name (completing-read "League: "
-                                                         (mapcar (lambda (league)
-                                                                   (plist-get league :name))
-                                                                 leagues))))
-                       (plist-get  (car (-filter (lambda (p)
-                                                   (equal league-name
-                                                          (plist-get p :name)))
-                                                 leagues))
-                                   :id))))
+                                                         (mapcar #'car
+                                                                 (soccer--fetch-leagues-all)))))
+                       (soccer-league-id (cdr (assoc league-name (soccer--fetch-leagues-all)))))))
   (unless buff
     (setq buff (get-buffer-create soccer-teams-buffer)))
   (with-current-buffer soccer-teams-buffer
@@ -466,13 +523,12 @@ The fixtures are sorted in ascending order of schedule."
 ;;;###autoload
 (defun list-soccer-fixtures (team-id &optional buff)
   "Entry point to list upcoming fixtures of a team identified by TEAM-ID."
-  (interactive (list (let* ((teams (soccer--known-teams))
+  (interactive (list (let* ((teams (soccer--fetch-teams-all))
                             (team-name  (completing-read "Team: "
-                                                         (mapcar #'car teams))))
+                                                         (-map #'car teams))))
                        (cdr (assoc team-name teams)))))
   (unless buff
     (setq buff (get-buffer-create soccer-fixtures-buffer)))
-  (message "team-id: %d" team-id)
   (with-current-buffer soccer-fixtures-buffer
     (soccer-fixture-mode)
     (soccer-fixtures--refresh team-id)
@@ -480,6 +536,137 @@ The fixtures are sorted in ascending order of schedule."
   (display-buffer soccer-fixtures-buffer))
 
 ;; (list-soccer-fixtures 798)
+
+(defun soccer-downloaded-leagues-p ()
+  "Determines whether leagues have been downloaded locally."
+  (soccer-cache-source soccer-local-cache-leagues-path))
+
+(defun soccer--fetch-leagues-all ()
+  "Fetch and store all leagues worldwide.
+If leagues are present in the local database, return it.
+Otherwise retrieve leagues from remote, store them locally and return it.
+Leagues are stored as an alist of (LEAGUE-NAME . SOCCER-LEAGUE) in
+individual files in `soccer-local-cache-leagues-path'."
+  (unless (soccer-downloaded-leagues-p)
+    (let* ((payload (soccer-fetch-url soccer-leagues-list-url))
+           (raw-response (append (alist-get 'response payload) nil))
+           (parsed-leagues (cl-loop for response in raw-response
+                                    collect (let* ((league (alist-get 'league response))
+                                                   (country (alist-get 'country response))
+                                                   (country-name (alist-get 'name country))
+                                                   (id (alist-get 'id league))
+                                                   (name (alist-get 'name league))
+                                                   (type (alist-get 'type league))
+                                                   (logo (alist-get 'logo league)))
+                                              (soccer-league--create :id id
+                                                                     :name name
+                                                                     :type type
+                                                                     :country country-name
+                                                                     :logo logo))))
+           (pairs  (cl-loop for league in parsed-leagues
+                            collect (cons (concat  (soccer-league-name league)
+                                                   soccer-league-name-delimiter
+                                                   (soccer-league-country league))
+                                          league))))
+      (log "No leagues in datastore, fetch from remote and store.")
+      (soccer--write-to soccer-local-cache-leagues-all-path
+                        pairs)
+      (dolist (pair pairs)
+        (let* ((league (cdr pair))
+               (league-id (soccer-league-id league)))
+          (soccer--write-to (soccer-league-filename league-id)
+                            pair)))))
+  (let* ((raw-leagues (soccer-load-file soccer-local-cache-leagues-all-path)))
+    raw-leagues))
+
+(defun soccer--fetch-teams-all ()
+  "Fetch and store all teams of `followed-leagues' for the given season.
+If league's teams is already present, return them.
+Otherwise retrieve teams from remote, store them and return it.
+Team are stored as an alist of (TEAM-NAME . SOCCER-TEAM) in
+individual files in `soccer-local-cache-teams-path'."
+  (let* ((followed-leagues (soccer--followed-leagues))
+         (downloaded-leagues (soccer-load-file soccer-downloaded-leagues-path))
+         (result))
+    (dolist (followed followed-leagues)
+      (unless (assoc (car followed) downloaded-leagues)
+        (soccer-fetch-teams (soccer-league-id (cdr followed)))
+        (push followed downloaded-leagues)
+        (soccer--write-to soccer-downloaded-leagues-path downloaded-leagues)))
+    (dolist (followed followed-leagues result)
+      (push (soccer-fetch-teams (soccer-league-id (cdr followed)))
+              result))
+    (-flatten result)))
+
+;; (soccer-fetch-teams 714)
+;; (soccer--fetch-teams-all)
+
+(defun soccer--followed-leagues ()
+  "If there are followed leagues, return alist of (LEAGUE-NAME . SOCCER-LEAGUE).
+Load alist from local database at `soccer-local-cache-leagues-path/followed.data'."
+  (let* ((followed (soccer-load-file soccer-local-cache-leagues-followed-path)))
+    followed))
+
+(defun soccer--followed-teams ()
+  "If there are followed teams, return alist of (TEAM-NAME . SOCCER-TEAM).
+Load alist from local database at `soccer-local-cache-leagues-path/followed.data'."
+  (let* ((followed (soccer-load-file soccer-local-cache-teams-followed-path)))
+    followed))
+
+(defun soccer--fetch-favorite-fixtures (limit)
+  "Fetch upcoming fixtures for teams defined in `soccer-followed-teams'.
+If non nil, gets up to LIMIT fixtures per team, otherwise gets only one upcoming fixture."
+  (setq limit 2)
+  (let ((result))
+    (dolist (raw-team (soccer--followed-teams) result)
+      (let* ((team (cdr raw-team))
+             (team-fixtures (soccer-fetch-fixtures (soccer-team-id team)))
+             (ordered-fixtures (-sort (lambda (x y)
+                                        (> (soccer-fixture-timestamp x)
+                                           (soccer-fixture-timestamp y)))
+                                      team-fixtures))
+             (picked-fixtures (-take limit ordered-fixtures)))
+        (push picked-fixtures result)))
+    (-sort (lambda (x y)
+             (> (soccer-fixture-timestamp x)
+                (soccer-fixture-timestamp y)))
+           (-flatten result))))
+
+;; (soccer--fetch-favorite-fixtures 2)
+
+(defun soccer--download-and-follow-league (league-name)
+  "Interactively select LEAGUE-NAME and tracks it as a `soccer-local-cache-leagues-path/followed.data'.
+Teams and upcoming fixtures are derived from `soccer-followed-leagues'."
+  (interactive (list (completing-read "Follow league: "
+                                      (mapcar #'car (soccer--fetch-leagues-all)))))
+  (let* ((all-leagues (soccer--fetch-leagues-all))
+         (current-leagues (soccer-load-file soccer-local-cache-leagues-followed-path))
+         (indexed-league (assoc league-name all-leagues)))
+    (unless (assoc league-name current-leagues)
+      (push indexed-league current-leagues)
+      (soccer--write-to soccer-local-cache-leagues-followed-path
+                        current-leagues))))
+
+(defun soccer-follow-league ()
+  "Presents a prompt before proceeding with downloading missing leagues."
+  (interactive)
+  (if (soccer-downloaded-leagues-p)
+      (call-interactively #'soccer--download-and-follow-league)
+    (and (yes-or-no-p soccer-league-download-message)
+         (call-interactively #'soccer--download-and-follow-league))))
+
+(defun soccer-follow-team (team-name)
+  "Interactively select TEAM-NAME to follow and tracks it as `soccer-local-cache-teams-path/followed.data'.
+These are considered as favorite teams and their next fixtures can be queried."
+  (interactive (list (completing-read "Follow team: "
+                                      (mapcar #'car (soccer--fetch-teams-all)))))
+  (let* ((all-teams (soccer--fetch-teams-all))
+         (current-teams (soccer-load-file soccer-local-cache-teams-followed-path))
+         (indexed-team (assoc team-name all-teams)))
+    (unless (assoc team-name current-teams)
+      (push indexed-team current-teams)
+      (soccer--write-to soccer-local-cache-teams-followed-path
+                        current-teams))))
 
 (provide 'soccer)
 ;;; soccer.el ends here
