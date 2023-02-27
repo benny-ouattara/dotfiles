@@ -43,14 +43,14 @@
      ;; doom-variable-pitch-font (font-spec :family "Avenir Next" :size 21)
      doom-font (font-spec :family "Iosevka" :size 21 :weight 'normal)
      doom-big-font (font-spec :family "Iosevka" :size 27)
-     doom-theme 'modus-operandi)
+     doom-theme 'modus-operandi-tinted)
   (setq
    ;; doom-font (font-spec :family "monaco" :size 15 :weight 'normal)
    ;; doom-font (font-spec :family "JetBrains Mono" :size 19 :weight 'normal :width 'normal)
    ;; doom-variable-pitch-font (font-spec :family "Avenir Next" :size 21)
    doom-font (font-spec :family "Iosevka" :size 19 :weight 'normal)
    doom-big-font (font-spec :family "Iosevka" :size 25)
-   doom-theme 'doom-palenight))
+   doom-theme 'modus-vivendi-tinted))
 
 (setq
  mac-command-modifier 'meta
@@ -1002,3 +1002,17 @@ $stderr = File.open(\"err.txt\", \"w\")")
   (setq modus-themes-prompts '(bold))
   (setq modus-themes-completions nil)
   (setq modus-themes-org-blocks 'gray-background))
+
+(setq beno-custom-lib "~/Code/dotfiles/lib/")
+(add-to-list 'load-path beno-custom-lib)
+
+(require 'soccer)
+(map! :leader
+          (:prefix-map ("o" . "open")
+           (:prefix ("S" . "soccer")
+            :desc " Favorite fixtures" "S" #'list-soccer-fixtures
+            :desc "Followed leagues" "l" #'list-soccer-leagues
+            :desc "Followed teams" "t" #'list-soccer-teams
+            :desc "Teams fixtures" "T" #'list-soccer-team-fixtures
+            :desc "Follow league" "f" #'soccer-follow-league
+            :desc "Follow team" "F" #'soccer-follow-team)))
