@@ -50,7 +50,7 @@
    ;; doom-variable-pitch-font (font-spec :family "Avenir Next" :size 21)
    doom-font (font-spec :family "Iosevka" :size 19 :weight 'normal)
    doom-big-font (font-spec :family "Iosevka" :size 25)
-   doom-theme 'modus-operandi-tinted))
+   doom-theme 'modus-vivendi-tinted))
 
 (setq
  mac-command-modifier 'meta
@@ -901,16 +901,12 @@ $stderr = File.open(\"err.txt\", \"w\")")
         :n "p P"
         'projectile-package-project))
 
-;; (set-popup-rule! "^2022" :size 0.40 :vslot -4 :select t :ttl t :quit nil :side 'right)
-;; (set-popup-rule! "^2021" :size 0.40 :vslot -4 :select t :ttl t :quit nil :side 'right)
-;; (set-popup-rule! "^\\*Org Agenda" :side 'bottom :size 0.90 :select t :ttl nil)
-;; (set-popup-rule! "^CAPTURE.*\\.org$" :side 'bottom :size 0.90 :select t :ttl nil)
-;; (set-popup-rule! "org$" :size 0.33 :vslot -4 :select t :ttl t :quit nil :side 'right)
 (if (> (display-pixel-width) 3000)
     ;; large display
     (progn
       (set-popup-rule! +main-eshell-popup+ :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
       (set-popup-rule! "*SQL:" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
+      (set-popup-rule! "^\\*Soccer.*" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
       (set-popup-rule! "^\\*com.spotify.*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
       (set-popup-rule! "^\\*compilation.*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
       (set-popup-rule! "^\\*Shell Command.*" :size 0.40 :vslot -4 :select t :quit t :ttl t :side 'right)
@@ -926,6 +922,7 @@ $stderr = File.open(\"err.txt\", \"w\")")
     ;; (set-popup-rule! +main-eshell-popup+ :size 0.25 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
     ;; (set-popup-rule! "^\\*compilation.*" :size 0.25 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
     (set-popup-rule! "*SQL:" :size 0.25 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
+    (set-popup-rule! "^\\*Soccer.*" :size 0.25 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
     ;; (set-popup-rule! "^\\*Org Agenda\\*" :size 0.25 :vslot -4 :select t :quit nil :ttl t :side 'right)
     ;; (set-popup-rule! "[0-9]+-[0-9]+-[0-9]+.org" :size 0.25 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
     ;; (set-popup-rule! "journal.org" :size 0.25 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
@@ -1013,3 +1010,17 @@ $stderr = File.open(\"err.txt\", \"w\")")
   (setq modus-themes-prompts '(bold))
   (setq modus-themes-completions nil)
   (setq modus-themes-org-blocks 'gray-background))
+
+(setq beno-custom-lib "~/Code/dotfiles/lib/")
+(add-to-list 'load-path beno-custom-lib)
+
+(require 'soccer)
+(map! :leader
+          (:prefix-map ("o" . "open")
+           (:prefix ("S" . "soccer")
+            :desc " Favorite fixtures" "S" #'list-soccer-fixtures
+            :desc "Followed leagues" "l" #'list-soccer-leagues
+            :desc "Followed teams" "t" #'list-soccer-teams
+            :desc "Teams fixtures" "T" #'list-soccer-team-fixtures
+            :desc "Follow league" "f" #'soccer-follow-league
+            :desc "Follow team" "F" #'soccer-follow-team)))
