@@ -417,7 +417,8 @@ Teams and upcoming fixtures are derived from `soccer-followed-leagues'."
          (updated-leagues (remove chosen-league current-leagues)))
     (when chosen-league
       (soccer--write-to soccer-local-store-leagues-followed-path
-                        updated-leagues))))
+                        updated-leagues)
+      (message "Unfollowed %s" league-name))))
 
 (defun soccer-follow-team (team-name)
   "Interactively select TEAM-NAME to follow and tracks it as `soccer-local-store-teams-path/followed.data'.
@@ -440,8 +441,10 @@ These are considered as favorite teams and their next fixtures can be queried."
          (current-teams (soccer-load-file soccer-local-store-teams-followed-path))
          (chosen-team (assoc team-name all-teams))
          (updated-teams (remove choosen-team current-teams)))
-    (soccer--write-to soccer-local-store-teams-followed-path
-                      updated-teams)))
+    (when chosen-team
+      (soccer--write-to soccer-local-store-teams-followed-path
+                        updated-teams)
+      (message "Unfollowed %s" team-name))))
 
 (defun soccer-favorite-fixtures--entries (limit)
   "Populate table entries with upcoming fixtures for `followed' teams."
