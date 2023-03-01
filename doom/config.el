@@ -1022,4 +1022,6 @@ $stderr = File.open(\"err.txt\", \"w\")")
             :desc "Followed teams" "t" #'list-soccer-teams
             :desc "Teams fixtures" "T" #'list-soccer-team-fixtures
             :desc "Follow league" "f" #'soccer-follow-league
+            :desc "Unfollow league" "U" #'soccer-unfollow-league
+            :desc "Unfollow team" "u" #'soccer-unfollow-team
             :desc "Follow team" "F" #'soccer-follow-team)))

@@ -1943,5 +1943,7 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
             :desc "Followed teams" "t" #'list-soccer-teams
             :desc "Teams fixtures" "T" #'list-soccer-team-fixtures
             :desc "Follow league" "f" #'soccer-follow-league
+            :desc "Unfollow league" "U" #'soccer-unfollow-league
+            :desc "Unfollow team" "u" #'soccer-unfollow-team
             :desc "Follow team" "F" #'soccer-follow-team)))
 #+end_src
