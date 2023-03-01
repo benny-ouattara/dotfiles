@@ -1930,15 +1930,10 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
   (setq modus-themes-org-blocks 'gray-background))
 #+end_src
 
-* custom lib
-Custom elisp packages that aren't doom modules e.g: custom soccer package
+* soccer.el
 #+begin_src emacs-lisp
 (setq beno-custom-lib "~/Code/dotfiles/lib/")
 (add-to-list 'load-path beno-custom-lib)
-#+end_src
-
-* load soccer package and assign keybindings
-#+begin_src emacs-lisp
 (require 'soccer)
 (map! :leader
           (:prefix-map ("o" . "open")

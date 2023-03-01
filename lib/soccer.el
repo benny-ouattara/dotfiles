@@ -407,6 +407,18 @@ Teams and upcoming fixtures are derived from `soccer-followed-leagues'."
     (and (yes-or-no-p soccer-league-download-message)
          (call-interactively #'soccer--download-and-follow-league))))
 
+(defun soccer-unfollow-league (league-name)
+  "Interactively select LEAGUE-NAME and stops trackin it in `soccer-local-store-leagues-path/followed.data'."
+  (interactive (list (completing-read "Follow league: "
+                                      (-map #'car (soccer--fetch-all-leagues)))))
+  (let* ((all-leagues (soccer--fetch-all-leagues))
+         (current-leagues (soccer-load-file soccer-local-store-leagues-followed-path))
+         (chosen-league (assoc league-name all-leagues))
+         (updated-leagues (remove chosen-league current-leagues)))
+    (when chosen-league
+      (soccer--write-to soccer-local-store-leagues-followed-path
+                        updated-leagues))))
+
 (defun soccer-follow-team (team-name)
   "Interactively select TEAM-NAME to follow and tracks it as `soccer-local-store-teams-path/followed.data'.
 These are considered as favorite teams and their next fixtures can be queried."
@@ -419,6 +431,17 @@ These are considered as favorite teams and their next fixtures can be queried."
       (push indexed-team current-teams)
       (soccer--write-to soccer-local-store-teams-followed-path
                         current-teams))))
+
+(defun soccer-unfollow-team (team-name)
+  "Interactively select TEAM-NAME to unfollow and stops tracking it in `soccer-local-store-teams-path/followed.data'."
+  (interactive (list (completing-read "Follow team: "
+                                      (-map #'car (soccer--fetch-all-teams)))))
+  (let* ((all-teams (soccer--fetch-all-teams))
+         (current-teams (soccer-load-file soccer-local-store-teams-followed-path))
+         (chosen-team (assoc team-name all-teams))
+         (updated-teams (remove choosen-team current-teams)))
+    (soccer--write-to soccer-local-store-teams-followed-path
+                      updated-teams)))
 
 (defun soccer-favorite-fixtures--entries (limit)
   "Populate table entries with upcoming fixtures for `followed' teams."

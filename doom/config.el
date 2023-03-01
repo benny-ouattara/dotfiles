@@ -1013,7 +1013,6 @@ $stderr = File.open(\"err.txt\", \"w\")")
 
 (setq beno-custom-lib "~/Code/dotfiles/lib/")
 (add-to-list 'load-path beno-custom-lib)
-
 (require 'soccer)
 (map! :leader
           (:prefix-map ("o" . "open")
