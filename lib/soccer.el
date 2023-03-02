@@ -20,6 +20,7 @@
 ;;; Code:
 
 (require 'cl-lib)
+(require 'dash)
 
 (defvar soccer-base-url "https://api-football-v1.p.rapidapi.com"
   "Base football API that provides past and realtime soccer data.")
