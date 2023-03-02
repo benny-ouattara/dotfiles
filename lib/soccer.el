@@ -409,7 +409,7 @@ Teams and upcoming fixtures are derived from `soccer-followed-leagues'."
 
 (defun soccer-unfollow-league (league-name)
   "Interactively select LEAGUE-NAME and stops trackin it in `soccer-local-store-leagues-path/followed.data'."
-  (interactive (list (completing-read "Follow league: "
+  (interactive (list (completing-read "Unfollow league: "
                                       (-map #'car (soccer-load-file soccer-local-store-leagues-followed-path)))))
   (let* ((all-leagues (soccer--fetch-all-leagues))
          (current-leagues (soccer-load-file soccer-local-store-leagues-followed-path))
@@ -423,7 +423,7 @@ Teams and upcoming fixtures are derived from `soccer-followed-leagues'."
 (defun soccer-follow-team (team-name)
   "Interactively select TEAM-NAME to follow and tracks it as `soccer-local-store-teams-path/followed.data'.
 These are considered as favorite teams and their next fixtures can be queried."
-  (interactive (list (completing-read "Follow team: "
+  (interactive (list (completing-read "Unfollow team: "
                                       (mapcar #'car (soccer--fetch-all-teams)))))
   (let* ((all-teams (soccer--fetch-all-teams))
          (current-teams (soccer-load-file soccer-local-store-teams-followed-path))
