@@ -1025,3 +1025,5 @@ $stderr = File.open(\"err.txt\", \"w\")")
             :desc "Unfollow league" "U" #'soccer-unfollow-league
             :desc "Unfollow team" "u" #'soccer-unfollow-team
             :desc "Follow team" "F" #'soccer-follow-team)))
+
+(eww-toggle-fonts)

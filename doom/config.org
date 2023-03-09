@@ -1947,3 +1947,8 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
             :desc "Unfollow team" "u" #'soccer-unfollow-team
             :desc "Follow team" "F" #'soccer-follow-team)))
 #+end_src
+
+* eww
+#+begin_src emacs-lisp
+(eww-toggle-fonts)
+#+end_src

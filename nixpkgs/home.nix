@@ -153,7 +153,7 @@ in rec {
       sbcl  = "${pkgs.rlwrap}/bin/rlwrap sbcl";
       guile = "${pkgs.rlwrap}/bin/rlwrap guile";
       info  = "info --vi-keys";
-      # git   = "/usr/local/Cellar/git/2.39.1/bin/git";
+      # git   = "/usr/local/Cellar/git/2.39.2/bin/git";
     };
 
     profileExtra = ''
