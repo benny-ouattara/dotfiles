@@ -2,6 +2,7 @@
 
 {
   all = [
+    pkgs.ffmpeg
     pkgs.gnutls
     pkgs.mcron
     # notmuch email
