@@ -1950,5 +1950,6 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
 
 * eww
 #+begin_src emacs-lisp
-(eww-toggle-fonts)
+(after! eww
+  (eww-toggle-fonts))
 #+end_src
