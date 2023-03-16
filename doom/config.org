@@ -150,11 +150,14 @@ Manages look and feel on tty frames i.e emacs in the terminal
  org-tags-column -80
  org-log-done 'time
  org-refile-targets (quote ((nil :maxlevel . 3)))
- +org-capture-todo-file "tasks.org")
+ +org-capture-todo-file "tasks.org"
+ org-exploration-file (concat org-directory
+                              "/"
+                              "exploration.org"))
 #+end_src
 
-** prettify block names
-#+begin_src emacs-lisp
+* org prettify block names
+ #+begin_src emacs-lisp
 (setq-hook! org-mode
   prettify-symbols-alist '(("#+end_quote" . "”")
                            ("#+END_QUOTE" . "”")
@@ -166,6 +169,15 @@ Manages look and feel on tty frames i.e emacs in the terminal
                            ("#+BEGIN_SRC" . "»")
                            ("#+name:" . "»")
                            ("#+NAME:" . "»")))
+#+end_src
+
+* org-capture-templates
+#+begin_src emacs-lisp
+(after! org-capture
+  (pushnew! org-capture-templates
+            '("e" "Explore domain" entry
+              (file+headline org-exploration-file "Inbox")
+              "* domain: %? \n** concepts\n** concepts relations\n** implications\n** problem statement\n" :prepend t)))
 #+end_src
 
 * org fancy priority
@@ -1950,5 +1962,6 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
 
 * eww
 #+begin_src emacs-lisp
-(eww-toggle-fonts)
+(after! eww
+  (eww-toggle-fonts))
 #+end_src

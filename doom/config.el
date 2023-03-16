@@ -114,7 +114,10 @@
  org-tags-column -80
  org-log-done 'time
  org-refile-targets (quote ((nil :maxlevel . 3)))
- +org-capture-todo-file "tasks.org")
+ +org-capture-todo-file "tasks.org"
+ org-exploration-file (concat org-directory
+                              "/"
+                              "exploration.org"))
 
 (setq-hook! org-mode
   prettify-symbols-alist '(("#+end_quote" . "”")
@@ -127,6 +130,12 @@
                            ("#+BEGIN_SRC" . "»")
                            ("#+name:" . "»")
                            ("#+NAME:" . "»")))
+
+(after! org-capture
+  (pushnew! org-capture-templates
+            '("e" "Explore domain" entry
+              (file+headline org-exploration-file "Inbox")
+              "* domain: %? \n** concepts\n** concepts relations\n** implications\n** problem statement\n" :prepend t)))
 
 (after! org-fancy-priorities
   (setq org-fancy-priorities-list '("⚡" "⬆" "⬇" "☕")))
@@ -1026,4 +1035,5 @@ $stderr = File.open(\"err.txt\", \"w\")")
             :desc "Unfollow team" "u" #'soccer-unfollow-team
             :desc "Follow team" "F" #'soccer-follow-team)))
 
-(eww-toggle-fonts)
+(after! eww
+  (eww-toggle-fonts))
