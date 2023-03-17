@@ -1,4 +1,5 @@
 #+TITLE: Config
+#+STARTUP: show2levels
 * dependencies
 ensure that we have these libraries loaded before proceeding
 #+begin_src emacs-lisp
