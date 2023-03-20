@@ -1138,9 +1138,11 @@ commands run at the project level
       (set-popup-rule! "^\\*eww*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
       (set-popup-rule! "^\\*Org Agenda\\*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
       (set-popup-rule! "[0-9]+-[0-9]+-[0-9]+.org" :size 0.40 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
-      (set-popup-rule! "journal.org" :size 0.25 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
+      (set-popup-rule! "journal.org" :size 0.40 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
       (set-popup-rule! "^[0-9]\\{8\\}$" :size 0.40 :vslot -4 :select t :quit 'other :ttl nil :side 'right :autosave t)
-      (set-popup-rule! "*kubel" :size 0.50 :vslot -4 :select t :quit nil :ttl t :side 'right))
+      (set-popup-rule! "*kubel" :size 0.50 :vslot -4 :select t :quit nil :ttl t :side 'right)
+      (set-popup-rule! "^\\*sbt*" :size 0.40 :vslot -4 :select t :quit nil :ttl nil :side 'right)
+      (set-popup-rule! "^\\*cider-repl" :size 0.40 :vslot -4 :select t :quit nil :ttl nil :side 'right))
   ;; small display
   (progn
     (set-popup-rule! +main-eshell-popup+ :size 0.35 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
@@ -1155,7 +1157,8 @@ commands run at the project level
     ;; (set-popup-rule! "journal.org" :size 0.25 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
     ;; (set-popup-rule! "^[0-9]\\{8\\}$" :size 0.25 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
     (set-popup-rule! "*kubel" :size 0.35 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
-    ))
+    (set-popup-rule! "^\\*sbt*" :size 0.35 :vslot -4 :select t :quit nil :ttl nil :side 'bottom)
+    (set-popup-rule! "^\\*cider-repl" :size 0.35 :vslot -4 :select t :quit nil :ttl nil :side 'bottom)))
 #+end_src
 
 * vertico-posframe
@@ -1330,7 +1333,7 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
            (debugger +lsp)   ; FIXME stepping through code, to help you add bugs
            direnv
            ;; (hammer +spotify +container)
-           docker
+           ;; docker
            ;;editorconfig      ; let someone else argue about tabs vs spaces
            ;;ein               ; tame Jupyter notebooks with emacs
            (eval +overlay)   ; run code, run (also, repls)

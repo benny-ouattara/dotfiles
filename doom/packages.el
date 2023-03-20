@@ -9,6 +9,7 @@
 (package! org-super-agenda)
 (package! org-bullets)
 (package! modus-themes)
+(package! ef-themes)
 (package! rfc-mode)
 (package! lsp-java)
 (package! leetcode)

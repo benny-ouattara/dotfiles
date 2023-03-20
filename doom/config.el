@@ -923,9 +923,11 @@ $stderr = File.open(\"err.txt\", \"w\")")
       (set-popup-rule! "^\\*eww*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
       (set-popup-rule! "^\\*Org Agenda\\*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
       (set-popup-rule! "[0-9]+-[0-9]+-[0-9]+.org" :size 0.40 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
-      (set-popup-rule! "journal.org" :size 0.25 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
+      (set-popup-rule! "journal.org" :size 0.40 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
       (set-popup-rule! "^[0-9]\\{8\\}$" :size 0.40 :vslot -4 :select t :quit 'other :ttl nil :side 'right :autosave t)
-      (set-popup-rule! "*kubel" :size 0.50 :vslot -4 :select t :quit nil :ttl t :side 'right))
+      (set-popup-rule! "*kubel" :size 0.50 :vslot -4 :select t :quit nil :ttl t :side 'right)
+      (set-popup-rule! "^\\*sbt*" :size 0.40 :vslot -4 :select t :quit nil :ttl nil :side 'right)
+      (set-popup-rule! "^\\*cider-repl" :size 0.40 :vslot -4 :select t :quit nil :ttl nil :side 'right))
   ;; small display
   (progn
     (set-popup-rule! +main-eshell-popup+ :size 0.35 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
@@ -940,7 +942,8 @@ $stderr = File.open(\"err.txt\", \"w\")")
     ;; (set-popup-rule! "journal.org" :size 0.25 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
     ;; (set-popup-rule! "^[0-9]\\{8\\}$" :size 0.25 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
     (set-popup-rule! "*kubel" :size 0.35 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
-    ))
+    (set-popup-rule! "^\\*sbt*" :size 0.35 :vslot -4 :select t :quit nil :ttl nil :side 'bottom)
+    (set-popup-rule! "^\\*cider-repl" :size 0.35 :vslot -4 :select t :quit nil :ttl nil :side 'bottom)))
 
 ;; (vertico-posframe-mode 1)
 ;; (setq vertico-posframe-parameters
