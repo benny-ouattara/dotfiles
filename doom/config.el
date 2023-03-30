@@ -910,7 +910,7 @@ $stderr = File.open(\"err.txt\", \"w\")")
         :n "p P"
         'projectile-package-project))
 
-(if (> (display-pixel-width) 3000)
+(if (> (display-pixel-width) 1600)
     ;; large display
     (progn
       (set-popup-rule! +main-eshell-popup+ :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
