@@ -2,6 +2,8 @@
 
 {
   all = [
+    pkgs.nodejs
+    pkgs.yarn
     pkgs.ffmpeg
     pkgs.gnutls
     pkgs.mcron
@@ -65,6 +67,7 @@
     # pkgs.tdlib
     # pkgs.sbcl
     pkgs.clojure
+    pkgs.clj-kondo
     pkgs.leiningen
     #pkgs.syncthing
     pkgs.wireguard-tools
