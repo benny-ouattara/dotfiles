@@ -2001,3 +2001,9 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
         gptel-default-mode 'org-mode
         gptel-api-key #'beno-gpt-key))
 #+end_src
+
+* cider
+#+begin_src emacs-lisp :results silent
+(after! cider
+  (add-hook 'before-save-hook 'cider-format-buffer t t))
+#+end_src

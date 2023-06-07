@@ -1069,3 +1069,6 @@ $stderr = File.open(\"err.txt\", \"w\")")
   (setq gpt-api-key "api.openai.com"
         gptel-default-mode 'org-mode
         gptel-api-key #'beno-gpt-key))
+
+(after! cider
+  (add-hook 'before-save-hook 'cider-format-buffer t t))
