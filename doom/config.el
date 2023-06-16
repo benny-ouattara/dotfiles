@@ -97,7 +97,8 @@
  ;; org-ellipsis " ∵ "
  ;; org-ellipsis " ⌄ "
  ;; org-ellipsis " ⁂ "
- org-startup-folded 'content
+ ;; org-startup-folded 'content
+ org-startup-folded 'show2levels
  org-auto-align-tags nil
  org-roam-v2-ack t
  +org-roam-open-buffer-on-find-file nil

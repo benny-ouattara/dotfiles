@@ -1,5 +1,4 @@
 #+TITLE: Config
-#+STARTUP: show2levels
 * dependencies
 ensure that we have these libraries loaded before proceeding
 #+begin_src emacs-lisp
@@ -134,7 +133,8 @@ Manages look and feel on tty frames i.e emacs in the terminal
  ;; org-ellipsis " ∵ "
  ;; org-ellipsis " ⌄ "
  ;; org-ellipsis " ⁂ "
- org-startup-folded 'content
+ ;; org-startup-folded 'content
+ org-startup-folded 'show2levels
  org-auto-align-tags nil
  org-roam-v2-ack t
  +org-roam-open-buffer-on-find-file nil
