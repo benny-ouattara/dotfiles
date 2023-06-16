@@ -35,5 +35,6 @@
 (package! info-colors)
 (package! org-modern :recipe (:host github :repo "minad/org-modern"))
 (package! gptel :recipe (:host github :repo "karthink/gptel"))
+(package! ement :recipe (:host github :repo "alphapapa/ement.el"))
 ;; (package! consult :pin "17de436c58df1f0e2036b7cc590b74dcbdefd393")
 ;; there is a bug where consult depends on compat but doom doesn't have the latest compat library

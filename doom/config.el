@@ -118,7 +118,10 @@
  +org-capture-todo-file "tasks.org"
  org-exploration-file (concat org-directory
                               "/"
-                              "exploration.org"))
+                              "exploration.org")
+ org-design-file (concat org-directory
+                         "/"
+                         "design.org"))
 
 (setq-hook! org-mode
   prettify-symbols-alist '(("#+end_quote" . "”")
@@ -136,7 +139,11 @@
   (pushnew! org-capture-templates
             '("e" "Explore domain" entry
               (file+headline org-exploration-file "Inbox")
-              "* domain: %? \n** concepts\n** concepts relations\n** implications\n** problem statement\n" :prepend t)))
+              "* domain: %? \n** concepts\n** concepts relations\n** implications\n** problem statement\n" :prepend t))
+  (pushnew! org-capture-templates
+            '("d" "Design problem space" entry
+              (file+headline org-design-file "Inbox")
+              "* domain: %? \n** observe situation\n** diagnose possible problems\n** delimit the problem you are going to solve\n** approaches to the problem\n** implementation tactics\n** develop\n" :prepend t)))
 
 (after! org-fancy-priorities
   (setq org-fancy-priorities-list '("⚡" "⬆" "⬇" "☕")))
@@ -929,7 +936,8 @@ $stderr = File.open(\"err.txt\", \"w\")")
       (set-popup-rule! "*kubel" :size 0.50 :vslot -4 :select t :quit nil :ttl t :side 'right)
       (set-popup-rule! "^\\*sbt*" :size 0.40 :vslot -4 :select t :quit nil :ttl nil :side 'right)
       (set-popup-rule! "^\\*cider-repl" :size 0.40 :vslot -4 :select t :quit nil :ttl nil :side 'right)
-      (set-popup-rule! "^\\*ChatGPT*" :size 0.40 :vslot -4 :select t :quit nil :ttl nil :side 'right))
+      (set-popup-rule! "^\\*ChatGPT*" :size 0.40 :vslot -4 :select t :quit nil :ttl nil :side 'right)
+      (set-popup-rule! "^\\*cider-inspect*" :size 0.40 :vslot -4 :select t :quit nil :ttl nil :side 'right))
   ;; small display
   (progn
     (set-popup-rule! +main-eshell-popup+ :size 0.35 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
@@ -946,7 +954,8 @@ $stderr = File.open(\"err.txt\", \"w\")")
     (set-popup-rule! "*kubel" :size 0.35 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
     (set-popup-rule! "^\\*sbt*" :size 0.35 :vslot -4 :select t :quit nil :ttl nil :side 'bottom)
     (set-popup-rule! "^\\*cider-repl" :size 0.35 :vslot -4 :select t :quit nil :ttl nil :side 'bottom)
-    (set-popup-rule! "^\\*ChatGPT*" :size 0.35 :vslot -4 :select t :quit nil :ttl nil :side 'bottom)))
+    (set-popup-rule! "^\\*ChatGPT*" :size 0.35 :vslot -4 :select t :quit nil :ttl nil :side 'bottom)
+    (set-popup-rule! "^\\*cider-inspect*" :size 0.35 :vslot -4 :select t :quit nil :ttl nil :side 'bottom)))
 
 ;; (vertico-posframe-mode 1)
 ;; (setq vertico-posframe-parameters
@@ -1061,3 +1070,6 @@ $stderr = File.open(\"err.txt\", \"w\")")
   (setq gpt-api-key "api.openai.com"
         gptel-default-mode 'org-mode
         gptel-api-key #'beno-gpt-key))
+
+(after! cider
+  (add-hook 'before-save-hook 'cider-format-buffer t t))
