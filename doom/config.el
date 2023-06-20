@@ -1077,7 +1077,7 @@ $stderr = File.open(\"err.txt\", \"w\")")
   (defun portal.api/open ()
     (interactive)
     (cider-nrepl-sync-request:eval
-     "(do (ns dev) (def portal ((requiring-resolve 'portal.api/open))) (add-tap (requiring-resolve 'portal.api/submit)))"))
+     "(do (ns dev) (def portal ((requiring-resolve 'portal.api/open) {:theme :portal.colors/material-ui})) (add-tap (requiring-resolve 'portal.api/submit)))"))
 
   (defun portal.api/clear ()
     (interactive)
