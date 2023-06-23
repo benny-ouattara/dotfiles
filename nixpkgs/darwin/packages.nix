@@ -2,7 +2,6 @@
 
 {
   all = [
-    pkgs.nodejs
     pkgs.yarn
     pkgs.ffmpeg
     pkgs.gnutls
@@ -60,7 +59,6 @@
     pkgs.silver-searcher
     # pkgs.youtube-dl
     # pkgs.subversion
-    pkgs.nodejs
     pkgs.fd
     pkgs.nixfmt
     pkgs.coreutils-full
