@@ -937,6 +937,7 @@ $stderr = File.open(\"err.txt\", \"w\")")
       (set-popup-rule! "*kubel" :size 0.50 :vslot -4 :select t :quit nil :ttl t :side 'right)
       (set-popup-rule! "^\\*sbt*" :size 0.40 :vslot -4 :select t :quit nil :ttl nil :side 'right)
       (set-popup-rule! "^\\*cider.*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
+      (set-popup-rule! "^\\*cider-repl.*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
       (set-popup-rule! "^\\*ChatGPT*" :size 0.40 :vslot -4 :select t :quit nil :ttl nil :side 'right))
   ;; small display
   (progn
@@ -955,6 +956,7 @@ $stderr = File.open(\"err.txt\", \"w\")")
     (set-popup-rule! "*kubel" :size 0.35 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
     (set-popup-rule! "^\\*sbt*" :size 0.35 :vslot -4 :select t :quit nil :ttl nil :side 'bottom)
     (set-popup-rule! "^\\*cider.*" :size 0.35 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
+    (set-popup-rule! "^\\*cider-repl.*" :size 0.35 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
     (set-popup-rule! "^\\*ChatGPT*" :size 0.35 :vslot -4 :select t :quit nil :ttl nil :side 'bottom)))
 
 ;; (vertico-posframe-mode 1)
