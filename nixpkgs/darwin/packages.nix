@@ -2,6 +2,7 @@
 
 {
   all = [
+    pkgs.foreman
     pkgs.yarn
     pkgs.ffmpeg
     pkgs.gnutls
