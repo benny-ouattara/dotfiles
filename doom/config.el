@@ -856,6 +856,7 @@ $stderr = File.open(\"err.txt\", \"w\")")
 (after! sql
   (setq
    setcheckerpwd (beno--read-db-password "setchecker_runs")
+   localpwd (beno--read-db-password "localdb")
    sql-password-search-wallet-function #'beno--sql-authenticator
    sql-password-wallet zangao-secrets
    sql-connection-alist `(("setchecker-cloudsql-connection"
@@ -865,6 +866,13 @@ $stderr = File.open(\"err.txt\", \"w\")")
                            ;; this line just makes sure that sql.el doesn't ask us for the a dummy password
                            (sql-password ,setcheckerpwd)
                            (sql-database "setchecker_runs")
+                           (sql-server "localhost")
+                           (sql-port 5432))
+                          ("local-postgres-connection"
+                           (sql-product 'postgres)
+                           (sql-user "localdb")
+                           (sql-password ,localpwd)
+                           (sql-database "localdb")
                            (sql-server "localhost")
                            (sql-port 5432)))
    sql-postgres-login-params '(user password database server)))
