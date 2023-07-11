@@ -2,6 +2,7 @@
 
 {
   all = [
+    pkgs.docker-compose
     pkgs.foreman
     pkgs.yarn
     pkgs.ffmpeg
