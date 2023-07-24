@@ -186,7 +186,7 @@ Manages look and feel on tty frames i.e emacs in the terminal
   (pushnew! org-capture-templates
             '("d" "Design problem space" entry
               (file+headline org-design-file "Inbox")
-              "* domain: %? \n** observe situation\n** diagnose possible problems\n** delimit the problem you are going to solve\n** approaches to the problem\n** implementation tactics\n** develop\n" :prepend t)))
+              "* domain: %? \n** observe situation\n** diagnose possible problems\n** delimit the problem you are going to solve\n** approaches to the problem\n** implementation \n *** story\n*** pseudo\n** develop\n" :prepend t)))
 #+end_src
 
 * org fancy priority
