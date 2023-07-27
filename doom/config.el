@@ -998,3 +998,9 @@ $stderr = File.open(\"err.txt\", \"w\")")
   (add-to-list 'default-frame-alist '(alpha-background . 90)))
 
 (global-org-modern-mode)
+
+(after! modus-themes
+  (setq modus-themes-prompts '(bold intense)
+        modus-themes-mode-line '(3d)
+        modus-themes-completions '((matches . (extrabold background intense)) (selection . (semibold accented intense)) (popup . (accented)))
+        ))

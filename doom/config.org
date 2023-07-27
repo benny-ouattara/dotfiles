@@ -1905,3 +1905,13 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
 #+begin_src emacs-lisp
 (global-org-modern-mode)
 #+end_src
+
+* modus themes
+
+#+begin_src emacs-lisp
+(after! modus-themes
+  (setq modus-themes-prompts '(bold intense)
+        modus-themes-mode-line '(3d)
+        modus-themes-completions '((matches . (extrabold background intense)) (selection . (semibold accented intense)) (popup . (accented)))
+        ))
+#+end_src
