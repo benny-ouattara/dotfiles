@@ -76,6 +76,6 @@
   "clojure"
   "clojure-tools"
   "leiningen"
-  "icedtea"
+  ;; "icedtea"
   "cmake"
   ))

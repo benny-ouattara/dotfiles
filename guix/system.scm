@@ -12,6 +12,7 @@
              (gnu packages package-management)
              (gnu packages pulseaudio)
              (gnu system setuid)
+             (gnu services databases)
              (gnu packages audio)
              (srfi srfi-1))
 (use-service-modules
@@ -135,6 +136,7 @@ EndSection
      (specification->package "awesome")
      (specification->package "i3-wm")
      (specification->package "i3status")
+     ;; (specification->package "postgresql")
      (specification->package "dmenu")
      (specification->package "st")
      (specification->package "ratpoison")
@@ -149,6 +151,7 @@ EndSection
    (append
     (list
      ;; (dbus-service #:services (list bluez-alsa))
+     (service postgresql-service-type)
      (service libvirt-service-type
               (libvirt-configuration
                (unix-sock-group "libvirt")

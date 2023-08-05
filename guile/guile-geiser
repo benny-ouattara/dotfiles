@@ -3,3 +3,4 @@
 (use-modules (guix build-system))
 (use-modules (gnu packages base))
 (use-modules (turtle packages search))
+(use-modules (turtle packages playground))

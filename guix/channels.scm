@@ -12,10 +12,10 @@
       (channel-with-substitutes-available
        %default-guix-channel
        "https://ci.guix.gnu.org")
-      (channel
-       (name 'guix-turtle)
-       (url "git@github.com:benny-ouattara/guix-turtle.git")
-       (branch "master"))
+      ;; (channel
+      ;;  (name 'guix-turtle)
+      ;;  (url "git@github.com:benny-ouattara/guix-turtle.git")
+      ;;  (branch "master"))
       ;; (channel
       ;;  (name 'guix-turtle-local)
       ;;  (url "file:///home/ben/Code/guix-turtle")

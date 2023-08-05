@@ -11,6 +11,7 @@
  (guix gexp)
  (gnu home services shells)
  (gnu home services)
+ (gnu home services ssh)
  (gnu home services desktop)
  (gnu packages shells))
 
@@ -18,7 +19,6 @@
  (packages
   (specifications->packages
    (list "recutils"
-         "emacs-guix"
          "xterm"
          "volumeicon"
          "pavucontrol"
@@ -26,7 +26,7 @@
          "autorandr"
          "xrandr"
          "fd"
-         "nyxt"
+         ;; "nyxt"
          "kitty"
          "alacritty"
          "picom"
@@ -85,22 +85,21 @@
          "clojure-tools"
          "alsa-utils"
          "make"
-         "eolie"
          "cmake"
          "network-manager-applet"
          "gnupg"
          "keychain"
          "qemu"
-         "qmpbackup"
-         "virt-manager"
+         ;; "qmpbackup"
+         ;; "virt-manager"
          "polybar"
          "rofi"
          "unzip"
-         "font-nerd-iosevka"
-         "font-nerd-jetbrains"
-         "font-nerd-meslo"
-         "font-nerd-victor"
-         "font-material-icons"
+         ;; "font-nerd-iosevka"
+         ;; "font-nerd-jetbrains"
+         ;; "font-nerd-meslo"
+         ;; "font-nerd-victor"
+         ;; "font-material-icons"
          ;; "ungoogled-chromium"
          "firefox"
          "dunst"
@@ -113,10 +112,12 @@
          "gcc"
          "the-silver-searcher"
          "ack"
-         "emacs-vterm"
          "lsof"
-         "gcc-toolchain"
-         )))
+         ;; "gcc-toolchain"
+         "leiningen"
+         "tmux"
+         "openjdk@17.0.5"
+         "node")))
  (services
   (list
    (simple-service 'environment-variables-service
@@ -126,6 +127,12 @@
                      ("VISUAL" . "emacs")
                      ;; ("SHELL" . ,(file-append zsh "/bin/zsh"))
                      ))
+   (service home-openssh-service-type
+                   (home-openssh-configuration
+                    (add-keys-to-agent "yes")
+                    (hosts
+                     (list (openssh-host (name "*")
+                                         (extra-content "    StrictHostKeyChecking no"))))))
 
    (service home-redshift-service-type)
    (service
