@@ -7,9 +7,11 @@
 (use-modules
  (gnu home)
  (gnu packages)
+ (gnu packages gnupg)
  (gnu services)
  (guix gexp)
  (gnu home services shells)
+ (gnu home services gnupg)
  (gnu home services)
  (gnu home services ssh)
  (gnu home services desktop)
@@ -118,7 +120,8 @@
          "tmux"
          "openjdk@17.0.5"
          "node"
-         "nmap")))
+         "nmap"
+         "pinentry-emacs")))
  (services
   (list
    (simple-service 'environment-variables-service
@@ -134,7 +137,11 @@
                     (hosts
                      (list (openssh-host (name "*")
                                          (extra-content "    StrictHostKeyChecking no"))))))
-
+   (service home-gpg-agent-service-type
+            (home-gpg-agent-configuration
+             (pinentry-program
+              (file-append pinentry-emacs "/bin/pinentry"))
+             (ssh-support? #f)))
    (service home-redshift-service-type)
    (service
     home-zsh-service-type

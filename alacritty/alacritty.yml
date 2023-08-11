@@ -171,11 +171,14 @@ colors:
   #   cursor: '0x383a42'
 
   primary:
-    background: '#000000'
-    foreground: '#ffffff'
+    # background: '#000000'
+    # foreground: '#ffffff'
+    foreground: '#000000'
+    background: '#ffffff'
   cursor:
     text: '#F81CE5'
-    cursor: '#ffffff'
+    # cursor: '#ffffff'
+    cursor: '#000000'
 
   # Normal colors
   normal:
