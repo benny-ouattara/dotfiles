@@ -155,7 +155,7 @@
 (define-key *top-map* (kbd "s-S") "vsplit-and-focus")
 (define-key *top-map* (kbd "s-SPC") "run-shell-command /home/ben/.config/rofi/launchers/type-4/launcher.sh")
 
-(define-key *top-map* (kbd "C-s-l") "run-shell-command slock")
+;; (define-key *top-map* (kbd "C-s-l") "run-shell-command slock")
 (define-key *top-map* (kbd "C-s-r") "iresize")
 
 (define-key *top-map* (kbd "s-1") "gselect dev")
@@ -260,7 +260,7 @@
 ;; primitive and unsecure screen lock, prefer slock bound to C-s-l
 (load-module "stump-lock")
 (setf stump-lock:*password* "asdf")
-(define-key *top-map* (kbd "s-l") "lock-screen")
+;; (define-key *top-map* (kbd "s-l") "lock-screen")
 
 ;; password
 (load-module "pass")

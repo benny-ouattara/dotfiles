@@ -117,7 +117,8 @@
          "leiningen"
          "tmux"
          "openjdk@17.0.5"
-         "node")))
+         "node"
+         "nmap")))
  (services
   (list
    (simple-service 'environment-variables-service
