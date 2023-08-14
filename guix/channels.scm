@@ -21,7 +21,7 @@
          "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
          (openpgp-fingerprint
           "2A39 3FFF 68F4 EF7A 3D29  12AF 6F51 20A0 22FB B2D5"))))
-      ;; prefer fluffy-guix which is a mirror of guix with patches for my use cases
+      ;; prefer octo-guix which is a mirror of guix with patches for my use cases
       ;; (channel-with-substitutes-available
       ;;  %default-guix-channel
       ;;  "https://ci.guix.gnu.org")
@@ -30,8 +30,8 @@
       ;;  "https://ci.guix.gnu.org")
       (channel
        (name 'guix)
-       (branch "master")
-       (url "git@github.com:benny-ouattara/fluffy-guix.git")
+       (branch "develop")
+       (url "git@github.com:benny-ouattara/octo-guix.git")
        (introduction %guix-channel-introduction))
       (channel
        (name 'todo)
