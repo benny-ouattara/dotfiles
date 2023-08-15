@@ -1161,7 +1161,8 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
 #+begin_src emacs-lisp
 (with-eval-after-load 'geiser-guile
   (add-to-list 'geiser-guile-load-path "/home/ben/Code/guix-turtle")
-  ;; (add-to-list 'geiser-guile-load-path "/home/ben/Code/guix")
+  (add-to-list 'geiser-guile-load-path "/home/ben/Code/todo/guix")
+  ;; (add-to-list 'geiser-guile-load-path "/home/ben/Code/octo-guix")
   )
 #+end_src
 

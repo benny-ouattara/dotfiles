@@ -943,7 +943,8 @@ $stderr = File.open(\"err.txt\", \"w\")")
 
 (with-eval-after-load 'geiser-guile
   (add-to-list 'geiser-guile-load-path "/home/ben/Code/guix-turtle")
-  ;; (add-to-list 'geiser-guile-load-path "/home/ben/Code/guix")
+  (add-to-list 'geiser-guile-load-path "/home/ben/Code/todo/guix")
+  ;; (add-to-list 'geiser-guile-load-path "/home/ben/Code/octo-guix")
   )
 
 ;; (use-package! info-colors

@@ -25,9 +25,6 @@
       ;; (channel-with-substitutes-available
       ;;  %default-guix-channel
       ;;  "https://ci.guix.gnu.org")
-      ;; (channel-with-substitutes-available
-
-      ;;  "https://ci.guix.gnu.org")
       (channel
        (name 'guix)
        (branch "develop")
