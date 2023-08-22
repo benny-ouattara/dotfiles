@@ -111,6 +111,15 @@ in rec {
     ];
   };
 
+  programs.fzf = rec {
+    enable = true;
+    tmux.enableShellIntegration = true;
+  };
+
+  programs.starship = rec {
+    enable = true;
+  };
+
   programs.zsh = rec {
     enable = true;
     oh-my-zsh = {
@@ -168,7 +177,7 @@ in rec {
 
         ZSH_DISABLE_COMPFIX=true
 
-        eval "$(starship init zsh)"
+        # eval "$(starship init zsh)"
 
         export PATH=/usr/local/opt/ruby/bin:$HOME/.rbenv/shims:$HOME/.rbenv/versions/3.0.3/bin:$PATH:$HOME/.jenv/bin:$HOME/.local/bin:$HOME/.emacs.d/bin:/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin:${pkgs.custom-scripts}/bin:/opt/local/bin:/Users/benouattara/Qt/5.15.2/clang_64/bin:/Users/zangao/Library/Application\ Support/Coursier/bin:~/.roswell/bin
 
@@ -187,26 +196,6 @@ in rec {
         export EDITOR=emacs
         export VISUAL=emacs
         export CPATH=/usr/local/include
-
-        # Use ~~ as the trigger sequence instead of the default **
-        export FZF_COMPLETION_TRIGGER='**'
-
-        # Options to fzf command
-        export FZF_COMPLETION_OPTS='--border --info=inline'
-
-        # Use fd (https://github.com/sharkdp/fd) instead of the default find
-        # command for listing path candidates.
-        # - The first argument to the function ($1) is the base path to start traversal
-        # - See the source code (completion.{bash,zsh}) for the details.
-        _fzf_compgen_path() {
-          fd --hidden --follow --exclude ".git" . "$1"
-        }
-
-        # Use fd to generate the list for directory completion
-        _fzf_compgen_dir() {
-          fd --type d --hidden --follow --exclude ".git" . "$1"
-        }
-
       '';
   };
 

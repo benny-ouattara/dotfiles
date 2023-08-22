@@ -23,7 +23,6 @@
     pkgs.automake
     pkgs.pkg-config
     pkgs.qemu
-    pkgs.starship
     pkgs.rlwrap
     # stack
     pkgs.maven
@@ -52,7 +51,6 @@
     pkgs.pass
     pkgs.portaudio
     pkgs.curl
-    pkgs.fzf
     pkgs.git
     pkgs.gnupg
     pkgs.htop
