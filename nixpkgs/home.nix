@@ -114,7 +114,7 @@ in rec {
   programs.zsh = rec {
     enable = true;
     oh-my-zsh = {
-      enable = true;
+      enable = false;
       theme = "gozilla";
     };
 
@@ -172,20 +172,41 @@ in rec {
 
         export PATH=/usr/local/opt/ruby/bin:$HOME/.rbenv/shims:$HOME/.rbenv/versions/3.0.3/bin:$PATH:$HOME/.jenv/bin:$HOME/.local/bin:$HOME/.emacs.d/bin:/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin:${pkgs.custom-scripts}/bin:/opt/local/bin:/Users/benouattara/Qt/5.15.2/clang_64/bin:/Users/zangao/Library/Application\ Support/Coursier/bin:~/.roswell/bin
 
+        # initializing pyenv and jenv significantly increase load time, disable them until needed
         # this needs to be after the main export as it prepends to the main path
-        if hash pyenv 2>/dev/null; then
-           eval "$(pyenv init --path)"
-           eval "$(pyenv init -)"
-           eval "$(pyenv virtualenv-init -)"
-        fi
-        if hash jenv 2>/dev/null; then
-           eval "$(jenv init -)"
-        fi
+        # if hash pyenv 2>/dev/null; then
+        #    eval "$(pyenv init --path)"
+        #    eval "$(pyenv init -)"
+        #    eval "$(pyenv virtualenv-init -)"
+        # fi
+        # if hash jenv 2>/dev/null; then
+        #    eval "$(jenv init -)"
+        # fi
         if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then . $HOME/.nix-profile/etc/profile.d/nix.sh; fi # required by nix to configure various paths
 
         export EDITOR=emacs
         export VISUAL=emacs
         export CPATH=/usr/local/include
+
+        # Use ~~ as the trigger sequence instead of the default **
+        export FZF_COMPLETION_TRIGGER='**'
+
+        # Options to fzf command
+        export FZF_COMPLETION_OPTS='--border --info=inline'
+
+        # Use fd (https://github.com/sharkdp/fd) instead of the default find
+        # command for listing path candidates.
+        # - The first argument to the function ($1) is the base path to start traversal
+        # - See the source code (completion.{bash,zsh}) for the details.
+        _fzf_compgen_path() {
+          fd --hidden --follow --exclude ".git" . "$1"
+        }
+
+        # Use fd to generate the list for directory completion
+        _fzf_compgen_dir() {
+          fd --type d --hidden --follow --exclude ".git" . "$1"
+        }
+
       '';
   };
 
