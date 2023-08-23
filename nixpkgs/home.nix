@@ -113,7 +113,6 @@ in rec {
 
   programs.fzf = rec {
     enable = true;
-    tmux.enableShellIntegration = true;
   };
 
   programs.starship = rec {
@@ -134,8 +133,10 @@ in rec {
     history = {
       size = 50000;
       save = 500000;
-      path = "${dotDir}/history";
-      ignoreDups = true;
+      path = "$HOME/${dotDir}/history";
+      ignoreAllDups = true;
+      ignoreSpace = true;
+      extended = true;
       share = true;
     };
 
