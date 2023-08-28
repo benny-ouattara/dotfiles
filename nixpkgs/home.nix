@@ -122,7 +122,7 @@ in rec {
   programs.zsh = rec {
     enable = true;
     oh-my-zsh = {
-      enable = false;
+      enable = true;
       theme = "gozilla";
     };
 
