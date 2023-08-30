@@ -101,3 +101,5 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 export GPG_TTY=$(tty)
+
+source /gnu/store/7zbca54ci5hqs8jgya18s677mxwlf76j-fzf-0.41.0/share/zsh/site-functions/_fzf
