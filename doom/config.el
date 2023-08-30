@@ -1123,3 +1123,11 @@ $stderr = File.open(\"err.txt\", \"w\")")
 
   ;; NOTE: You do need to have portal on the class path
   (setq cider-clojure-cli-aliases ":portal"))
+
+(defun beno-find-file-in-dotfiles ()
+  "Search for a file in `dotfiles'."
+  (interactive)
+  (doom-project-find-file "~/Code/dotfiles"))
+
+(map! :map doom-leader-map
+      "f p" #'beno-find-file-in-dotfiles)

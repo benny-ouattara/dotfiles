@@ -2062,3 +2062,13 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
   ;; NOTE: You do need to have portal on the class path
   (setq cider-clojure-cli-aliases ":portal"))
 #+end_src
+* find file in dotfiles
+#+begin_src emacs-lisp
+(defun beno-find-file-in-dotfiles ()
+  "Search for a file in `dotfiles'."
+  (interactive)
+  (doom-project-find-file "~/Code/dotfiles"))
+
+(map! :map doom-leader-map
+      "f p" #'beno-find-file-in-dotfiles)
+#+end_src
