@@ -1001,7 +1001,77 @@ $stderr = File.open(\"err.txt\", \"w\")")
 (global-org-modern-mode)
 
 (after! modus-themes
-  (setq modus-themes-prompts '(bold intense)
-        modus-themes-mode-line '(3d)
-        modus-themes-completions '((matches . (extrabold background intense)) (selection . (semibold accented intense)) (popup . (accented)))
-        ))
+  (setq modus-themes-syntax '(faint alt-syntax green-strings yellow-comments))
+  (setq modus-themes-italic-constructs nil
+        modus-themes-bold-constructs nil
+        modus-themes-variable-pitch-ui nil
+        modus-themes-mixed-fonts nil)
+
+  (setq modus-themes-prompts '(bold))
+  (setq modus-themes-completions nil)
+  (setq modus-themes-org-blocks 'gray-background))
+
+(setq beno-custom-lib "~/Code/dotfiles/lib/")
+(add-to-list 'load-path beno-custom-lib)
+(require 'soccer)
+(map! :leader
+          (:prefix-map ("o" . "open")
+           (:prefix ("S" . "soccer")
+            :desc "Favorite fixtures" "S" #'list-soccer-fixtures
+            :desc "Followed leagues" "l" #'list-soccer-leagues
+            :desc "Followed teams" "t" #'list-soccer-teams
+            :desc "Teams fixtures" "T" #'list-soccer-team-fixtures
+            :desc "Follow league" "f" #'soccer-follow-league
+            :desc "Unfollow league" "U" #'soccer-unfollow-league
+            :desc "Unfollow team" "u" #'soccer-unfollow-team
+            :desc "Follow team" "F" #'soccer-follow-team)))
+
+(after! eww
+  (eww-toggle-fonts))
+
+(defun beno-gpt-key ()
+  "Read gpt secret from authsource."
+  (funcall (plist-get (car (auth-source-search :host gpt-api-key))
+                      :secret)))
+(map! :leader
+      :desc "gpt"
+      :n "o g"
+      'gptel)
+
+(after! gptel
+  (setq gpt-api-key "api.openai.com"
+        gptel-default-mode 'org-mode
+        gptel-api-key #'beno-gpt-key))
+
+(after! cider-repl
+  (add-hook 'before-save-hook 'cider-format-buffer t t)
+
+  (defun portal.api/open ()
+    (interactive)
+    (cider-nrepl-sync-request:eval
+     "(do (ns dev) (def portal ((requiring-resolve 'portal.api/open) {:theme :portal.colors/material-ui})) (add-tap (requiring-resolve 'portal.api/submit)))"))
+
+  (defun portal.api/clear ()
+    (interactive)
+    (cider-nrepl-sync-request:eval "(portal.api/clear)"))
+
+  (defun portal.api/close ()
+    (interactive)
+    (cider-nrepl-sync-request:eval "(portal.api/close)"))
+
+  (map! :map clojure-mode-map
+        :localleader
+        :desc "open portal"  :n "o" #'portal.api/open
+        :desc "close portal" :n "q" #'portal.api/close
+        :desc "clear portal" :n "l" #'portal.api/clear)
+
+  ;; NOTE: You do need to have portal on the class path
+  (setq cider-clojure-cli-aliases ":portal"))
+
+(defun beno-find-file-in-dotfiles ()
+  "Search for a file in `dotfiles'."
+  (interactive)
+  (doom-project-find-file "~/Code/dotfiles"))
+
+(map! :map doom-leader-map
+      "f p" #'beno-find-file-in-dotfiles)
