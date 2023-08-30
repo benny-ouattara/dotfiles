@@ -385,6 +385,22 @@ Indentation of =2= for most programming languages
        :desc "Run test"  "T" (cmd! (beno--run-mvn-command (call-interactively #'beno--mvn-test-to-run)))))
 #+end_src
 
+** better vertical motion keybindings
+#+begin_src emacs-lisp
+(defun beno-evil-scroll-down ()
+  (interactive)
+  (evil-scroll-down evil-scroll-count)
+  (evil-scroll-line-to-center nil))
+
+(defun beno-evil-scroll-up ()
+  (interactive)
+  (evil-scroll-up evil-scroll-count)
+  (evil-scroll-line-to-center nil))
+
+(map! :n "C-d" #'beno-evil-scroll-down)
+(map! :n "C-u" #'beno-evil-scroll-up)
+#+end_src
+
 * lsp
 #+begin_src emacs-lisp
 (setq

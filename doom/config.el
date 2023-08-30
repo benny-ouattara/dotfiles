@@ -309,6 +309,19 @@
        :desc "Integration test mvn project"  "i" (cmd! (beno--run-mvn-command "clean integration-test"))
        :desc "Run test"  "T" (cmd! (beno--run-mvn-command (call-interactively #'beno--mvn-test-to-run)))))
 
+(defun beno-evil-scroll-down ()
+  (interactive)
+  (evil-scroll-down evil-scroll-count)
+  (evil-scroll-line-to-center nil))
+
+(defun beno-evil-scroll-up ()
+  (interactive)
+  (evil-scroll-up evil-scroll-count)
+  (evil-scroll-line-to-center nil))
+
+(map! :n "C-d" #'beno-evil-scroll-down)
+(map! :n "C-u" #'beno-evil-scroll-up)
+
 (setq
  lsp-java-format-settings-url "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml")
 
