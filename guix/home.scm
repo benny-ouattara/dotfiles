@@ -118,10 +118,12 @@
          ;; "gcc-toolchain"
          "leiningen"
          "tmux"
-         "openjdk@17.0.5"
+         "openjdk@11.0.17"
          "node"
          "nmap"
-         "pinentry-emacs")))
+         "pinentry-emacs"
+         "maven"
+         "fzf")))
  (services
   (list
    (simple-service 'environment-variables-service
