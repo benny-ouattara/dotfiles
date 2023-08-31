@@ -744,6 +744,13 @@ Beware using this command given that it's destructive and non reversible."
 Quickly take actions such as read later or follow up on emails
 This has been superseded by ~+mu4e/capture-msg-to-agenda~ which adds the =msg= as task in the global ~tasks.org~ which is registered with org agenda
 
+** disable window management
+#+begin_src emacs-lisp
+(after! mu4e
+  (set-popup-rule! (regexp-quote mu4e-main-buffer-name) :actions :ignore t)
+  (set-popup-rule! (regexp-quote mu4e-headers-buffer-name) :actions :ignore t))
+#+end_src
+
 * dired
 ** dired single
 Ability to navigate in and out of directories with h and l using a single buffer when navigating down
@@ -1235,13 +1242,16 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
   )
 #+end_src
 
-* info colors
+* info
 
 #+begin_src emacs-lisp
-;; (use-package! info-colors
-;;   :after info
-;;   :commands (info-colors-fontify-node)
-;;   :hook (Info-selection . info-colors-fontify-node))
+(use-package! info-colors
+  :after info
+  :commands (info-colors-fontify-node)
+  :hook (Info-selection . info-colors-fontify-node))
+
+(after! info
+  (set-popup-rule! "^\\*info\\*" :ignore t))
 #+end_src
 
 * notmuch

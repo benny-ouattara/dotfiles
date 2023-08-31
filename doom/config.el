@@ -595,6 +595,10 @@ Beware using this command given that it's destructive and non reversible."
         (:name "Messages with images" :query "mime:image/*" :key 112)
         (:name "Fragomen" :query "fragomen" :hide-unread t :key 102)))
 
+(after! mu4e
+  (set-popup-rule! (regexp-quote mu4e-main-buffer-name) :actions :ignore t)
+  (set-popup-rule! (regexp-quote mu4e-headers-buffer-name) :actions :ignore t))
+
 (after! (dired dired-single)
   (define-key dired-mode-map [remap dired-find-file]
     'dired-single-buffer)
@@ -1001,10 +1005,13 @@ $stderr = File.open(\"err.txt\", \"w\")")
   ;; (add-to-list 'geiser-guile-load-path "/home/ben/Code/guix")
   )
 
-;; (use-package! info-colors
-;;   :after info
-;;   :commands (info-colors-fontify-node)
-;;   :hook (Info-selection . info-colors-fontify-node))
+(use-package! info-colors
+  :after info
+  :commands (info-colors-fontify-node)
+  :hook (Info-selection . info-colors-fontify-node))
+
+(after! info
+  (set-popup-rule! "^\\*info\\*" :ignore t))
 
 (after! notmuch
   (setq +notmuch-sync-backend 'mbsync)
