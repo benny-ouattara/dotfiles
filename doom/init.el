@@ -163,7 +163,7 @@
             ;;+hugo            ; use Emacs for hugo blogging
             +ipython     ; ipython/jupyter support for babel
             +pandoc      ; export-with-pandoc support
-            ;; +pomodoro    ; be fruitful with the tomato technique
+            +pomodoro    ; be fruitful with the tomato technique
             +noter
             +present
             ;; +pretty
@@ -195,8 +195,8 @@
            ;;zig               ; C, but simpler
 
            :email
-           ;; (mu4e +org +gmail)
-           (notmuch +afew +org)
+           (mu4e +org +gmail)
+           ;; (notmuch +afew +org)
            ;;(wanderlust +gmail)
 
            ;; Applications are complex and opinionated modules that transform Emacs
