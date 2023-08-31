@@ -573,6 +573,9 @@ Beware using this command given that it's destructive and non reversible."
   (add-to-list 'mu4e-view-actions '("follow up" . beno--capture-mail-follow-up) t)
   (add-to-list 'mu4e-headers-actions '("read later" . beno--capture-mail-read-later) t)
   (add-to-list 'mu4e-view-actions '("read later" . beno--capture-mail-read-later) t))
+(after! mu4e
+  (set-popup-rule! (regexp-quote mu4e-main-buffer-name) :actions :ignore t)
+  (set-popup-rule! (regexp-quote mu4e-headers-buffer-name) :actions :ignore t))
 
 (after! (dired dired-single)
   (define-key dired-mode-map [remap dired-find-file]
@@ -947,10 +950,13 @@ $stderr = File.open(\"err.txt\", \"w\")")
   ;; (add-to-list 'geiser-guile-load-path "/home/ben/Code/octo-guix")
   )
 
-;; (use-package! info-colors
-;;   :after info
-;;   :commands (info-colors-fontify-node)
-;;   :hook (Info-selection . info-colors-fontify-node))
+(use-package! info-colors
+  :after info
+  :commands (info-colors-fontify-node)
+  :hook (Info-selection . info-colors-fontify-node))
+
+(after! info
+  (set-popup-rule! "^\\*info\\*" :ignore t))
 
 (setq +notmuch-sync-backend 'mbsync)
 ;; (after! notmuch
