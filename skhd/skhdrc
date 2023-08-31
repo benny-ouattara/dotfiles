@@ -3,7 +3,7 @@
 # cmd + ctrl - t : open -n ~/Applications/Nix\ Apps/Alacritty.app --args --live-config-reload --config-file $HOME/.config/alacritty/alacritty.yml
 
 # cmd + ctrl - return : @tmuxEmulator@
-cmd + ctrl - return : emacsclient -c -e '(+vterm/here "~")'
+cmd + ctrl - return : emacsclient -c -e '(let ((default-directory "~")) (+vterm/here t))'
 cmd + ctrl - d :  emacsclient -c -e '(dired "~")'
 cmd + ctrl - e :  emacsclient -c -e '(elfeed)'
 cmd + ctrl - m :  emacsclient -c -e '(mu4e)'

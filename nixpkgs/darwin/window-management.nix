@@ -33,6 +33,30 @@ in
         };
       };
 
+      mcron = {
+        serviceConfig = {
+          RunAtLoad = true;
+          StandardErrorPath = log-dir + "/" + "mcron" + ".log";
+          StandardOutPath = log-dir + "/" + "mcron" + ".log";
+          EnvironmentVariables = {
+            PATH = "${config.environment.systemPath}";
+          };
+        };
+        command = "/run/current-system/sw/bin/mcron --daemon";
+      };
+
+      # mbsync = {
+      #   serviceConfig = {
+      #     RunAtLoad = true;
+      #     StandardErrorPath = log-dir + "/" + "mbsync" + ".log";
+      #     StandardOutPath = log-dir + "/" + "mbsync" + ".log";
+      #     EnvironmentVariables = {
+      #       PATH = "${config.environment.systemPath}";
+      #     };
+      #   };
+      #   command = "/run/current-system/sw/bin/mbsync gmail";
+      # };
+
       # emacs = {
       #   serviceConfig = {
       #     RunAtLoad = true;

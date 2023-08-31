@@ -82,6 +82,7 @@ in rec {
 
     extraConfig = {
       github.user           = "benny-ouattara";
+      pull.rebase = false;  # merge
 
       color = {
         status      = "auto";
@@ -110,6 +111,14 @@ in rec {
     ];
   };
 
+  programs.fzf = rec {
+    enable = true;
+  };
+
+  programs.starship = rec {
+    enable = true;
+  };
+
   programs.zsh = rec {
     enable = true;
     oh-my-zsh = {
@@ -124,8 +133,10 @@ in rec {
     history = {
       size = 50000;
       save = 500000;
-      path = "${dotDir}/history";
-      ignoreDups = true;
+      path = "$HOME/${dotDir}/history";
+      ignoreAllDups = true;
+      ignoreSpace = true;
+      extended = true;
       share = true;
     };
 
@@ -152,7 +163,7 @@ in rec {
       sbcl  = "${pkgs.rlwrap}/bin/rlwrap sbcl";
       guile = "${pkgs.rlwrap}/bin/rlwrap guile";
       info  = "info --vi-keys";
-      git   = "/usr/local/Cellar/git/2.39.1/bin/git";
+      # git   = "/usr/local/Cellar/git/2.39.2/bin/git";
     };
 
     profileExtra = ''
@@ -167,19 +178,20 @@ in rec {
 
         ZSH_DISABLE_COMPFIX=true
 
-        eval "$(starship init zsh)"
+        # eval "$(starship init zsh)"
 
         export PATH=/usr/local/opt/ruby/bin:$HOME/.rbenv/shims:$HOME/.rbenv/versions/3.0.3/bin:$PATH:$HOME/.jenv/bin:$HOME/.local/bin:$HOME/.emacs.d/bin:/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin:${pkgs.custom-scripts}/bin:/opt/local/bin:/Users/benouattara/Qt/5.15.2/clang_64/bin:/Users/zangao/Library/Application\ Support/Coursier/bin:~/.roswell/bin
 
+        # initializing pyenv and jenv significantly increase load time, disable them until needed
         # this needs to be after the main export as it prepends to the main path
-        if hash pyenv 2>/dev/null; then
-           eval "$(pyenv init --path)"
-           eval "$(pyenv init -)"
-           eval "$(pyenv virtualenv-init -)"
-        fi
-        if hash jenv 2>/dev/null; then
-           eval "$(jenv init -)"
-        fi
+        # if hash pyenv 2>/dev/null; then
+        #    eval "$(pyenv init --path)"
+        #    eval "$(pyenv init -)"
+        #    eval "$(pyenv virtualenv-init -)"
+        # fi
+        # if hash jenv 2>/dev/null; then
+        #    eval "$(jenv init -)"
+        # fi
         if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then . $HOME/.nix-profile/etc/profile.d/nix.sh; fi # required by nix to configure various paths
 
         export EDITOR=emacs

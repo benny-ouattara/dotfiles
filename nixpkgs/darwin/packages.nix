@@ -2,6 +2,12 @@
 
 {
   all = [
+    pkgs.docker-compose
+    pkgs.foreman
+    pkgs.yarn
+    pkgs.ffmpeg
+    pkgs.gnutls
+    pkgs.mcron
     # notmuch email
     pkgs.afew
     pkgs.notmuch
@@ -17,7 +23,6 @@
     pkgs.automake
     pkgs.pkg-config
     pkgs.qemu
-    pkgs.starship
     pkgs.rlwrap
     # stack
     pkgs.maven
@@ -46,7 +51,6 @@
     pkgs.pass
     pkgs.portaudio
     pkgs.curl
-    pkgs.fzf
     pkgs.git
     pkgs.gnupg
     pkgs.htop
@@ -55,13 +59,13 @@
     pkgs.silver-searcher
     # pkgs.youtube-dl
     # pkgs.subversion
-    pkgs.nodejs
     pkgs.fd
     pkgs.nixfmt
     pkgs.coreutils-full
     # pkgs.tdlib
     # pkgs.sbcl
     pkgs.clojure
+    pkgs.clj-kondo
     pkgs.leiningen
     #pkgs.syncthing
     pkgs.wireguard-tools

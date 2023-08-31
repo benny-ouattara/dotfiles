@@ -36,19 +36,21 @@
  org-pomodoro-length 45
  org-pomodoro-short-break-length 15)
 
-(if (equal "ben" (user-login-name))
+(if (equal "zangao" (user-login-name))
     (setq
      ;; doom-font (font-spec :family "monaco" :size 15 :weight 'normal)
      ;; doom-font (font-spec :family "JetBrains Mono" :size 19 :weight 'normal :width 'normal)
      ;; doom-variable-pitch-font (font-spec :family "Avenir Next" :size 21)
-     doom-font (font-spec :family "Iosevka" :size 25 :weight 'normal)
-     doom-big-font (font-spec :family "Iosevka" :size 27))
+     doom-font (font-spec :family "Iosevka" :size 21 :weight 'normal)
+     doom-big-font (font-spec :family "Iosevka" :size 27)
+     doom-theme 'modus-operandi-tinted)
   (setq
    ;; doom-font (font-spec :family "monaco" :size 15 :weight 'normal)
    ;; doom-font (font-spec :family "JetBrains Mono" :size 19 :weight 'normal :width 'normal)
    ;; doom-variable-pitch-font (font-spec :family "Avenir Next" :size 21)
    doom-font (font-spec :family "Iosevka" :size 19 :weight 'normal)
-   doom-big-font (font-spec :family "Iosevka" :size 25)))
+   doom-big-font (font-spec :family "Iosevka" :size 25)
+   doom-theme 'modus-vivendi-tinted))
 
 (setq
  mac-command-modifier 'meta
@@ -57,8 +59,7 @@
  evil-insert-state-cursor 'hbar
  evil-move-cursor-back nil
  display-line-numbers-type 'relative
- fancy-splash-image (expand-file-name "splash.png" doom-private-dir)
- doom-theme 'modus-operandi)
+ fancy-splash-image (expand-file-name "splash.png" doom-private-dir))
 
 (menu-bar-mode -1)
 (rainbow-mode)
@@ -96,14 +97,14 @@
  ;; org-ellipsis " ∵ "
  ;; org-ellipsis " ⌄ "
  ;; org-ellipsis " ⁂ "
- org-startup-folded 'content
+ ;; org-startup-folded 'content
+ org-startup-folded 'show2levels
  org-auto-align-tags nil
  org-roam-v2-ack t
  +org-roam-open-buffer-on-find-file nil
  sync-dir "~/Sync/"
  org-directory (concat sync-dir "org")
  org-spotify-directory (concat org-directory "/spotify")
- org-mail-directory (concat org-directory "/mail.org")
  org-mime-export-options '(:section-numbers nil
                            :with-author nil
                            :with-toc nil)
@@ -114,17 +115,13 @@
  org-tags-column -80
  org-log-done 'time
  org-refile-targets (quote ((nil :maxlevel . 3)))
- +org-capture-todo-file "tasks.org")
-
-(after! org
-  (pushnew! org-capture-templates
-            '("m" "Email workflow")
-            '("mf" "Follow up" entry (file+olp org-mail-directory "Follow up")
-              "* TODO follow up with %:fromname on %a\n\n%i"
-              :immediate-finish t)
-            '("mr" "Read later" entry (file+olp org-mail-directory "Read later")
-              "* TODO read %:subject\n%a\n\n%i"
-              :immediate-finish t)))
+ +org-capture-todo-file "tasks.org"
+ org-exploration-file (concat org-directory
+                              "/"
+                              "exploration.org")
+ org-design-file (concat org-directory
+                         "/"
+                         "design.org"))
 
 (setq-hook! org-mode
   prettify-symbols-alist '(("#+end_quote" . "”")
@@ -137,6 +134,16 @@
                            ("#+BEGIN_SRC" . "»")
                            ("#+name:" . "»")
                            ("#+NAME:" . "»")))
+
+(after! org-capture
+  (pushnew! org-capture-templates
+            '("e" "Explore domain" entry
+              (file+headline org-exploration-file "Inbox")
+              "* domain: %? \n** concepts\n** concepts relations\n** implications\n** problem statement\n" :prepend t))
+  (pushnew! org-capture-templates
+            '("d" "Design problem space" entry
+              (file+headline org-design-file "Inbox")
+              "* domain: %? \n** observe situation\n** diagnose possible problems\n** delimit the problem you are going to solve\n** approaches to the problem\n** implementation \n *** story\n*** pseudo\n** develop\n" :prepend t)))
 
 (after! org-fancy-priorities
   (setq org-fancy-priorities-list '("⚡" "⬆" "⬇" "☕")))
@@ -193,6 +200,8 @@
                (lambda ()
                  (when (equal org-state "DONE")
                    (beno/org-roam-copy-todo-to-today)))))
+
+(setq org-fold-core-style 'overlays)
 
 (after! org-journal
   (map! :leader :desc "Open current journal" "j" #'org-journal-open-current-journal-file))
@@ -297,8 +306,21 @@
        :desc "Package mvn project"  "p" (cmd! (beno--run-mvn-command "clean package"))
        :desc "Package mvn project - skip tests"  "P" (cmd! (beno--run-mvn-command "-Dmaven.test.skip=true clean package"))
        :desc "Test mvn project"  "t" (cmd! (beno--run-mvn-command "clean test"))
-       :desc "Integration test mvn project"  "i" (cmd! (beno--run-mvn-command "-Dtest=SomeNonExistingTestClass -DfailIfNoTests=false integration-test"))
+       :desc "Integration test mvn project"  "i" (cmd! (beno--run-mvn-command "clean integration-test"))
        :desc "Run test"  "T" (cmd! (beno--run-mvn-command (call-interactively #'beno--mvn-test-to-run)))))
+
+(defun beno-evil-scroll-down ()
+  (interactive)
+  (evil-scroll-down evil-scroll-count)
+  (evil-scroll-line-to-center nil))
+
+(defun beno-evil-scroll-up ()
+  (interactive)
+  (evil-scroll-up evil-scroll-count)
+  (evil-scroll-line-to-center nil))
+
+(map! :n "C-d" #'beno-evil-scroll-down)
+(map! :n "C-u" #'beno-evil-scroll-up)
 
 (setq
  lsp-java-format-settings-url "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml")
@@ -345,6 +367,20 @@
   (let ((old-env (getenv "JAVA_HOME"))
         (home-path (concat java-dir "/" chosen-jvm java-home-suffix)))
     (setenv "JAVA_HOME" home-path)))
+
+(after! dap-java
+  (add-hook 'dap-stopped-hook
+            (lambda (arg) (call-interactively #'dap-hydra)))
+
+  (dap-register-debug-template "Custom Runner"
+                               (list :type "java"
+                                     :request "launch"
+                                     :args ""
+                                     :vmArgs "-ea -Dmyapp.instance.name=myapp_1"
+                                     :projectName "sp"
+                                     :classPaths nil
+                                     :mainClass ""
+                                     :env '(("DEV" . "1")))))
 
 ;; TODO: refactor project creation logic in a =macro=
 (defun haikunate (token-range &optional prefix)
@@ -496,9 +532,14 @@ Beware using this command given that it's destructive and non reversible."
 (if (not (equal "ben" (user-login-name)))
     (progn (setq
             mu-root (s-chop-suffixes '("/mu" "/bin") (file-truename  (executable-find "mu")))
-            mu4e-path (concat mu-root "/share/emacs/site-lisp/mu4e")
-            mu4e-update-interval 60)
+            mu4e-path (concat mu-root "/share/emacs/site-lisp/mu4e"))
            (add-to-list 'load-path mu4e-path)))
+
+(after! mu4e
+  (setq mu4e-update-interval 180))
+(setq +mu4e-workspace-name "*mail*")
+
+(setq +org-capture-emails-file "tasks.org")
 
 (set-email-account! "Gmail"
                     '((mu4e-sent-folder       . "/gmail/sent")
@@ -545,34 +586,18 @@ Beware using this command given that it's destructive and non reversible."
 
 ;; (add-hook 'message-send-hook 'org-mime-confirm-when-no-multipart)
 
+;; NOTE: mu-find cannot match strings containing hyphens e.g: fleet-manager-bot, use "fleet" to match
 (setq mu4e-bookmarks
       '((:name "Unread messages" :query "flag:unread AND NOT flag:trashed" :key 117)
+        (:name "Skip messages" :query "(flag:unread AND NOT flag:trashed) AND (subject:\"Use Spotify BOM\" OR subject:\"Use Spotify root\" OR subject:\"no review needed\" OR subject:\"Update dependent library\" OR from:\"fleet\" OR from:\"fleetshift\" OR from:\"setadel\")" :key 115)
         (:name "Today's messages" :query "date:today..now" :key 116)
         (:name "Last 7 days" :query "date:7d..now" :hide-unread t :key 119)
         (:name "Messages with images" :query "mime:image/*" :key 112)
         (:name "Fragomen" :query "fragomen" :hide-unread t :key 102)))
 
-(defun beno--capture-mail-follow-up (msg)
-  (interactive)
-  (call-interactively 'org-store-link)
-  (org-capture nil "mf"))
-
-(defun beno--capture-mail-read-later (msg)
-  (interactive)
-  (call-interactively 'org-store-link)
-  (org-capture nil "mr"))
-
-;; store query link is convenient for capturing search query for use in org mail
-(defun beno--store-mu4e-query-link ()
-  (interactive)
-  (let ((mu4e-org-link-query-in-headers-mode t))
-    (call-interactively 'org-store-link)))
-
 (after! mu4e
-  (add-to-list 'mu4e-headers-actions '("follow up" . beno--capture-mail-follow-up) t)
-  (add-to-list 'mu4e-view-actions '("follow up" . beno--capture-mail-follow-up) t)
-  (add-to-list 'mu4e-headers-actions '("read later" . beno--capture-mail-read-later) t)
-  (add-to-list 'mu4e-view-actions '("read later" . beno--capture-mail-read-later) t))
+  (set-popup-rule! (regexp-quote mu4e-main-buffer-name) :actions :ignore t)
+  (set-popup-rule! (regexp-quote mu4e-headers-buffer-name) :actions :ignore t))
 
 (after! (dired dired-single)
   (define-key dired-mode-map [remap dired-find-file]
@@ -837,7 +862,7 @@ $stderr = File.open(\"err.txt\", \"w\")")
 (pcase (user-login-name)
   ("zangao" (pushnew! auth-sources zangao-secrets))
   ("bouattara" (pushnew! auth-sources bouattara-secrets))
-  ("benny" (pushnew! auth-sources benny-secrets)))
+  ("benouattara" (pushnew! auth-sources benny-secrets)))
 
 (defun beno--read-db-password (db)
   (if-let ((result (auth-source-search :database db)))
@@ -849,6 +874,7 @@ $stderr = File.open(\"err.txt\", \"w\")")
 (after! sql
   (setq
    setcheckerpwd (beno--read-db-password "setchecker_runs")
+   localpwd (beno--read-db-password "localdb")
    sql-password-search-wallet-function #'beno--sql-authenticator
    sql-password-wallet zangao-secrets
    sql-connection-alist `(("setchecker-cloudsql-connection"
@@ -859,8 +885,18 @@ $stderr = File.open(\"err.txt\", \"w\")")
                            (sql-password ,setcheckerpwd)
                            (sql-database "setchecker_runs")
                            (sql-server "localhost")
+                           (sql-port 5432))
+                          ("local-postgres-connection"
+                           (sql-product 'postgres)
+                           (sql-user "localdb")
+                           (sql-password ,localpwd)
+                           (sql-database "localdb")
+                           (sql-server "localhost")
                            (sql-port 5432)))
    sql-postgres-login-params '(user password database server)))
+
+(after! compile
+  (compilation-set-skip-threshold 2)) ;; skip warning an info
 
 (defun beno--mvn-root-dir ()
   (or (locate-dominating-file buffer-file-name ".git")
@@ -885,10 +921,13 @@ $stderr = File.open(\"err.txt\", \"w\")")
   (interactive
    (list  (ivy-read "Test to run: "
                     (beno--mvn-project-tests (beno--mvn-root-dir)))))
-  (format "clean -DfailIfNoTests=false -Dtest=%s test" test-name))
+  (if (s-contains? "Test.java" test-name) ;; surefire unit test
+      (format "clean -DfailIfNoTests=false -Dtest=%s test" test-name)
+    ;; failsafe integration test
+    (format "clean -DfailIfNoTests=false -Dit.test=%s verify" test-name)))
 
 (setq
- projectile-project-search-path '("~/Code/" "~/common-lisp" "~/Code/archives/Code"))
+ projectile-project-search-path '(("~/Code/" . 1) ("~/common-lisp" . 1) ("~/Code/archives/Code" . 1)))
 
 (after! projectile
   (setq projectile-project-root-files-bottom-up
@@ -905,32 +944,50 @@ $stderr = File.open(\"err.txt\", \"w\")")
         :n "p P"
         'projectile-package-project))
 
-;; (set-popup-rule! "^2022" :size 0.40 :vslot -4 :select t :ttl t :quit nil :side 'right)
-;; (set-popup-rule! "^2021" :size 0.40 :vslot -4 :select t :ttl t :quit nil :side 'right)
-;; (set-popup-rule! "^\\*Org Agenda" :side 'bottom :size 0.90 :select t :ttl nil)
-;; (set-popup-rule! "^CAPTURE.*\\.org$" :side 'bottom :size 0.90 :select t :ttl nil)
-;; (set-popup-rule! "org$" :size 0.33 :vslot -4 :select t :ttl t :quit nil :side 'right)
-(if (> (display-pixel-width) 3000)
+(if (> (display-pixel-width) 1600)
     ;; large display
     (progn
-      (set-popup-rule! +main-eshell-popup+ :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
-      (set-popup-rule! "*SQL:" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
-      (set-popup-rule! "^\\*compilation.*" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
-      (set-popup-rule! "^\\*Org Agenda\\*" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'right)
-      (set-popup-rule! "[0-9]+-[0-9]+-[0-9]+.org" :size 0.33 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
-      (set-popup-rule! "journal.org" :size 0.25 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
-      (set-popup-rule! "^[0-9]\\{8\\}$" :size 0.33 :vslot -4 :select t :quit 'other :ttl nil :side 'right :autosave t)
-      (set-popup-rule! "*kubel" :size 0.50 :vslot -4 :select t :quit nil :ttl t :side 'right))
+      (set-popup-rule! +main-eshell-popup+ :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
+      (set-popup-rule! "*SQL:" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
+      (set-popup-rule! "^\\*Soccer.*" :size 0.33 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
+      (set-popup-rule! "^\\*com.spotify.*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
+      (set-popup-rule! "^\\*compilation.*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
+      (set-popup-rule! "^\\*Shell Command.*" :size 0.40 :vslot -4 :select t :quit t :ttl t :side 'right)
+      (set-popup-rule! "^\\*helpful.*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
+      (set-popup-rule! "^\\*eww*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
+      (set-popup-rule! "^\\*Org Agenda\\*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
+      (set-popup-rule! "^\\*Org Sr.*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
+      (set-popup-rule! "[0-9]+-[0-9]+-[0-9]+.org" :size 0.40 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
+      (set-popup-rule! "journal.org" :size 0.40 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
+      (set-popup-rule! "^[0-9]\\{8\\}$" :size 0.40 :vslot -4 :select t :quit 'other :ttl nil :side 'right :autosave t)
+      (set-popup-rule! "*kubel" :size 0.50 :vslot -4 :select t :quit nil :ttl t :side 'right)
+      (set-popup-rule! "^\\*sbt*" :size 0.40 :vslot -4 :select t :quit nil :ttl nil :side 'right)
+      (set-popup-rule! "^\\*cider.*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
+      (set-popup-rule! "^\\*docker.*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
+      (set-popup-rule! "^\\*cider-repl.*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
+      (set-popup-rule! "^\\*HTTP Response.*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
+      (set-popup-rule! "^\\*ChatGPT*" :size 0.40 :vslot -4 :select t :quit nil :ttl nil :side 'right))
   ;; small display
   (progn
-    ;; (set-popup-rule! +main-eshell-popup+ :size 0.25 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
-    ;; (set-popup-rule! "^\\*compilation.*" :size 0.25 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
-    (set-popup-rule! "*SQL:" :size 0.25 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
+    (set-popup-rule! +main-eshell-popup+ :size 0.35 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
+    (set-popup-rule! "*SQL:" :size 0.35 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
+    (set-popup-rule! "^\\*Soccer.*" :size 0.35 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
+    (set-popup-rule! "^\\*Org Sr.*" :size 0.35 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
+    (set-popup-rule! "^\\*compilation.*" :size 0.35 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
+    (set-popup-rule! "^\\*Shell Command.*" :size 0.35 :vslot -4 :select t :quit t :ttl t :side 'bottom)
+    (set-popup-rule! "^\\*helpful.*" :size 0.35 :vslot -4 :select nil :quit nil :ttl t :side 'bottom)
+    (set-popup-rule! "^\\*eww*" :size 0.35 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
     ;; (set-popup-rule! "^\\*Org Agenda\\*" :size 0.25 :vslot -4 :select t :quit nil :ttl t :side 'right)
     ;; (set-popup-rule! "[0-9]+-[0-9]+-[0-9]+.org" :size 0.25 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
     ;; (set-popup-rule! "journal.org" :size 0.25 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
     ;; (set-popup-rule! "^[0-9]\\{8\\}$" :size 0.25 :vslot -4 :select t :quit 'other :ttl 5 :side 'right :autosave t)
-    ))
+    (set-popup-rule! "*kubel" :size 0.35 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
+    (set-popup-rule! "^\\*sbt*" :size 0.35 :vslot -4 :select t :quit nil :ttl nil :side 'bottom)
+    (set-popup-rule! "^\\*cider.*" :size 0.35 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
+    (set-popup-rule! "^\\*docker.*" :size 0.35 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
+    (set-popup-rule! "^\\*cider-repl.*" :size 0.35 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
+    (set-popup-rule! "^\\*HTTP Response.*" :size 0.35 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
+    (set-popup-rule! "^\\*ChatGPT*" :size 0.35 :vslot -4 :select t :quit nil :ttl nil :side 'bottom)))
 
 ;; (vertico-posframe-mode 1)
 ;; (setq vertico-posframe-parameters
@@ -939,6 +996,8 @@ $stderr = File.open(\"err.txt\", \"w\")")
 
 (add-to-list 'default-frame-alist '(undecorated . t))
 
+(after! elfeed
+  (setq elfeed-search-filter "@2-weeks-ago +unread"))
 (add-hook 'elfeed-search-mode-hook #'elfeed-update)
 
 (with-eval-after-load 'geiser-guile
@@ -947,32 +1006,37 @@ $stderr = File.open(\"err.txt\", \"w\")")
   ;; (add-to-list 'geiser-guile-load-path "/home/ben/Code/octo-guix")
   )
 
-;; (use-package! info-colors
-;;   :after info
-;;   :commands (info-colors-fontify-node)
-;;   :hook (Info-selection . info-colors-fontify-node))
+(use-package! info-colors
+  :after info
+  :commands (info-colors-fontify-node)
+  :hook (Info-selection . info-colors-fontify-node))
 
-(setq +notmuch-sync-backend 'mbsync)
-;; (after! notmuch
-;;   (setq notmuch-show-log nil
-;;         notmuch-hello-sections `(notmuch-hello-insert-saved-searches
-;;                                  notmuch-hello-insert-alltags)
-;;         ;; To hide headers while composing an email
-;;         notmuch-message-headers-visible nil))
-(setq notmuch-saved-searches '((:name "inbox" :query "tag:inbox not tag:trash" :key "i")
-                               ;; (:name "flagged" :query "tag:flagged" :key "f")
-                               ;; (:name "sent" :query "tag:sent" :key "s")
-                               ;; (:name "drafts" :query "tag:draft" :key "d")
-                               (:name "spotify" :query "tag:spotify" :key "s")
-                               (:name "gmail" :query "tag:gmail" :key "g")
-                               (:name "protonmail" :query "tag:protonmail" :key "p")
-                               (:name "spotify-unread" :query "tag:spotify and tag:unread" :key "S")
-                               (:name "gmail-unread" :query "tag:gmail and tag:unread" :key "G")
-                               (:name "protonmail-unread" :query "tag:protonmail and tag:unread" :key "P")))
+(after! info
+  (set-popup-rule! "^\\*info\\*" :ignore t))
 
-(set-popup-rule! "^\\*notmuch-hello" :side 'right :size 0.5 :ttl 0)
+(after! notmuch
+  (setq +notmuch-sync-backend 'mbsync)
+  ;; (after! notmuch
+  ;;   (setq notmuch-show-log nil
+  ;;         notmuch-hello-sections `(notmuch-hello-insert-saved-searches
+  ;;                                  notmuch-hello-insert-alltags)
+  ;;         ;; To hide headers while composing an email
+  ;;         notmuch-message-headers-visible nil))
+  (setq notmuch-saved-searches '((:name "inbox" :query "tag:inbox not tag:trash" :key "i")
+                                 ;; (:name "flagged" :query "tag:flagged" :key "f")
+                                 ;; (:name "sent" :query "tag:sent" :key "s")
+                                 ;; (:name "drafts" :query "tag:draft" :key "d")
+                                 (:name "spotify" :query "tag:spotify" :key "s")
+                                 (:name "gmail" :query "tag:gmail" :key "g")
+                                 (:name "protonmail" :query "tag:protonmail" :key "p")
+                                 (:name "spotify-unread" :query "tag:spotify and tag:unread" :key "S")
+                                 (:name "gmail-unread" :query "tag:gmail and tag:unread" :key "G")
+                                 (:name "protonmail-unread" :query "tag:protonmail and tag:unread" :key "P")))
 
-(map! :localleader
+  (set-popup-rule! "^\\*notmuch-hello" :ignore t)
+  (set-popup-rule! "^\\*notmuch-saved" :ignore t)
+
+  (map! :localleader
         :map (notmuch-hello-mode-map notmuch-search-mode-map notmuch-tree-mode-map notmuch-show-mode-map)
         :desc "Compose email"   "c" #'+notmuch/compose
         :desc "Sync email"      "u" #'+notmuch/update
@@ -983,13 +1047,13 @@ $stderr = File.open(\"err.txt\", \"w\")")
         :desc "Mark as spam"    "s" #'+notmuch/search-spam
         :map notmuch-tree-mode-map
         :desc "Mark as deleted" "d" #'+notmuch/tree-delete
-        :desc "Mark as spam"    "s" #'+notmuch/tree-spam)
+        :desc "Mark as spam"    "s" #'+notmuch/tree-spam))
 
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-footer)
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-loaded)
 
-(global-subword-mode 1)
+;; (global-subword-mode 1)
 
 (setq evil-split-window-below t
       evil-vsplit-window-right t)
@@ -1001,7 +1065,77 @@ $stderr = File.open(\"err.txt\", \"w\")")
 (global-org-modern-mode)
 
 (after! modus-themes
-  (setq modus-themes-prompts '(bold intense)
-        modus-themes-mode-line '(3d)
-        modus-themes-completions '((matches . (extrabold background intense)) (selection . (semibold accented intense)) (popup . (accented)))
-        ))
+  (setq modus-themes-syntax '(faint alt-syntax green-strings yellow-comments))
+  (setq modus-themes-italic-constructs nil
+        modus-themes-bold-constructs nil
+        modus-themes-variable-pitch-ui nil
+        modus-themes-mixed-fonts nil)
+
+  (setq modus-themes-prompts '(bold))
+  (setq modus-themes-completions nil)
+  (setq modus-themes-org-blocks 'gray-background))
+
+(setq beno-custom-lib "~/Code/dotfiles/lib/")
+(add-to-list 'load-path beno-custom-lib)
+(require 'soccer)
+(map! :leader
+          (:prefix-map ("o" . "open")
+           (:prefix ("S" . "soccer")
+            :desc "Favorite fixtures" "S" #'list-soccer-fixtures
+            :desc "Followed leagues" "l" #'list-soccer-leagues
+            :desc "Followed teams" "t" #'list-soccer-teams
+            :desc "Teams fixtures" "T" #'list-soccer-team-fixtures
+            :desc "Follow league" "f" #'soccer-follow-league
+            :desc "Unfollow league" "U" #'soccer-unfollow-league
+            :desc "Unfollow team" "u" #'soccer-unfollow-team
+            :desc "Follow team" "F" #'soccer-follow-team)))
+
+(after! eww
+  (eww-toggle-fonts))
+
+(defun beno-gpt-key ()
+  "Read gpt secret from authsource."
+  (funcall (plist-get (car (auth-source-search :host gpt-api-key))
+                      :secret)))
+(map! :leader
+      :desc "gpt"
+      :n "o g"
+      'gptel)
+
+(after! gptel
+  (setq gpt-api-key "api.openai.com"
+        gptel-default-mode 'org-mode
+        gptel-api-key #'beno-gpt-key))
+
+(after! cider-repl
+  (add-hook 'before-save-hook 'cider-format-buffer t t)
+
+  (defun portal.api/open ()
+    (interactive)
+    (cider-nrepl-sync-request:eval
+     "(do (ns dev) (def portal ((requiring-resolve 'portal.api/open) {:theme :portal.colors/material-ui})) (add-tap (requiring-resolve 'portal.api/submit)))"))
+
+  (defun portal.api/clear ()
+    (interactive)
+    (cider-nrepl-sync-request:eval "(portal.api/clear)"))
+
+  (defun portal.api/close ()
+    (interactive)
+    (cider-nrepl-sync-request:eval "(portal.api/close)"))
+
+  (map! :map clojure-mode-map
+        :localleader
+        :desc "open portal"  :n "o" #'portal.api/open
+        :desc "close portal" :n "q" #'portal.api/close
+        :desc "clear portal" :n "l" #'portal.api/clear)
+
+  ;; NOTE: You do need to have portal on the class path
+  (setq cider-clojure-cli-aliases ":portal"))
+
+(defun beno-find-file-in-dotfiles ()
+  "Search for a file in `dotfiles'."
+  (interactive)
+  (doom-project-find-file "~/Code/dotfiles"))
+
+(map! :map doom-leader-map
+      "f p" #'beno-find-file-in-dotfiles)
