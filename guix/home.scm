@@ -123,7 +123,8 @@
          "nmap"
          "pinentry-emacs"
          "maven"
-         "fzf")))
+         "fzf"
+         "emacs-vterm")))
  (services
   (list
    (simple-service 'environment-variables-service
