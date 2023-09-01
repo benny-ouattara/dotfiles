@@ -1139,3 +1139,19 @@ $stderr = File.open(\"err.txt\", \"w\")")
 
 (map! :map doom-leader-map
       "f p" #'beno-find-file-in-dotfiles)
+
+(defadvice! beno-recenter-consult-line (&rest _)
+  :after #'consult-line
+  (evil-scroll-line-to-center nil))
+
+(defadvice! beno-recenter-after-search (&rest _)
+  :after #'evil-ex-search-word-forward
+  (evil-scroll-line-to-center nil))
+
+(defadvice! beno-recenter-after-search (&rest _)
+  :after #'evil-ex-search-next
+  (evil-scroll-line-to-center nil))
+
+(defadvice! beno-recenter-after-search (&rest _)
+  :after #'evil-ex-search-previous
+  (evil-scroll-line-to-center nil))

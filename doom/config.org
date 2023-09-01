@@ -386,6 +386,7 @@ Indentation of =2= for most programming languages
 #+end_src
 
 ** better vertical motion keybindings
+Using advices doesn't work for these, it gets stuck after the first call
 #+begin_src emacs-lisp
 (defun beno-evil-scroll-down ()
   (interactive)
@@ -2082,4 +2083,22 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
 
 (map! :map doom-leader-map
       "f p" #'beno-find-file-in-dotfiles)
+#+end_src
+* search related advices
+#+begin_src emacs-lisp
+(defadvice! beno-recenter-consult-line (&rest _)
+  :after #'consult-line
+  (evil-scroll-line-to-center nil))
+
+(defadvice! beno-recenter-after-search (&rest _)
+  :after #'evil-ex-search-word-forward
+  (evil-scroll-line-to-center nil))
+
+(defadvice! beno-recenter-after-search (&rest _)
+  :after #'evil-ex-search-next
+  (evil-scroll-line-to-center nil))
+
+(defadvice! beno-recenter-after-search (&rest _)
+  :after #'evil-ex-search-previous
+  (evil-scroll-line-to-center nil))
 #+end_src
