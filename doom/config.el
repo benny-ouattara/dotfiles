@@ -36,21 +36,23 @@
  org-pomodoro-length 45
  org-pomodoro-short-break-length 15)
 
-(if (equal "zangao" (user-login-name))
-    (setq
-     ;; doom-font (font-spec :family "monaco" :size 15 :weight 'normal)
-     ;; doom-font (font-spec :family "JetBrains Mono" :size 19 :weight 'normal :width 'normal)
-     ;; doom-variable-pitch-font (font-spec :family "Avenir Next" :size 21)
-     doom-font (font-spec :family "Iosevka" :size 21 :weight 'normal)
-     doom-big-font (font-spec :family "Iosevka" :size 27)
-     doom-theme 'modus-operandi-tinted)
-  (setq
-   ;; doom-font (font-spec :family "monaco" :size 15 :weight 'normal)
-   ;; doom-font (font-spec :family "JetBrains Mono" :size 19 :weight 'normal :width 'normal)
-   ;; doom-variable-pitch-font (font-spec :family "Avenir Next" :size 21)
-   doom-font (font-spec :family "Iosevka" :size 19 :weight 'normal)
-   doom-big-font (font-spec :family "Iosevka" :size 25)
-   doom-theme 'modus-vivendi-tinted))
+(pcase (user-login-name)
+  ("zangao" (setq
+             doom-font (font-spec :family "Iosevka" :size 21 :weight 'normal)
+             doom-big-font (font-spec :family "Iosevka" :size 27)
+             doom-theme 'modus-operandi-tinted))
+  ("bouattara" (setq
+                doom-font (font-spec :family "Iosevka" :size 19 :weight 'normal)
+                doom-big-font (font-spec :family "Iosevka" :size 25)
+                doom-theme 'modus-vivendi-tinted))
+  ("benouattara" (setq
+                  doom-font (font-spec :family "Iosevka" :size 19 :weight 'normal)
+                  doom-big-font (font-spec :family "Iosevka" :size 25)
+                  doom-theme 'modus-vivendi-tinted))
+  ("ben" (setq
+          doom-font (font-spec :family "Iosevka" :size 23 :weight 'normal)
+          doom-big-font (font-spec :family "Iosevka" :size 29)
+          doom-theme 'modus-operandi-tinted) ))
 
 (setq
  mac-command-modifier 'meta
