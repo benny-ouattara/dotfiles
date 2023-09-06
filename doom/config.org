@@ -77,7 +77,7 @@ ensure that we have these libraries loaded before proceeding
   ("ben" (setq
           doom-font (font-spec :family "Iosevka" :size 23 :weight 'normal)
           doom-big-font (font-spec :family "Iosevka" :size 29)
-          doom-theme 'modus-operandi-tinted) ))
+          doom-theme 'ef-duo-light) ))
 
 (setq
  mac-command-modifier 'meta
@@ -2103,4 +2103,12 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
 (defadvice! beno-recenter-after-search (&rest _)
   :after #'evil-ex-search-previous
   (evil-scroll-line-to-center nil))
+#+end_src
+* scheme
+#+begin_src emacs-lisp
+(after! scheme
+  (set-popup-rules!
+    '(("^\\*[gG]eiser \\(dbg\\|xref\\|messages\\)\\*$" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
+      ("^\\*Geiser documentation\\*$" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
+      ("^\\*Geiser .+ REPL" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right))))
 #+end_src

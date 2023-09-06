@@ -16,6 +16,7 @@
        (name 'nonguix)
        (url "https://gitlab.com/nonguix/nonguix")
        (branch "master")
+       (commit "d44f0cde50ca96eabf6e7b0f0c9bdbd89508b790") ;; pin commit to avoid unbound variable bug
        (introduction
         (make-channel-introduction
          "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
@@ -30,15 +31,15 @@
        (branch "develop")
        (url "git@github.com:benny-ouattara/octo-guix.git")
        (introduction %guix-channel-introduction))
-      (channel
-       (name 'todo)
-       (url (string-append "file://"
-                           (getenv "HOME")
-                           "/Code/todo")))
-      (channel
-       (name 'guix-turtle)
-       (url "git@github.com:benny-ouattara/guix-turtle.git")
-       (branch "master"))
+      ;; (channel
+      ;;  (name 'todo)
+      ;;  (url (string-append "file://"
+      ;;                      (getenv "HOME")
+      ;;                      "/Code/todo")))
+      ;; (channel
+      ;;  (name 'guix-turtle)
+      ;;  (url "git@github.com:benny-ouattara/guix-turtle.git")
+      ;;  (branch "master"))
       ;; (channel
       ;;  (name 'guix-turtle-local)
       ;;  (url "file:///home/ben/Code/guix-turtle")

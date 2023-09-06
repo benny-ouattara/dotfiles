@@ -52,7 +52,7 @@
   ("ben" (setq
           doom-font (font-spec :family "Iosevka" :size 23 :weight 'normal)
           doom-big-font (font-spec :family "Iosevka" :size 29)
-          doom-theme 'modus-operandi-tinted) ))
+          doom-theme 'ef-duo-light) ))
 
 (setq
  mac-command-modifier 'meta
@@ -1157,3 +1157,9 @@ $stderr = File.open(\"err.txt\", \"w\")")
 (defadvice! beno-recenter-after-search (&rest _)
   :after #'evil-ex-search-previous
   (evil-scroll-line-to-center nil))
+
+(after! scheme
+  (set-popup-rules!
+    '(("^\\*[gG]eiser \\(dbg\\|xref\\|messages\\)\\*$" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
+      ("^\\*Geiser documentation\\*$" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
+      ("^\\*Geiser .+ REPL" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right))))
