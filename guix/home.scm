@@ -7,6 +7,8 @@
 (use-modules
  (gnu home)
  (gnu packages)
+ (gnu packages networking)
+ (gnu packages admin)
  (gnu packages gnupg)
  (gnu services)
  (guix gexp)
@@ -123,7 +125,10 @@
          "nmap"
          "pinentry-emacs"
          "maven"
-         "fzf")))
+         "fzf"
+         "iptables"
+         "ipcalc"
+         "sipcalc")))
  (services
   (list
    (simple-service 'environment-variables-service
@@ -138,7 +143,14 @@
                     (add-keys-to-agent "yes")
                     (hosts
                      (list (openssh-host (name "*")
-                                         (extra-content "    StrictHostKeyChecking no"))))))
+                                         (extra-content "  StrictHostKeyChecking no"))
+                           (openssh-host
+                            (name "scratch 159.203.128.204")
+                            (host-name "159.203.128.204")
+                            (identity-file "/home/ben/Code/todo/id_rsa")
+                            (user "root")
+                            (proxy (proxy-command "ssh -W %h:%p root@159.65.34.138")))
+                           ))))
    (service home-gpg-agent-service-type
             (home-gpg-agent-configuration
              (pinentry-program
