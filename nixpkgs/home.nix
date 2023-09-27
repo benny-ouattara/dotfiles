@@ -189,9 +189,9 @@ in rec {
         #    eval "$(pyenv init -)"
         #    eval "$(pyenv virtualenv-init -)"
         # fi
-        # if hash jenv 2>/dev/null; then
-        #    eval "$(jenv init -)"
-        # fi
+        if hash jenv 2>/dev/null; then
+           eval "$(jenv init -)"
+        fi
         if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then . $HOME/.nix-profile/etc/profile.d/nix.sh; fi # required by nix to configure various paths
 
         export EDITOR=emacs
