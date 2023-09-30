@@ -25,6 +25,7 @@ in
             "yabai"
             "sbcl"
             "btop"
+            "nnn"
         ];
         casks = let
             skipSha = name: {
