@@ -40,9 +40,9 @@ switch: darwin home
 
 reload-keys:
 	switch darwin home
-	launchctl unload -w org.nixos.skhd.plist
+	launchctl unload -w ~/Library/LaunchAgents/org.nixos.skhd.plist
 	sleep 5
-	launchctl load -w org.nixos.skhd.plist
+	launchctl load -w ~/Library/LaunchAgents/org.nixos.skhd.plist
 
 # clean:
 # 	$(call message,nix collect garbage)
