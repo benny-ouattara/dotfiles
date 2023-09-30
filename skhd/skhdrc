@@ -8,7 +8,7 @@ cmd + ctrl - d :  emacsclient -c -e '(dired "~")'
 cmd + ctrl - e :  emacsclient -c -e '(elfeed)'
 cmd + ctrl - m :  emacsclient -c -e '(mu4e)'
 
-cmd + ctrl - v : open -n /Applications/Alacritty.app --args --live-config-reload --config-file $HOME/.config/alacritty/alacritty.yml --command nnn
+cmd + ctrl - v : open -n /Applications/Alacritty.app --args --config-file $HOME/.config/alacritty/alacritty.yml --command nnn
 
 cmd + ctrl - i : open -a /Applications/Emacs.app
 # cmd + ctrl - i : emacsclient -c
