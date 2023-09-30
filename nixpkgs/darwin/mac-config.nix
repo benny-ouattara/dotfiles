@@ -57,6 +57,8 @@ in
             "font-symbols-only-nerd-font"
             "sf-symbols"
             "wezterm"
+            "monitorcontrol"
+            "meetingbar"
             #"qutebrowser"
             #"slack"
             #"docker"

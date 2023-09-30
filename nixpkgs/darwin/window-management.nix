@@ -6,6 +6,7 @@ let
 in
 {
   services.skhd.enable = true;
+  services.sketchybar.enable = true;
   services.skhd.skhdConfig = (builtins.readFile (pkgs.substituteAll {
     src = ../../skhd/skhdrc;
     tmuxEmulator = pkgs.writeShellScript "tmuxEmulator" ''

@@ -163,7 +163,6 @@ in rec {
       sbcl  = "${pkgs.rlwrap}/bin/rlwrap sbcl";
       guile = "${pkgs.rlwrap}/bin/rlwrap guile";
       info  = "info --vi-keys";
-      # git   = "/usr/local/Cellar/git/2.39.2/bin/git";
     };
 
     profileExtra = ''
@@ -196,7 +195,7 @@ in rec {
 
         export EDITOR=emacs
         export VISUAL=emacs
-        export CPATH=/usr/local/include
+        export XDG_CONFIG_HOME="$HOME/.config"
       '';
   };
 
