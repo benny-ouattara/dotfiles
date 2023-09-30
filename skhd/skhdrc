@@ -2,7 +2,8 @@
 # cmd + ctrl - v : open -n ~/Applications/Nix\ Apps/Alacritty.app --args --live-config-reload --config-file $HOME/.config/alacritty/alacritty.yml --command ranger
 # cmd + ctrl - t : open -n ~/Applications/Nix\ Apps/Alacritty.app --args --live-config-reload --config-file $HOME/.config/alacritty/alacritty.yml
 
-cmd + ctrl - return : emacsclient -c -e '(let ((default-directory "~")) (+vterm/here t))'
+# cmd + ctrl - return : emacsclient -c -e '(let ((default-directory "~")) (+vterm/here t))'
+cmd + ctrl - return : open -n /Applications/wezTerm.app
 cmd + ctrl - d :  emacsclient -c -e '(dired "~")'
 cmd + ctrl - e :  emacsclient -c -e '(elfeed)'
 cmd + ctrl - m :  emacsclient -c -e '(mu4e)'
