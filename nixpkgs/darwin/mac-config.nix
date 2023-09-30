@@ -79,7 +79,7 @@ in
         ];
         extraConfig = ''
       # cask_args appdir: "${home-dir}/Applications"
-      brew "emacs-plus@30", args: ["with-imagemagick", "with-modern-sexy-v2-icon",  "with-native-comp"], link: true
+      brew "emacs-plus@30", args: ["with-imagemagick", "with-modern-sexy-v2-icon"], link: true
     '';
     };
 
