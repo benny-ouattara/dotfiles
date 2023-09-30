@@ -2,6 +2,7 @@
 
 {
   all = [
+    pkgs.scalafmt
     pkgs.sketchybar
     pkgs.docker-compose
     pkgs.foreman

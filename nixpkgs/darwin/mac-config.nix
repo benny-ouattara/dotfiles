@@ -3,9 +3,6 @@
 let
     home-dir = builtins.getEnv("HOME");
     packages = pkgs.callPackage ./packages.nix {};
-    formulae = pkgs.callPackage ./brew-formulae.nix {};
-    casks = pkgs.callPackage ./brew-casks.nix {};
-    taps = pkgs.callPackage ./brew-taps.nix {};
 in
 {
     nix.package = pkgs.nix;
@@ -25,7 +22,6 @@ in
             "yabai"
             "sbcl"
             "btop"
-            "nnn"
         ];
         casks = let
             skipSha = name: {
