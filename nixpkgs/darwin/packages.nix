@@ -2,6 +2,7 @@
 
 {
   all = [
+    pkgs.sketchybar
     pkgs.docker-compose
     pkgs.foreman
     pkgs.yarn
@@ -37,7 +38,7 @@
     pkgs.cloc
     pkgs.overmind
     pkgs.metals
-    pkgs.fish
+    # pkgs.fish
     pkgs.neofetch
     pkgs.ranger
     pkgs.zsh

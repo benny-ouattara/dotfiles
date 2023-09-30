@@ -12,6 +12,75 @@ in
 
     environment.systemPackages = packages.all;
 
+    homebrew = {
+        enable = true;
+        caskArgs.require_sha = true;
+        onActivation = {
+            autoUpdate = true;
+            cleanup = "uninstall";
+            upgrade = true;
+        };
+        brews = [
+            "choose-gui"
+            "yabai"
+            "sbcl"
+            "btop"
+        ];
+        casks = let
+            skipSha = name: {
+                inherit name;
+                args = {require_sha = false;};
+            };
+            noQuarantine = name: {
+                inherit name;
+                args = {no_quarantine = true;};
+            };
+        in [
+            (skipSha "spotify")
+            "gimp"
+            (noQuarantine "olive")
+            "vlc"
+            "appcleaner"
+            "discord"
+            "blender"
+            "utm"
+            "maccy"
+            "balenaetcher"
+            "dmenu-mac"
+            "protonvpn"
+            "alacritty"
+            "syncthing"
+            "kitty"
+            "font-victor-mono-nerd-font"
+            "font-iosevka-nerd-font"
+            "font-iosevka-term-nerd-font"
+            "font-symbols-only-nerd-font"
+            "sf-symbols"
+            "wezterm"
+            #"qutebrowser"
+            #"slack"
+            #"docker"
+            #"zoom"
+            #"android-platform-tools"
+        ];
+        taps = [
+            "homebrew/cask-fonts"
+            "homebrew/cask"
+            "homebrew/bundle"
+            "homebrew/services"
+            "koekeishiya/formulae"
+            "d12frosted/emacs-plus"
+            "clojure/tools"
+            "flyteorg/tap"
+            # "spotify/public"
+            # "spotify/sptaps"
+        ];
+        extraConfig = ''
+      # cask_args appdir: "${home-dir}/Applications"
+      brew "emacs-plus@30", args: ["with-imagemagick", "with-modern-sexy-v2-icon",  "with-native-comp"], link: true
+    '';
+    };
+
     # Note that the homebrew pkg overshadows system packages probably a bug in the mdule
     # Comment it out in order to have system packages be applied
     # homebrew = {

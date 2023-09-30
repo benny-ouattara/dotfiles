@@ -91,7 +91,6 @@ To have grub-mkconfig search for other installed systems and automatically add t
 GRUB_DISABLE_OS_PROBER=false
 #+end_quote
 
-
 xorg is not automatically started, it should be started with a display manager
 or xinit
 #+begin_src

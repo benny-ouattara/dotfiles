@@ -2,7 +2,6 @@
 # cmd + ctrl - v : open -n ~/Applications/Nix\ Apps/Alacritty.app --args --live-config-reload --config-file $HOME/.config/alacritty/alacritty.yml --command ranger
 # cmd + ctrl - t : open -n ~/Applications/Nix\ Apps/Alacritty.app --args --live-config-reload --config-file $HOME/.config/alacritty/alacritty.yml
 
-# cmd + ctrl - return : @tmuxEmulator@
 cmd + ctrl - return : emacsclient -c -e '(let ((default-directory "~")) (+vterm/here t))'
 cmd + ctrl - d :  emacsclient -c -e '(dired "~")'
 cmd + ctrl - e :  emacsclient -c -e '(elfeed)'
@@ -19,19 +18,11 @@ cmd + ctrl - c : ~/.emacs.d/bin/org-capture
 
 # focus window
 cmd + ctrl - j : yabai -m window --focus prev
-# cmd + ctrl - h : yabai -m window --focus south || yabai -m display --focus prev
 cmd + ctrl - h : yabai -m space --balance && yabai -m window --ratio rel:-0.2
-# cmd + ctrl - l : yabai -m window --focus north || yabai -m display --focus next
 cmd + ctrl - l : yabai -m space --balance && yabai -m window --ratio rel:0.2
 cmd + ctrl - k : yabai -m window --focus next
 cmd + ctrl - 0x21 : yabai -m window --focus stack.prev # this is [
 cmd + ctrl - 0x1E : yabai -m window --focus stack.next # this is ]
-
-# move window
-# cmd + shift + ctrl - h : yabai -m window --warp west
-# cmd + shift + ctrl - j : yabai -m window --warp south || { yabai -m window --display prev && yabai -m display --focus prev }
-# cmd + shift + ctrl - k : yabai -m window --warp north || { yabai -m window --display next && yabai -m display --focus next }
-# cmd + shift + ctrl - l : yabai -m window --warp east
 
 # swap instead of warp
 cmd + shift + ctrl - j : yabai -m window --swap west
@@ -53,9 +44,6 @@ cmd + ctrl - 4 : yabai -m space --focus 4
 cmd + ctrl - 5 : yabai -m space --focus 5
 cmd + ctrl - 6 : yabai -m space --focus 6
 cmd + ctrl - 7 : yabai -m space --focus 7
-# cmd + ctrl - 8 : yabai -m space --focus 8
-# cmd + ctrl - 9 : yabai -m space --focus 9
-# cmd + ctrl - 0 : yabai -m space --focus 10
 
 # send window to desktop and follow focus
 shift + cmd + ctrl - tab : yabai -m window --space recent; yabai -m space --focus recent
@@ -68,9 +56,6 @@ shift + cmd + ctrl - 4 : yabai -m window --space  4; yabai -m space --focus 4
 shift + cmd + ctrl - 5 : yabai -m window --space  5; yabai -m space --focus 5
 shift + cmd + ctrl - 6 : yabai -m window --space  6; yabai -m space --focus 6
 shift + cmd + ctrl - 7 : yabai -m window --space  7; yabai -m space --focus 7
-# shift + cmd + ctrl - 8 : yabai -m window --space  8; yabai -m space --focus 8
-# shift + cmd + ctrl - 9 : yabai -m window --space  9; yabai -m space --focus 9
-# shift + cmd + ctrl - 0 : yabai -m window --space 10; yabai -m space --focus 10
 
 # set insertion point in focused container
 cmd + ctrl + alt - h : yabai -m window --insert west
@@ -84,7 +69,14 @@ cmd + ctrl - e : yabai -m space --layout float
 shift + cmd + ctrl - e : yabai -m space --layout bsp
 
 # float layout
-cmd + ctrl - space : yabai -m window --toggle zoom-fullscreen
+cmd + ctrl - space : yabai -m window --toggle zoom-fullscreen; sketchybar --trigger window_focus
 
 # float / unfloat window and center on screen
 # cmd + ctrl - space : yabai -m window --toggle float; yabai -m window --grid 4:4:1:1:2:2
+
+# Enable / Disable gaps in current workspace
+cmd + ctrl - g : yabai -m space --toggle padding; yabai -m space --toggle gap
+
+# Toggle sketchybar
+shift + lalt - space : sketchybar --bar hidden=toggle
+shift + lalt - r : sketchybar --remove '/.*/' && sh -c 'export CONFIG_DIR=$HOME/.config/sketchybar && $CONFIG_DIR/sketchybarrc'
