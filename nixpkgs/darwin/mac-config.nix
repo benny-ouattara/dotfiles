@@ -56,6 +56,9 @@ in
             "wezterm"
             "monitorcontrol"
             "meetingbar"
+            "corretto17"
+            "corretto11"
+            "google-cloud-sdk"
             #"qutebrowser"
             #"slack"
             #"docker"
@@ -63,6 +66,7 @@ in
             #"android-platform-tools"
         ];
         taps = [
+            "homebrew/cask-versions"
             "homebrew/cask-fonts"
             "homebrew/cask"
             "homebrew/bundle"
