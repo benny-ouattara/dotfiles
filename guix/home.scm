@@ -105,8 +105,8 @@
          ;; "font-nerd-meslo"
          ;; "font-nerd-victor"
          ;; "font-material-icons"
-         ;; "ungoogled-chromium"
-         "firefox"
+         "ungoogled-chromium"
+         ;; "firefox"
          "dunst"
          "mpv"
          "ncmpcpp"
@@ -153,8 +153,8 @@
                      (user "root")
                      (proxy (proxy-command "ssh -W %h:%p root@159.65.34.138")))
                     (openssh-host
-                     (name "cuirass 138.197.6.189")
-                     (host-name "138.197.6.189")
+                     (name "cuirass 143.198.20.130")
+                     (host-name "143.198.20.130")
                      (identity-file "/home/ben/Code/todo/id_rsa")
                      (user "root")
                      (proxy (proxy-command "ssh -W %h:%p root@159.65.34.138")))
@@ -165,8 +165,8 @@
                      (user "root")
                      (proxy (proxy-command "ssh -W %h:%p root@159.65.34.138")))
                     (openssh-host
-                     (name "db0 104.236.70.206")
-                     (host-name "104.236.70.206")
+                     (name "db0 104.131.178.33")
+                     (host-name "104.131.178.33")
                      (identity-file "/home/ben/Code/todo/id_rsa")
                      (user "root")
                      (proxy (proxy-command "ssh -W %h:%p root@159.65.34.138")))

@@ -143,7 +143,7 @@ EndSection
      (specification->package "st")
      (specification->package "ratpoison")
      (specification->package "xterm")
-     (specification->package "emacs-next")
+     (specification->package "emacs@29.1")
      (specification->package "emacs-exwm")
      (specification->package
       "emacs-desktop-environment")
@@ -153,6 +153,30 @@ EndSection
    (append
     (list
      ;; (dbus-service #:services (list bluez-alsa))
+     (service guix-publish-service-type
+              (guix-publish-configuration
+               (host "0.0.0.0")
+               (advertise? #t)))
+     (service cuirass-service-type
+              (cuirass-configuration
+               (use-substitutes? #t)
+               (fallback? #t)
+               (specifications
+                #~(list
+                   (specification
+                    (name "todo-releases")
+                    (build '(packages "hello"))
+                    ;; (channels
+                    ;;  (list
+                    ;;   ;; (channel
+                    ;;   ;;  (name 'todo-releases)
+                    ;;   ;;  (branch "main")
+                    ;;   ;;  (url "git@github.com:benny-ouattara/todo-releases.git"))
+                    ;;   (channel
+                    ;;    (name 'guix)
+                    ;;    (branch "master")
+                    ;;    (url "https://git.savannah.gnu.org/git/guix.git"))))
+                    )))))
      (service postgresql-service-type)
      (service libvirt-service-type
               (libvirt-configuration
