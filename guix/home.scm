@@ -150,8 +150,7 @@
                      (name "gateway 159.65.34.138")
                      (host-name "159.65.34.138")
                      (identity-file "/home/ben/Code/todo/id_rsa")
-                     (user "root")
-                     (proxy (proxy-command "ssh -W %h:%p root@159.65.34.138")))
+                     (user "root"))
                     (openssh-host
                      (name "cuirass 143.198.20.130")
                      (host-name "143.198.20.130")
