@@ -11,6 +11,7 @@
  (gnu packages admin)
  (gnu packages gnupg)
  (gnu services)
+ (gnu packages ci)
  (guix gexp)
  (gnu home services shells)
  (gnu home services gnupg)
@@ -128,7 +129,8 @@
          "fzf"
          "iptables"
          "ipcalc"
-         "sipcalc")))
+         "sipcalc"
+         "btop")))
  (services
   (list
    (simple-service 'environment-variables-service
@@ -139,18 +141,41 @@
                      ;; ("SHELL" . ,(file-append zsh "/bin/zsh"))
                      ))
    (service home-openssh-service-type
-                   (home-openssh-configuration
-                    (add-keys-to-agent "yes")
-                    (hosts
-                     (list (openssh-host (name "*")
-                                         (extra-content "  StrictHostKeyChecking no"))
-                           (openssh-host
-                            (name "scratch 159.203.128.204")
-                            (host-name "159.203.128.204")
-                            (identity-file "/home/ben/Code/todo/id_rsa")
-                            (user "root")
-                            (proxy (proxy-command "ssh -W %h:%p root@159.65.34.138")))
-                           ))))
+            (home-openssh-configuration
+             (add-keys-to-agent "yes")
+             (hosts
+              (list (openssh-host (name "*")
+                                  (extra-content "  StrictHostKeyChecking no"))
+                    (openssh-host
+                     (name "gateway 159.65.34.138")
+                     (host-name "159.65.34.138")
+                     (identity-file "/home/ben/Code/todo/id_rsa")
+                     (user "root")
+                     (proxy (proxy-command "ssh -W %h:%p root@159.65.34.138")))
+                    (openssh-host
+                     (name "cuirass 138.197.6.189")
+                     (host-name "138.197.6.189")
+                     (identity-file "/home/ben/Code/todo/id_rsa")
+                     (user "root")
+                     (proxy (proxy-command "ssh -W %h:%p root@159.65.34.138")))
+                    (openssh-host
+                     (name "app0 167.172.250.252")
+                     (host-name "167.172.250.252")
+                     (identity-file "/home/ben/Code/todo/id_rsa")
+                     (user "root")
+                     (proxy (proxy-command "ssh -W %h:%p root@159.65.34.138")))
+                    (openssh-host
+                     (name "db0 104.236.70.206")
+                     (host-name "104.236.70.206")
+                     (identity-file "/home/ben/Code/todo/id_rsa")
+                     (user "root")
+                     (proxy (proxy-command "ssh -W %h:%p root@159.65.34.138")))
+                    (openssh-host
+                     (name "scratch 159.203.128.204")
+                     (host-name "159.203.128.204")
+                     (identity-file "/home/ben/Code/todo/id_rsa")
+                     (user "root")
+                     (proxy (proxy-command "ssh -W %h:%p root@159.65.34.138")))))))
    (service home-gpg-agent-service-type
             (home-gpg-agent-configuration
              (pinentry-program

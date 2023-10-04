@@ -14,6 +14,7 @@
              (gnu system setuid)
              (gnu services databases)
              (gnu packages audio)
+             (guix channels)
              (srfi srfi-1))
 (use-service-modules
  cups
@@ -25,7 +26,8 @@
  syncthing
  monitoring
  pm
- virtualization)
+ virtualization
+ cuirass)
 
 ;; Allow members of the "video" group to change the screen brightness.
 (define %backlight-udev-rule

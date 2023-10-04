@@ -31,15 +31,18 @@
        (branch "develop")
        (url "git@github.com:benny-ouattara/octo-guix.git")
        (introduction %guix-channel-introduction))
-      ;; (channel
-      ;;  (name 'todo)
-      ;;  (url (string-append "file://"
-      ;;                      (getenv "HOME")
-      ;;                      "/Code/todo")))
+
+      (channel
+       (name 'todo)
+       (url (string-append "file:///home/ben/Code/todo"))
+       ;; (url "git@github.com:benny-ouattara/todomock.git")
+       (branch "main"))
+
       ;; (channel
       ;;  (name 'guix-turtle)
       ;;  (url "git@github.com:benny-ouattara/guix-turtle.git")
       ;;  (branch "master"))
+
       ;; (channel
       ;;  (name 'guix-turtle-local)
       ;;  (url "file:///home/ben/Code/guix-turtle")
