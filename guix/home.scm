@@ -9,6 +9,7 @@
  (gnu packages)
  (gnu packages networking)
  (gnu packages admin)
+ (gnu packages ssh)
  (gnu packages gnupg)
  (gnu services)
  (gnu packages ci)
@@ -106,7 +107,7 @@
          ;; "font-nerd-victor"
          ;; "font-material-icons"
          "ungoogled-chromium"
-         ;; "firefox"
+         "firefox"
          "dunst"
          "mpv"
          "ncmpcpp"
@@ -130,7 +131,8 @@
          "iptables"
          "ipcalc"
          "sipcalc"
-         "btop")))
+         "btop"
+         "autossh")))
  (services
   (list
    (simple-service 'environment-variables-service
@@ -149,30 +151,38 @@
                     (openssh-host
                      (name "gateway 159.65.34.138")
                      (host-name "159.65.34.138")
-                     (identity-file "/home/ben/Code/todo/id_rsa")
+                     (forward-agent? #t)
+                     (identity-file "/home/ben/.ssh/do_rsa")
                      (user "root"))
                     (openssh-host
-                     (name "cuirass 143.198.20.130")
-                     (host-name "143.198.20.130")
-                     (identity-file "/home/ben/Code/todo/id_rsa")
+                     (name "jumpbox 64.225.22.98")
+                     (host-name "64.225.22.98")
+                     (forward-agent? #t)
+                     (identity-file "/home/ben/.ssh/do_rsa")
+                     (user "root")
+                     (proxy (proxy-command "ssh -W %h:%p root@159.65.34.138")))
+                    (openssh-host
+                     (name "cuirass 104.236.65.62")
+                     (host-name "104.236.65.62")
+                     (identity-file "/home/ben/.ssh/do_rsa")
                      (user "root")
                      (proxy (proxy-command "ssh -W %h:%p root@159.65.34.138")))
                     (openssh-host
                      (name "app0 167.172.250.252")
                      (host-name "167.172.250.252")
-                     (identity-file "/home/ben/Code/todo/id_rsa")
+                     (identity-file "/home/ben/.ssh/do_rsa")
                      (user "root")
                      (proxy (proxy-command "ssh -W %h:%p root@159.65.34.138")))
                     (openssh-host
-                     (name "db0 104.131.178.33")
-                     (host-name "104.131.178.33")
-                     (identity-file "/home/ben/Code/todo/id_rsa")
+                     (name "db1 165.227.100.5")
+                     (host-name "165.227.100.5")
+                     (identity-file "/home/ben/.ssh/do_rsa")
                      (user "root")
                      (proxy (proxy-command "ssh -W %h:%p root@159.65.34.138")))
                     (openssh-host
                      (name "scratch 159.203.128.204")
                      (host-name "159.203.128.204")
-                     (identity-file "/home/ben/Code/todo/id_rsa")
+                     (identity-file "/home/ben/.ssh/do_rsa")
                      (user "root")
                      (proxy (proxy-command "ssh -W %h:%p root@159.65.34.138")))))))
    (service home-gpg-agent-service-type

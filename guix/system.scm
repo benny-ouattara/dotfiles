@@ -80,7 +80,8 @@ EndSection
                                             (append (list "https://substitutes.nonguix.org")
                                                     %default-substitute-urls))
                                            (authorized-keys
-                                            (append (list (local-file "./signing-key.pub"))
+                                            (append (list (local-file "./nonguix-key.pub")
+                                                          (local-file "./cuirass-key.pub"))
                                                     %default-authorized-guix-keys))))
     (elogind-service-type config =>
                           (elogind-configuration (inherit config)
@@ -143,7 +144,7 @@ EndSection
      (specification->package "st")
      (specification->package "ratpoison")
      (specification->package "xterm")
-     (specification->package "emacs@29.1")
+     (specification->package "emacs-next")
      (specification->package "emacs-exwm")
      (specification->package
       "emacs-desktop-environment")
@@ -152,7 +153,12 @@ EndSection
   (services
    (append
     (list
-     ;; (dbus-service #:services (list bluez-alsa))
+     (service autossh-service-type
+              (autossh-configuration
+               (user "root")
+               (log-level 2)
+               (port "0")
+               (ssh-options (list "-T" "-N" "-L" "8080:localhost:8081" "104.236.65.62"))))
      (service guix-publish-service-type
               (guix-publish-configuration
                (host "0.0.0.0")
@@ -164,7 +170,7 @@ EndSection
                (specifications
                 #~(list
                    (specification
-                    (name "todo-releases")
+                    (name "todo-releases3")
                     (build '(packages "hello"))
                     ;; (channels
                     ;;  (list
