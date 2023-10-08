@@ -132,7 +132,8 @@
          "ipcalc"
          "sipcalc"
          "btop"
-         "autossh")))
+         "autossh"
+         "glances")))
  (services
   (list
    (simple-service 'environment-variables-service
@@ -148,6 +149,12 @@
              (hosts
               (list (openssh-host (name "*")
                                   (extra-content "  StrictHostKeyChecking no"))
+                    (openssh-host
+                     (name "gateway0 159.89.34.15")
+                     (host-name "159.89.34.15")
+                     (forward-agent? #t)
+                     (identity-file "/home/ben/.ssh/do_rsa")
+                     (user "root"))
                     (openssh-host
                      (name "gateway 159.65.34.138")
                      (host-name "159.65.34.138")
