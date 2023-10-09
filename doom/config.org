@@ -1332,7 +1332,7 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
            hl-todo            ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
            (hydra +hydra/window-nav/body
                   +hydra/text-zoom/body)
-           ;;(emoji +unicode)  ; 🙂
+           (emoji +unicode)  ; 🙂
            ;;indent-guides     ; highlighted indent columns
            (modeline +light)          ; snazzy, Atom-inspired modeline, plus API
            nav-flash                  ; blink the current line after jumping

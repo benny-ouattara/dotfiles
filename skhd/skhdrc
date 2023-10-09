@@ -10,7 +10,7 @@ cmd + ctrl - m :  emacsclient -c -e '(mu4e)'
 # use ranger in kitty for image support
 cmd + ctrl - v : open -n /Applications/kitty.app --args command ranger
 
-cmd + ctrl - i : open -a /usr/local/Cellar/emacs-plus@30/30.0.50/Emacs.app
+cmd + ctrl - i : open -a /usr/local/Cellar/emacs-plus@29/29.1/Emacs.app
 cmd + ctrl - f : open -na "Google Chrome" --args --profile-directory=Default
 cmd + shift + ctrl - f : open -na "qutebrowser"
 cmd + ctrl - y : emacsclient -c -e '(find-file "~/Documents/org")'

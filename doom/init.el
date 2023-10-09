@@ -30,7 +30,7 @@
            hl-todo            ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
            (hydra +hydra/window-nav/body
                   +hydra/text-zoom/body)
-           ;;(emoji +unicode)  ; 🙂
+           (emoji +unicode)  ; 🙂
            ;;indent-guides     ; highlighted indent columns
            (modeline +light)          ; snazzy, Atom-inspired modeline, plus API
            nav-flash                  ; blink the current line after jumping
@@ -166,7 +166,7 @@
             ;; +pomodoro    ; be fruitful with the tomato technique
             +noter
             +present
-            ;; +pretty
+            +pretty
             +journal)                   ; using org-mode for presentations
            ;;perl              ; write code no one else can comprehend
            ;;php               ; perl's insecure younger brother
