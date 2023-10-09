@@ -19,6 +19,15 @@ define message
 	@echo '└────────────────────────────────────────────────────────────────────────────┘'
 endef
 
+help:
+	@echo "all                     - nix reconfigure home and darwin"
+	@echo "darwin                  - nix reconfigure darwin"
+	@echo "home                    - nix reconfigure home"
+	@echo "restart-skhd            - restart skhd"
+	@echo "restart-yabai           - restart yabai"
+	@echo "reset                   - nix reconfigure home/darwin and restart yabai, skhd"
+	@echo "build                   - nix build file"
+
 all: switch
 
 build:
@@ -38,11 +47,17 @@ home:
 
 switch: darwin home
 
-reload-keys:
-	switch darwin home
+reset: switch restart-skhd restart-yabai
+
+restart-skhd:
 	launchctl unload -w ~/Library/LaunchAgents/org.nixos.skhd.plist
 	sleep 5
 	launchctl load -w ~/Library/LaunchAgents/org.nixos.skhd.plist
+
+restart-yabai:
+	launchctl unload -w ~/Library/LaunchAgents/homebrew.mxcl.yabai.plist
+	sleep 5
+	launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.yabai.plist
 
 # clean:
 # 	$(call message,nix collect garbage)
