@@ -1169,3 +1169,6 @@ $stderr = File.open(\"err.txt\", \"w\")")
     '(("^\\*[gG]eiser \\(dbg\\|xref\\|messages\\)\\*$" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
       ("^\\*Geiser documentation\\*$" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
       ("^\\*Geiser .+ REPL" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right))))
+
+(after! vterm
+  (setq vterm-clear-scrollback-when-clearing t))

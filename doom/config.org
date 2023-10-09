@@ -2118,3 +2118,10 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
       ("^\\*Geiser documentation\\*$" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
       ("^\\*Geiser .+ REPL" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right))))
 #+end_src
+
+* vterm
+** clear scrollback
+#+begin_src emacs-lisp
+(after! vterm
+  (setq vterm-clear-scrollback-when-clearing t))
+#+end_src
