@@ -132,7 +132,6 @@
          "ipcalc"
          "sipcalc"
          "btop"
-         "autossh"
          "glances")))
  (services
   (list

@@ -12,7 +12,9 @@
              (gnu packages package-management)
              (gnu packages pulseaudio)
              (gnu system setuid)
+             (gnu system shadow)
              (gnu services databases)
+             (guix gexp)
              (gnu packages audio)
              (guix channels)
              (srfi srfi-1))
@@ -27,7 +29,8 @@
  monitoring
  pm
  virtualization
- cuirass)
+ cuirass
+ mcron)
 
 ;; Allow members of the "video" group to change the screen brightness.
 (define %backlight-udev-rule
@@ -91,6 +94,9 @@ EndSection
                                            (rules (cons %backlight-udev-rule
                                                         (udev-configuration-rules config)))))))
 
+(define garbage-collector-job
+  #~(job '(next-hour) "guix gc --collect-garbage"))
+
 (operating-system
   (kernel linux)
   (firmware (list linux-firmware))
@@ -153,12 +159,9 @@ EndSection
   (services
    (append
     (list
-     (service autossh-service-type
-              (autossh-configuration
-               (user "root")
-               (log-level 2)
-               (port "0")
-               (ssh-options (list "-T" "-N" "-L" "8080:localhost:8081" "104.236.65.62"))))
+     (simple-service 'system-cron-jobs
+                     mcron-service-type
+                     (list garbage-collector-job))
      (service guix-publish-service-type
               (guix-publish-configuration
                (host "0.0.0.0")
