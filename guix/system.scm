@@ -162,30 +162,6 @@ EndSection
      (simple-service 'system-cron-jobs
                      mcron-service-type
                      (list garbage-collector-job))
-     (service guix-publish-service-type
-              (guix-publish-configuration
-               (host "0.0.0.0")
-               (advertise? #t)))
-     (service cuirass-service-type
-              (cuirass-configuration
-               (use-substitutes? #t)
-               (fallback? #t)
-               (specifications
-                #~(list
-                   (specification
-                    (name "todo-releases3")
-                    (build '(packages "hello"))
-                    ;; (channels
-                    ;;  (list
-                    ;;   ;; (channel
-                    ;;   ;;  (name 'todo-releases)
-                    ;;   ;;  (branch "main")
-                    ;;   ;;  (url "git@github.com:benny-ouattara/todo-releases.git"))
-                    ;;   (channel
-                    ;;    (name 'guix)
-                    ;;    (branch "master")
-                    ;;    (url "https://git.savannah.gnu.org/git/guix.git"))))
-                    )))))
      (service postgresql-service-type)
      (service libvirt-service-type
               (libvirt-configuration
