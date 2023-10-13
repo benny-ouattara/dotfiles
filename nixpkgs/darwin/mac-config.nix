@@ -59,6 +59,7 @@ in
             "corretto17"
             "corretto11"
             "google-cloud-sdk"
+            "background-music"
             #"qutebrowser"
             #"slack"
             #"docker"
