@@ -149,8 +149,8 @@
               (list (openssh-host (name "*")
                                   (extra-content "  StrictHostKeyChecking no"))
                     (openssh-host
-                     (name "gateway 159.65.34.138")
-                     (host-name "159.65.34.138")
+                     (name "gateway 159.89.47.202")
+                     (host-name "159.89.47.202")
                      (forward-agent? #t)
                      (identity-file "/home/ben/.ssh/do_rsa")
                      (user "root"))
@@ -168,8 +168,8 @@
                      (user "root")
                      (proxy (proxy-command "ssh -W %h:%p root@159.65.34.138")))
                     (openssh-host
-                     (name "app 10.108.16.2")
-                     (host-name "10.108.16.2")
+                     (name "app 10.108.16.8")
+                     (host-name "10.108.16.8")
                      (identity-file "/home/ben/.ssh/do_rsa")
                      (user "root")
                      (proxy (proxy-command "ssh -W %h:%p root@159.65.34.138")))
