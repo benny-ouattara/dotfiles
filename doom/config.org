@@ -65,7 +65,8 @@ ensure that we have these libraries loaded before proceeding
   ("zangao" (setq
              doom-font (font-spec :family "Iosevka" :size 21 :weight 'normal)
              doom-big-font (font-spec :family "Iosevka" :size 27)
-             doom-theme 'modus-operandi-tinted))
+             ;; doom-theme 'modus-operandi-tinted
+             doom-theme 'catppuccin))
   ("bouattara" (setq
                 doom-font (font-spec :family "Iosevka" :size 19 :weight 'normal)
                 doom-big-font (font-spec :family "Iosevka" :size 25)
@@ -2126,4 +2127,15 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
 #+begin_src emacs-lisp
 (after! vterm
   (setq vterm-clear-scrollback-when-clearing t))
+#+end_src
+** use nushell in vterm
+#+begin_src emacs-lisp
+(after! vterm
+  (setq vterm-shell "/run/current-system/sw/bin/nu"))
+#+end_src
+* catppuccin theme
+Commented out to avoid recursive loading bug
+#+begin_src emacs-lisp
+;; (setq catppuccin-flavor 'mocha) ;; or 'latte, 'macchiato, or 'mocha, 'frappe
+;; (catppuccin-reload)
 #+end_src

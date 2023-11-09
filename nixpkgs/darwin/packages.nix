@@ -2,6 +2,7 @@
 
 {
   all = [
+    pkgs.nushell
     pkgs.scalafmt
     pkgs.sketchybar
     pkgs.docker-compose

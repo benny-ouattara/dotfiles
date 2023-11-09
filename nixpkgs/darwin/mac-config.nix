@@ -22,6 +22,7 @@ in
             "yabai"
             "sbcl"
             "btop"
+            "reroutingcli"
         ];
         casks = let
             skipSha = name: {

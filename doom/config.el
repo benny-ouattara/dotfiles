@@ -40,7 +40,8 @@
   ("zangao" (setq
              doom-font (font-spec :family "Iosevka" :size 21 :weight 'normal)
              doom-big-font (font-spec :family "Iosevka" :size 27)
-             doom-theme 'modus-operandi-tinted))
+             ;; doom-theme 'modus-operandi-tinted
+             doom-theme 'catppuccin))
   ("bouattara" (setq
                 doom-font (font-spec :family "Iosevka" :size 19 :weight 'normal)
                 doom-big-font (font-spec :family "Iosevka" :size 25)
@@ -1174,3 +1175,9 @@ $stderr = File.open(\"err.txt\", \"w\")")
 
 (after! vterm
   (setq vterm-clear-scrollback-when-clearing t))
+
+(after! vterm
+  (setq vterm-shell "/run/current-system/sw/bin/nu"))
+
+;; (setq catppuccin-flavor 'mocha) ;; or 'latte, 'macchiato, or 'mocha, 'frappe
+;; (catppuccin-reload)
