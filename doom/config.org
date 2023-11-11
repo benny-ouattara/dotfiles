@@ -1957,7 +1957,7 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
            calendar
            ;;emms
            ;;everywhere        ; *leave* Emacs!? You must be joking
-           ;;irc               ; how neckbeards socialize
+           irc               ; how neckbeards socialize
            (rss +org)                   ; emacs as an RSS reader
            ;;twitter           ; twitter client https://twitter.com/vnought
 
@@ -2131,7 +2131,8 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
 ** use nushell in vterm
 #+begin_src emacs-lisp
 (after! vterm
-  (setq vterm-shell "/run/current-system/sw/bin/nu"))
+  (setq vterm-shell "/run/current-system/sw/bin/nu")
+  )
 #+end_src
 * catppuccin theme
 Commented out to avoid recursive loading bug

@@ -1177,7 +1177,8 @@ $stderr = File.open(\"err.txt\", \"w\")")
   (setq vterm-clear-scrollback-when-clearing t))
 
 (after! vterm
-  (setq vterm-shell "/run/current-system/sw/bin/nu"))
+  (setq vterm-shell "/run/current-system/sw/bin/nu")
+  )
 
 ;; (setq catppuccin-flavor 'mocha) ;; or 'latte, 'macchiato, or 'mocha, 'frappe
 ;; (catppuccin-reload)
