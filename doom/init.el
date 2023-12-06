@@ -166,7 +166,7 @@
             ;; +pomodoro    ; be fruitful with the tomato technique
             +noter
             +present
-            +pretty
+            ;; +pretty
             +journal)                   ; using org-mode for presentations
            ;;perl              ; write code no one else can comprehend
            ;;php               ; perl's insecure younger brother
@@ -206,7 +206,7 @@
            calendar
            ;;emms
            ;;everywhere        ; *leave* Emacs!? You must be joking
-           ;; irc               ; how neckbeards socialize
+           ;;irc               ; how neckbeards socialize
            (rss +org)                   ; emacs as an RSS reader
            ;;twitter           ; twitter client https://twitter.com/vnought
 

@@ -53,7 +53,7 @@
   ("ben" (setq
           doom-font (font-spec :family "Iosevka" :size 23 :weight 'normal)
           doom-big-font (font-spec :family "Iosevka" :size 29)
-          doom-theme 'ef-duo-light) ))
+          doom-theme 'catppuccin) ))
 
 (setq
  mac-command-modifier 'meta
