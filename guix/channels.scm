@@ -36,7 +36,6 @@
  ;;  (introduction %guix-channel-introduction))
 
  (channel
-  (name 'todo-releases)
-  (url  "git@github.com:benny-ouattara/todo-releases.git")
-  ;; (url (string-append "file:///home/ben/Code/todo"))
-  (branch "main")))
+  (name 'contactapp)
+  (url  "git@github.com:benny-ouattara/contactapp.git")
+  (branch "packaging")))
