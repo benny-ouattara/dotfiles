@@ -19,7 +19,8 @@
  (gnu home services)
  (gnu home services ssh)
  (gnu home services desktop)
- (gnu packages shells))
+ (gnu packages shells)
+ (gnu packages shellutils))
 
 (home-environment
  (packages
@@ -132,7 +133,30 @@
          "ipcalc"
          "sipcalc"
          "btop"
-         "glances")))
+         "glances"
+         "dfc"
+         "facter"
+         "jnettop"
+         "clusterssh"
+         "dmidecode"
+         "tree"
+         "smartmontools"
+         "fdupes"
+         "autojump"
+         "fasd"
+         "iftop"
+         "di"
+         "neofetch"
+         ;; "lynis"
+         "ngrep"
+         "jtbl"
+         "rex"
+         "doctl"
+         "du-dust"
+         "direnv"
+         "nushell"
+         "pandoc"
+         "bat")))
  (services
   (list
    (simple-service 'environment-variables-service
@@ -149,36 +173,36 @@
               (list (openssh-host (name "*")
                                   (extra-content "  StrictHostKeyChecking no"))
                     (openssh-host
-                     (name "gateway 159.89.47.202")
-                     (host-name "159.89.47.202")
+                     (name "gateway 104.248.40.197")
+                     (host-name "104.248.40.197")
                      (forward-agent? #t)
-                     (identity-file "/home/ben/.ssh/do_rsa")
+                     (identity-file "/home/ben/.ssh/test_id_rsa")
                      (user "root"))
                     (openssh-host
-                     (name "jumpbox 10.108.16.6")
-                     (host-name "10.108.16.6")
+                     (name "jumpbox 10.114.0.3")
+                     (host-name "10.114.0.3")
                      (forward-agent? #t)
-                     (identity-file "/home/ben/.ssh/do_rsa")
+                     (identity-file "/home/ben/.ssh/test_id_rsa")
                      (user "root")
-                     (proxy (proxy-command "ssh -W %h:%p root@159.65.34.138")))
+                     (proxy (proxy-command "ssh -W %h:%p root@104.248.40.197")))
                     (openssh-host
-                     (name "cuirass 10.108.16.3")
-                     (host-name "10.108.16.3")
-                     (identity-file "/home/ben/.ssh/do_rsa")
+                     (name "cuirass 10.114.0.6")
+                     (host-name "10.114.0.6")
+                     (identity-file "/home/ben/.ssh/test_id_rsa")
                      (user "root")
-                     (proxy (proxy-command "ssh -W %h:%p root@159.65.34.138")))
+                     (proxy (proxy-command "ssh -W %h:%p root@104.248.40.197")))
                     (openssh-host
-                     (name "app 10.108.16.8")
-                     (host-name "10.108.16.8")
-                     (identity-file "/home/ben/.ssh/do_rsa")
+                     (name "db 10.114.0.5")
+                     (host-name "10.114.0.5")
+                     (identity-file "/home/ben/.ssh/test_id_rsa")
                      (user "root")
-                     (proxy (proxy-command "ssh -W %h:%p root@159.65.34.138")))
+                     (proxy (proxy-command "ssh -W %h:%p root@104.248.40.197")))
                     (openssh-host
-                     (name "db 10.108.16.7")
-                     (host-name "10.108.16.7")
-                     (identity-file "/home/ben/.ssh/do_rsa")
+                     (name "app 10.114.0.4")
+                     (host-name "10.114.0.4")
+                     (identity-file "/home/ben/.ssh/test_id_rsa")
                      (user "root")
-                     (proxy (proxy-command "ssh -W %h:%p root@159.65.34.138")))))))
+                     (proxy (proxy-command "ssh -W %h:%p root@104.248.40.197")))))))
    (service home-gpg-agent-service-type
             (home-gpg-agent-configuration
              (pinentry-program

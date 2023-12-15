@@ -15,6 +15,7 @@
              (gnu system shadow)
              (gnu services databases)
              (guix gexp)
+             (contactapp service)
              (gnu packages audio)
              (guix channels)
              (srfi srfi-1))
