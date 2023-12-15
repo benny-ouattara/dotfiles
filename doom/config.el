@@ -41,7 +41,14 @@
              doom-font (font-spec :family "Iosevka" :size 21 :weight 'normal)
              doom-big-font (font-spec :family "Iosevka" :size 27)
              ;; doom-theme 'modus-operandi-tinted
-             doom-theme 'catppuccin))
+             doom-theme 'doom-nano-light)
+   (use-package! doom-nano-modeline
+     :config
+     (doom-nano-modeline-mode 1)
+     (global-hide-mode-line-mode 1))
+   ;; (after! doom-themes
+   ;;   (load-theme 'doom-nano-light t))
+   )
   ("bouattara" (setq
                 doom-font (font-spec :family "Iosevka" :size 19 :weight 'normal)
                 doom-big-font (font-spec :family "Iosevka" :size 25)
@@ -53,7 +60,12 @@
   ("ben" (setq
           doom-font (font-spec :family "Iosevka" :size 23 :weight 'normal)
           doom-big-font (font-spec :family "Iosevka" :size 29)
-          doom-theme 'ef-duo-light) ))
+          ;; doom-theme 'ef-duo-light
+          doom-theme 'doom-nano-light)
+   (use-package! doom-nano-modeline
+     :config
+     (doom-nano-modeline-mode 1)
+     (global-hide-mode-line-mode 1))))
 
 (setq
  mac-command-modifier 'meta
@@ -1178,7 +1190,9 @@ $stderr = File.open(\"err.txt\", \"w\")")
 
 (after! vterm
   (setq vterm-shell "/run/current-system/sw/bin/nu")
+  (setq vterm-shell "/bin/zsh")
   )
 
-;; (setq catppuccin-flavor 'mocha) ;; or 'latte, 'macchiato, or 'mocha, 'frappe
+;; (setq catppuccin-flavor 'frappe) ;; or 'latte, 'macchiato, or 'mocha, 'frappe
+;; (setq catppuccin-flavor 'latte) ;; or 'latte, 'macchiato, or 'mocha, 'frappe
 ;; (catppuccin-reload)
