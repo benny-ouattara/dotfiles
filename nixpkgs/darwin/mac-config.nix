@@ -23,6 +23,8 @@ in
             "sbcl"
             "btop"
             "reroutingcli"
+            "mmp"
+            "kubectl-site"
         ];
         casks = let
             skipSha = name: {
@@ -77,8 +79,9 @@ in
             "d12frosted/emacs-plus"
             "clojure/tools"
             "flyteorg/tap"
-            # "spotify/public"
-            # "spotify/sptaps"
+            "spotify/public"
+            "spotify/sptaps"
+            "spotify/mmptaps"
         ];
         extraConfig = ''
       # cask_args appdir: "${home-dir}/Applications"
