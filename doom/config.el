@@ -36,36 +36,31 @@
  org-pomodoro-length 45
  org-pomodoro-short-break-length 15)
 
+(use-package! doom-nano-modeline
+     :config
+     (doom-nano-modeline-mode 1)
+     (global-hide-mode-line-mode 1))
+
 (pcase (user-login-name)
   ("zangao" (setq
              doom-font (font-spec :family "Iosevka" :size 21 :weight 'normal)
              doom-big-font (font-spec :family "Iosevka" :size 27)
-             ;; doom-theme 'modus-operandi-tinted
              doom-theme 'doom-nano-light)
-   (use-package! doom-nano-modeline
-     :config
-     (doom-nano-modeline-mode 1)
-     (global-hide-mode-line-mode 1))
    ;; (after! doom-themes
    ;;   (load-theme 'doom-nano-light t))
    )
   ("bouattara" (setq
                 doom-font (font-spec :family "Iosevka" :size 19 :weight 'normal)
                 doom-big-font (font-spec :family "Iosevka" :size 25)
-                doom-theme 'modus-vivendi-tinted))
+                doom-theme 'doom-nano-light))
   ("benouattara" (setq
                   doom-font (font-spec :family "Iosevka" :size 19 :weight 'normal)
                   doom-big-font (font-spec :family "Iosevka" :size 25)
-                  doom-theme 'modus-vivendi-tinted))
+                  doom-theme 'doom-nano-light))
   ("ben" (setq
           doom-font (font-spec :family "Iosevka" :size 23 :weight 'normal)
           doom-big-font (font-spec :family "Iosevka" :size 29)
-          ;; doom-theme 'ef-duo-light
-          doom-theme 'doom-nano-light)
-   (use-package! doom-nano-modeline
-     :config
-     (doom-nano-modeline-mode 1)
-     (global-hide-mode-line-mode 1))))
+          doom-theme 'doom-nano-light)))
 
 (setq
  mac-command-modifier 'meta
