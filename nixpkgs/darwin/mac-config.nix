@@ -65,7 +65,7 @@ in
             "background-music"
             #"qutebrowser"
             #"slack"
-            #"docker"
+            "docker"
             #"zoom"
             #"android-platform-tools"
         ];

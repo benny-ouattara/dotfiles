@@ -179,7 +179,7 @@ in rec {
 
         # eval "$(starship init zsh)"
 
-        export PATH=/usr/local/opt/ruby/bin:$HOME/.rbenv/shims:$HOME/.rbenv/versions/3.0.3/bin:$PATH:$HOME/.jenv/bin:$HOME/.local/bin:$HOME/.emacs.d/bin:/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin:${pkgs.custom-scripts}/bin:/opt/local/bin:/Users/benouattara/Qt/5.15.2/clang_64/bin:/Users/zangao/Library/Application\ Support/Coursier/bin:~/.roswell/bin
+        export PATH=/usr/local/opt/ruby/bin:$HOME/.rbenv/shims:$HOME/.rbenv/versions/3.0.3/bin:$PATH:$HOME/.jenv/bin:$HOME/.local/bin:$HOME/.emacs.d/bin:/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin:${pkgs.custom-scripts}/bin:/opt/local/bin:/Users/benouattara/Qt/5.15.2/clang_64/bin:/Users/zangao/Library/Application\ Support/Coursier/bin:~/.roswell/bin:/usr/local/lib/ruby/gems/3.2.0/bin
 
         # initializing pyenv and jenv significantly increase load time, disable them until needed
         # this needs to be after the main export as it prepends to the main path
@@ -215,11 +215,18 @@ in rec {
     hashKnownHosts = true;
 
     extraConfig = ''
-        user zangao
-        Host *
-          AddKeysToAgent yes
-          StrictHostKeyChecking no
-          IdentityFile ~/.ssh/id_rsa
+    Host github.com
+      AddKeysToAgent yes
+      User git
+      StrictHostKeyChecking no
+      IdentityFile ~/.ssh/jazacash
+      LogLevel DEBUG3
+
+    user zangao
+    Host *
+      AddKeysToAgent yes
+      StrictHostKeyChecking no
+      IdentityFile ~/.ssh/id_rsa
       '';
 
     matchBlocks = {
