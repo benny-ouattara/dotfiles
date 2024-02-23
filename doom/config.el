@@ -887,17 +887,23 @@ $stderr = File.open(\"err.txt\", \"w\")")
 (defun beno--sql-authenticator (wallet product user server database port)
   (beno--read-db-password database))
 
+(setq local-wallet (pcase (user-login-name)
+                     ("zangao" zangao-secrets)
+                     ("bouattara" bouattara-secrets)
+                     ("benouattara" benny-secrets)))
+
 (after! sql
   (setq
    setcheckerpwd (beno--read-db-password "setchecker_runs")
    localpwd (beno--read-db-password "localdb")
+   jazapwd (beno--read-db-password "jazadb")
    sql-password-search-wallet-function #'beno--sql-authenticator
-   sql-password-wallet zangao-secrets
+   sql-password-wallet local-wallet
    sql-connection-alist `(("setchecker-cloudsql-connection"
                            (sql-product 'postgres)
                            (sql-user "postgres")
                            ;; password reading is done through pgpass since psql cli does't support password passing
-                           ;; this line just makes sure that sql.el doesn't ask us for the a dummy password
+                           ;; this line just makes sure that sql.el doesn't ask us for a dummy password
                            (sql-password ,setcheckerpwd)
                            (sql-database "setchecker_runs")
                            (sql-server "localhost")
@@ -907,6 +913,13 @@ $stderr = File.open(\"err.txt\", \"w\")")
                            (sql-user "localdb")
                            (sql-password ,localpwd)
                            (sql-database "localdb")
+                           (sql-server "localhost")
+                           (sql-port 5432))
+                          ("jaza-postgres-connection"
+                           (sql-product 'postgres)
+                           (sql-user "jazadb")
+                           (sql-password ,jazapwd)
+                           (sql-database "jazadb")
                            (sql-server "localhost")
                            (sql-port 5432)))
    sql-postgres-login-params '(user password database server)))
