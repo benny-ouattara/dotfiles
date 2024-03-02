@@ -64,6 +64,9 @@
 (defvar soccer-fixtures-buffer "*Soccer Fixtures*"
   "Fixtures buffer name.")
 
+(defvar soccer-league-fixtures-buffer "*Soccer League Fixtures*"
+  "League fixtures buffer name.")
+
 (defvar soccer-favorite-fixtures-buffer "*Soccer Favorites*"
   "Favorite fixtures buffer name.")
 
@@ -141,12 +144,26 @@
                                   soccer-season)))
 
 (defun soccer-team-fixtures-url (team-id &optional limit)
-  "Return the URL where to fetch the FIXTURES ot the TEAM-ID."
+  "Return the URL where to fetch the FIXTURES of TEAM-ID."
   (concat soccer-base-url (format soccer-team-fixtures-url-template
                                   soccer-season
                                   team-id
                                   soccer-tz
                                   (or limit soccer-fixtures-limit))))
+
+(defun soccer-rounds-url (league-id &optional current)
+  "Return the URL where to fetch all ROUNDS for a league. If CURRENT is string true or false, return current ROUND."
+  (concat soccer-base-url (format "/v3/fixtures/rounds?league=%s&season=%d&current=%s"
+                                  league-id
+                                  soccer-season
+                                  (or current "true"))))
+
+(defun soccer-league-fixtures-url (league-id round)
+  "Return the URL where to fetch the FIXTURES of LEAGUE-ID at given ROUND."
+  (concat soccer-base-url (format "/v3/fixtures?league=%s&season=%s&round=%s"
+                                  league-id
+                                  soccer-season
+                                  round)))
 
 (defun soccer-league-filename (league-id)
   "Determine specific league absolute path."
@@ -200,6 +217,38 @@ Return an alist of (TEAM-NAME . TEAM)."
 No caching is applied on fixtures since they are dynamic and change on a daily or even hourly basis.
 We want to always see the latest and greatest in fixture details."
   (let* ((url (soccer-team-fixtures-url team-id limit))
+         (json (soccer-fetch-url url))
+         (response (append (alist-get 'response json) nil)))
+    (cl-loop for r in response
+             collect (let* ((fixture (alist-get 'fixture r))
+                            (teams (alist-get 'teams r))
+                            (home (alist-get 'name (alist-get 'home teams)))
+                            (away (alist-get 'name (alist-get 'away teams)))
+                            (league (alist-get 'league r))
+                            (league-name (alist-get 'name league))
+                            (league-round (alist-get 'round league))
+                            (venue (alist-get 'name (alist-get 'venue fixture)))
+                            (timestamp (alist-get 'timestamp fixture))
+                            (status (alist-get 'long (alist-get 'status fixture))))
+                       (soccer-fixture--create :timestamp timestamp
+                                               :venue venue
+                                               :status status
+                                               :league league-name
+                                               :round league-round
+                                               :home home
+                                               :away away)))))
+
+(defun soccer-fetch-current-round (league-id)
+  "Fetch current ROUND of LEAGUE-ID."
+  (let* ((url (soccer-rounds-url league-id "true"))
+         (json (soccer-fetch-url url))
+         (response (elt (alist-get 'response json) 0)))
+    response))
+
+(defun soccer-fetch-current-league-fixtures (league-id)
+  "Fetch current ROUND fixtures of LEAGUED-ID."
+  (let* ((round (soccer-fetch-current-round league-id))
+         (url (soccer-league-fixtures-url league-id round))
          (json (soccer-fetch-url url))
          (response (append (alist-get 'response json) nil)))
     (cl-loop for r in response
@@ -461,6 +510,25 @@ These are considered as favorite teams and their next fixtures can be queried."
                                   (soccer-fixture-round fixture)))
             tabulated-list-entries))))
 
+
+(defun soccer-league-fixtures--entries (league-id)
+  "Populate table entries with upcoming league fixtures."
+  (setq tabulated-list-entries nil)
+  (let* ((fixtures (soccer-fetch-current-league-fixtures league-id))
+         (ordered-fixtures (-sort (lambda (x y)
+                                        (> (soccer-fixture-timestamp x)
+                                           (soccer-fixture-timestamp y)))
+                                      fixtures)))
+    (dolist (fixture ordered-fixtures)
+      (push (list fixture (vector (s-truncate 22 (soccer-fixture-league fixture))
+                                  (format-time-string "%a, %b %d" (soccer-fixture-timestamp fixture))
+                                  (format-time-string "%I:%M %p" (soccer-fixture-timestamp fixture))
+                                  (s-truncate 22 (soccer-fixture-home fixture))
+                                  (s-truncate 22 (soccer-fixture-away fixture))
+                                  (s-truncate 17 (soccer-fixture-status fixture))
+                                  (soccer-fixture-round fixture)))
+            tabulated-list-entries))))
+
 ;;;###autoload
 (define-derived-mode soccer-favorite-fixture-mode tabulated-list-mode "SoccerFavorite"
   "Mode to view upcoming fixtures of favorite teams."
@@ -485,6 +553,22 @@ These are considered as favorite teams and their next fixtures can be queried."
     (soccer-favorite-fixtures--entries limit) ;; default limit is 1 for (interactive "p")
     (tabulated-list-print))
   (display-buffer soccer-favorite-fixtures-buffer))
+
+;;;###autoload
+(defun list-league-fixtures (league-id &optional buff)
+  "Entry point to list upcoming fixtures in LEAGUE-ID."
+  (interactive (list (let ((league-name (completing-read "Choose league: "
+                                                         (mapcar #'car
+                                                                 (soccer--fetch-all-leagues)))))
+                       (soccer-league-id (cdr (assoc league-name (soccer--fetch-all-leagues)))))))
+  (message "current league: %s" league-id)
+  (unless buff
+    (setq buff (get-buffer-create soccer-league-fixtures-buffer)))
+  (with-current-buffer soccer-league-fixtures-buffer
+    (soccer-favorite-fixture-mode)
+    (soccer-league-fixtures--entries league-id)
+    (tabulated-list-print))
+  (display-buffer soccer-league-fixtures-buffer))
 
 (defun soccer-leagues-visit-teams (button)
   "Action when a league is selected from the table.

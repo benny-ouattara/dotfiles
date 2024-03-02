@@ -1113,6 +1113,7 @@ $stderr = File.open(\"err.txt\", \"w\")")
           (:prefix-map ("o" . "open")
            (:prefix ("S" . "soccer")
             :desc "Favorite fixtures" "S" #'list-soccer-fixtures
+            :desc "League fixtures" "s" #'list-league-fixtures
             :desc "Followed leagues" "l" #'list-soccer-leagues
             :desc "Followed teams" "t" #'list-soccer-teams
             :desc "Teams fixtures" "T" #'list-soccer-team-fixtures
