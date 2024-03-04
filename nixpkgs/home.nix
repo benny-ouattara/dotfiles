@@ -215,13 +215,19 @@ in rec {
     hashKnownHosts = true;
 
     extraConfig = ''
+    Host github.com
+      AddKeysToAgent yes
+      User git
+      StrictHostKeyChecking no
+      IdentityFile ~/.ssh/jazacash
+      IdentitiesOnly yes
+      LogLevel DEBUG3
 
     user zangao
     Host *
       AddKeysToAgent yes
       StrictHostKeyChecking no
       IdentityFile ~/.ssh/id_rsa
-      LogLevel DEBUG3
       '';
 
     matchBlocks = {
