@@ -220,6 +220,7 @@ in rec {
       User git
       StrictHostKeyChecking no
       IdentityFile ~/.ssh/jazacash
+      IdentitiesOnly yes
       LogLevel DEBUG3
 
     user zangao
