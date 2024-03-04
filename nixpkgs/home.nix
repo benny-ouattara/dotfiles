@@ -204,6 +204,7 @@ in rec {
   programs.ssh = {
     enable = true;
 
+    # this is a problem when connecting to multiple github accounts
     # controlMaster  = "auto";
     # controlPath    = "${tmp-directory}/ssh-%u-%r@%h:%p";
     # controlPersist = "1800";
