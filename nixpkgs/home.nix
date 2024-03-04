@@ -81,7 +81,6 @@ in rec {
     };
 
     extraConfig = {
-      github.user           = "benny-ouattara";
       pull.rebase = false;  # merge
 
       color = {
@@ -205,9 +204,9 @@ in rec {
   programs.ssh = {
     enable = true;
 
-    controlMaster  = "auto";
-    controlPath    = "${tmp-directory}/ssh-%u-%r@%h:%p";
-    controlPersist = "1800";
+    # controlMaster  = "auto";
+    # controlPath    = "${tmp-directory}/ssh-%u-%r@%h:%p";
+    # controlPersist = "1800";
 
     forwardAgent = true;
     serverAliveInterval = 60;
@@ -215,20 +214,13 @@ in rec {
     hashKnownHosts = true;
 
     extraConfig = ''
-    Host github.com
-      AddKeysToAgent yes
-      User git
-      StrictHostKeyChecking no
-      IdentityFile ~/.ssh/jazacash
-      IdentitiesOnly yes
-      LogLevel DEBUG3
-
-    user zangao
     Host *
       AddKeysToAgent yes
       StrictHostKeyChecking no
       IdentityFile ~/.ssh/id_rsa
-      '';
+      IdentitiesOnly yes
+      # LogLevel DEBUG3
+    '';
 
     matchBlocks = {
       keychain = {
