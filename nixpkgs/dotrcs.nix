@@ -121,15 +121,15 @@
     Channel gmail-inbox
     Channel gmail-sent
 
-    # ################################ PROTONMAIL ##############################################
+    ################################# PROTONMAIL ##############################################
     IMAPAccount protonmail
     Host 127.0.0.1
     Port 1143
     User benny.ouattara@protonmail.com
     # PassCmd "gpg --quiet --decrypt ~/.mbsync-pw-mailbox.gpg"
     PassCmd "/run/current-system/sw/bin/pass Email/protonmail-mu-app.com"
+    AuthMechs LOGIN
     SSLType NONE
-    #SSLVersions SSLv3
     #SSLVersions SSLv3
     # CertificateFile /etc/ssl/certs/ca-bundle.crt
 
