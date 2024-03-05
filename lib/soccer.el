@@ -125,7 +125,7 @@
 
 (cl-defstruct (soccer-fixture (:constructor soccer-fixture--create))
   "Represent a soccer fixture."
-  timestamp venue status league round home away)
+  timestamp venue status league round home away home-goals away-goals)
 
 (cl-defstruct (soccer-league (:constructor soccer-league--create))
   "Represent a soccer league."
@@ -152,7 +152,7 @@
                                   (or limit soccer-fixtures-limit))))
 
 (defun soccer-rounds-url (league-id &optional current)
-  "Return the URL where to fetch all ROUNDS for a league. If CURRENT is string true or false, return current ROUND."
+  "Return the URL where to fetch all ROUNDS for a league. CURRENT is the string true or false, it returns current ROUND."
   (concat soccer-base-url (format "/v3/fixtures/rounds?league=%s&season=%d&current=%s"
                                   league-id
                                   soccer-season
@@ -224,6 +224,9 @@ We want to always see the latest and greatest in fixture details."
                             (teams (alist-get 'teams r))
                             (home (alist-get 'name (alist-get 'home teams)))
                             (away (alist-get 'name (alist-get 'away teams)))
+                            (goals (alist-get 'goals r))
+                            (home-goals (alist-get 'home goals))
+                            (away-goals (alist-get 'away goals))
                             (league (alist-get 'league r))
                             (league-name (alist-get 'name league))
                             (league-round (alist-get 'round league))
@@ -236,7 +239,9 @@ We want to always see the latest and greatest in fixture details."
                                                :league league-name
                                                :round league-round
                                                :home home
-                                               :away away)))))
+                                               :away away
+                                               :home-goals home-goals
+                                               :away-goals away-goals)))))
 
 (defun soccer-fetch-current-round (league-id)
   "Fetch current ROUND of LEAGUE-ID."
@@ -256,6 +261,9 @@ We want to always see the latest and greatest in fixture details."
                             (teams (alist-get 'teams r))
                             (home (alist-get 'name (alist-get 'home teams)))
                             (away (alist-get 'name (alist-get 'away teams)))
+                            (goals (alist-get 'goals r))
+                            (home-goals (alist-get 'home goals))
+                            (away-goals (alist-get 'away goals))
                             (league (alist-get 'league r))
                             (league-name (alist-get 'name league))
                             (league-round (alist-get 'round league))
@@ -268,7 +276,9 @@ We want to always see the latest and greatest in fixture details."
                                                :league league-name
                                                :round league-round
                                                :home home
-                                               :away away)))))
+                                               :away away
+                                               :home-goals home-goals
+                                               :away-goals away-goals)))))
 
 (defun soccer--write-to (filepath content)
   "Write CONTENT to FILEPATH.
@@ -507,6 +517,8 @@ These are considered as favorite teams and their next fixtures can be queried."
                                   (s-truncate 22 (soccer-fixture-home fixture))
                                   (s-truncate 22 (soccer-fixture-away fixture))
                                   (s-truncate 17 (soccer-fixture-status fixture))
+                                  (format "%s - %s" (or (soccer-fixture-home-goals fixture) "")
+                                          (or (soccer-fixture-away-goals fixture) ""))
                                   (soccer-fixture-round fixture)))
             tabulated-list-entries))))
 
@@ -526,6 +538,8 @@ These are considered as favorite teams and their next fixtures can be queried."
                                   (s-truncate 22 (soccer-fixture-home fixture))
                                   (s-truncate 22 (soccer-fixture-away fixture))
                                   (s-truncate 17 (soccer-fixture-status fixture))
+                                  (format "%s - %s" (or (soccer-fixture-home-goals fixture) "")
+                                          (or (soccer-fixture-away-goals fixture) ""))
                                   (soccer-fixture-round fixture)))
             tabulated-list-entries))))
 
@@ -538,6 +552,7 @@ These are considered as favorite teams and their next fixtures can be queried."
                                       '("Home" 22 t)
                                       '("Away" 22 t)
                                       '("Status" 15 t)
+                                      '("Score" 15 t)
                                       '("Round" 0 t)))
   ;; (setq tabulated-list-sort-key (cons "Time" t))
   (tabulated-list-init-header))
@@ -561,7 +576,6 @@ These are considered as favorite teams and their next fixtures can be queried."
                                                          (mapcar #'car
                                                                  (soccer--fetch-all-leagues)))))
                        (soccer-league-id (cdr (assoc league-name (soccer--fetch-all-leagues)))))))
-  (message "current league: %s" league-id)
   (unless buff
     (setq buff (get-buffer-create soccer-league-fixtures-buffer)))
   (with-current-buffer soccer-league-fixtures-buffer
