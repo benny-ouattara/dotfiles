@@ -66,7 +66,7 @@
  mac-command-modifier 'meta
  ns-command-modifier 'meta
  confirm-kill-emacs nil
- evil-insert-state-cursor 'hbar
+ evil-insert-state-cursor 'bar
  evil-move-cursor-back nil
  display-line-numbers-type 'relative
  fancy-splash-image (expand-file-name "splash.png" doom-private-dir))
