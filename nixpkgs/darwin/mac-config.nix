@@ -26,6 +26,10 @@ in
             "mmp"
             "kubectl-site"
             "jdtls"
+            "clojure-lsp"
+            "metals"
+            "openjdk"
+            "yaml-language-server"
         ];
         casks = let
             skipSha = name: {

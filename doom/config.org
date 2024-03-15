@@ -425,6 +425,9 @@ configure it to navigate to classpath dependencies. So I am not using it
 for now. It will be a solid candidate when that is figured out since it doesn't
 hang emacs as often as lsp-mode. Also eglot isn't java friendly. Integrating it
 with java requires a lot of work done below.
+
+eglot has gotten much better since it's been merged as the default emacs language server.
+The setup below is no longer required. Language servers simply need to be on the PATH.
 #+begin_src emacs-lisp
 ;; setup lsp server for eglot
 ;; eglot doesn't recognize ~ for user home directory
@@ -1869,7 +1872,7 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
            ;;gist              ; interacting with github gists
            (lookup              ; helps you navigate your code and documentation
             +docsets)           ; ...or in Dash docsets locally
-           (lsp +lsp)
+           (lsp +eglot)
            ;;macos             ; MacOS-specific commands
            magit                        ; a git porcelain for Emacs
            make                         ; run make tasks from Emacs
