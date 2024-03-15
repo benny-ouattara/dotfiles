@@ -1429,7 +1429,7 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
            ;;gist              ; interacting with github gists
            (lookup              ; helps you navigate your code and documentation
             +docsets)           ; ...or in Dash docsets locally
-           (lsp +lsp)
+           (lsp +eglot)
            ;;macos             ; MacOS-specific commands
            magit                        ; a git porcelain for Emacs
            make                         ; run make tasks from Emacs

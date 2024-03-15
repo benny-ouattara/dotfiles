@@ -25,6 +25,7 @@ in
             "reroutingcli"
             "mmp"
             "kubectl-site"
+            "jdtls"
         ];
         casks = let
             skipSha = name: {
