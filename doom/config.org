@@ -1415,7 +1415,7 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
            vterm                        ; another terminals in Emacs
 
            :checkers
-           ;; syntax              ; tasing you for every semicolon you forget
+           syntax              ; tasing you for every semicolon you forget
            ;; ;;(spell +flyspell) ; tasing you for misspelling mispelling
            ;; ;;grammar           ; tasing grammar mistake every you make
 
@@ -1773,7 +1773,6 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
 #+end_src
 
 * zangao macos init.el
-
 #+begin_src emacs-lisp :tangle (if (equal (user-login-name) "zangao") "init.el" "no")
 ;;; init.el -*- lexical-binding: t; -*-
 
@@ -1855,7 +1854,7 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
            vterm                        ; another terminals in Emacs
 
            :checkers
-           ;; syntax              ; tasing you for every semicolon you forget
+           syntax              ; tasing you for every semicolon you forget
            ;; ;;(spell +flyspell) ; tasing you for misspelling mispelling
            ;; ;;grammar           ; tasing grammar mistake every you make
 

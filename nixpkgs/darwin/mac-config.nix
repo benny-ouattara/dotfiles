@@ -29,6 +29,7 @@ in
             "metals"
             "openjdk"
             "yaml-language-server"
+            "node"
         ];
         casks = let
             skipSha = name: {
