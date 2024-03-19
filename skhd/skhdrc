@@ -6,6 +6,7 @@ cmd + ctrl - return : open -n /Applications/wezTerm.app
 cmd + ctrl - d :  emacsclient -c -e '(dired "~")'
 cmd + ctrl - e :  emacsclient -c -e '(elfeed)'
 cmd + ctrl - m :  emacsclient -c -e '(mu4e)'
+cmd + ctrl - a : emacsclient -c -e '(org-agenda)'
 
 # use ranger in kitty for image support
 cmd + ctrl - v : open -n /Applications/kitty.app --args command ranger
@@ -13,7 +14,7 @@ cmd + ctrl - v : open -n /Applications/kitty.app --args command ranger
 cmd + ctrl - i : open -a /usr/local/bin/emacs
 cmd + ctrl - f : open -na "Google Chrome" --args --profile-directory=Default
 cmd + shift + ctrl - f : open -na "qutebrowser"
-cmd + ctrl - y : emacsclient -c -e '(find-file "~/Documents/org")'
+cmd + ctrl - y : emacsclient -c -e '(find-file "~/Sync/org")'
 cmd + ctrl - c : ~/.emacs.d/bin/org-capture
 
 # focus window
