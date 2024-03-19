@@ -608,8 +608,7 @@ Beware using this command given that it's destructive and non reversible."
         (:name "Skip messages" :query "(flag:unread AND NOT flag:trashed) AND (subject:\"Use Spotify BOM\" OR subject:\"Use Spotify root\" OR subject:\"no review needed\" OR subject:\"Update dependent library\" OR from:\"fleet\" OR from:\"fleetshift\" OR from:\"setadel\")" :key 115)
         (:name "Today's messages" :query "date:today..now" :key 116)
         (:name "Last 7 days" :query "date:7d..now" :hide-unread t :key 119)
-        (:name "Messages with images" :query "mime:image/*" :key 112)
-        (:name "Fragomen" :query "fragomen" :hide-unread t :key 102)))
+        (:name "Messages with images" :query "mime:image/*" :key 112)))
 
 (after! mu4e
   (set-popup-rule! (regexp-quote mu4e-main-buffer-name) :actions :ignore t)
