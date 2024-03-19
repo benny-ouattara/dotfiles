@@ -214,6 +214,16 @@
 (setq org-fold-core-style 'overlays)
 
 (after! org-journal
+  (defun org-journal-today ()
+    (let*  ((future (org-journal--read-period 'future))
+            (beg (car future))
+            (end (cdr future)))
+      (setcar (cdr beg) (1- (cadr beg)))
+      (org-journal--search-build-file-list
+       (org-journal--calendar-date->time beg)
+       (org-journal--calendar-date->time end))))
+
+  (setq org-agenda-files (append (org-agenda-files) (org-journal-today)))
   (map! :leader :desc "Open current journal" "j" #'org-journal-open-current-journal-file))
 
 (setq
