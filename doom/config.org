@@ -771,6 +771,11 @@ This has been superseded by ~+mu4e/capture-msg-to-agenda~ which adds the =msg= a
   (set-popup-rule! (regexp-quote mu4e-headers-buffer-name) :actions :ignore t))
 #+end_src
 
+** disable auto fill
+#+begin_src emacs-lisp
+(after! mu4e-compose
+  (add-hook! 'mu4e-compose-mode-hook (auto-fill-mode -1)))
+#+end_src
 * dired
 ** dired single
 Ability to navigate in and out of directories with h and l using a single buffer when navigating down
@@ -1534,7 +1539,7 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
            ;;zig               ; C, but simpler
 
            :email
-           (mu4e +org +gmail)
+           (mu4e +gmail)
            ;; (notmuch +afew +org)
            ;;(wanderlust +gmail)
 

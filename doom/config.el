@@ -615,6 +615,9 @@ Beware using this command given that it's destructive and non reversible."
   (set-popup-rule! (regexp-quote mu4e-main-buffer-name) :actions :ignore t)
   (set-popup-rule! (regexp-quote mu4e-headers-buffer-name) :actions :ignore t))
 
+(after! mu4e-compose
+  (add-hook! 'mu4e-compose-mode-hook (auto-fill-mode -1)))
+
 (after! (dired dired-single)
   (define-key dired-mode-map [remap dired-find-file]
     'dired-single-buffer)
