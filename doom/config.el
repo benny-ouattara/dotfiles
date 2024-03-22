@@ -1222,3 +1222,13 @@ $stderr = File.open(\"err.txt\", \"w\")")
 ;; (setq catppuccin-flavor 'frappe) ;; or 'latte, 'macchiato, or 'mocha, 'frappe
 ;; (setq catppuccin-flavor 'latte) ;; or 'latte, 'macchiato, or 'mocha, 'frappe
 ;; (catppuccin-reload)
+
+(after! embark
+  (setq embark-common-map
+        (let ((map  (make-sparse-keymap)))
+          (define-key map (kbd "s") '+default/search-project)
+          (define-key map (kbd "f") 'projectile-find-file)
+          (define-key map (kbd "b") 'switch-to-buffer)
+          map))
+
+  (cl-pushnew 'embark-common-map embark-become-keymaps))
