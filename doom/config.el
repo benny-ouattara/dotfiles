@@ -559,6 +559,9 @@ Beware using this command given that it's destructive and non reversible."
   (setq mu4e-update-interval 180))
 (setq +mu4e-workspace-name "*mail*")
 
+(after! mu4e-main
+  (setq mu4e-main-hide-personal-addresses t))
+
 (after! mu4e-modeline
   (setq mu4e-modeline-unread-items `("U:" . ,(+mu4e-normalised-icon "nf-fa-fire"))
         mu4e-modeline-all-clear `("C:" . ,(+mu4e-normalised-icon "nf-fa-check"))
