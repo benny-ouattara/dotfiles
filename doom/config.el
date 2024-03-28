@@ -562,6 +562,9 @@ Beware using this command given that it's destructive and non reversible."
 (after! mu4e-main
   (setq mu4e-main-hide-personal-addresses t))
 
+(after! mu4e-alert
+  (mu4e-alert-set-default-style 'ignore))
+
 (after! mu4e-modeline
   (setq mu4e-modeline-unread-items `("U:" . ,(+mu4e-normalised-icon "nf-fa-fire"))
         mu4e-modeline-all-clear `("C:" . ,(+mu4e-normalised-icon "nf-fa-check"))
