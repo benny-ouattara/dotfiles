@@ -21,9 +21,9 @@ in {
       "yabai"
       "sbcl"
       "btop"
-      "reroutingcli"
-      "mmp"
-      "kubectl-site"
+      # "reroutingcli"
+      # "mmp"
+      # "kubectl-site"
       "jdtls"
       "metals"
       "openjdk"
@@ -76,7 +76,6 @@ in {
     taps = [
       "homebrew/cask-versions"
       "homebrew/cask-fonts"
-      "homebrew/cask"
       "homebrew/bundle"
       "homebrew/services"
       "koekeishiya/formulae"
@@ -84,8 +83,8 @@ in {
       "clojure/tools"
       "flyteorg/tap"
       "spotify/public"
-      "spotify/sptaps"
-      "spotify/mmptaps"
+      # "spotify/sptaps"
+      # "spotify/mmptaps"
     ];
     extraConfig = ''
       # cask_args appdir: "${home-dir}/Applications"
