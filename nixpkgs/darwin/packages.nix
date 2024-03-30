@@ -4,7 +4,6 @@
   environment.systemPackages = [
     pkgs.scalafmt
     pkgs.sketchybar
-    pkgs.docker-compose
     pkgs.foreman
     pkgs.yarn
     pkgs.ffmpeg
@@ -132,6 +131,7 @@
       "corretto11"
       "google-cloud-sdk"
       "background-music"
+      "docker"
     ];
     taps = [
       "homebrew/cask-versions"
