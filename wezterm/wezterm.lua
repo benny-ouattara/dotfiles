@@ -42,45 +42,25 @@ config.keys = {
   {
     key = 'k',
     mods = 'CTRL',
-    action = action.ActivatePaneDirection "Down"
+    action = action.ActivatePaneDirection "Right"
   },
   {
     key = 'l',
     mods = 'CTRL',
-    action = action.ActivatePaneDirection "Up"
+    action = action.ActivatePaneDirection "Down"
   },
   {
     key = 'h',
     mods = 'CTRL',
-    action = action.ActivatePaneDirection "Right"
+    action = action.ActivatePaneDirection "Down"
   },
-  -- {
-  --   key = 'UpArrow',
-  --   mods = 'CTRL',
-  --   action = action.AdjustPaneSize { "Up", 1 }
-  -- },
-  -- {
-  --   key = 'DownArrow',
-  --   mods = 'CTRL',
-  --   action = action.AdjustPaneSize { "Down", 1 }
-  -- },
-  -- {
-  --   key = 'LeftArrow',
-  --   mods = 'CTRL',
-  --   action = action.AdjustPaneSize { "Left", 1 }
-  -- },
-  -- {
-  --   key = 'RightArrow',
-  --   mods = 'CTRL',
-  --   action = action.AdjustPaneSize { "Right", 1 }
-  -- },
   {
-    key = 'y',
+    key = 's',
     mods = 'CTRL',
     action = action.SplitHorizontal { domain = "CurrentPaneDomain" }
   },
   {
-    key = 'x',
+    key = 'v',
     mods = 'CTRL',
     action = action.SplitVertical { domain = "CurrentPaneDomain" }
   },

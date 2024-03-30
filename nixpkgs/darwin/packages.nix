@@ -1,8 +1,7 @@
-{ config, lib, pkgs, ... }:
+{ config, pkgs, ... }: {
+  nix.package = pkgs.nix;
 
-{
-  all = [
-    pkgs.nushell
+  environment.systemPackages = [
     pkgs.scalafmt
     pkgs.sketchybar
     pkgs.docker-compose
@@ -11,10 +10,8 @@
     pkgs.ffmpeg
     pkgs.gnutls
     pkgs.mcron
-    # notmuch email
     pkgs.afew
     pkgs.notmuch
-    # pkgs.texinfo
     pkgs.stow
     pkgs.poppler
     pkgs.termshark
@@ -27,20 +24,14 @@
     pkgs.pkg-config
     pkgs.qemu
     pkgs.rlwrap
-    # stack
     pkgs.maven
     pkgs.pandoc
     pkgs.cask
     pkgs.mu
     pkgs.isync
-    # pkgs.protonmail-bridge
-    # pkgs.kubectl
-    # pkgs.kubectx
-    # pkgs.kubetail
     pkgs.cloc
     pkgs.overmind
     pkgs.metals
-    # pkgs.fish
     pkgs.neofetch
     pkgs.ranger
     pkgs.zsh
@@ -60,23 +51,15 @@
     pkgs.jq
     pkgs.ripgrep
     pkgs.silver-searcher
-    # pkgs.youtube-dl
-    # pkgs.subversion
     pkgs.fd
     pkgs.nixfmt
     pkgs.coreutils-full
-    # pkgs.tdlib
-    # pkgs.sbcl
     pkgs.clojure
     pkgs.clj-kondo
     pkgs.leiningen
-    #pkgs.syncthing
     pkgs.wireguard-tools
     pkgs.tree
     pkgs.tcpdump
-    # pkgs.python38
-    # pkgs.python38Packages.pip
-    # pkgs.python38Packages.python-language-server
     pkgs.mosh
     pkgs.m-cli
     pkgs.hydroxide
@@ -88,15 +71,83 @@
     pkgs.scala
     pkgs.sbt
     pkgs.inetutils
-    # envs
-    # envs.java8
-    # envs.java11
-    # envs.java14
-    # envs.python2
-    # envs.python3
-    # envs.scala
-    # envs.dotty
-    # envs.clojure
-    # envs.ghc88
   ];
+
+  homebrew = {
+    enable = true;
+    caskArgs.require_sha = true;
+    onActivation = {
+      autoUpdate = true;
+      cleanup = "uninstall";
+      upgrade = true;
+    };
+    brews = [
+      "choose-gui"
+      "yabai"
+      "sbcl"
+      "btop"
+      # "reroutingcli"
+      # "mmp"
+      # "kubectl-site"
+      "jdtls"
+      "metals"
+      "openjdk"
+      "yaml-language-server"
+      "node"
+    ];
+    casks = let
+      skipSha = name: {
+        inherit name;
+        args = { require_sha = false; };
+      };
+      noQuarantine = name: {
+        inherit name;
+        args = { no_quarantine = true; };
+      };
+    in [
+      (skipSha "spotify")
+      "gimp"
+      (noQuarantine "olive")
+      "vlc"
+      "appcleaner"
+      "discord"
+      "blender"
+      "utm"
+      "maccy"
+      "balenaetcher"
+      "dmenu-mac"
+      "protonvpn"
+      "alacritty"
+      "syncthing"
+      "kitty"
+      "font-victor-mono-nerd-font"
+      "font-iosevka-nerd-font"
+      "font-iosevka-term-nerd-font"
+      "font-symbols-only-nerd-font"
+      "sf-symbols"
+      "wezterm"
+      "monitorcontrol"
+      "meetingbar"
+      "corretto17"
+      "corretto11"
+      "google-cloud-sdk"
+      "background-music"
+    ];
+    taps = [
+      "homebrew/cask-versions"
+      "homebrew/cask-fonts"
+      "homebrew/bundle"
+      "homebrew/services"
+      "koekeishiya/formulae"
+      "d12frosted/emacs-plus"
+      "clojure/tools"
+      "flyteorg/tap"
+      "spotify/public"
+      # "spotify/sptaps"
+      # "spotify/mmptaps"
+    ];
+    extraConfig = ''
+      brew "emacs-plus@29", args: ["with-imagemagick", "with-modern-sexy-v2-icon", "with-xwidgets"], link: true
+    '';
+  };
 }
