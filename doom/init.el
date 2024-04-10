@@ -32,7 +32,7 @@
                   +hydra/text-zoom/body)
            (emoji +unicode)  ; 🙂
            ;;indent-guides     ; highlighted indent columns
-           ;; (modeline +light)          ; snazzy, Atom-inspired modeline, plus API
+           ;;  (modeline +light)          ; snazzy, Atom-inspired modeline, plus API
            nav-flash                  ; blink the current line after jumping
            ;;neotree           ; a project drawer, like NERDTree for vim
            ophints                ; highlight the region an operation acts on
@@ -173,7 +173,7 @@
            ;;plantuml          ; diagrams for confusing people more
            ;;purescript        ; javascript, but functional
            (python +lsp
-                   +tree-sitter)              ; beautiful is better than ugly
+                   +tree-sitter)       ; beautiful is better than ugly
            ;;qt                ; the 'cutest' gui framework ever
            ;;racket            ; a DSL for DSLs
            ;;raku              ; the artist formerly known as perl6

@@ -1,7 +1,4 @@
-# launchers
-# cmd + ctrl - t : open -n ~/Applications/Nix\ Apps/Alacritty.app --args --live-config-reload --config-file $HOME/.config/alacritty/alacritty.yml
-
-# cmd + ctrl - return : emacsclient -c -e '(let ((default-directory "~")) (+vterm/here t))'
+# emacs and terminal
 cmd + ctrl - return : open -n /Applications/wezTerm.app
 cmd + ctrl - d :  emacsclient -c -e '(dired "~")'
 cmd + ctrl - e :  emacsclient -c -e '(elfeed)'
