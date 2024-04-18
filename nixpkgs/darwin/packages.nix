@@ -2,6 +2,8 @@
   nix.package = pkgs.nix;
 
   environment.systemPackages = [
+    pkgs.cmake
+    pkgs.postgresql
     pkgs.scalafmt
     pkgs.sketchybar
     pkgs.foreman
