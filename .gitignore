@@ -41,3 +41,4 @@ polybar.bak/
 nushell/history.txt
 git/ignore
 git/config
+nixpkgs/darwin/project/

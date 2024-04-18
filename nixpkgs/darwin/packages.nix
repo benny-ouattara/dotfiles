@@ -70,7 +70,7 @@
     pkgs.fontconfig
 
     pkgs.scala
-    pkgs.sbt
+    # "pkgs.sbt@1.8.0"
     pkgs.inetutils
   ];
 
