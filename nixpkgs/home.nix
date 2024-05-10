@@ -43,7 +43,7 @@ in rec {
     enable = true;
     bashrcExtra = lib.mkBefore ''
       source /etc/bashrc
-      if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile.d/nix.sh; fi # required by nix to setup various paths
+      # if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile.d/nix.sh; fi # required by nix to setup various paths
     '';
   };
 
@@ -150,9 +150,9 @@ in rec {
 
     initExtra = lib.mkBefore ''
       # source nix init
-      if [ -f "/nix/store/q8rz5ss00d94dlzjjbqp2p5q1wryfir1-set-environment" ]; then
-        . /nix/store/q8rz5ss00d94dlzjjbqp2p5q1wryfir1-set-environment
-      fi
+      # if [ -f "/nix/store/q8rz5ss00d94dlzjjbqp2p5q1wryfir1-set-environment" ]; then
+      #   . /nix/store/q8rz5ss00d94dlzjjbqp2p5q1wryfir1-set-environment
+      # fi
 
       ZSH_DISABLE_COMPFIX=true
 
@@ -172,7 +172,7 @@ in rec {
       fi
 
       # required by nix to configure various paths
-      if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then . $HOME/.nix-profile/etc/profile.d/nix.sh; fi
+      # if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then . $HOME/.nix-profile/etc/profile.d/nix.sh; fi
 
       export EDITOR=emacs
       export VISUAL=emacs
