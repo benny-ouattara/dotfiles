@@ -6,7 +6,7 @@ in
 {
   services.nix-daemon.enable = true;
 
-  nixpkgs.overlays = let path = ../overlays;
+  nixpkgs.overlays = let path = ./overlays;
                      in with builtins;
                        map (n: import (path + ("/" + n))) (filter (n:
                          match ".*\\.nix" n != null
@@ -238,7 +238,7 @@ in
   services.skhd.enable = true;
   services.sketchybar.enable = true;
   services.skhd.skhdConfig =
-    (builtins.readFile (pkgs.substituteAll { src = ../../skhd/skhdrc; }));
+    (builtins.readFile (pkgs.substituteAll { src = ../skhd/skhdrc; }));
 
   launchd.user.agents = {
     skhd = {
