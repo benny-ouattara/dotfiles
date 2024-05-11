@@ -30,3 +30,19 @@ switch darwin
 ln -s ~/Code/dotfiles ~/.config
 cp ~/.zsh_history ~/.config/zsh/history
 #+end_src
+* nix-darwin flakes
+#+install nix-darwin:
+#+begin_src shell
+nix run nix-darwin -- switch --flake ~/.config/nix-darwin # --impure
+#+end_src
+
+#+switch to built generation:
+#+begin_src shell
+darwin-rebuild switch --flake ~/.config/nix-darwin # --impure
+#+end_src
+
+#+begin_src shell
+# to fix permission denied on home-manager
+sudo chown -R benouattara:nixbld /nix/var/nix/profiles/per-user/benouattara
+# mkdir -m 0755 -p /nix/var/nix/{profiles,gcroots}/per-user/$USER
+#+end_src
