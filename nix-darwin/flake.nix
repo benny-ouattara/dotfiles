@@ -19,7 +19,7 @@
                     {
                       home-manager.useGlobalPkgs = true;
                       home-manager.useUserPackages = true;
-                      home-manager.users.benouattara = import ./benouattara.nix;
+                      home-manager.users.benouattara = import ./personal.nix;
                     }
                   ];
       };
