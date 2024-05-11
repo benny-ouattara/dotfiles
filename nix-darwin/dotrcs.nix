@@ -1,7 +1,7 @@
-{ } : {
+{
   mbsync = ''
     ################################ SPOTIFY ##############################################
-    # ACCOUNTS INFORMATION
+    # ACCOUNT INFORMATION
     IMAPAccount spotify-gmail
     # Address to connect to
     Host imap.gmail.com

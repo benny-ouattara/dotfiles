@@ -40,6 +40,14 @@ darwin:
 	@$(DARWIN_REBUILD) switch -Q
 	@echo "Darwin generation: $$($(DARWIN_REBUILD) --list-generations | tail -1)"
 
+personal:
+	$(call message,nix run nix-darwin -- switch --flake  ~/Code/dotfiles/nix-darwin)
+	@darwin-rebuild switch --flake ~/Code/dotfiles/nix-darwin#Bens-MacBook-Pro --impure
+
+work:
+	$(call message,nix run nix-darwin -- switch --flake  ~/Code/dotfiles/nix-darwin)
+	@darwin-rebuild switch --flake ~/Code/dotfiles/nix-darwin#zangao --impure
+
 home:
 	$(call message,home-manager switch)
 	@$(HOME_MANAGER) switch

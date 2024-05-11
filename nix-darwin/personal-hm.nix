@@ -2,7 +2,7 @@
 let
   home-directory = builtins.getEnv "HOME";
   tmp-directory = "/tmp";
-  dotrcs = import ./dotrcs.nix { };
+  dotrcs = import ./dotrcs.nix;
 in
 {
   # Home Manager needs a bit of information about you and the
