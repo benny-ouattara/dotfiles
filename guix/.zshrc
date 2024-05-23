@@ -102,3 +102,4 @@ source $ZSH/oh-my-zsh.sh
 
 export GPG_TTY=$(tty)
 eval "$(direnv hook zsh)"
+source ~/Code/google-cloud-sdk/path.zsh.inc

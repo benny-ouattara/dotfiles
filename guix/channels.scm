@@ -35,7 +35,8 @@
  ;;  (url "git@github.com:benny-ouattara/octo-guix.git")
  ;;  (introduction %guix-channel-introduction))
 
- (channel
-  (name 'contactapp)
-  (url  "git@github.com:benny-ouattara/contactapp.git")
-  (branch "packaging")))
+ ;; (channel
+ ;;  (name 'contactapp)
+ ;;  (url  "git@github.com:benny-ouattara/contactapp.git")
+ ;;  (branch "packaging"))
+ )

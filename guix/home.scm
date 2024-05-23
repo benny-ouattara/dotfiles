@@ -116,11 +116,11 @@
          "cava"
          "sqlite"
          "sqlitebrowser"
-         "gcc"
+         ;; "gcc"
          "the-silver-searcher"
          "ack"
          "lsof"
-         ;; "gcc-toolchain"
+         "gcc-toolchain"
          "leiningen"
          "tmux"
          "openjdk@11.0.17"
@@ -156,7 +156,8 @@
          "direnv"
          "nushell"
          "pandoc"
-         "bat")))
+         "bat"
+         "python")))
  (services
   (list
    (simple-service 'environment-variables-service
@@ -173,36 +174,36 @@
               (list (openssh-host (name "*")
                                   (extra-content "  StrictHostKeyChecking no"))
                     (openssh-host
-                     (name "gateway 104.248.40.197")
-                     (host-name "104.248.40.197")
+                     (name "gateway 143.110.253.4")
+                     (host-name "143.110.253.4")
                      (forward-agent? #t)
-                     (identity-file "/home/ben/.ssh/test_id_rsa")
+                     (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
                      (user "root"))
                     (openssh-host
-                     (name "jumpbox 10.114.0.3")
-                     (host-name "10.114.0.3")
+                     (name "jumpbox 10.122.0.2")
+                     (host-name "10.122.0.2")
                      (forward-agent? #t)
-                     (identity-file "/home/ben/.ssh/test_id_rsa")
+                     (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
                      (user "root")
-                     (proxy (proxy-command "ssh -W %h:%p root@104.248.40.197")))
+                     (proxy (proxy-command "ssh -W %h:%p root@143.110.253.4")))
                     (openssh-host
-                     (name "cuirass 10.114.0.6")
-                     (host-name "10.114.0.6")
-                     (identity-file "/home/ben/.ssh/test_id_rsa")
+                     (name "cuirass 10.122.0.3")
+                     (host-name "10.122.0.3")
+                     (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
                      (user "root")
-                     (proxy (proxy-command "ssh -W %h:%p root@104.248.40.197")))
+                     (proxy (proxy-command "ssh -W %h:%p root@143.110.253.4")))
                     (openssh-host
-                     (name "db 10.114.0.5")
-                     (host-name "10.114.0.5")
-                     (identity-file "/home/ben/.ssh/test_id_rsa")
+                     (name "db 10.122.0.6")
+                     (host-name "10.122.0.6")
+                     (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
                      (user "root")
-                     (proxy (proxy-command "ssh -W %h:%p root@104.248.40.197")))
+                     (proxy (proxy-command "ssh -W %h:%p root@143.110.253.4")))
                     (openssh-host
-                     (name "app 10.114.0.4")
-                     (host-name "10.114.0.4")
-                     (identity-file "/home/ben/.ssh/test_id_rsa")
+                     (name "app 10.122.0.5")
+                     (host-name "10.122.0.5")
+                     (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
                      (user "root")
-                     (proxy (proxy-command "ssh -W %h:%p root@104.248.40.197")))))))
+                     (proxy (proxy-command "ssh -W %h:%p root@143.110.253.4")))))))
    (service home-gpg-agent-service-type
             (home-gpg-agent-configuration
              (pinentry-program
