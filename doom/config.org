@@ -690,8 +690,11 @@ Beware using this command given that it's destructive and non reversible."
 #+begin_src emacs-lisp
 (if (not (equal "ben" (user-login-name)))
     (progn (setq
-            mu-root (s-chop-suffixes '("/mu" "/bin") (file-truename  (executable-find "mu")))
-            mu4e-path (concat mu-root "/share/emacs/site-lisp/mu4e"))
+            mu-root (car (-filter
+                          (lambda (s)
+                            (s-contains? "mu4e" s)) (s-split "\n" (cdr (doom-call-process "nix-store" "--query" "--referrers" (file-truename  (executable-find "mu")))))))
+            mu-version (s-chop-prefix "-" (cadr (s-split "emacs" mu-root)))
+            mu4e-path (concat mu-root (s-concat "/share/emacs/site-lisp/elpa/" mu-version)))
            (add-to-list 'load-path mu4e-path)))
 
 (after! mu4e

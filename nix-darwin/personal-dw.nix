@@ -111,6 +111,7 @@ in
     pkgs.pandoc
     pkgs.cask
     pkgs.mu
+    pkgs.emacsPackages.mu4e
     pkgs.isync
     pkgs.cloc
     pkgs.overmind
