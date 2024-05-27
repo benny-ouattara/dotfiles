@@ -151,7 +151,7 @@ in
     initExtra = lib.mkBefore ''
       ZSH_DISABLE_COMPFIX=true
 
-      export PATH=$PATH:$HOME/.jenv/bin:$HOME/.local/bin:$HOME/.emacs.d/bin:/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin:${pkgs.custom-scripts}/bin
+      export PATH=/etc/profiles/per-user/$USER/bin:/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:$HOME/.jenv/bin:$HOME/.local/bin:$HOME/.emacs.d/bin:${pkgs.custom-scripts}/bin:$PATH
 
       if hash jenv 2>/dev/null; then
          eval "$(jenv init -)"

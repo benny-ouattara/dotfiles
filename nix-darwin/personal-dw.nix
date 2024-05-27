@@ -84,6 +84,8 @@ in
   };
 
   environment.systemPackages = [
+    pkgs.google-cloud-sdk
+    pkgs.youtube-dl
     pkgs.cmake
     pkgs.postgresql
     pkgs.scalafmt
@@ -211,7 +213,7 @@ in
       "meetingbar"
       "corretto17"
       "corretto11"
-      "google-cloud-sdk"
+      # "google-cloud-sdk"
       "background-music"
       "docker"
     ];

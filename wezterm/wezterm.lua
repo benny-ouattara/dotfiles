@@ -11,7 +11,7 @@ config.window_decorations = "RESIZE"
 config.color_scheme = 'Catppuccin Mocha'
 config.enable_tab_bar = true
 config.hide_tab_bar_if_only_one_tab = true
-
+config.default_cursor_style = 'SteadyBar'
 config.font = wezterm.font_with_fallback({
   {
     family = 'IosevkaTerm Nerd Font',
@@ -68,6 +68,11 @@ config.keys = {
     key = 'f',
     mods = 'CTRL',
     action = action.TogglePaneZoomState
+  },
+  {
+    key = 'l',
+    mods = 'CTRL',
+    action = action.ClearScrollback 'ScrollbackAndViewport',
   }
 }
 return config
