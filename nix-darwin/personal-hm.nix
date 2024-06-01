@@ -153,6 +153,9 @@ in
 
       export PATH=/etc/profiles/per-user/$USER/bin:/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:$HOME/.jenv/bin:$HOME/.local/bin:$HOME/.emacs.d/bin:${pkgs.custom-scripts}/bin:$PATH
 
+      export NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+      # source /nix/var/nix/profiles/per-user/$USER/profile/etc/profile.d/nix.sh
+
       if hash jenv 2>/dev/null; then
          eval "$(jenv init -)"
       fi
