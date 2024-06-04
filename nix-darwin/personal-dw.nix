@@ -84,6 +84,7 @@ in
   };
 
   environment.systemPackages = [
+    pkgs.docker-compose
     pkgs.google-cloud-sdk
     pkgs.youtube-dl
     pkgs.cmake
