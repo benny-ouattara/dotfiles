@@ -84,6 +84,8 @@ in
   };
 
   environment.systemPackages = [
+    pkgs.bore-cli
+    pkgs.mailcatcher
     pkgs.docker-compose
     pkgs.google-cloud-sdk
     pkgs.youtube-dl
