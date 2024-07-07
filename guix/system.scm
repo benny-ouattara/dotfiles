@@ -15,7 +15,6 @@
              (gnu system shadow)
              (gnu services databases)
              (guix gexp)
-             (contactapp service)
              (gnu packages audio)
              (guix channels)
              (srfi srfi-1))
@@ -81,7 +80,8 @@ EndSection
     (guix-service-type config =>
                        (guix-configuration (inherit config)
                                            (substitute-urls
-                                            (append (list "https://substitutes.nonguix.org")
+                                            (append (list "https://substitutes.nonguix.org"
+                                                          "http://34.148.208.103")
                                                     %default-substitute-urls))
                                            (authorized-keys
                                             (append (list (local-file "./nonguix-key.pub")
