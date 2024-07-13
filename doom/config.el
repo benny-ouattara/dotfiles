@@ -36,32 +36,6 @@
  org-pomodoro-length 45
  org-pomodoro-short-break-length 15)
 
-(use-package! doom-nano-modeline
-     :config
-     (doom-nano-modeline-mode 1)
-     (global-hide-mode-line-mode 1))
-
-(pcase (user-login-name)
-  ("zangao" (setq
-             doom-font (font-spec :family "Iosevka" :size 21 :weight 'normal)
-             doom-big-font (font-spec :family "Iosevka" :size 27)
-             doom-theme 'doom-nano-light)
-   ;; (after! doom-themes
-   ;;   (load-theme 'doom-nano-light t))
-   )
-  ("bouattara" (setq
-                doom-font (font-spec :family "Iosevka" :size 19 :weight 'normal)
-                doom-big-font (font-spec :family "Iosevka" :size 25)
-                doom-theme 'doom-nano-light))
-  ("benouattara" (setq
-                  doom-font (font-spec :family "Iosevka" :size 19 :weight 'normal)
-                  doom-big-font (font-spec :family "Iosevka" :size 25)
-                  doom-theme 'doom-nano-light))
-  ("ben" (setq
-          doom-font (font-spec :family "Iosevka" :size 23 :weight 'normal)
-          doom-big-font (font-spec :family "Iosevka" :size 29)
-          doom-theme 'doom-nano-light)))
-
 (setq
  mac-command-modifier 'meta
  ns-command-modifier 'meta
@@ -132,18 +106,6 @@
  org-design-file (concat org-directory
                          "/"
                          "design.org"))
-
-(setq-hook! org-mode
-  prettify-symbols-alist '(("#+end_quote" . "”")
-                           ("#+END_QUOTE" . "”")
-                           ("#+begin_quote" . "“")
-                           ("#+BEGIN_QUOTE" . "“")
-                           ("#+end_src" . "«")
-                           ("#+END_SRC" . "«")
-                           ("#+begin_src" . "»")
-                           ("#+BEGIN_SRC" . "»")
-                           ("#+name:" . "»")
-                           ("#+NAME:" . "»")))
 
 (after! org-capture
   (pushnew! org-capture-templates
@@ -548,15 +510,6 @@ Beware using this command given that it's destructive and non reversible."
   (let* ((projects (f-directories project-dir))
          (matches  (-filter (lambda (project) (s-contains? project-prefix project)) projects)))
     (seq-do #'delete-project matches)))
-
-(if (not (equal "ben" (user-login-name)))
-    (progn (setq
-            mu-root (car (-filter
-                          (lambda (s)
-                            (s-contains? "mu4e" s)) (s-split "\n" (cdr (doom-call-process "nix-store" "--query" "--referrers" (file-truename  (executable-find "mu")))))))
-            mu-version (s-chop-prefix "-" (cadr (s-split "emacs" mu-root)))
-            mu4e-path (concat mu-root (s-concat "/share/emacs/site-lisp/elpa/" mu-version)))
-           (add-to-list 'load-path mu4e-path)))
 
 (after! mu4e
   (setq mu4e-update-interval 180))
@@ -1053,7 +1006,7 @@ $stderr = File.open(\"err.txt\", \"w\")")
 ;;       '((left-fringe . 8)
 ;;         (right-fringe . 8)))
 
-(add-to-list 'default-frame-alist '(undecorated . t))
+;; (add-to-list 'default-frame-alist '(undecorated . t))
 
 (after! elfeed
   (setq elfeed-search-filter "@2-weeks-ago +unread"))
@@ -1133,22 +1086,6 @@ $stderr = File.open(\"err.txt\", \"w\")")
   (setq modus-themes-prompts '(bold))
   (setq modus-themes-completions nil)
   (setq modus-themes-org-blocks 'gray-background))
-
-(setq beno-custom-lib "~/Code/dotfiles/lib/")
-(add-to-list 'load-path beno-custom-lib)
-(require 'soccer)
-(map! :leader
-          (:prefix-map ("o" . "open")
-           (:prefix ("S" . "soccer")
-            :desc "Favorite fixtures" "S" #'list-soccer-fixtures
-            :desc "League fixtures" "s" #'list-league-fixtures
-            :desc "Followed leagues" "l" #'list-soccer-leagues
-            :desc "Followed teams" "t" #'list-soccer-teams
-            :desc "Teams fixtures" "T" #'list-soccer-team-fixtures
-            :desc "Follow league" "f" #'soccer-follow-league
-            :desc "Unfollow league" "U" #'soccer-unfollow-league
-            :desc "Unfollow team" "u" #'soccer-unfollow-team
-            :desc "Follow team" "F" #'soccer-follow-team)))
 
 (after! eww
   (eww-toggle-fonts))

@@ -40,5 +40,13 @@ btop/
 polybar.bak/
 nushell/history.txt
 git/ignore
+ard.settings-ported
+dconf/
+gnome-initial-setup-done
+ibus/
+pulse/
+stumpwm/config
+user-dirs.dirs
+user-dirs.locale
 git/config
-nixpkgs/darwin/project/
+.gsd-keyboard.settings-ported
