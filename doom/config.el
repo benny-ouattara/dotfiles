@@ -1062,10 +1062,8 @@ $stderr = File.open(\"err.txt\", \"w\")")
 (add-hook 'elfeed-search-mode-hook #'elfeed-update)
 
 (with-eval-after-load 'geiser-guile
-  (add-to-list 'geiser-guile-load-path "/home/ben/Code/guix-turtle")
-  (add-to-list 'geiser-guile-load-path "/home/ben/Code/todo/guix")
-  ;; (add-to-list 'geiser-guile-load-path "/home/ben/Code/octo-guix")
-  )
+  (add-to-list 'geiser-guile-load-path "/home/ben/Code/nonguix")
+  (add-to-list 'geiser-guile-load-path "/home/ben/Code/jazacash/guix"))
 
 (use-package! info-colors
   :after info
