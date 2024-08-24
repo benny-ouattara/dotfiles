@@ -287,11 +287,13 @@ This should fix a [[https://github.com/bastibe/org-journal/issues/392][bug]] in 
 
 * tramp
 #+begin_src emacs-lisp
-(setq
- tramp-histfile-override "/dev/null")
-
 (when (not (file-exists-p (concat doom-cache-dir "tramp-histfile")))
   (make-empty-file (concat doom-cache-dir "tramp-histfile")))
+
+(after! tramp
+  (setq
+   tramp-histfile-override "/dev/null")
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
 #+end_src
 
 * code indentation

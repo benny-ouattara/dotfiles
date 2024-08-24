@@ -32,7 +32,7 @@
                   +hydra/text-zoom/body)
            (emoji +unicode)  ; 🙂
            ;;indent-guides     ; highlighted indent columns
-           ;; (modeline +light)          ; snazzy, Atom-inspired modeline, plus API
+           ;;  (modeline +light)          ; snazzy, Atom-inspired modeline, plus API
            nav-flash                  ; blink the current line after jumping
            ;;neotree           ; a project drawer, like NERDTree for vim
            ophints                ; highlight the region an operation acts on
@@ -166,7 +166,7 @@
             ;; +pomodoro    ; be fruitful with the tomato technique
             +noter
             +present
-            ;; +pretty
+            +pretty
             +journal)                   ; using org-mode for presentations
            ;;perl              ; write code no one else can comprehend
            ;;php               ; perl's insecure younger brother
@@ -207,7 +207,7 @@
            calendar
            ;;emms
            ;;everywhere        ; *leave* Emacs!? You must be joking
-           ;;irc               ; how neckbeards socialize
+           ;; irc               ; how neckbeards socialize
            (rss +org)                   ; emacs as an RSS reader
            ;;twitter           ; twitter client https://twitter.com/vnought
 

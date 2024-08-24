@@ -226,11 +226,13 @@
   (setq org-agenda-files (append (org-agenda-files) (org-journal-today)))
   (map! :leader :desc "Open current journal" "j" #'org-journal-open-current-journal-file))
 
-(setq
- tramp-histfile-override "/dev/null")
-
 (when (not (file-exists-p (concat doom-cache-dir "tramp-histfile")))
   (make-empty-file (concat doom-cache-dir "tramp-histfile")))
+
+(after! tramp
+  (setq
+   tramp-histfile-override "/dev/null")
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
 
 (defun beno--indent (n)
   (interactive "p")
