@@ -25,7 +25,7 @@
 (defvar soccer-base-url "https://api-football-v1.p.rapidapi.com"
   "Base football API that provides past and realtime soccer data.")
 
-(defvar soccer-season 2023
+(defvar soccer-season 2024
   "Soccer season to explore.")
 
 (defvar soccer-tz "America/New_York"
