@@ -33,7 +33,7 @@
          "autorandr"
          "xrandr"
          "fd"
-         ;; "nyxt"
+         "nyxt"
          "kitty"
          "alacritty"
          "picom"
@@ -75,7 +75,7 @@
          "sbcl-stumpwm-net"
          "sbcl-stumpwm-wifi"
          "sbcl-slynk"
-         "stumpwm:lib"
+         ;; "stumpwm:lib"
          "xmodmap"
          "curl"
          "rlwrap"
@@ -123,7 +123,7 @@
          "gcc-toolchain"
          "leiningen"
          "tmux"
-         "openjdk@11.0.17"
+         "openjdk@17.0.10:jdk"
          "node"
          "nmap"
          "pinentry-emacs"
@@ -157,7 +157,11 @@
          "nushell"
          "pandoc"
          "bat"
-         "python")))
+         "python"
+         "strace"
+         "cuirass"
+         ;; "youtube-dl"
+         )))
  (services
   (list
    (simple-service 'environment-variables-service
@@ -174,8 +178,8 @@
               (list (openssh-host (name "*")
                                   (extra-content "  StrictHostKeyChecking no"))
                     (openssh-host
-                     (name "gateway 143.110.253.4")
-                     (host-name "143.110.253.4")
+                     (name "lb 35.231.94.98")
+                     (host-name "35.231.94.98")
                      (forward-agent? #t)
                      (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
                      (user "root"))
@@ -185,25 +189,60 @@
                      (forward-agent? #t)
                      (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
                      (user "root")
-                     (proxy (proxy-command "ssh -W %h:%p root@143.110.253.4")))
+                     (proxy (proxy-command "ssh -W %h:%p root@35.231.94.98")))
                     (openssh-host
-                     (name "cuirass 10.122.0.3")
-                     (host-name "10.122.0.3")
+                     (name "cicd 34.148.208.103")
+                     (host-name "34.148.208.103")
                      (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
                      (user "root")
-                     (proxy (proxy-command "ssh -W %h:%p root@143.110.253.4")))
+                     ;; (proxy (proxy-command "ssh -W %h:%p root@35.231.94.98"))
+                     )
                     (openssh-host
-                     (name "db 10.122.0.6")
-                     (host-name "10.122.0.6")
+                     (name "db 35.227.116.128")
+                     (host-name "35.227.116.128")
                      (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
                      (user "root")
-                     (proxy (proxy-command "ssh -W %h:%p root@143.110.253.4")))
+                     ;; (proxy (proxy-command "ssh -W %h:%p root@35.231.94.98"))
+                     )
                     (openssh-host
-                     (name "app 10.122.0.5")
-                     (host-name "10.122.0.5")
+                     (name "app1 35.231.142.92")
+                     (host-name "35.231.142.92")
                      (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
                      (user "root")
-                     (proxy (proxy-command "ssh -W %h:%p root@143.110.253.4")))))))
+                     ;; (proxy (proxy-command "ssh -W %h:%p root@35.231.94.98"))
+                     )
+                    (openssh-host
+                     (name "app2 34.23.23.182")
+                     (host-name "34.23.23.182")
+                     (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
+                     (user "root")
+                     ;; (proxy (proxy-command "ssh -W %h:%p root@35.231.94.98"))
+                     )
+                    (openssh-host
+                     (name "app1-prod 34.35.20.192")
+                     (host-name "34.35.20.192")
+                     (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
+                     (user "root"))
+                    (openssh-host
+                     (name "app2-prod 34.35.60.255")
+                     (host-name "34.35.60.255")
+                     (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
+                     (user "root"))
+                    (openssh-host
+                     (name "lb-prod 34.35.44.149")
+                     (host-name "34.35.44.149")
+                     (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
+                     (user "root"))
+                    (openssh-host
+                     (name "db-prod 34.35.31.72")
+                     (host-name "34.35.31.72")
+                     (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
+                     (user "root"))
+                    (openssh-host
+                     (name "terra 10.0.0.213")
+                     (host-name "10.0.0.213")
+                     (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
+                     (user "root"))))))
    (service home-gpg-agent-service-type
             (home-gpg-agent-configuration
              (pinentry-program

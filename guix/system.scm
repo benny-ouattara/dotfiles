@@ -1,11 +1,9 @@
-;; This is an operating system configuration generated
-;; by the graphical installer.
-
 (use-modules (gnu)
              (nongnu packages linux)
              (gnu artwork)
              (gnu packages fonts)
              (gnu packages lisp)
+             (gnu packages ssh)
              (gnu packages wm)
              (gnu packages fonts)
              (gnu packages shells)
@@ -14,8 +12,8 @@
              (gnu system setuid)
              (gnu system shadow)
              (gnu services databases)
+             (gnu services)
              (guix gexp)
-             (contactapp service)
              (gnu packages audio)
              (guix channels)
              (srfi srfi-1))
@@ -81,7 +79,9 @@ EndSection
     (guix-service-type config =>
                        (guix-configuration (inherit config)
                                            (substitute-urls
-                                            (append (list "https://substitutes.nonguix.org")
+                                            (append (list "https://substitutes.nonguix.org"
+                                                          "http://34.148.208.103"
+                                                          "http://10.0.0.213")
                                                     %default-substitute-urls))
                                            (authorized-keys
                                             (append (list (local-file "./nonguix-key.pub")
@@ -128,9 +128,11 @@ EndSection
            %setuid-programs))
   (packages
    (append
-    (list (list stumpwm "lib"))         ; use lib output of stumpwm package
+    ;; (list (list stumpwm "lib"))
+                                        ; use lib output of stumpwm package
     (list
      (specification->package "exfat-utils")
+     ;; (specification->package "exfat-utils")
      (specification->package "xf86-input-libinput")
      (specification->package "sugar-light-sddm-theme")
      (specification->package "sugar-dark-sddm-theme")
@@ -153,9 +155,7 @@ EndSection
      (specification->package "xterm")
      (specification->package "emacs-next")
      (specification->package "emacs-exwm")
-     (specification->package
-      "emacs-desktop-environment")
-     (specification->package "nss-certs"))
+     (specification->package "emacs-desktop-environment"))
     %base-packages))
   (services
    (append
@@ -163,7 +163,11 @@ EndSection
      (simple-service 'system-cron-jobs
                      mcron-service-type
                      (list garbage-collector-job))
-     (service postgresql-service-type)
+     (simple-service 'jazacash-etc-files etc-service-type
+                     `(("jazacash" ,(local-file (format #f "~a/secrets" (getenv "HOME"))
+                                                "jaza-secrets"
+                                                #:recursive? #t))))
+     ;; (service postgresql-service-type)
      (service libvirt-service-type
               (libvirt-configuration
                (unix-sock-group "libvirt")

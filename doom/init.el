@@ -78,7 +78,7 @@
            vterm                        ; another terminals in Emacs
 
            :checkers
-           syntax              ; tasing you for every semicolon you forget
+           ;; syntax              ; tasing you for every semicolon you forget
            ;; ;;(spell +flyspell) ; tasing you for misspelling mispelling
            ;; ;;grammar           ; tasing grammar mistake every you make
 
@@ -95,7 +95,7 @@
            ;;gist              ; interacting with github gists
            (lookup              ; helps you navigate your code and documentation
             +docsets)           ; ...or in Dash docsets locally
-           (lsp +eglot)
+           (lsp +lsp)
            ;;macos             ; MacOS-specific commands
            magit                        ; a git porcelain for Emacs
            make                         ; run make tasks from Emacs
@@ -172,8 +172,7 @@
            ;;php               ; perl's insecure younger brother
            ;;plantuml          ; diagrams for confusing people more
            ;;purescript        ; javascript, but functional
-           (python +lsp
-                   +tree-sitter)       ; beautiful is better than ugly
+           python              ; beautiful is better than ugly
            ;;qt                ; the 'cutest' gui framework ever
            ;;racket            ; a DSL for DSLs
            ;;raku              ; the artist formerly known as perl6
@@ -196,7 +195,7 @@
            ;;zig               ; C, but simpler
 
            :email
-           (mu4e +gmail)
+           (mu4e +org +gmail)
            ;; (notmuch +afew +org)
            ;;(wanderlust +gmail)
 

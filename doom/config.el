@@ -43,24 +43,24 @@
 
 (pcase (user-login-name)
   ("zangao" (setq
-             doom-font (font-spec :family "Iosevka" :size 21 :weight 'normal)
+             doom-font (font-spec :family "Iosevka" :size 19 :weight 'normal)
              doom-big-font (font-spec :family "Iosevka" :size 27)
-             doom-theme 'doom-nano-light)
+             doom-theme 'modus-operandi-tinted)
    ;; (after! doom-themes
-   ;;   (load-theme 'doom-nano-light t))
+   ;;   (load-theme 'modus-operandi-tinted t))
    )
   ("bouattara" (setq
-                doom-font (font-spec :family "Iosevka" :size 19 :weight 'normal)
+                doom-font (font-spec :family "Iosevka" :size 17 :weight 'normal)
                 doom-big-font (font-spec :family "Iosevka" :size 25)
-                doom-theme 'doom-nano-light))
+                doom-theme 'modus-operandi-tinted))
   ("benouattara" (setq
-                  doom-font (font-spec :family "Iosevka" :size 19 :weight 'normal)
+                  doom-font (font-spec :family "Iosevka" :size 17 :weight 'normal)
                   doom-big-font (font-spec :family "Iosevka" :size 25)
-                  doom-theme 'doom-nano-light))
+                  doom-theme 'modus-operandi-tinted))
   ("ben" (setq
-          doom-font (font-spec :family "Iosevka" :size 23 :weight 'normal)
+          doom-font (font-spec :family "Iosevka" :size 21 :weight 'normal)
           doom-big-font (font-spec :family "Iosevka" :size 29)
-          doom-theme 'doom-nano-light)))
+          doom-theme 'modus-operandi-tinted)))
 
 (setq
  mac-command-modifier 'meta
@@ -1062,10 +1062,8 @@ $stderr = File.open(\"err.txt\", \"w\")")
 (add-hook 'elfeed-search-mode-hook #'elfeed-update)
 
 (with-eval-after-load 'geiser-guile
-  (add-to-list 'geiser-guile-load-path "/home/ben/Code/guix-turtle")
-  (add-to-list 'geiser-guile-load-path "/home/ben/Code/todo/guix")
-  ;; (add-to-list 'geiser-guile-load-path "/home/ben/Code/octo-guix")
-  )
+  (add-to-list 'geiser-guile-load-path "/home/ben/Code/nonguix")
+  (add-to-list 'geiser-guile-load-path "/home/ben/Code/jazacash/guix"))
 
 (use-package! info-colors
   :after info

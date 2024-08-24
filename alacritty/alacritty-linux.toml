@@ -77,7 +77,7 @@ blinking = "Off"
 shape = "Beam"
 
 [font]
-size = 10.0
+size = 21.0
 
 [font.bold]
 family = "Iosevka Nerd Font"
@@ -113,7 +113,6 @@ mods = "Command"
 hide_when_typing = false
 
 [window]
-# decorations = "buttonless"
 dynamic_title = true
 opacity = 1.0
 title = "Alacritty"
