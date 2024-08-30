@@ -3,6 +3,7 @@
              (gnu artwork)
              (gnu packages fonts)
              (gnu packages lisp)
+             (gnu packages guile-xyz)
              (gnu packages ssh)
              (gnu packages wm)
              (gnu packages fonts)
@@ -13,6 +14,7 @@
              (gnu system shadow)
              (gnu services databases)
              (gnu services)
+             (jazacash service)
              (guix gexp)
              (gnu packages audio)
              (guix channels)
@@ -79,13 +81,10 @@ EndSection
     (guix-service-type config =>
                        (guix-configuration (inherit config)
                                            (substitute-urls
-                                            (append (list "https://substitutes.nonguix.org"
-                                                          "http://34.148.208.103"
-                                                          "http://10.0.0.213")
+                                            (append (list "https://substitutes.nonguix.org")
                                                     %default-substitute-urls))
                                            (authorized-keys
-                                            (append (list (local-file "./nonguix-key.pub")
-                                                          (local-file "./cuirass-key.pub"))
+                                            (append (list (local-file "./nonguix-key.pub"))
                                                     %default-authorized-guix-keys))))
     (elogind-service-type config =>
                           (elogind-configuration (inherit config)
@@ -155,6 +154,7 @@ EndSection
      (specification->package "xterm")
      (specification->package "emacs-next")
      (specification->package "emacs-exwm")
+     (specification->package "guile-jwt")
      (specification->package "emacs-desktop-environment"))
     %base-packages))
   (services
@@ -167,6 +167,7 @@ EndSection
                      `(("jazacash" ,(local-file (format #f "~a/secrets" (getenv "HOME"))
                                                 "jaza-secrets"
                                                 #:recursive? #t))))
+     (service jazacash-ci-service-type)
      ;; (service postgresql-service-type)
      (service libvirt-service-type
               (libvirt-configuration

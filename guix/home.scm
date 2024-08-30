@@ -13,6 +13,8 @@
  (gnu packages gnupg)
  (gnu services)
  (gnu packages ci)
+ (gnu packages ruby)
+ (gnu packages guile-xyz)
  (guix gexp)
  (gnu home services shells)
  (gnu home services gnupg)
@@ -83,11 +85,11 @@
          "autoconf"
          "xsetroot"
          "nss-certs"
-         "stumpish"
+         ;; "stumpish"
          "xdot"
-         "qutebrowser"
+         ;; "qutebrowser"
          "net-tools"
-         "dstat"
+         ;; "dstat"
          "clojure"
          "clojure-tools"
          "alsa-utils"
@@ -109,13 +111,13 @@
          ;; "font-material-icons"
          "ungoogled-chromium"
          "firefox"
-         "dunst"
-         "mpv"
-         "ncmpcpp"
-         "mpd"
-         "cava"
-         "sqlite"
-         "sqlitebrowser"
+         ;; "dunst"
+         ;; "mpv"
+         ;; "ncmpcpp"
+         ;; "mpd"
+         ;; "cava"
+         ;; "sqlite"
+         ;; "sqlitebrowser"
          ;; "gcc"
          "the-silver-searcher"
          "ack"
@@ -129,37 +131,40 @@
          "pinentry-emacs"
          "maven"
          "fzf"
-         "iptables"
-         "ipcalc"
-         "sipcalc"
+         "ruby"
+         "ruby-jwt"
+         "guile-jwt"
+         ;; "iptables"
+         ;; "ipcalc"
+         ;; "sipcalc"
          "btop"
-         "glances"
-         "dfc"
-         "facter"
-         "jnettop"
-         "clusterssh"
-         "dmidecode"
+         ;; "glances"
+         ;; "dfc"
+         ;; "facter"
+         ;; "jnettop"
+         ;; "clusterssh"
+         ;; "dmidecode"
          "tree"
-         "smartmontools"
-         "fdupes"
-         "autojump"
-         "fasd"
-         "iftop"
-         "di"
+         ;; "smartmontools"
+         ;; "fdupes"
+         ;; "autojump"
+         ;; "fasd"
+         ;; "iftop"
+         ;; "di"
          "neofetch"
          ;; "lynis"
-         "ngrep"
-         "jtbl"
-         "rex"
-         "doctl"
-         "du-dust"
+         ;; "ngrep"
+         ;; "jtbl"
+         ;; "rex"
+         ;; "doctl"
+         ;; "du-dust"
          "direnv"
-         "nushell"
+         ;; "nushell"
          "pandoc"
-         "bat"
+         ;; "bat"
          "python"
-         "strace"
-         "cuirass"
+         ;; "strace"
+         ;; "cuirass"
          ;; "youtube-dl"
          )))
  (services
@@ -191,8 +196,8 @@
                      (user "root")
                      (proxy (proxy-command "ssh -W %h:%p root@35.231.94.98")))
                     (openssh-host
-                     (name "cicd 34.148.208.103")
-                     (host-name "34.148.208.103")
+                     (name "cicd 34.139.146.192")
+                     (host-name "34.139.146.192")
                      (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
                      (user "root")
                      ;; (proxy (proxy-command "ssh -W %h:%p root@35.231.94.98"))

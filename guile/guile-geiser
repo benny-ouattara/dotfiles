@@ -1,5 +1,6 @@
 (use-modules (guix))
 (use-modules (guix hash))
+(use-modules (guix build utils))
 (use-modules (guix build-system))
 (use-modules (gnu packages base))
 (use-modules (jazacash package))

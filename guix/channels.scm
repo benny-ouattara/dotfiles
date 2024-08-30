@@ -13,6 +13,11 @@
      "2A39 3FFF 68F4 EF7A 3D29  12AF 6F51 20A0 22FB B2D5"))))
 
  (channel
+  (name 'jazacash)
+  (url  "git@github.com:jazafund/jazacash.git")
+  (branch "develop"))
+
+ (channel
   (name 'guix)
   (url "https://git.savannah.gnu.org/git/guix.git")
   (commit "5217ea6d45bef053844d8360a06252b9436783b3")
