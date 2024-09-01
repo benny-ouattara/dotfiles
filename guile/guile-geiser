@@ -1,4 +1,7 @@
 (use-modules (guix))
+(use-modules (guix store))
+(use-modules (guix channels))
+(use-modules (guix inferior))
 (use-modules (guix hash))
 (use-modules (guix build utils))
 (use-modules (guix build-system))

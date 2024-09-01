@@ -81,10 +81,12 @@ EndSection
     (guix-service-type config =>
                        (guix-configuration (inherit config)
                                            (substitute-urls
-                                            (append (list "https://substitutes.nonguix.org")
+                                            (append (list "https://substitutes.nonguix.org"
+                                                          "http://substitutes.jazacash.com")
                                                     %default-substitute-urls))
                                            (authorized-keys
-                                            (append (list (local-file "./nonguix-key.pub"))
+                                            (append (list (local-file "./nonguix-key.pub")
+                                                          (local-file "./cuirass-key.pub"))
                                                     %default-authorized-guix-keys))))
     (elogind-service-type config =>
                           (elogind-configuration (inherit config)
