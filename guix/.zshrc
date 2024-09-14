@@ -103,3 +103,4 @@ source $ZSH/oh-my-zsh.sh
 export GPG_TTY=$(tty)
 eval "$(direnv hook zsh)"
 source ~/Code/google-cloud-sdk/path.zsh.inc
+export PATH=/home/ben/.local/share/gem/ruby/3.3.0/bin:$PATH
