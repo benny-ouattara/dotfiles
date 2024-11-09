@@ -14,7 +14,7 @@
              (gnu system shadow)
              (gnu services databases)
              (gnu services)
-             (jazacash service)
+             ;(jazacash service)
              (guix gexp)
              (gnu packages audio)
              (guix channels)
@@ -82,7 +82,8 @@ EndSection
                        (guix-configuration (inherit config)
                                            (substitute-urls
                                             (append (list "https://substitutes.nonguix.org"
-                                                          "http://substitutes.jazacash.com")
+                                                         ; "http://substitutes.jazacash.com"
+							  )
                                                     %default-substitute-urls))
                                            (authorized-keys
                                             (append (list (local-file "./nonguix-key.pub")
@@ -165,11 +166,11 @@ EndSection
      (simple-service 'system-cron-jobs
                      mcron-service-type
                      (list garbage-collector-job))
-     (simple-service 'jazacash-etc-files etc-service-type
-                     `(("jazacash" ,(local-file (format #f "~a/secrets" (getenv "HOME"))
-                                                "jaza-secrets"
-                                                #:recursive? #t))))
-     (service jazacash-ci-service-type)
+     ;(simple-service 'jazacash-etc-files etc-service-type
+     ;                `(("jazacash" ,(local-file (format #f "~a/secrets" (getenv "HOME"))
+     ;                                           "jaza-secrets"
+     ;                                           #:recursive? #t))))
+     ;(service jazacash-ci-service-type)
      ;; (service postgresql-service-type)
      (service libvirt-service-type
               (libvirt-configuration
