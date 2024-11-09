@@ -15,8 +15,8 @@
              (gnu services databases)
              (gnu services)
              (jazacash service)
-             (guix gexp)
              (gnu packages audio)
+             (guix gexp)
              (guix channels)
              (srfi srfi-1))
 (use-service-modules
@@ -32,6 +32,28 @@
  virtualization
  cuirass
  mcron)
+
+;; (define channels
+;;   (list
+;;    (channel
+;;     (name 'nonguix)
+;;     (url "https://gitlab.com/nonguix/nonguix")
+;;     (branch "master")
+;;     (commit "831f3ff14260e20d4da31b707515891eeb49e752")
+;;     (introduction
+;;      (make-channel-introduction
+;;       "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
+;;       (openpgp-fingerprint
+;;        "2A39 3FFF 68F4 EF7A 3D29  12AF 6F51 20A0 22FB B2D5"))))
+;;    (channel
+;;     (name 'jazacash)
+;;     (url  "git@github.com:jazafund/jazacash.git")
+;;     (branch "develop"))
+;;    (channel
+;;     (name 'guix)
+;;     (url "https://git.savannah.gnu.org/git/guix.git")
+;;     (commit "5217ea6d45bef053844d8360a06252b9436783b3")
+;;     (branch "master"))))
 
 ;; Allow members of the "video" group to change the screen brightness.
 (define %backlight-udev-rule
@@ -80,9 +102,11 @@ EndSection
                                              (motd %beno-motd)))
     (guix-service-type config =>
                        (guix-configuration (inherit config)
+                                           ;; (channels channels)
+                                           ;; (guix (guix-for-channels channels))
                                            (substitute-urls
                                             (append (list "https://substitutes.nonguix.org"
-                                                          "http://substitutes.jazacash.com")
+                                                          "http://substitutes.jaza.cash")
                                                     %default-substitute-urls))
                                            (authorized-keys
                                             (append (list (local-file "./nonguix-key.pub")
@@ -157,6 +181,8 @@ EndSection
      (specification->package "emacs-next")
      (specification->package "emacs-exwm")
      (specification->package "guile-jwt")
+     (specification->package "guile-fibers")
+     (specification->package "guile-sqlite3")
      (specification->package "emacs-desktop-environment"))
     %base-packages))
   (services

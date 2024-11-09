@@ -6,5 +6,6 @@
 (use-modules (guix build utils))
 (use-modules (guix build-system))
 (use-modules (gnu packages base))
+(use-modules (gnu packages guile-xyz))
 (use-modules (jazacash package))
 (use-modules (jazacash service))
