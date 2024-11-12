@@ -170,30 +170,31 @@ EndSection
      ;; (specification->package "exfat-utils")
      (specification->package "xf86-input-libinput")
      (specification->package "sugar-light-sddm-theme")
-     (specification->package "sugar-dark-sddm-theme")
-     (specification->package "chili-sddm-theme")
-     (specification->package "lightdm-gtk-greeter")
+     ;; (specification->package "sugar-dark-sddm-theme")
+     ;; (specification->package "chili-sddm-theme")
+     ;; (specification->package "lightdm-gtk-greeter")
      (specification->package "font-tamzen")
      (specification->package "bluez")
      (specification->package "bluez-alsa")
      (specification->package "stumpwm-with-slynk")
-     (specification->package "stow")
+     ;; (specification->package "stow")
      (specification->package "pulseaudio")
      (specification->package "sbcl")
      (specification->package "awesome")
      (specification->package "i3-wm")
      (specification->package "i3status")
      ;; (specification->package "postgresql")
-     (specification->package "dmenu")
-     (specification->package "st")
-     (specification->package "ratpoison")
+     ;; (specification->package "dmenu")
+     ;; (specification->package "st")
+     ;; (specification->package "ratpoison")
      (specification->package "xterm")
      (specification->package "emacs-next")
-     (specification->package "emacs-exwm")
+     ;; (specification->package "emacs-exwm")
      (specification->package "guile-jwt")
      (specification->package "guile-fibers")
      (specification->package "guile-sqlite3")
-     (specification->package "emacs-desktop-environment"))
+     ;; (specification->package "emacs-desktop-environment")
+     )
     %base-packages))
   (services
    (append
@@ -207,18 +208,18 @@ EndSection
      ;                                           #:recursive? #t))))
      ;(service jazacash-ci-service-type)
      ;; (service postgresql-service-type)
-     (service libvirt-service-type
-              (libvirt-configuration
-               (unix-sock-group "libvirt")
-               (tls-port "16555")))
+     ;; (service libvirt-service-type
+     ;;          (libvirt-configuration
+     ;;           (unix-sock-group "libvirt")
+     ;;           (tls-port "16555")))
      (service console-font-service-type
               (map (lambda (tty)
                      (cons tty %beno-console-font))
                    '("tty1" "tty2" "tty3" "tty4" "tty5" "tty6")))
      (service thermald-service-type)
-     (service darkstat-service-type
-              (darkstat-configuration
-               (interface "wlp0s20f3")))
+     ;; (service darkstat-service-type
+     ;;          (darkstat-configuration
+     ;;           (interface "wlp0s20f3")))
      (bluetooth-service #:auto-enable? #t)
      (service syncthing-service-type
               (syncthing-configuration (user "ben")))
