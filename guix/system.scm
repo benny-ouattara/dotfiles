@@ -14,12 +14,8 @@
              (gnu system shadow)
              (gnu services databases)
              (gnu services)
-<<<<<<< HEAD
-             ;(jazacash service)
-             (guix gexp)
-=======
              (jazacash service)
->>>>>>> master
+             (guix gexp)
              (gnu packages audio)
              (guix gexp)
              (guix channels)

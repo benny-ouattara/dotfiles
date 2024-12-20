@@ -128,18 +128,21 @@ EndSection
                     (specification->package "guile-sqlite3"))
                    %base-packages))
  (services
-  (append (list (service gnome-desktop-service-type)
-                (service openssh-service-type)
-                (set-xorg-configuration
-                 (xorg-configuration
-                  (keyboard-layout keyboard-layout)
-                  (extra-config (list %xorg-libinput-config)))
-                 sddm-service-type)
-                (service sddm-service-type
-                         (sddm-configuration
-                          ;; valid values are elarun, maldives or maya, chili, sugar-light, sugar-dark
-                          (theme "sugar-light")
-                          )))
+  (append (list
+           (service syncthing-service-type
+                    (syncthing-configuration (user "ben")))
+           (service gnome-desktop-service-type)
+           (service openssh-service-type)
+           (set-xorg-configuration
+            (xorg-configuration
+             (keyboard-layout keyboard-layout)
+             (extra-config (list %xorg-libinput-config)))
+            sddm-service-type)
+           (service sddm-service-type
+                    (sddm-configuration
+                     ;; valid values are elarun, maldives or maya, chili, sugar-light, sugar-dark
+                     (theme "sugar-light")
+                     )))
           %modified-desktop-services))
  (bootloader (bootloader-configuration
               (bootloader grub-efi-bootloader)
