@@ -104,3 +104,10 @@ export GPG_TTY=$(tty)
 eval "$(direnv hook zsh)"
 source ~/Code/google-cloud-sdk/path.zsh.inc
 export PATH=/home/ben/.local/share/gem/ruby/3.3.0/bin:$PATH
+
+alias gs="guix system"
+alias sgs="sudo guix system"
+alias gh="guix home"
+alias sgh="sudo guix home"
+alias home-config="guix home reconfigure ~/Code/dotfiles/guix/otter-home.scm"
+alias system-config="sudo guix system reconfigure ~/Code/dotfiles/guix/otter-system.scm"
