@@ -148,6 +148,7 @@ EndSection
                     (specification->package "stumpwm-with-slynk")
                     (specification->package "sugar-light-sddm-theme")
                     (specification->package "guile-jwt")
+                    (specification->package "guile-gnutls")
                     (specification->package "guile-git")
                     (specification->package "guile-fibers")
                     (specification->package "guile-sqlite3"))
