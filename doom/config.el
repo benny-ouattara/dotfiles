@@ -1024,7 +1024,7 @@ $stderr = File.open(\"err.txt\", \"w\")")
         (set-popup-rule! "^\\*HTTP Response.*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
         (set-popup-rule! "^\\*ChatGPT*" :size 0.40 :vslot -4 :select t :quit nil :ttl nil :side 'right)
         (set-popup-rule! "^\\*Async Shell.*" :size 0.40 :vslot -4 :select t :quit t :ttl t :side 'right)
-        (set-popup-rule! "^\\*Geiser Guile REPL.*" :size 0.40 :vslot -4 :select t :quit t :ttl t :side 'right)
+        (set-popup-rule! "^\\*Geiser Guile REPL.*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
         (set-popup-rule! "^\\*Proced*" :size 0.40 :vslot -4 :select t :quit t :ttl t :side 'right))
     ;; small display
     (progn
