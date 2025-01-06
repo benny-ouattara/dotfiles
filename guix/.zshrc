@@ -105,6 +105,10 @@ eval "$(direnv hook zsh)"
 source ~/Code/google-cloud-sdk/path.zsh.inc
 export PATH=/home/ben/.local/share/gem/ruby/3.3.0/bin:$PATH
 
+# eval "$(ssh-agent -s)"
+# ssh-add ~/.ssh/jazacash
+# ssh-add ~/.ssh/id_rsa
+
 alias gs="guix system"
 alias sgs="sudo guix system"
 alias gh="guix home"

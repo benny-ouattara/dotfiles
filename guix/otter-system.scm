@@ -33,6 +33,28 @@
  cuirass
  mcron)
 
+(define channels
+  (list
+   (channel
+    (name 'nonguix)
+    (url "https://gitlab.com/nonguix/nonguix")
+    (branch "master")
+    (commit "831f3ff14260e20d4da31b707515891eeb49e752") ;; pin commit to avoid unbound variable bug
+    (introduction
+     (make-channel-introduction
+      "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
+      (openpgp-fingerprint
+       "2A39 3FFF 68F4 EF7A 3D29  12AF 6F51 20A0 22FB B2D5"))))
+   (channel
+    (name 'jazacash)
+    (url  "git@github.com:jazafund/jazacash.git")
+    (branch "develop"))
+   (channel
+    (name 'guix)
+    (url "https://git.savannah.gnu.org/git/guix.git")
+    (commit "5217ea6d45bef053844d8360a06252b9436783b3")
+    (branch "master"))))
+
 (define %backlight-udev-rule
   (udev-rule
    "90-backlight.rules"
@@ -79,6 +101,8 @@ EndSection
                                                             (motd %beno-motd)))
                    (guix-service-type config =>
                                       (guix-configuration (inherit config)
+                                                          (channels channels)
+                                                          (guix (guix-for-channels channels))
                                                           (substitute-urls
                                                            (append (list "https://substitutes.nonguix.org"
                                         ; "http://substitutes.jazacash.com"
@@ -124,11 +148,16 @@ EndSection
                     (specification->package "stumpwm-with-slynk")
                     (specification->package "sugar-light-sddm-theme")
                     (specification->package "guile-jwt")
+                    (specification->package "guile-git")
                     (specification->package "guile-fibers")
                     (specification->package "guile-sqlite3"))
                    %base-packages))
  (services
   (append (list
+           (simple-service 'jazacash-etc-files etc-service-type
+                           `(("jazacash" ,(local-file (format #f "~a/secrets" "/home/ben")
+                                                      "jaza-secrets"
+                                                      #:recursive? #t))))
            (service syncthing-service-type
                     (syncthing-configuration (user "ben")))
            (service gnome-desktop-service-type)
@@ -144,25 +173,25 @@ EndSection
                      (theme "sugar-light")
                      )))
           %modified-desktop-services))
-   (bootloader (bootloader-configuration
-                (bootloader grub-efi-bootloader)
-                (targets (list "/boot/efi"))
-                (keyboard-layout keyboard-layout)))
-  (swap-devices (list (swap-space
-                        (target (uuid
-                                 "893cebe6-5e30-4588-9c99-1a03389facd8")))))
+ (bootloader (bootloader-configuration
+              (bootloader grub-efi-bootloader)
+              (targets (list "/boot/efi"))
+              (keyboard-layout keyboard-layout)))
+ (swap-devices (list (swap-space
+                      (target (uuid
+                               "893cebe6-5e30-4588-9c99-1a03389facd8")))))
 
-  ;; The list of file systems that get "mounted".  The unique
-  ;; file system identifiers there ("UUIDs") can be obtained
-  ;; by running 'blkid' in a terminal.
-  (file-systems (cons* (file-system
-                         (mount-point "/boot/efi")
-                         (device (uuid "D47F-3FB9"
-                                       'fat32))
-                         (type "vfat"))
-                       (file-system
-                         (mount-point "/")
-                         (device (uuid
-                                  "d690f4db-ddfc-45e7-9b77-c4a2e08892b3"
-                                  'ext4))
-                         (type "ext4")) %base-file-systems)))
+ ;; The list of file systems that get "mounted".  The unique
+ ;; file system identifiers there ("UUIDs") can be obtained
+ ;; by running 'blkid' in a terminal.
+ (file-systems (cons* (file-system
+                       (mount-point "/boot/efi")
+                       (device (uuid "D47F-3FB9"
+                                     'fat32))
+                       (type "vfat"))
+                      (file-system
+                       (mount-point "/")
+                       (device (uuid
+                                "d690f4db-ddfc-45e7-9b77-c4a2e08892b3"
+                                'ext4))
+                       (type "ext4")) %base-file-systems)))

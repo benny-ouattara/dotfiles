@@ -113,7 +113,6 @@
     ;; "gnome-backgrounds"
     ;; "font-fira-code"
     ;; "font-google-noto"
-    ;; "font-nerd-iosevka"
     ;; "font-nerd-jetbrains"
     ;; "font-nerd-meslo"
     ;; "font-nerd-victor"
@@ -188,8 +187,8 @@
                      (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
                      (user "root"))
                     (openssh-host
-                     (name "app-dev 34.23.118.163")
-                     (host-name "34.23.118.163")
+                     (name "app-dev 34.148.193.204")
+                     (host-name "34.148.193.204")
                      (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
                      (user "root"))
                     (openssh-host
