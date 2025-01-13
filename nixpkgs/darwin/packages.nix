@@ -2,6 +2,7 @@
   nix.package = pkgs.nix;
 
   environment.systemPackages = [
+    pkgs.babashka
     pkgs.cmake
     pkgs.postgresql
     pkgs.scalafmt

@@ -84,6 +84,9 @@ in
   };
 
   environment.systemPackages = [
+    pkgs.just
+    pkgs.github-cli
+    pkgs.babashka
     pkgs.bore-cli
     pkgs.mailcatcher
     pkgs.docker-compose
@@ -143,7 +146,9 @@ in
     pkgs.coreutils-full
     pkgs.clojure
     pkgs.clj-kondo
-    pkgs.leiningen
+    pkgs.cljfmt
+    # pkgs.leiningen
+    (pkgs.leiningen.override { jdk = pkgs.jdk17; })
     pkgs.wireguard-tools
     pkgs.tree
     pkgs.tcpdump
