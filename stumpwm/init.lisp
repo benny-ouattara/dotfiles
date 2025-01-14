@@ -195,7 +195,7 @@
 ;; start processes
 (run-commands
  "start-polybar"
- "start-firefox"
+ "start-nyxt"
  "start-emacs"
  "gselect dev")
 (run-shell-command "setxkbmap us -option 'caps:ctrl_modifier'")
