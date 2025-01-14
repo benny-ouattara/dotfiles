@@ -102,5 +102,20 @@ source $ZSH/oh-my-zsh.sh
 
 export GPG_TTY=$(tty)
 eval "$(direnv hook zsh)"
-source ~/Code/google-cloud-sdk/path.zsh.inc
 export PATH=/home/ben/.local/share/gem/ruby/3.3.0/bin:$PATH
+if [ -S $XDG_RUNTIME_DIR/ssh-agent/socket ]; then
+    export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/ssh-agent/socket
+    ssh-add -q ~/.ssh/jazacash
+    ssh-add -q ~/.ssh/id_rsa
+fi
+
+alias gs="guix system"
+alias sgs="sudo guix system"
+# alias gh="guix home"
+alias sgh="sudo guix home"
+alias home-config="guix home reconfigure ~/Code/dotfiles/guix/otter-home.scm"
+alias system-config="sudo guix system reconfigure ~/Code/dotfiles/guix/otter-system.scm"
+
+if [ -f ~/Code/google-cloud-sdk/path.zsh.inc ]; then
+    source ~/Code/google-cloud-sdk/path.zsh.inc
+fi
