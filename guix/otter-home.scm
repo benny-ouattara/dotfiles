@@ -103,6 +103,14 @@
      "direnv@2.32.3"
      "pandoc@2.19.2"
      "python@3.10.7"
+     "babashka@1.3.189"
+     "just@1.23.0"
+
+     ;; jazacash
+     "rust-bore-cli@0.5.1"
+     "jtools@0.0.0"
+     "rust-bore@0.4.1"
+     "github-cli@2.65.0"
                                         ;"ruby-riemann-client"
      ;; "xterm"
      ;; "kitty"

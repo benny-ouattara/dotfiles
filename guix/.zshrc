@@ -111,7 +111,7 @@ fi
 
 alias gs="guix system"
 alias sgs="sudo guix system"
-alias gh="guix home"
+# alias gh="guix home"
 alias sgh="sudo guix home"
 alias home-config="guix home reconfigure ~/Code/dotfiles/guix/otter-home.scm"
 alias system-config="sudo guix system reconfigure ~/Code/dotfiles/guix/otter-system.scm"
