@@ -172,12 +172,27 @@ in
     serverAliveInterval = 60;
     hashKnownHosts = true;
     extraConfig = ''
-      Host *
-        AddKeysToAgent yes
-        StrictHostKeyChecking no
-        IdentityFile ~/.ssh/id_rsa
-        IdentitiesOnly yes
-        # LogLevel DEBUG3
+    Host *
+      AddKeysToAgent yes
+      StrictHostKeyChecking no
+      IdentityFile ~/.ssh/id_rsa
+      IdentitiesOnly yes
+      # LogLevel DEBUG3
+
+    Host ci 104.196.125.161
+      HostName 104.196.125.161
+      IdentityFile ~/.ssh/jazacash-server
+      User root
+
+    Host app-dev 34.148.193.204
+      HostName 34.148.193.204
+      IdentityFile ~/.ssh/jazacash-server
+      User root
+
+    Host app-prod 34.35.8.94
+      HostName 34.35.8.94
+      IdentityFile ~/.ssh/jazacash-server
+      User root
     '';
 
     matchBlocks = {
