@@ -130,6 +130,7 @@ in
     };
 
     shellAliases = {
+      up = "overmind start";
       r = "ranger";
       ls = "${pkgs.coreutils}/bin/ls --color=auto -alhrt";
       l = "${pkgs.coreutils}/bin/ls --color=auto -alhrt";

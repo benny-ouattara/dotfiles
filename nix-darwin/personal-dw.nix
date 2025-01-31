@@ -84,6 +84,7 @@ in
   };
 
   environment.systemPackages = [
+    pkgs.ollama
     pkgs.just
     pkgs.github-cli
     pkgs.babashka
