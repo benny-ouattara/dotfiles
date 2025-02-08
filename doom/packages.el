@@ -42,3 +42,4 @@
 ;; there is a bug where consult depends on compat but doom doesn't have the latest compat library
 (package! doom-nano-modeline :recipe (:host github :repo "ronisbr/doom-nano-modeline"))
 (package! devdocs :recipe (:host github :repo "astoff/devdocs.el"))
+(package! verb :recipe (:host github :repo "federicotdn/verb"))
