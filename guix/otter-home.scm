@@ -105,8 +105,8 @@
               (list (openssh-host (name "*")
                                   (extra-content "  StrictHostKeyChecking no"))
                     (openssh-host
-                     (name "ci 104.196.125.161")
-                     (host-name "104.196.125.161")
+                     (name "ci 35.231.53.45")
+                     (host-name "35.231.53.45")
                      (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
                      (user "root"))
                     (openssh-host
@@ -115,7 +115,7 @@
                      (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
                      (user "root"))
                     (openssh-host
-                     (name "db-prod 34.35.8.94")
+                     (name "app-prod 34.35.8.94")
                      (host-name "34.35.8.94")
                      (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
                      (user "root"))
