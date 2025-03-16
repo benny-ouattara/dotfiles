@@ -180,8 +180,8 @@ in
       IdentitiesOnly yes
       # LogLevel DEBUG3
 
-    Host ci 104.196.125.161
-      HostName 104.196.125.161
+    Host ci  35.231.53.45
+      HostName 35.231.53.45
       IdentityFile ~/.ssh/jazacash-server
       User root
 

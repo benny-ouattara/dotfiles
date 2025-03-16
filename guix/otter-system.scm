@@ -162,7 +162,12 @@ EndSection
            (service syncthing-service-type
                     (syncthing-configuration (user "ben")))
            (service gnome-desktop-service-type)
-           (service openssh-service-type)
+           (service openssh-service-type
+                    (openssh-configuration
+                     (permit-root-login 'prohibit-password)
+                     (password-authentication? #f)
+                     (authorized-keys
+                      `(("root" ,(local-file "./keys/mac.pub"))))))
            (set-xorg-configuration
             (xorg-configuration
              (keyboard-layout keyboard-layout)
