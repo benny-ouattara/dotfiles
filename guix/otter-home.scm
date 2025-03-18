@@ -81,7 +81,7 @@
     "pandoc@2.19.2"
     "python@3.10.7"
     "babashka@1.3.189"
-    "just@1.23.0"
+    "awscli@1.22.90"
 
     ;; jazacash
     "rust-bore-cli@0.5.1"
