@@ -5,7 +5,7 @@
   (name 'nonguix)
   (url "https://gitlab.com/nonguix/nonguix")
   (branch "master")
-  (commit "831f3ff14260e20d4da31b707515891eeb49e752") ;; pin commit to avoid unbound variable bug
+  (commit "a96e2451bda5aaf9b48339edee392c6a3017d730")
   (introduction
    (make-channel-introduction
     "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
@@ -20,5 +20,5 @@
  (channel
   (name 'guix)
   (url "https://git.savannah.gnu.org/git/guix.git")
-  (commit "5217ea6d45bef053844d8360a06252b9436783b3")
+  (commit "e12455a5e8d524c5c3fba1ae56ebc6819b4f9320")
   (branch "master")))
