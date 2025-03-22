@@ -25,6 +25,14 @@ in
   # The platform the configuration will be used on.
   nixpkgs.hostPlatform = "x86_64-darwin";
 
+  nixpkgs = {
+    config = {
+      allowUnfree = true;
+      allowBroken = false;
+      allowUnsupportedSystem = false;
+    };
+  };
+
   # Set Git commit hash for darwin-version.
   # system.configurationRevision = self.rev or self.dirtyRev or null;
 
@@ -84,6 +92,8 @@ in
   };
 
   environment.systemPackages = [
+    pkgs.awscli
+    pkgs.packer
     pkgs.ollama
     pkgs.just
     pkgs.github-cli
@@ -166,12 +176,12 @@ in
   ];
 
   homebrew = {
-    enable = true;
+    enable = false;
     caskArgs.require_sha = true;
     onActivation = {
-      autoUpdate = true;
+      autoUpdate = false;
       cleanup = "uninstall";
-      upgrade = true;
+      upgrade = false;
     };
     brews = [
       "choose-gui"
@@ -225,6 +235,7 @@ in
       # "google-cloud-sdk"
       "background-music"
       "docker"
+      "visualvm"
     ];
     taps = [
       "homebrew/cask-versions"
