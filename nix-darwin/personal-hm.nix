@@ -180,16 +180,21 @@ in
       IdentitiesOnly yes
       # LogLevel DEBUG3
 
-    Host dev 34.205.166.43
-      HostName 34.205.166.43
+    Host dev 44.201.64.217
+      HostName 44.201.64.217
       IdentityFile ~/.ssh/jazacash-server
       User root
 
-    Host ops 10.0.0.103
-      HostName 10.0.0.103
+    Host ops 10.0.0.86
+      HostName 10.0.0.86
       IdentityFile ~/.ssh/jazacash-server
       User root
-      ProxyCommand ssh -W %h:%p root@34.205.166.43
+      ProxyCommand ssh -W %h:%p root@44.201.64.217
+
+    Host prod 13.244.104.50
+      HostName 13.244.104.50
+      IdentityFile ~/.ssh/jazacash-server
+      User root
 
     Host ci  35.231.53.45
       HostName 35.231.53.45

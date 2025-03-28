@@ -93,6 +93,7 @@ in
 
   environment.systemPackages = [
     pkgs.awscli
+    pkgs.ejsonkms
     pkgs.packer
     pkgs.ollama
     pkgs.just
@@ -101,8 +102,6 @@ in
     pkgs.bore-cli
     pkgs.mailcatcher
     pkgs.docker-compose
-    pkgs.google-cloud-sdk
-    pkgs.youtube-dl
     pkgs.cmake
     pkgs.postgresql
     pkgs.scalafmt
@@ -176,7 +175,7 @@ in
   ];
 
   homebrew = {
-    enable = false;
+    enable = true;
     caskArgs.require_sha = true;
     onActivation = {
       autoUpdate = false;
@@ -208,12 +207,12 @@ in
       };
     in [
       (skipSha "spotify")
-      "gimp"
       (noQuarantine "olive")
       "vlc"
       "appcleaner"
       "discord"
-      "blender"
+      #"gimp"
+      # "blender"
       "utm"
       "maccy"
       "balenaetcher"
@@ -232,10 +231,12 @@ in
       "meetingbar"
       "corretto17"
       "corretto11"
-      # "google-cloud-sdk"
+      "tableplus"
       "background-music"
       "docker"
       "visualvm"
+      "virtualbox"
+      "vagrant"
     ];
     taps = [
       "homebrew/cask-versions"
