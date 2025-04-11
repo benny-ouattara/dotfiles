@@ -14,7 +14,7 @@
              (gnu system shadow)
              (gnu services databases)
              (gnu services)
-                                        ;(jazacash service)
+             (jazacash service)
              (guix gexp)
              (gnu packages audio)
              (guix channels)
@@ -32,6 +32,8 @@
  virtualization
  cuirass
  mcron)
+
+(format #t "PATH: ~a~%" %load-path)
 
 (define channels
   (list
@@ -170,6 +172,7 @@ EndSection
                            `(("jazacash-aws" ,(local-file (format #f "~a/aws-secrets" "/home/ben")
                                                       "jaza-aws-secrets"
                                                       #:recursive? #t))))
+           (service tailscale-service-type)
            (service syncthing-service-type
                     (syncthing-configuration (user "ben")))
            (service gnome-desktop-service-type)

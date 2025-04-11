@@ -86,6 +86,7 @@
     ;; jazacash
     "rust-bore-cli@0.5.1"
     "jtools@0.0.0"
+    "sops@3.9.4"
     "rust-bore@0.4.1"
     "github-cli@2.65.0"
     )))
@@ -105,6 +106,22 @@
               (list (openssh-host (name "*")
                                   (extra-content "  StrictHostKeyChecking no"))
                     (openssh-host
+                     (name "ops 10.0.0.86")
+                     (host-name "10.0.0.86")
+                     (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
+                     (user "root")
+                     (proxy (proxy-command "ssh -W %h:%p root@44.201.64.217")))
+                    (openssh-host
+                     (name "dev 44.201.64.217")
+                     (host-name "44.201.64.217")
+                     (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
+                     (user "root"))
+                    (openssh-host
+                     (name "prod 13.244.104.50")
+                     (host-name "13.244.104.50")
+                     (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
+                     (user "root"))
+                    (openssh-host
                      (name "ci 35.231.53.45")
                      (host-name "35.231.53.45")
                      (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
@@ -119,31 +136,6 @@
                      (host-name "34.35.8.94")
                      (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
                      (user "root"))
-                    ;; (openssh-host
-                    ;;  (name "app0-prod 34.35.22.11")
-                    ;;  (host-name "34.35.22.11")
-                    ;;  (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
-                    ;;  (user "root"))
-                    ;; (openssh-host
-                    ;;  (name "app1-prod 34.35.37.186")
-                    ;;  (host-name "34.35.37.186")
-                    ;;  (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
-                    ;;  (user "root"))
-                    ;; (openssh-host
-                    ;;  (name "lb-prod 34.35.43.13")
-                    ;;  (host-name "34.35.43.13")
-                    ;;  (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
-                    ;;  (user "root"))
-                    ;; (openssh-host
-                    ;;  (name "db-prod 34.35.8.94")
-                    ;;  (host-name "34.35.8.94")
-                    ;;  (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
-                    ;;  (user "root"))
-                    ;; (openssh-host
-                    ;;  (name "terra 10.0.0.213")
-                    ;;  (host-name "10.0.0.213")
-                    ;;  (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
-                    ;;  (user "root"))
                     ))))
    (service home-ssh-agent-service-type
             (home-ssh-agent-configuration
