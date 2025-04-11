@@ -180,6 +180,10 @@ in
       IdentitiesOnly yes
       # LogLevel DEBUG3
 
+    Host otter
+      IdentityFile ~/.ssh/id_rsa
+      User ben
+
     Host dev 44.201.64.217
       HostName 44.201.64.217
       IdentityFile ~/.ssh/jazacash-server

@@ -92,6 +92,8 @@ in
   };
 
   environment.systemPackages = [
+    pkgs.sops
+    pkgs.age
     pkgs.awscli
     pkgs.ejsonkms
     pkgs.packer

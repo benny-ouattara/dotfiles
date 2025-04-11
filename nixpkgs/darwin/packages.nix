@@ -96,6 +96,8 @@
       "openjdk"
       "yaml-language-server"
       "node"
+      "php"
+      "composer"
     ];
     casks = let
       skipSha = name: {
@@ -110,6 +112,7 @@
       (skipSha "spotify")
       "gimp"
       (noQuarantine "olive")
+      "frappe-books"
       "vlc"
       "appcleaner"
       "discord"
