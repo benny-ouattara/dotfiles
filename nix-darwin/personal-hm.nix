@@ -169,7 +169,7 @@ in
 
   programs.ssh = {
     enable = true;
-    forwardAgent = true;
+    forwardAgent = false;
     serverAliveInterval = 60;
     hashKnownHosts = true;
     extraConfig = ''
@@ -186,33 +186,33 @@ in
 
     Host dev 44.201.64.217
       HostName 44.201.64.217
-      IdentityFile ~/.ssh/jazacash-server
+      IdentityFile ~/.ssh/jazacash
       User root
 
     Host ops 10.0.0.86
       HostName 10.0.0.86
-      IdentityFile ~/.ssh/jazacash-server
+      IdentityFile ~/.ssh/jazacash
       User root
       ProxyCommand ssh -W %h:%p root@44.201.64.217
 
     Host prod 13.244.104.50
       HostName 13.244.104.50
-      IdentityFile ~/.ssh/jazacash-server
+      IdentityFile ~/.ssh/jazacash
       User root
 
     Host ci  35.231.53.45
       HostName 35.231.53.45
-      IdentityFile ~/.ssh/jazacash-server
+      IdentityFile ~/.ssh/jazacash
       User root
 
     Host app-dev 34.148.193.204
       HostName 34.148.193.204
-      IdentityFile ~/.ssh/jazacash-server
+      IdentityFile ~/.ssh/jazacash
       User root
 
     Host app-prod 34.35.8.94
       HostName 34.35.8.94
-      IdentityFile ~/.ssh/jazacash-server
+      IdentityFile ~/.ssh/jazacash
       User root
     '';
 
