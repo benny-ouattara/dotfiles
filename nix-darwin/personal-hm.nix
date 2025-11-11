@@ -23,14 +23,6 @@ in
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
-  nixpkgs = {
-    config = {
-      allowUnfree = true;
-      allowBroken = false;
-      allowUnsupportedSystem = false;
-    };
-  };
-
   home.file = {
     ".curlrc".text = ''
       capath=${pkgs.cacert}/etc/ssl/certs/
@@ -52,28 +44,28 @@ in
     #userName  = "Ben O.";
     # userEmail = "benny.ouattara@gmail.com";
 
-    aliases = {
-      amend = "commit --amend -C HEAD";
-      authors = ''!"${pkgs.git}/bin/git log --pretty=format:%aN''
-                + " | ${pkgs.coreutils}/bin/sort" + " | ${pkgs.coreutils}/bin/uniq -c"
-                + " | ${pkgs.coreutils}/bin/sort -rn\"";
-      b = "branch --color -v";
-      ca = "commit --amend";
-      clone = "clone --recursive";
-      co = "checkout";
-      cp = "cherry-pick";
-      dc = "diff --cached";
-      dh = "diff HEAD";
-      ds = "diff --staged";
-      undo = "reset --soft HEAD^";
-      w = "status -sb";
-      wdiff = "diff --color-words";
-      l = "log --graph --pretty=format:'%Cred%h%Creset"
-          + " —%Cblue%d%Creset %s %Cgreen(%cr)%Creset'"
-          + " --abbrev-commit --date=relative --show-notes=*";
-    };
+    settings = {
+      alias = {
+        amend = "commit --amend -C HEAD";
+        authors = ''!"${pkgs.git}/bin/git log --pretty=format:%aN''
+                  + " | ${pkgs.coreutils}/bin/sort" + " | ${pkgs.coreutils}/bin/uniq -c"
+                  + " | ${pkgs.coreutils}/bin/sort -rn\"";
+        b = "branch --color -v";
+        ca = "commit --amend";
+        clone = "clone --recursive";
+        co = "checkout";
+        cp = "cherry-pick";
+        dc = "diff --cached";
+        dh = "diff HEAD";
+        ds = "diff --staged";
+        undo = "reset --soft HEAD^";
+        w = "status -sb";
+        wdiff = "diff --color-words";
+        l = "log --graph --pretty=format:'%Cred%h%Creset"
+            + " —%Cblue%d%Creset %s %Cgreen(%cr)%Creset'"
+            + " --abbrev-commit --date=relative --show-notes=*";
+      };
 
-    extraConfig = {
       pull.rebase = false; # merge
 
       color = {
@@ -105,7 +97,8 @@ in
       theme = "gozilla";
     };
 
-    dotDir = ".config/zsh";
+    # dotDir = ".config/zsh";
+    dotDir = "${config.home.homeDirectory}/.config/zsh";
     enableCompletion = true;
     autosuggestion.enable = true;
 
@@ -149,7 +142,7 @@ in
       . ${pkgs.z}/share/z.sh
     '';
 
-    initExtra = lib.mkBefore ''
+    initContent = lib.mkBefore ''
       ZSH_DISABLE_COMPFIX=true
 
       export PATH=/etc/profiles/per-user/$USER/bin:/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:$HOME/.jenv/bin:$HOME/.local/bin:$HOME/.emacs.d/bin:${pkgs.custom-scripts}/bin:$PATH
@@ -169,9 +162,22 @@ in
 
   programs.ssh = {
     enable = true;
-    forwardAgent = true;
-    serverAliveInterval = 60;
-    hashKnownHosts = true;
+    enableDefaultConfig = false;
+    matchBlocks."*" = {
+        hashKnownHosts = true;
+        forwardAgent = true;
+        serverAliveInterval = 60;
+    };
+    matchBlocks = {
+      keychain = {
+        host = "*";
+        extraOptions = {
+          "UseKeychain" = "yes";
+          "AddKeysToAgent" = "yes";
+          "IgnoreUnknown" = "UseKeychain";
+        };
+      };
+    };
     extraConfig = ''
     Host *
       AddKeysToAgent yes
@@ -195,17 +201,6 @@ in
       IdentityFile ~/.ssh/jazacash-server
       User root
     '';
-
-    matchBlocks = {
-      keychain = {
-        host = "*";
-        extraOptions = {
-          "UseKeychain" = "yes";
-          "AddKeysToAgent" = "yes";
-          "IgnoreUnknown" = "UseKeychain";
-        };
-      };
-    };
   };
 
   xdg = {

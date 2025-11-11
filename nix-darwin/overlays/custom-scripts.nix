@@ -1,11 +1,13 @@
-self: super: {
+{ scriptsPath }:self: super: {
   custom-scripts = with self;
     stdenv.mkDerivation {
       name = "custom-scripts";
 
-      src = builtins.filterSource
-        (path: type: type != "directory" || baseNameOf path != ".git")
-        ~/.config/scripts;
+      src = self.lib.cleanSource scriptsPath;
+
+      # src = builtins.filterSource
+      #   (path: type: type != "directory" || baseNameOf path != ".git")
+      #   ./scripts;
 
       buildInputs = [ ];
 

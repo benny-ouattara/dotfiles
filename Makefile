@@ -42,11 +42,11 @@ darwin:
 
 personal:
 	$(call message,nix run nix-darwin -- switch --flake  ~/Code/dotfiles/nix-darwin)
-	@darwin-rebuild switch --flake ~/Code/dotfiles/nix-darwin#Bens-MacBook-Pro --impure
+	@darwin-rebuild switch --flake ~/Code/dotfiles/nix-darwin#beno --impure
 
 work:
 	$(call message,nix run nix-darwin -- switch --flake  ~/Code/dotfiles/nix-darwin)
-	@darwin-rebuild switch --flake ~/Code/dotfiles/nix-darwin#zangao --impure
+	@darwin-rebuild switch --flake ~/Code/dotfiles/nix-darwin#zo --impure
 
 home:
 	$(call message,home-manager switch)

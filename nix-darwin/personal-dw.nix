@@ -4,15 +4,15 @@ let
   log-dir = home-dir + "/.logs";
 in
 {
-  services.nix-daemon.enable = true;
+  # services.nix-daemon.enable = true;
 
-  nixpkgs.overlays = let path = ./overlays;
-                     in with builtins;
-                       map (n: import (path + ("/" + n))) (filter (n:
-                         match ".*\\.nix" n != null
-                         || pathExists (path + ("/" + n + "/default.nix")))
-                         (attrNames (readDir path)));
-
+  nixpkgs = {
+    config = {
+      allowUnfree = true;
+      allowBroken = false;
+      allowUnsupportedSystem = false;
+    };
+  };
   # nix.package = pkgs.nix;
 
   # Necessary for using flakes on this system.
@@ -34,6 +34,7 @@ in
     home = "/Users/benouattara";
   };
 
+  system.primaryUser = "benouattara";
   system = {
     defaults = {
       NSGlobalDomain = {
@@ -92,7 +93,6 @@ in
     pkgs.mailcatcher
     pkgs.docker-compose
     pkgs.google-cloud-sdk
-    pkgs.youtube-dl
     pkgs.cmake
     pkgs.postgresql
     pkgs.scalafmt
@@ -118,7 +118,6 @@ in
     pkgs.rlwrap
     pkgs.maven
     pkgs.pandoc
-    pkgs.cask
     pkgs.mu
     pkgs.emacsPackages.mu4e
     pkgs.isync
@@ -220,15 +219,15 @@ in
       "wezterm"
       "monitorcontrol"
       "meetingbar"
-      "corretto17"
-      "corretto11"
+      "corretto@17"
+      "corretto@11"
       # "google-cloud-sdk"
       "background-music"
       "docker"
     ];
     taps = [
-      "homebrew/cask-versions"
-      "homebrew/cask-fonts"
+      # "homebrew/cask-versions"
+      # "homebrew/cask-fonts"
       "homebrew/bundle"
       "homebrew/services"
       "koekeishiya/formulae"
@@ -244,10 +243,15 @@ in
     '';
   };
 
-  services.skhd.enable = true;
   services.sketchybar.enable = true;
-  services.skhd.skhdConfig =
-    (builtins.readFile (pkgs.substituteAll { src = ../skhd/skhdrc; }));
+  # services.skhd.enable = true;
+  services = {
+    skhd = {
+      enable = true;
+      skhdConfig = builtins.readFile ../skhd/skhdrc;
+    };
+  };
+  # (builtins.readFile (pkgs.substituteAll { src = ../skhd/skhdrc; }));
 
   launchd.user.agents = {
     skhd = {
