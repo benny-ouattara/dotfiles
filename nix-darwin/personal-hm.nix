@@ -1,6 +1,5 @@
 { config, pkgs, lib, ... }:
 let
-  home-directory = builtins.getEnv "HOME";
   dotrcs = import ./dotrcs.nix;
 in
 {
@@ -90,7 +89,7 @@ in
 
   programs.fzf = rec { enable = true; };
 
-  # programs.starship = { enable = true; };
+  programs.starship = { enable = true; };
 
   programs.zsh = {
     enable = true;
@@ -99,20 +98,19 @@ in
       theme = "gozilla";
     };
 
-    # dotDir = ".config/zsh";
     dotDir = "${config.xdg.configHome}/zsh";
     enableCompletion = true;
     autosuggestion.enable = true;
 
-    # history = {
-    #   size = 50000;
-    #   save = 500000;
-    #   path = ".config/zsh/history";
-    #   ignoreAllDups = true;
-    #   ignoreSpace = true;
-    #   extended = true;
-    #   share = true;
-    # };
+    history = {
+      size = 50000;
+      save = 500000;
+      path = "${config.xdg.configHome}/zsh/history";
+      ignoreAllDups = true;
+      ignoreSpace = true;
+      extended = true;
+      share = true;
+    };
 
     sessionVariables = {
       ALTERNATE_EDITOR = "${pkgs.vim}/bin/vi";
@@ -207,9 +205,7 @@ in
 
   xdg = {
     enable = true;
-    # configHome = "${home-directory}/.config";
-    # dataHome = "${home-directory}/.local/share";
-    # cacheHome = "${home-directory}/.cache";
+    cacheHome = "${config.home.homeDirectory}/.cache";
     configFile."mail/mbsyncrc".text = dotrcs.mbsync;
     # configFile."mail/mbsyncrc".source = ../mail/mbsync;
   };
