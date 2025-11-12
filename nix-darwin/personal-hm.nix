@@ -1,7 +1,6 @@
 { config, pkgs, lib, ... }:
 let
   home-directory = builtins.getEnv "HOME";
-  tmp-directory = "/tmp";
   dotrcs = import ./dotrcs.nix;
 in
 {
@@ -23,11 +22,12 @@ in
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
-  home.file = {
-    ".curlrc".text = ''
+  home = {
+    file.".curlrc".text = ''
       capath=${pkgs.cacert}/etc/ssl/certs/
       cacert=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
     '';
+    # file.".config/wezterm/wezterm.lua".source = ../wezterm/wezterm.lua;
   };
 
   programs.direnv = {
@@ -41,10 +41,12 @@ in
 
   programs.git = {
     enable = true;
-    #userName  = "Ben O.";
-    # userEmail = "benny.ouattara@gmail.com";
 
     settings = {
+      user = {
+        name = "Ben O.";
+        email = "ben.ouattara@proton.me";
+      };
       alias = {
         amend = "commit --amend -C HEAD";
         authors = ''!"${pkgs.git}/bin/git log --pretty=format:%aN''
@@ -66,7 +68,7 @@ in
             + " --abbrev-commit --date=relative --show-notes=*";
       };
 
-      pull.rebase = false; # merge
+      pull.rebase = true;
 
       color = {
         status = "auto";
@@ -88,7 +90,7 @@ in
 
   programs.fzf = rec { enable = true; };
 
-  programs.starship = rec { enable = true; };
+  programs.starship = { enable = true; };
 
   programs.zsh = rec {
     enable = true;
@@ -209,5 +211,6 @@ in
     dataHome = "${home-directory}/.local/share";
     cacheHome = "${home-directory}/.cache";
     configFile."mail/mbsyncrc".text = dotrcs.mbsync;
+    # configFile."mail/mbsyncrc".source = ../mail/mbsync;
   };
 }

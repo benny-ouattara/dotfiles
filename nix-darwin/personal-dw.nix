@@ -244,7 +244,6 @@ in
   };
 
   services.sketchybar.enable = true;
-  # services.skhd.enable = true;
   services = {
     skhd = {
       enable = true;
@@ -254,14 +253,15 @@ in
   # (builtins.readFile (pkgs.substituteAll { src = ../skhd/skhdrc; }));
 
   launchd.user.agents = {
-    skhd = {
-      serviceConfig = {
-        RunAtLoad = true;
-        EnvironmentVariables = { NIX_SSL_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt"; };
-        StandardErrorPath = log-dir + "/" + "skhd" + ".log";
-        StandardOutPath = log-dir + "/" + "skhd" + ".log";
-      };
-    };
+    # not needed, predefined by services.skhd.enable = true
+    # skhd = {
+    #   serviceConfig = {
+    #     RunAtLoad = true;
+    #     EnvironmentVariables = { NIX_SSL_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt"; };
+    #     StandardErrorPath = log-dir + "/" + "skhd" + ".log";
+    #     StandardOutPath = log-dir + "/" + "skhd" + ".log";
+    #   };
+    # };
 
     mcron = {
       serviceConfig = {

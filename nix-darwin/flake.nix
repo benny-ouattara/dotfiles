@@ -28,9 +28,7 @@
           pkgs = import nixpkgs {
             inherit system;
             overlays = [
-              (import ./overlays/custom-scripts.nix {
-                scriptsPath = ./scripts;
-              })
+              (import ./overlays/custom-scripts.nix { scriptsPath = ./scripts; })
               (import ./overlays/z.nix)
             ];
           };
