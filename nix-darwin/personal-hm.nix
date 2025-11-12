@@ -90,9 +90,9 @@ in
 
   programs.fzf = rec { enable = true; };
 
-  programs.starship = { enable = true; };
+  # programs.starship = { enable = true; };
 
-  programs.zsh = rec {
+  programs.zsh = {
     enable = true;
     oh-my-zsh = {
       enable = true;
@@ -100,19 +100,19 @@ in
     };
 
     # dotDir = ".config/zsh";
-    dotDir = "${config.home.homeDirectory}/.config/zsh";
+    dotDir = "${config.xdg.configHome}/zsh";
     enableCompletion = true;
     autosuggestion.enable = true;
 
-    history = {
-      size = 50000;
-      save = 500000;
-      path = "$HOME/${dotDir}/history";
-      ignoreAllDups = true;
-      ignoreSpace = true;
-      extended = true;
-      share = true;
-    };
+    # history = {
+    #   size = 50000;
+    #   save = 500000;
+    #   path = ".config/zsh/history";
+    #   ignoreAllDups = true;
+    #   ignoreSpace = true;
+    #   extended = true;
+    #   share = true;
+    # };
 
     sessionVariables = {
       ALTERNATE_EDITOR = "${pkgs.vim}/bin/vi";
@@ -158,7 +158,7 @@ in
 
       export EDITOR=emacs
       export VISUAL=emacs
-      export XDG_CONFIG_HOME="$HOME/.config"
+      # export XDG_CONFIG_HOME="$HOME/.config"
     '';
   };
 
@@ -207,9 +207,9 @@ in
 
   xdg = {
     enable = true;
-    configHome = "${home-directory}/.config";
-    dataHome = "${home-directory}/.local/share";
-    cacheHome = "${home-directory}/.cache";
+    # configHome = "${home-directory}/.config";
+    # dataHome = "${home-directory}/.local/share";
+    # cacheHome = "${home-directory}/.cache";
     configFile."mail/mbsyncrc".text = dotrcs.mbsync;
     # configFile."mail/mbsyncrc".source = ../mail/mbsync;
   };
