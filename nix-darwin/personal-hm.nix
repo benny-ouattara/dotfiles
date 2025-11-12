@@ -26,6 +26,7 @@ in
       capath=${pkgs.cacert}/etc/ssl/certs/
       cacert=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
     '';
+    file.".mbsyncrc".text = dotrcs.mbsync;
     # file.".config/wezterm/wezterm.lua".source = ../wezterm/wezterm.lua;
   };
 
@@ -210,7 +211,7 @@ in
   xdg = {
     enable = true;
     cacheHome = "${config.home.homeDirectory}/.cache";
-    configFile."mail/mbsyncrc".text = dotrcs.mbsync;
+    # configFile."mail/mbsyncrc".text = dotrcs.mbsync;
     # configFile."mail/mbsyncrc".source = ../mail/mbsync;
   };
 }

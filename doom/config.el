@@ -555,7 +555,7 @@ Beware using this command given that it's destructive and non reversible."
     (progn (setq
             mu-root (car (-filter
                           (lambda (s)
-                            (s-contains? "mu4e" s)) (s-split "\n" (cdr (doom-call-process "nix-store" "--query" "--referrers" (file-truename  (executable-find "mu")))))))
+                            (s-contains? "emacs-mu4e" s)) (s-split "\n" (cdr (doom-call-process "nix-store" "--query" "--referrers" (file-truename  (executable-find "mu")))))))
             mu-version (s-chop-prefix "-" (cadr (s-split "emacs" mu-root)))
             mu4e-path (concat mu-root (s-concat "/share/emacs/site-lisp/elpa/" mu-version)))
            (add-to-list 'load-path mu4e-path)))

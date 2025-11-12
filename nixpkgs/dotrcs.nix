@@ -1,79 +1,5 @@
 { }: {
   mbsync = ''
-    ################################ SPOTIFY ##############################################
-    # ACCOUNT INFORMATION
-    IMAPAccount spotify-gmail
-    # Address to connect to
-    Host imap.gmail.com
-    User zangao@spotify.com
-    PassCmd "/run/current-system/sw/bin/pass Email/spotify-mu-app.com"
-    AuthMechs LOGIN
-    SSLType IMAPS
-    # SSLVersions SSLv3 # SSLv3 is deprecated, use default
-    # ssl config for running mbsync as a launchd agent
-    # CertificateFile /etc/ssl/certs/ca-certificates.crt
-    # CertificateFile ~/.config/certificates/gmail.crt
-    # CertificateFile /usr/local/etc/openssl@1.1/cert.pem
-    # CertificateFile /usr/local/etc/ca-certificates/cert.pem
-    # CertificateFile /usr/local/etc/openssl/cert.pem
-
-    # THEN WE SPECIFY THE LOCAL AND REMOTE STORAGE
-    # - THE REMOTE STORAGE IS WHERE WE GET THE MAIL FROM (E.G., THE
-    #   SPECIFICATION OF AN IMAP ACCOUNT)
-    # - THE LOCAL STORAGE IS WHERE WE STORE THE EMAIL ON OUR COMPUTER
-
-    # REMOTE STORAGE (USE THE IMAP ACCOUNT SPECIFIED ABOVE)
-    IMAPStore spotify-remote
-    Account spotify-gmail
-
-    # LOCAL STORAGE (CREATE DIRECTORIES with mkdir -p ~/.mail)
-    MaildirStore spotify-local
-    Path ~/.mail/spotify/
-    Inbox ~/.mail/spotify/INBOX
-
-    # CONNECTIONS SPECIFY LINKS BETWEEN REMOTE AND LOCAL FOLDERS
-    #
-    # CONNECTIONS ARE SPECIFIED USING PATTERNS, WHICH MATCH REMOTE MAIl
-    # FOLDERS. SOME COMMONLY USED PATTERS INCLUDE:
-    #
-    # 1 "*" TO MATCH EVERYTHING
-    # 2 "!DIR" TO EXCLUDE "DIR"
-    # 3 "DIR" TO MATCH DIR
-
-    Channel spotify-inbox
-    Far :spotify-remote:
-    Near :spotify-local:
-    Patterns "INBOX"
-    Create Both
-    Expunge Both
-    SyncState *
-
-    Channel spotify-sent
-    # [Gmail]/Sent Mail doesn't seem to be the right remote folder
-    Far :spotify-remote:"[Gmail]/Sent Mail"
-    Near :spotify-local:"sent"
-    Create Both
-    Expunge Both
-    SyncState *
-
-    # Channel spotify-all
-    # Far :spotify-remote:"[Gmail]/All Mail"
-    # Near :spotify-local:"all"
-    # Create Both
-    # Expunge Both
-    # SyncState *
-
-    # GROUPS PUT TOGETHER CHANNELS, SO THAT WE CAN INVOKE
-    # MBSYNC ON A GROUP TO SYNC ALL CHANNELS
-    #
-    # FOR INSTANCE: "mbsync gmail" GETS MAIL FROM
-    # "spotify-inbox", "spotify-sent", and "gmail-trash"
-    #
-    Group spotifymail
-    Channel spotify-inbox
-    Channel spotify-sent
-    # Channel spotify-all
-
     ################################ PERSONAL GMAIL ##############################################
     # ACCOUNT INFORMATION
     IMAPAccount gmail
@@ -115,9 +41,17 @@
     Expunge Both
     SyncState *
 
+    Channel gmail-all
+    Far :gmail-remote:"[Gmail]/All Mail"
+    Near :gmail-local:"all"
+    Create Both
+    Expunge Both
+    SyncState *
+
     Group gmail
     Channel gmail-inbox
     Channel gmail-sent
+    # Channel gmail-all
 
     ################################# PROTONMAIL ##############################################
     IMAPAccount protonmail
