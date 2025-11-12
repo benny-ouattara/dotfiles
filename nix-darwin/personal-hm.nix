@@ -29,6 +29,10 @@ in
     # file.".config/wezterm/wezterm.lua".source = ../wezterm/wezterm.lua;
   };
 
+  programs.wezterm = {
+    enable = true;
+  };
+
   programs.direnv = {
     enable = true;
     enableZshIntegration = true;

@@ -216,7 +216,7 @@ in
       "font-iosevka-term-nerd-font"
       "font-symbols-only-nerd-font"
       "sf-symbols"
-      "wezterm"
+      # "wezterm"
       "monitorcontrol"
       "meetingbar"
       "corretto@17"
