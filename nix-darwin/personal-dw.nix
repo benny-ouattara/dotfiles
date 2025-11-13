@@ -221,6 +221,7 @@ in
       "meetingbar"
       "corretto@17"
       "corretto@11"
+      "tableplus"
       # "google-cloud-sdk"
       "background-music"
       "docker"
