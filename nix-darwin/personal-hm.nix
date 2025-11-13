@@ -26,12 +26,7 @@ in
       capath=${pkgs.cacert}/etc/ssl/certs/
       cacert=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
     '';
-    file.".mbsyncrc".text = dotrcs.mbsync;
-    # file.".config/wezterm/wezterm.lua".source = ../wezterm/wezterm.lua;
-  };
-
-  programs.wezterm = {
-    enable = true;
+    # file.".mbsyncrc".text = dotrcs.mbsync; # superseded by ./config/isyncrc
   };
 
   programs.direnv = {
@@ -161,7 +156,6 @@ in
 
       export EDITOR=emacs
       export VISUAL=emacs
-      # export XDG_CONFIG_HOME="$HOME/.config"
     '';
   };
 

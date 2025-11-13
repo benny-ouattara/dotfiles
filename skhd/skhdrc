@@ -1,5 +1,5 @@
 # emacs and terminal
-cmd + ctrl - return : wezterm
+cmd + ctrl - return : open -n /Applications/wezterm.app
 cmd + ctrl - d :  emacsclient -c -e '(dired "~")'
 cmd + ctrl - e :  emacsclient -c -e '(elfeed)'
 cmd + ctrl - m :  emacsclient -c -e '(mu4e)'

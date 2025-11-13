@@ -1,5 +1,3 @@
-{
-  mbsync = ''
     ################################ PERSONAL GMAIL ##############################################
     # ACCOUNT INFORMATION
     IMAPAccount gmail
@@ -57,7 +55,7 @@
     IMAPAccount protonmail
     Host 127.0.0.1
     Port 1143
-    User benny.ouattara@protonmail.com
+    User ben.ouattara@proton.me
     # PassCmd "gpg --quiet --decrypt ~/.mbsync-pw-mailbox.gpg"
     PassCmd "/run/current-system/sw/bin/pass Email/protonmail-mu-app.com"
     AuthMechs LOGIN
@@ -106,5 +104,3 @@
     Channel pm-sent
     Channel pm-trash
     Channel pm-spam
-  '';
-}

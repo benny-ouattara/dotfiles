@@ -216,7 +216,7 @@ in
       "font-iosevka-term-nerd-font"
       "font-symbols-only-nerd-font"
       "sf-symbols"
-      # "wezterm"
+      "wezterm"
       "monitorcontrol"
       "meetingbar"
       "corretto@17"
@@ -239,7 +239,7 @@ in
       # "spotify/mmptaps"
     ];
     extraConfig = ''
-      brew "emacs-plus@29", args: ["with-imagemagick", "with-modern-sexy-v2-icon", "with-xwidgets"], link: true
+      brew "emacs-plus@30", args: ["with-imagemagick", "with-modern-sexy-v2-icon", "with-xwidgets"], link: true
     '';
   };
 
