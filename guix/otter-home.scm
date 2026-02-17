@@ -5,6 +5,7 @@
  (gnu packages admin)
  (gnu packages ssh)
  (gnu packages gnupg)
+ (gnu packages tmux)
  (gnu services)
  (gnu packages ci)
  (gnu packages ruby)
@@ -65,6 +66,8 @@
     "rofi@1.7.5"
     "unzip@6.0"
     "firefox@127.0.2"
+    "qutebrowser@3.1.0"
+    "ungoogled-chromium@112.0.5615.165-1"
     "the-silver-searcher@2.2.0"
     "ack@3.7.0"
     "lsof@4.94.0"
@@ -82,6 +85,9 @@
     "python@3.10.7"
     "babashka@1.3.189"
     "awscli@1.22.90"
+    "tmux@3.4"
+    "vim@9.1.0146"
+    "docker-compose@1.29.2"
 
     ;; jazacash
     "rust-bore-cli@0.5.1"
@@ -145,7 +151,6 @@
              (pinentry-program
               (file-append pinentry-emacs "/bin/pinentry"))
              (ssh-support? #f)))
-   (service home-redshift-service-type)
    (service
     home-zsh-service-type
     (home-zsh-configuration

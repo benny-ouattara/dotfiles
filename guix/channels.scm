@@ -5,7 +5,7 @@
   (name 'nonguix)
   (url "https://gitlab.com/nonguix/nonguix")
   (branch "master")
-  (commit "831f3ff14260e20d4da31b707515891eeb49e752") ;; pin commit to avoid unbound variable bug
+  (commit "d096df03564783372b315fe6c179655c2c337d5a") ;; pin commit to avoid unbound variable bug
   (introduction
    (make-channel-introduction
     "897c1a470da759236cc11798f4e0a5f7d4d59fbc"

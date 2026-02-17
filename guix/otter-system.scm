@@ -12,7 +12,6 @@
              (gnu packages pulseaudio)
              (gnu system setuid)
              (gnu system shadow)
-             (gnu services databases)
              (gnu services)
              (jazacash service)
              (guix gexp)
@@ -31,11 +30,11 @@
  pm
  virtualization
  cuirass
- mcron)
+ mcron
+ docker
+ databases)
 
-(format #t "PATH: ~a~%" %load-path)
-
-(define channels
+(define %channels
   (list
    (channel
     (name 'nonguix)
@@ -51,6 +50,15 @@
     (name 'jazacash)
     (url  "git@github.com:jazafund/jazacash.git")
     (branch "develop"))
+   (channel
+        (name 'pantherx)
+        (url "https://codeberg.org/gofranz/panther.git")
+        ;; Enable signature verification
+        (introduction
+         (make-channel-introduction
+          "54b4056ac571611892c743b65f4c47dc298c49da"
+          (openpgp-fingerprint
+           "A36A D41E ECC7 A871 1003  5D24 524F EB1A 9D33 C9CB"))))
    (channel
     (name 'guix)
     (url "https://git.savannah.gnu.org/git/guix.git")
@@ -94,20 +102,23 @@ EndSection
 (define %beno-console-font
   (file-append font-tamzen "/share/kbd/consolefonts/Tamzen10x20.psf"))
 
+(define %default-secrets `(("secrets.json" ,(local-file "/home/ben/Code/jazacash/aws/secrets/staging.json"))))
+(define secrets-config (jazacash-secrets-configuration (secret-files %default-secrets)))
+
 (define %modified-desktop-services
   (modify-services %desktop-services
-                   (delete console-font-service-type)  ;; provide other console fonts below
+                   (delete console-font-service-type) ;; provide other console fonts below
                    (delete gdm-service-type)
                    (login-service-type config =>
                                        (login-configuration (inherit config)
                                                             (motd %beno-motd)))
                    (guix-service-type config =>
                                       (guix-configuration (inherit config)
-                                                          (channels channels)
-                                                          (guix (guix-for-channels channels))
+                                                          ;; (channels %channels)
+                                                          ;; (guix (guix-for-channels %channels))
                                                           (substitute-urls
                                                            (append (list "https://substitutes.nonguix.org"
-                                        ; "http://substitutes.jazacash.com"
+                                        ;; "http://substitutes.jazacash.com"
                                                                          )
                                                                    %default-substitute-urls))
                                                           (authorized-keys
@@ -164,14 +175,10 @@ EndSection
                    %base-packages))
  (services
   (append (list
-           (simple-service 'jazacash-etc-files etc-service-type
-                           `(("jazacash" ,(local-file (format #f "~a/secrets" "/home/ben")
-                                                      "jaza-secrets"
-                                                      #:recursive? #t))))
-           (simple-service 'aws-etc-files etc-service-type
-                           `(("jazacash-aws" ,(local-file (format #f "~a/aws-secrets" "/home/ben")
-                                                      "jaza-aws-secrets"
-                                                      #:recursive? #t))))
+           (service jazacash-secrets-service-type secrets-config)
+           (service jazacash-ci-service-type)
+           (service mysql-service-type)
+           (service docker-service-type)
            (service tailscale-service-type)
            (service syncthing-service-type
                     (syncthing-configuration (user "ben")))
@@ -181,7 +188,8 @@ EndSection
                      (permit-root-login 'prohibit-password)
                      (password-authentication? #f)
                      (authorized-keys
-                      `(("root" ,(local-file "./keys/mac.pub"))))))
+                      `(("root" ,(local-file "./keys/mac.pub"))
+                        ("ben"  ,(local-file "./keys/mac.pub"))))))
            (set-xorg-configuration
             (xorg-configuration
              (keyboard-layout keyboard-layout)
