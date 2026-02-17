@@ -50,15 +50,15 @@
     (name 'jazacash)
     (url  "git@github.com:jazafund/jazacash.git")
     (branch "develop"))
-   (channel
-        (name 'pantherx)
-        (url "https://codeberg.org/gofranz/panther.git")
-        ;; Enable signature verification
-        (introduction
-         (make-channel-introduction
-          "54b4056ac571611892c743b65f4c47dc298c49da"
-          (openpgp-fingerprint
-           "A36A D41E ECC7 A871 1003  5D24 524F EB1A 9D33 C9CB"))))
+   ;; (channel
+   ;;      (name 'pantherx)
+   ;;      (url "https://codeberg.org/gofranz/panther.git")
+   ;;      ;; Enable signature verification
+   ;;      (introduction
+   ;;       (make-channel-introduction
+   ;;        "54b4056ac571611892c743b65f4c47dc298c49da"
+   ;;        (openpgp-fingerprint
+   ;;         "A36A D41E ECC7 A871 1003  5D24 524F EB1A 9D33 C9CB"))))
    (channel
     (name 'guix)
     (url "https://git.savannah.gnu.org/git/guix.git")
@@ -114,8 +114,8 @@ EndSection
                                                             (motd %beno-motd)))
                    (guix-service-type config =>
                                       (guix-configuration (inherit config)
-                                                          ;; (channels %channels)
-                                                          ;; (guix (guix-for-channels %channels))
+                                                          (channels %channels)
+                                                          (guix (guix-for-channels %channels))
                                                           (substitute-urls
                                                            (append (list "https://substitutes.nonguix.org"
                                         ;; "http://substitutes.jazacash.com"
