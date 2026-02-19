@@ -60,7 +60,7 @@
   ("ben" (setq
           doom-font (font-spec :family "Iosevka" :size 21 :weight 'normal)
           doom-big-font (font-spec :family "Iosevka" :size 29)
-          doom-theme 'modus-operandi-tinted)))
+          doom-theme 'doom-dark+)))
 
 (setq
  mac-command-modifier 'meta

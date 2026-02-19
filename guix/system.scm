@@ -106,14 +106,8 @@ EndSection
                                            ;; (channels channels)
                                            ;; (guix (guix-for-channels channels))
                                            (substitute-urls
-                                            (append (list "https://substitutes.nonguix.org"
-<<<<<<< HEAD
-                                                         ; "http://substitutes.jazacash.com"
-							  )
-=======
-                                                          "http://substitutes.jaza.cash")
->>>>>>> master
-                                                    %default-substitute-urls))
+                                            (append (list "https://substitutes.nonguix.org"))
+                                            %default-substitute-urls))
                                            (authorized-keys
                                             (append (list (local-file "./nonguix-key.pub")
                                                           (local-file "./cuirass-key.pub"))

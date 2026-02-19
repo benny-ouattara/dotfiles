@@ -5,9 +5,18 @@
              (gnu packages lisp)
              (gnu packages guile-xyz)
              (gnu packages ssh)
+             (gnu packages base)
              (gnu packages wm)
              (gnu packages fonts)
              (gnu packages shells)
+             (gnu packages docker)
+             (gnu packages xorg)
+             (gnu packages emacs)
+             (gnu packages wm)
+             (gnu packages tls)
+             (gnu packages gnupg)
+             (gnu packages guile)
+             (gnu packages display-managers)
              (gnu packages package-management)
              (gnu packages pulseaudio)
              (gnu system setuid)
@@ -40,7 +49,7 @@
     (name 'nonguix)
     (url "https://gitlab.com/nonguix/nonguix")
     (branch "master")
-    (commit "831f3ff14260e20d4da31b707515891eeb49e752") ;; pin commit to avoid unbound variable bug
+    (commit "1980960f932063f42f97ad3be4b020f68d24e62b")
     (introduction
      (make-channel-introduction
       "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
@@ -62,8 +71,14 @@
    (channel
     (name 'guix)
     (url "https://git.savannah.gnu.org/git/guix.git")
-    (commit "5217ea6d45bef053844d8360a06252b9436783b3")
-    (branch "master"))))
+    (branch "master")
+    (commit
+     "a29122743a67a453ca74042e00d521fffcbc3310")
+    (introduction
+     (make-channel-introduction
+      "9edb3f66fd807b096b48283debdcddccfea34bad"
+      (openpgp-fingerprint
+       "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA"))))))
 
 (define %backlight-udev-rule
   (udev-rule
@@ -118,7 +133,7 @@ EndSection
                                                           (guix (guix-for-channels %channels))
                                                           (substitute-urls
                                                            (append (list "https://substitutes.nonguix.org"
-                                        ;; "http://substitutes.jazacash.com"
+                                                                         ;; "http://substitutes.jazacash.com"
                                                                          )
                                                                    %default-substitute-urls))
                                                           (authorized-keys
@@ -138,6 +153,7 @@ EndSection
  (kernel linux)
  (firmware (list linux-firmware))
  (locale "en_US.utf8")
+ (locale-libcs (list glibc-2.35 glibc-2.39 (canonical-package glibc)))
  (timezone "America/New_York")
  (keyboard-layout (keyboard-layout "us"))
  (host-name "otter")
@@ -148,36 +164,38 @@ EndSection
                 (shell (file-append zsh "/bin/zsh"))
                 (home-directory "/home/ben")
                 (supplementary-groups '("wheel" "netdev" "audio" "video")))
-               (user-account
-                (name "benny")
-                (comment "Ben")
-                (group "users")
-                (shell (file-append zsh "/bin/zsh"))
-                (home-directory "/home/benny")
-                (supplementary-groups '("wheel" "netdev" "audio" "video")))
                %base-user-accounts))
  (setuid-programs
   (append (list (setuid-program
                  (program (file-append stumpwm+slynk "/bin/stumpwm"))))
           %setuid-programs))
- (packages (append (list
-                    (specification->package "xf86-input-libinput")
-                    (specification->package "emacs-next")
-                    (specification->package "sbcl")
-                    (specification->package "xterm")
-                    (specification->package "stumpwm-with-slynk")
-                    (specification->package "sugar-light-sddm-theme")
-                    (specification->package "guile-jwt")
-                    (specification->package "guile-gnutls")
-                    (specification->package "guile-git")
-                    (specification->package "guile-fibers")
-                    (specification->package "guile-sqlite3"))
-                   %base-packages))
+ (packages (cons*
+	        xf86-input-libinput
+	        emacs-next
+	        sbcl
+	        xterm
+            stumpwm+slynk
+            sbcl-stumpwm-swm-gaps
+            sbcl-stumpwm-screenshot
+            sbcl-stumpwm-rofi
+            sbcl-stumpwm-pass
+            sbcl-stumpwm-pamixer
+	        stumpish
+            guile-gnutls
+            guile-gcrypt
+            guile-git
+            guile-fibers
+            guile-jwt
+	        sugar-light-sddm-theme
+            dexy-color-sddm-theme
+            chili-sddm-theme
+	        %base-packages))
  (services
   (append (list
            (service jazacash-secrets-service-type secrets-config)
            (service jazacash-ci-service-type)
            (service mysql-service-type)
+           (service containerd-service-type)
            (service docker-service-type)
            (service tailscale-service-type)
            (service syncthing-service-type
@@ -197,9 +215,8 @@ EndSection
             sddm-service-type)
            (service sddm-service-type
                     (sddm-configuration
-                     ;; valid values are elarun, maldives or maya, chili, sugar-light, sugar-dark
-                     (theme "sugar-light")
-                     )))
+                     ;; valid values are elarun, maldives or maya, chili, sugar-light
+                     (theme "chili"))))
           %modified-desktop-services))
  (bootloader (bootloader-configuration
               (bootloader grub-efi-bootloader)

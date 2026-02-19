@@ -72,10 +72,6 @@
             "Run or raise qutebrowser."
             (run-or-raise "qutebrowser" '(:class "Qutebrowser") t nil))
 
-(defcommand start-eolie () ()
-            "Run or raise eolie web browser."
-            (run-or-raise "eolie" '(:class "Eolie") t nil))
-
 (defcommand start-firefox () ()
             "Run or raise firefox web browser."
             (run-or-raise "firefox" '(:class "firefox-default") t nil))
@@ -89,10 +85,10 @@
   (run-or-raise "emacs" '(:class "Emacs") t nil))
 
 (defcommand start-slynk (port) ((:string "Port number: "))
-  (sb-thread:make-thread
-   (lambda ()
-     (slynk:create-server :port (parse-integer port) :dont-close t))
-   :name "manual-slynk-stumpwm"))
+ (sb-thread:make-thread
+  (lambda ()
+    (slynk:create-server :port (parse-integer port) :dont-close t))
+  :name "manual-slynk-stumpwm"))
 
 (defcommand start-polybar () ()
   "Run the polybar status bar."
@@ -132,7 +128,7 @@
 (define-key *top-map* (kbd "M-h") "resize-direction Down")
 
 (define-key *top-map* (kbd "s-RET") "exec alacritty")
-(define-key *top-map* (kbd "s-w") "qutebrowser")
+(define-key *top-map* (kbd "s-w") "firefox")
 (define-key *top-map* (kbd "s-e") "emacs")
 
 (define-key *top-map* (kbd "s-j") "move-focus left")
@@ -153,7 +149,7 @@
 (define-key *top-map* (kbd "s-f") "fullscreen")
 (define-key *top-map* (kbd "s-s") "hsplit-and-focus")
 (define-key *top-map* (kbd "s-S") "vsplit-and-focus")
-(define-key *top-map* (kbd "s-SPC") "run-shell-command /home/ben/.config/rofi/launchers/type-4/launcher.sh")
+(define-key *top-map* (kbd "s-SPC") "run-shell-command /home/ben/.config/rofi/launchers/type-1/launcher.sh")
 
 ;; (define-key *top-map* (kbd "C-s-l") "run-shell-command slock")
 (define-key *top-map* (kbd "C-s-r") "iresize")
@@ -195,8 +191,8 @@
 ;; start processes
 (run-commands
  "start-polybar"
- "start-nyxt"
- "start-emacs"
+ ;; "start-nyxt"
+ ;; "start-emacs"
  "gselect dev")
 (run-shell-command "setxkbmap us -option 'caps:ctrl_modifier'")
 (run-shell-command "xcape -e 'Caps_Lock=Escape'")
@@ -207,14 +203,20 @@
 (run-shell-command "amixer")
 
 ;; backlight
-(load-module "acpi-backlight")
-(acpi-backlight:init "intel_backlight")
+;; (load-module "acpi-backlight")
+;; (acpi-backlight:init "intel_backlight")
 
 ;; gaps
-(load-module "swm-gaps")
+;; (load-module "swm-gaps")
+(asdf:load-system :swm-gaps)
 (setf swm-gaps:*inner-gaps-size* 5
-      swm-gaps:*outer-gaps-size* 15)
-(run-commands "toggle-gaps-on")
+      swm-gaps:*outer-gaps-size* 10)
+(swm-gaps:toggle-gaps-on)
+
+;; take screenshot C-a ; then type command screenshot
+(asdf:load-system :screenshot)
+
+(asdf:load-system :rofi)
 
 ;; Polybar
 (defun icon-by-group (name)
@@ -255,28 +257,28 @@
 ;; (add-hook *focus-window-hook* (lambda (win lastw) (polybar-update-groups)))
 ;; (add-hook *focus-group-hook* (lambda (grp lastg) (polybar-update-groups)))
 
-(load-module "stump-volume-control")
+;; (load-module "stump-volume-control")
 
 ;; primitive and unsecure screen lock, prefer slock bound to C-s-l
-(load-module "stump-lock")
-(setf stump-lock:*password* "asdf")
+;; (load-module "stump-lock")
+;; (setf stump-lock:*password* "asdf")
 ;; (define-key *top-map* (kbd "s-l") "lock-screen")
 
 ;; password
-(load-module "pass")
+;; (load-module "pass")
 
 ;; load modules last so that they don't break system in failure case
-(ql:quickload :clx-truetype)
-(setf xft:*font-dirs* '("/home/ben/.guix-profile/share/fonts/"))
-(xft:cache-fonts)
-(load-module "ttf-fonts")
+;; (ql:quickload :clx-truetype)
+;; (setf xft:*font-dirs* '("/home/ben/.guix-profile/share/fonts/"))
+;; (xft:cache-fonts)
+;; (load-module "ttf-fonts")
 ;; the window starts shrinking when the :size >= 15 for mode-line
-(set-font (make-instance 'xft:font :family "JetBrains Mono" :subfamily "Regular" :size 16))
+;; (set-font (make-instance 'xft:font :family "JetBrains Mono" :subfamily "Regular" :size 16))
 
 (run-shell-command "nm-applet")
 (run-shell-command "mpd")
 ;; (run-shell-command "volumeicon") ;; the polybar theme used provides volume icon and partial control
 
 ;; load this last to avoid issues
-;; (require :slynk)
-;; (slynk:create-server :port 4009 :dont-close t)
+(require :slynk)
+(slynk:create-server :port 4009 :dont-close t)
