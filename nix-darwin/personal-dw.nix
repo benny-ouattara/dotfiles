@@ -164,6 +164,11 @@ in
     pkgs.inetutils
   ];
 
+  fonts.packages = with pkgs; [
+    nerd-fonts.iosevka
+    nerd-fonts.iosevka-term
+  ];
+
   homebrew = {
     enable = true;
     caskArgs.require_sha = true;
@@ -183,7 +188,6 @@ in
       "jdtls"
       "metals"
       "openjdk"
-      "yaml-language-server"
       "node"
     ];
     casks = let
@@ -209,11 +213,11 @@ in
       "dmenu-mac"
       "protonvpn"
       "alacritty"
-      "syncthing"
+      "syncthing-app"
       "kitty"
-      "font-victor-mono-nerd-font"
-      "font-iosevka-nerd-font"
-      "font-iosevka-term-nerd-font"
+      # "font-victor-mono-nerd-font"
+      # "font-iosevka-nerd-font"
+      # "font-iosevka-term-nerd-font"
       "font-symbols-only-nerd-font"
       "sf-symbols"
       "wezterm"
@@ -224,7 +228,7 @@ in
       "tableplus"
       # "google-cloud-sdk"
       "background-music"
-      "docker"
+      "docker-desktop"
     ];
     taps = [
       # "homebrew/cask-versions"
