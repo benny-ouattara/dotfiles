@@ -65,7 +65,7 @@
 (setq
  mac-command-modifier 'meta
  ns-command-modifier 'meta
- confirm-kill-emacs nil
+ confirm-kill-emacs 'y-or-n-p
  evil-insert-state-cursor 'bar
  evil-move-cursor-back nil
  display-line-numbers-type 'relative

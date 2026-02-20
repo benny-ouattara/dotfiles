@@ -64,27 +64,23 @@
             (delete-window)
             (remove-split))
 
-(defcommand start-nyxt () ()
-            "Run or raise nyxt."
-            (run-or-raise "nyxt" '(:class "Nyxt") t nil))
-
-(defcommand start-qutebrowser () ()
-            "Run or raise qutebrowser."
-            (run-or-raise "qutebrowser" '(:class "Qutebrowser") t nil))
-
 (defcommand start-firefox () ()
             "Run or raise firefox web browser."
-            (run-or-raise "firefox" '(:class "firefox-default") t nil))
+            (run-or-raise "firefox" '(:class "Firefox") t nil))
 
 (defcommand start-emacs () ()
   "Run or raise emacs."
   (run-or-raise "emacs" '(:class "Emacs") t nil))
 
+(defcommand start-kitty () ()
+            "Run or raise kitty."
+            (run-or-raise "kitty" '(:class "kitty") t nil))
+
 (defcommand start-slynk (port) ((:string "Port number: "))
- (sb-thread:make-thread
-  (lambda ()
-    (slynk:create-server :port (parse-integer port) :dont-close t))
-  :name "manual-slynk-stumpwm"))
+  (sb-thread:make-thread
+   (lambda ()
+     (slynk:create-server :port (parse-integer port) :dont-close t))
+   :name "manual-slynk-stumpwm"))
 
 (defcommand start-polybar () ()
   "Run the polybar status bar."
@@ -127,6 +123,10 @@
 (define-key *top-map* (kbd "M-h") "resize-direction Down")
 
 (define-key *top-map* (kbd "s-RET") "exec kitty --directory=/home/ben/Code/dotfiles/guix")
+(define-key *top-map* (kbd "s-o") "exec kitty --directory=/home/ben/Code/dotfiles/guix emacsclient -t otter-system.scm")
+(define-key *top-map* (kbd "s-O") "exec kitty --directory=/home/ben/Code/dotfiles/guix emacsclient -t otter-home.scm")
+(define-key *top-map* (kbd "s-g") "exec kitty --directory=/home/ben/Code/dotfiles/guix zsh -c 'sudo -E guix system reconfigure otter-system.scm; exec zsh;'")
+(define-key *top-map* (kbd "s-G") "exec kitty --directory=/home/ben/Code/dotfiles/guix zsh -c 'guix home reconfigure otter-home.scm; exec zsh;'")
 (define-key *top-map* (kbd "s-w") "exec firefox")
 (define-key *top-map* (kbd "s-e") "emacs")
 
@@ -180,19 +180,16 @@
   (1 t t :class "Emacs"))
 
 (define-frame-preference "web"
-    (2 t t :class "firefox-default"))
-
-(define-frame-preference "web"
-  (2 t t :class "Nyxt"))
+    (2 t t :class "Firefox"))
 
 ;; (define-frame-preference "term"
-;;     (3 t t :class "Alacritty"))
+;;     (3 t t :class "kitty"))
 
 ;; start processes
 (run-commands
  "start-polybar"
- ;; "start-nyxt"
- ;; "start-emacs"
+ "start-firefox"
+ "start-emacs"
  "gselect dev")
 (run-shell-command "setxkbmap us -option 'caps:ctrl_modifier'")
 (run-shell-command "xcape -e 'Caps_Lock=Escape'")
