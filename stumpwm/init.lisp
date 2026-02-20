@@ -41,7 +41,7 @@
 (update-color-map (current-screen))
 
 ;; set modules path
-(set-module-dir "~/.stumpwm.d/modules")
+;; (set-module-dir "~/.stumpwm.d/modules")
 
 ;; define commands
 (defcommand now-we-are-six (name age)
@@ -76,10 +76,6 @@
             "Run or raise firefox web browser."
             (run-or-raise "firefox" '(:class "firefox-default") t nil))
 
-(defcommand start-alacritty () ()
-  "Run or raise alacritty."
-  (run-or-raise "alacritty" '(:class "Alacritty") t nil))
-
 (defcommand start-emacs () ()
   "Run or raise emacs."
   (run-or-raise "emacs" '(:class "Emacs") t nil))
@@ -99,6 +95,9 @@
 
 (defcommand rofi-run () ()
   (rofi "run -sidebar-mode"))
+
+(defcommand launch-rofi () ()
+  (rofi "drun -theme /home/ben/.config/rofi/launchers/type-1/style-8.rasi"))
 
 (defcommand rofi-window () ()
   (rofi "window"))
@@ -127,8 +126,8 @@
 (define-key *top-map* (kbd "M-l") "resize-direction Up")
 (define-key *top-map* (kbd "M-h") "resize-direction Down")
 
-(define-key *top-map* (kbd "s-RET") "exec alacritty")
-(define-key *top-map* (kbd "s-w") "firefox")
+(define-key *top-map* (kbd "s-RET") "exec kitty --directory=/home/ben/Code/dotfiles/guix")
+(define-key *top-map* (kbd "s-w") "exec firefox")
 (define-key *top-map* (kbd "s-e") "emacs")
 
 (define-key *top-map* (kbd "s-j") "move-focus left")
@@ -149,7 +148,8 @@
 (define-key *top-map* (kbd "s-f") "fullscreen")
 (define-key *top-map* (kbd "s-s") "hsplit-and-focus")
 (define-key *top-map* (kbd "s-S") "vsplit-and-focus")
-(define-key *top-map* (kbd "s-SPC") "run-shell-command /home/ben/.config/rofi/launchers/type-1/launcher.sh")
+;; (define-key *top-map* (kbd "s-SPC") "run-shell-command /home/ben/.config/rofi/launchers/type-1/launcher.sh")
+(define-key *top-map* (kbd "s-SPC") "launch-rofi")
 
 ;; (define-key *top-map* (kbd "C-s-l") "run-shell-command slock")
 (define-key *top-map* (kbd "C-s-r") "iresize")

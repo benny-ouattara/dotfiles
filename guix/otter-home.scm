@@ -26,6 +26,8 @@
     "fd@10.3.0"
    ; "nyxt@3.11.7"
     "alacritty@0.16.1"
+    "kitty@0.21.2"
+    "ranger@1.9.4"
     "picom@13"
     "feh@3.10.3"
     "xset@1.2.5"

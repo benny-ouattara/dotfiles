@@ -177,7 +177,6 @@ EndSection
             stumpwm+slynk
             sbcl-stumpwm-swm-gaps
             sbcl-stumpwm-screenshot
-            sbcl-stumpwm-rofi
             sbcl-stumpwm-pass
             sbcl-stumpwm-pamixer
 	        stumpish
