@@ -29,6 +29,42 @@ in
     # file.".mbsyncrc".text = dotrcs.mbsync; # superseded by ./config/isyncrc
   };
 
+  programs.aichat = {
+    enable = true;
+    settings = {
+      model = "ollama:deepseek-r1:1.5b";
+      clients = [
+        {
+          type = "openai-compatible";
+          name = "ollama";
+          api_base = "http://localhost:11434/v1";
+          models = [
+            {
+              name = "deepseek-r1:1.5b";
+              supports_function_calling = true;
+              supports_vision = false;
+            }
+          ];
+        }
+      ];
+    };
+  };
+
+  programs.aider-chat = {
+    enable = true;
+    settings = {
+      architect = true;
+      auto-accept-architect = false;
+      cache-prompts = true;
+      check-model-accepts-settings = false;
+      dark-mode = true;
+      dirty-commits = false;
+      lint = true;
+      show-model-warnings = false;
+      verify-ssl = false;
+    };
+  };
+
   programs.direnv = {
     enable = true;
     enableZshIntegration = true;
@@ -163,9 +199,9 @@ in
     enable = true;
     enableDefaultConfig = false;
     matchBlocks."*" = {
-        hashKnownHosts = true;
-        forwardAgent = true;
-        serverAliveInterval = 60;
+      hashKnownHosts = true;
+      forwardAgent = true;
+      serverAliveInterval = 60;
     };
     matchBlocks = {
       keychain = {
@@ -190,6 +226,9 @@ in
       IdentityFile ~/.ssh/jazacash-server
       User root
 
+    Host dev
+      User root
+
     Host app-dev 34.148.193.204
       HostName 34.148.193.204
       IdentityFile ~/.ssh/jazacash-server
@@ -200,6 +239,10 @@ in
       IdentityFile ~/.ssh/jazacash-server
       User root
     '';
+  };
+
+  services.ollama = {
+    enable = true;
   };
 
   xdg = {

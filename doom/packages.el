@@ -33,3 +33,4 @@
 (package! doom-nano-modeline :recipe (:host github :repo "ronisbr/doom-nano-modeline"))
 (package! devdocs :recipe (:host github :repo "astoff/devdocs.el"))
 (package! verb :recipe (:host github :repo "federicotdn/verb"))
+(package! mu4e-views :recipe (:host github :repo "lordpretzel/mu4e-views"))

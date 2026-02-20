@@ -626,7 +626,7 @@ Beware using this command given that it's destructive and non reversible."
 ;; NOTE: mu-find cannot match strings containing hyphens e.g: fleet-manager-bot, use "fleet" to match
 (setq mu4e-bookmarks
       '((:name "Unread messages" :query "flag:unread AND NOT flag:trashed" :key 117)
-        (:name "Skip messages" :query "(flag:unread AND NOT flag:trashed) AND (subject:\"Use Spotify BOM\" OR subject:\"Use Spotify root\" OR subject:\"no review needed\" OR subject:\"Update dependent library\" OR from:\"fleet\" OR from:\"fleetshift\" OR from:\"setadel\")" :key 115)
+        ;; (:name "Skip messages" :query "(flag:unread AND NOT flag:trashed) AND (subject:\"Use Spotify BOM\" OR subject:\"Use Spotify root\" OR subject:\"no review needed\" OR subject:\"Update dependent library\" OR from:\"fleet\" OR from:\"fleetshift\" OR from:\"setadel\")" :key 115)
         (:name "Today's messages" :query "date:today..now" :key 116)
         (:name "Last 7 days" :query "date:7d..now" :hide-unread t :key 119)
         (:name "Messages with images" :query "mime:image/*" :key 112)))
