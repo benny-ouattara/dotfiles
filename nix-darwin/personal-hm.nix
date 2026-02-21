@@ -221,22 +221,16 @@ in
       IdentitiesOnly yes
       # LogLevel DEBUG3
 
-    Host ci  35.231.53.45
-      HostName 35.231.53.45
-      IdentityFile ~/.ssh/jazacash-server
-      User root
+    Host otter
+      User ben
 
     Host dev
       User root
 
-    Host app-dev 34.148.193.204
-      HostName 34.148.193.204
-      IdentityFile ~/.ssh/jazacash-server
+    Host ops
       User root
 
-    Host app-prod 34.35.8.94
-      HostName 34.35.8.94
-      IdentityFile ~/.ssh/jazacash-server
+    Host prod
       User root
     '';
   };
