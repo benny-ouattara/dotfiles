@@ -21,6 +21,7 @@
              (gnu packages package-management)
              (gnu packages pulseaudio)
              (gnu system setuid)
+             (gnu system accounts)
              (gnu system shadow)
              (gnu services)
              (jazacash service)
@@ -38,6 +39,7 @@
  syncthing
  monitoring
  pm
+ containers
  virtualization
  cuirass
  mcron
@@ -164,7 +166,7 @@ EndSection
                 (group "users")
                 (shell (file-append zsh "/bin/zsh"))
                 (home-directory "/home/ben")
-                (supplementary-groups '("wheel" "netdev" "audio" "video")))
+                (supplementary-groups '("cgroup" "wheel" "netdev" "audio" "video")))
                %base-user-accounts))
  (setuid-programs
   (append (list (setuid-program
@@ -200,6 +202,13 @@ EndSection
            (service mysql-service-type)
            (service containerd-service-type)
            (service docker-service-type)
+           (service iptables-service-type) ; require for podman-service
+           (service rootless-podman-service-type
+                    (rootless-podman-configuration
+                     (subgids
+                      (list (subid-range (name "ben"))))
+                     (subuids
+                      (list (subid-range (name "ben"))))))
            (service tailscale-service-type)
            (service syncthing-service-type
                     (syncthing-configuration (user "ben")))
