@@ -219,7 +219,7 @@ in
       StrictHostKeyChecking no
       IdentityFile ~/.ssh/id_rsa
       IdentitiesOnly yes
-      # LogLevel DEBUG3
+      LogLevel DEBUG3
 
     Host otter
       User ben
