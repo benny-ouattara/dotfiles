@@ -46,12 +46,6 @@
     "font-jetbrains-mono@2.304"
     "font-awesome@4.7.0"
     "sbcl-slynk@1.0.43-9.9c43bf6"
-    ;"sbcl-stumpwm-swm-gaps@0.0.1-5.4613a95"
-    ;"sbcl-stumpwm-ttf-fonts@0.0.1-5.4613a95"
-    ;"sbcl-stumpwm-stumptray@0.0.1-5.4613a95"
-    ;"sbcl-stumpwm-kbd-layouts@0.0.1-5.4613a95"
-    ;"sbcl-stumpwm-net@0.0.1-5.4613a95"
-    ;"sbcl-stumpwm-wifi@0.0.1-5.4613a95"
     "curl@8.6.0"
     "rlwrap@0.48"
     "ripgrep@15.1.0"
@@ -87,7 +81,6 @@
     "babashka@1.12.214"
     "awscli@1.43.11"
     "tmux@3.6a"
-    ;"vim@9.1.0146"
     "docker-compose@1.29.2"
     "podman-compose@1.5.0"
 
@@ -96,17 +89,14 @@
     "jtools@0.0.0"
     "sops@3.9.4"
     ;; "rust-bore@0.4.1"
-    "github-cli@2.65.0"
-    )))
+    "github-cli@2.65.0")))
  (services
   (list
    (simple-service 'environment-variables-service
                    home-environment-variables-service-type
                    `(("LESSHISTFILE" . "$XDG_CACHE_HOME/.lesshst")
                      ("EDITOR" . "emacs")
-                     ("VISUAL" . "emacs")
-                     ;; ("SHELL" . ,(file-append zsh "/bin/zsh"))
-                     ))
+                     ("VISUAL" . "emacs")))
    (service home-openssh-service-type
             (home-openssh-configuration
              (add-keys-to-agent "yes")
@@ -128,23 +118,7 @@
                      (name "prod 13.244.104.50")
                      (host-name "13.244.104.50")
                      (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
-                     (user "root"))
-                    (openssh-host
-                     (name "ci 35.231.53.45")
-                     (host-name "35.231.53.45")
-                     (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
-                     (user "root"))
-                    (openssh-host
-                     (name "app-dev 34.148.193.204")
-                     (host-name "34.148.193.204")
-                     (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
-                     (user "root"))
-                    (openssh-host
-                     (name "app-prod 34.35.8.94")
-                     (host-name "34.35.8.94")
-                     (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
-                     (user "root"))
-                    ))))
+                     (user "root"))))))
    (service home-ssh-agent-service-type
             (home-ssh-agent-configuration
              (extra-options '("-t" "1h30m"))))

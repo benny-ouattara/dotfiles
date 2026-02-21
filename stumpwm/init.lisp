@@ -101,6 +101,18 @@
 (defcommand rofi-windowcd () ()
   (rofi "windowcd"))
 
+(defun guix-run (cmd)
+  (gselect "random")
+  (run-shell-command cmd))
+
+(defcommand guix-system () ()
+  "Reconfigure guix system."
+  (guix-run "exec kitty --directory=/home/ben/Code/dotfiles/guix zsh -c 'sudo -E guix system reconfigure otter-system.scm; exec zsh;'"))
+
+(defcommand guix-home () ()
+  "Reconfigure guix home."
+  (guix-run "exec kitty --directory=/home/ben/Code/dotfiles/guix zsh -c 'guix home reconfigure otter-home.scm; exec zsh;'"))
+
 ;; enable which-key-mode
 (which-key-mode)
 
@@ -125,8 +137,8 @@
 (define-key *top-map* (kbd "s-RET") "exec kitty --directory=/home/ben/Code/dotfiles/guix")
 (define-key *top-map* (kbd "s-o") "exec kitty --directory=/home/ben/Code/dotfiles/guix emacsclient -t otter-system.scm")
 (define-key *top-map* (kbd "s-O") "exec kitty --directory=/home/ben/Code/dotfiles/guix emacsclient -t otter-home.scm")
-(define-key *top-map* (kbd "s-g") "exec kitty --directory=/home/ben/Code/dotfiles/guix zsh -c 'sudo -E guix system reconfigure otter-system.scm; exec zsh;'")
-(define-key *top-map* (kbd "s-G") "exec kitty --directory=/home/ben/Code/dotfiles/guix zsh -c 'guix home reconfigure otter-home.scm; exec zsh;'")
+(define-key *top-map* (kbd "s-g") "guix-system")
+(define-key *top-map* (kbd "s-G") "guix-home")
 (define-key *top-map* (kbd "s-w") "exec firefox")
 (define-key *top-map* (kbd "s-e") "emacs")
 

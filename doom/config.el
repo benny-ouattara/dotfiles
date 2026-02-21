@@ -60,12 +60,12 @@
   ("ben" (setq
           doom-font (font-spec :family "Iosevka" :size 21 :weight 'normal)
           doom-big-font (font-spec :family "Iosevka" :size 29)
-          doom-theme 'doom-dark+)))
+          doom-theme 'modus-operandi-tinted)))
 
 (setq
  mac-command-modifier 'meta
  ns-command-modifier 'meta
- confirm-kill-emacs 'y-or-n-p
+ confirm-kill-emacs nil
  evil-insert-state-cursor 'bar
  evil-move-cursor-back nil
  display-line-numbers-type 'relative

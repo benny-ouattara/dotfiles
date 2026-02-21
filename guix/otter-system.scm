@@ -13,6 +13,7 @@
              (gnu packages xorg)
              (gnu packages emacs)
              (gnu packages wm)
+             (gnu packages containers)
              (gnu packages tls)
              (gnu packages gnupg)
              (gnu packages guile)
@@ -176,10 +177,13 @@ EndSection
 	        xterm
             stumpwm+slynk
             sbcl-stumpwm-swm-gaps
+            ;; sbcl-stumpwm-ttf-fonts
             sbcl-stumpwm-screenshot
             sbcl-stumpwm-pass
             sbcl-stumpwm-pamixer
 	        stumpish
+            podman
+            podman-compose
             guile-gnutls
             guile-gcrypt
             guile-git
