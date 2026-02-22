@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+mkdir -p ~/otter
+
+sshfs otter:/home/ben/Code ~/otter \
+  -o reconnect \
+  -o defer_permissions \
+  -o auto_cache \
+  -o volname=otter

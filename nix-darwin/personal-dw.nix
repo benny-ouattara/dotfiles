@@ -85,6 +85,7 @@ in
   };
 
   environment.systemPackages = [
+    pkgs.sshfs
     pkgs.ollama
     pkgs.just
     pkgs.github-cli
@@ -182,6 +183,7 @@ in
       "yabai"
       "sbcl"
       "btop"
+      # "sshfs"
       # "reroutingcli"
       # "mmp"
       # "kubectl-site"
@@ -213,11 +215,9 @@ in
       "dmenu-mac"
       "protonvpn"
       "alacritty"
-      "syncthing-app"
+      "syncthing"
       "kitty"
-      # "font-victor-mono-nerd-font"
-      # "font-iosevka-nerd-font"
-      # "font-iosevka-term-nerd-font"
+      "macfuse"
       "font-symbols-only-nerd-font"
       "sf-symbols"
       "wezterm"

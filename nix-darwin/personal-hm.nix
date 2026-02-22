@@ -223,6 +223,9 @@ in
 
     Host otter
       User ben
+      ServerAliveInterval 15
+      ServerAliveCountMax 3
+      Compression yes
 
     Host dev
       User root
