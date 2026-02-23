@@ -17,6 +17,7 @@
              (gnu packages tls)
              (gnu packages gnupg)
              (gnu packages guile)
+             (gnu packages audio)
              (gnu packages display-managers)
              (gnu packages package-management)
              (gnu packages pulseaudio)
@@ -26,7 +27,6 @@
              (gnu services)
              (jazacash service)
              (guix gexp)
-             (gnu packages audio)
              (guix channels)
              (srfi srfi-1))
 (use-service-modules
@@ -62,15 +62,16 @@
     (name 'jazacash)
     (url  "git@github.com:jazafund/jazacash.git")
     (branch "develop"))
-   ;; (channel
-   ;;      (name 'pantherx)
-   ;;      (url "https://codeberg.org/gofranz/panther.git")
-   ;;      ;; Enable signature verification
-   ;;      (introduction
-   ;;       (make-channel-introduction
-   ;;        "54b4056ac571611892c743b65f4c47dc298c49da"
-   ;;        (openpgp-fingerprint
-   ;;         "A36A D41E ECC7 A871 1003  5D24 524F EB1A 9D33 C9CB"))))
+   (channel
+    (name 'pantherx)
+    (url "https://codeberg.org/gofranz/panther.git")
+    (branch "master")
+    (commit "9956fddff1e2f024d592ec8c4be37096bb16ea8b")
+    (introduction
+     (make-channel-introduction
+      "54b4056ac571611892c743b65f4c47dc298c49da"
+      (openpgp-fingerprint
+       "A36A D41E ECC7 A871 1003  5D24 524F EB1A 9D33 C9CB"))))
    (channel
     (name 'guix)
     (url "https://git.savannah.gnu.org/git/guix.git")
@@ -136,13 +137,15 @@ EndSection
                                                           (guix (guix-for-channels %channels))
                                                           (substitute-urls
                                                            (append (list "https://substitutes.nonguix.org"
+                                                                         "https://substitutes.guix.gofranz.com"
                                                                          ;; "http://substitutes.jazacash.com"
                                                                          )
                                                                    %default-substitute-urls))
                                                           (authorized-keys
-                                                           (append (list ;(local-file "./nonguix-key.pub")
-                                        ;(local-file "./cuirass-key.pub")
-                                                                    )
+                                                           (append (list (local-file "./nonguix-key.pub")
+                                                                         (local-file "./pantherx-key.pub")
+                                                                         ;(local-file "./cuirass-key.pub")
+                                                                         )
                                                                    %default-authorized-guix-keys))))
                    (elogind-service-type config =>
                                          (elogind-configuration (inherit config)
@@ -201,7 +204,7 @@ EndSection
            (service jazacash-ci-service-type)
            (service mysql-service-type)
            (service containerd-service-type)
-           (service docker-service-type)
+           ;; (service docker-service-type)
            (service iptables-service-type) ; require for podman-service
            (service rootless-podman-service-type
                     (rootless-podman-configuration

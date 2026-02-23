@@ -8,6 +8,7 @@
  (gnu packages tmux)
  (gnu services)
  (gnu packages ci)
+ (gnu packages dns)
  (gnu packages ruby)
  (gnu packages guile-xyz)
  (guix gexp)
@@ -15,16 +16,41 @@
  (gnu home services gnupg)
  (gnu home services)
  (gnu home services ssh)
+ (px packages ai)
+ (gnu home services shepherd)
  (gnu home services desktop)
  (gnu packages shells)
  (gnu packages shellutils))
+
+(define (home-ollama-shepherd-service config)
+  (list (shepherd-service
+         (provision '(ollama))
+         (documentation "Start the ollama server")
+         (start #~(make-forkexec-constructor
+                   (list (string-append #$ollama "/bin/ollama") "serve")
+                   #:environment-variables (list "HOME=/home/ben"
+                                                 "OLLAMA_HOST=0.0.0.0"
+                                                 "OLLAMA_MODELS=/home/ben/.ollama/models")
+                   #:log-file "/home/ben/.ollama/logs"
+                   ))
+         (stop #~(make-kill-destructor)))))
+
+(define-public home-ollama-service-type
+  (service-type (name 'ollama)
+                (extensions (list (service-extension
+                                   home-shepherd-service-type
+                                   home-ollama-shepherd-service)))
+                (default-value #f)
+                (description
+                 "Launch the ollama server so running ollama works out of the box.")))
 
 (home-environment
  (packages
   (specifications->packages
    (list
+    "ollama@0.16.1"
     "fd@10.3.0"
-   ; "nyxt@3.11.7"
+                                        ; "nyxt@3.11.7"
     "alacritty@0.16.1"
     "kitty@0.21.2"
     "ranger@1.9.4"
@@ -83,12 +109,12 @@
     "tmux@3.6a"
     "docker-compose@1.29.2"
     "podman-compose@1.5.0"
+    "bind@9.19.24"
 
     ;; jazacash
     ;; "rust-bore-cli@0.5.1"
     "jtools@0.0.0"
     "sops@3.9.4"
-    ;; "rust-bore@0.4.1"
     "github-cli@2.65.0")))
  (services
   (list
@@ -97,6 +123,7 @@
                    `(("LESSHISTFILE" . "$XDG_CACHE_HOME/.lesshst")
                      ("EDITOR" . "emacs")
                      ("VISUAL" . "emacs")))
+   (service home-ollama-service-type)
    (service home-openssh-service-type
             (home-openssh-configuration
              (add-keys-to-agent "yes")

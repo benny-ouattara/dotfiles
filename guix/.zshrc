@@ -110,11 +110,15 @@ if [ -S $XDG_RUNTIME_DIR/ssh-agent/socket ]; then
 fi
 
 alias gs="guix system"
-alias sgs="sudo guix system"
+alias sgs="sudo -E guix system"
 # alias gh="guix home"
 alias sgh="sudo guix home"
 alias home-config="guix home reconfigure ~/Code/dotfiles/guix/otter-home.scm"
-alias system-config="sudo guix system reconfigure ~/Code/dotfiles/guix/otter-system.scm"
+alias system-config="sudo -E guix system reconfigure ~/Code/dotfiles/guix/otter-system.scm"
+alias pm="podman"
+alias pc="podman-compose"
+alias edit="nvim"
+alias vim="nvim"
 
 if [ -f ~/Code/google-cloud-sdk/path.zsh.inc ]; then
     source ~/Code/google-cloud-sdk/path.zsh.inc
