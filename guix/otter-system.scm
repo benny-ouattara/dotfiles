@@ -18,6 +18,7 @@
              (gnu packages gnupg)
              (gnu packages guile)
              (gnu packages audio)
+             (gnu packages vim)
              (gnu packages display-managers)
              (gnu packages package-management)
              (gnu packages pulseaudio)
@@ -178,6 +179,7 @@ EndSection
  (packages (cons*
 	        xf86-input-libinput
 	        emacs-next
+            neovim
 	        sbcl
 	        xterm
             stumpwm+slynk
