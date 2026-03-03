@@ -172,6 +172,8 @@ in
       sbcl = "${pkgs.rlwrap}/bin/rlwrap sbcl";
       guile = "${pkgs.rlwrap}/bin/rlwrap guile";
       info = "info --vi-keys";
+      oc-on="ssh -f oc-tunnel";
+      oc-off="pkill -f oc-tunnel";
     };
 
     profileExtra = ''
@@ -235,6 +237,13 @@ in
 
     Host prod
       User root
+
+    Host oc-tunnel
+      HostName otter
+      User ben
+      LocalForward 18789 127.0.0.1:18789
+      RequestTTY no
+      RemoteCommand sleep infinity
     '';
   };
 

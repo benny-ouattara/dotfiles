@@ -50,7 +50,6 @@
    (list
     "ollama@0.16.1"
     "fd@10.3.0"
-                                        ; "nyxt@3.11.7"
     "alacritty@0.16.1"
     "kitty@0.21.2"
     "ranger@1.9.4"

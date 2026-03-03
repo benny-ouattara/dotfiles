@@ -109,17 +109,46 @@ if [ -S $XDG_RUNTIME_DIR/ssh-agent/socket ]; then
     ssh-add -q ~/.ssh/id_rsa
 fi
 
-alias gs="guix system"
-alias sgs="sudo -E guix system"
-# alias gh="guix home"
-alias sgh="sudo guix home"
 alias home-config="guix home reconfigure ~/Code/dotfiles/guix/otter-home.scm"
 alias system-config="sudo -E guix system reconfigure ~/Code/dotfiles/guix/otter-system.scm"
 alias pm="podman"
 alias pc="podman-compose"
 alias edit="nvim"
 alias vim="nvim"
+alias oc-perms-fix="sudo -i -u openclaw podman unshare chmod -R 2775 /home/openclaw/.openclaw"
 
 if [ -f ~/Code/google-cloud-sdk/path.zsh.inc ]; then
     source ~/Code/google-cloud-sdk/path.zsh.inc
 fi
+
+oc-podman() {
+    sudo -i -u openclaw podman "$@"
+}
+
+oc-setup() {
+    sudo -i -u openclaw /home/openclaw/run-openclaw-podman.sh launch setup
+}
+
+openclaw() {
+    sudo -i -u openclaw podman run -it --rm \
+        --name openclaw-cli \
+        --network container:openclaw \
+        --userns keep-id \
+        -v "/home/openclaw/.openclaw:/home/node/.openclaw:rw" \
+        "openclaw:local" \
+        openclaw "$@"
+}
+
+oc-cli-shell() {
+    sudo -i -u openclaw podman run -it --rm \
+        --name openclaw-cli \
+        --network container:openclaw \
+        --userns keep-id \
+        -v "/home/openclaw/.openclaw:/home/node/.openclaw:rw" \
+        "openclaw:local" \
+        /bin/sh
+}
+
+oc-gateway-shell() {
+    sudo -i -u openclaw podman exec -it openclaw /bin/sh
+}
