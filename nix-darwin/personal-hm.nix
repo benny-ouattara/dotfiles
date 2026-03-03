@@ -174,6 +174,7 @@ in
       info = "info --vi-keys";
       oc-on="ssh -f oc-tunnel";
       oc-off="pkill -f oc-tunnel";
+      oc-dash="ssh -f oc-tunnel && open http://localhost:18789";
     };
 
     profileExtra = ''
@@ -243,7 +244,9 @@ in
       User ben
       LocalForward 18789 127.0.0.1:18789
       RequestTTY no
-      RemoteCommand sleep infinity
+      ServerAliveInterval 60
+      ServerAliveCountMax 3
+      RemoteCommand /run/current-system/profile/bin/sleep infinity
     '';
   };
 
