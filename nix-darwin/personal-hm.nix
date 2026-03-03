@@ -243,6 +243,7 @@ in
       User ben
       LocalForward 18789 127.0.0.1:18789
       RequestTTY no
+      RemoteCommand sleep infinity
     '';
   };
 
