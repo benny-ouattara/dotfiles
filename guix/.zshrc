@@ -109,7 +109,7 @@ if [ -S $XDG_RUNTIME_DIR/ssh-agent/socket ]; then
     ssh-add -q ~/.ssh/id_rsa
 fi
 
-alias home-config="guix home reconfigure ~/Code/dotfiles/guix/otter-home.scm"
+alias home-config="guix home reconfigure -L ~/Code/dotfiles/guix/modules  ~/Code/dotfiles/guix/otter-home.scm"
 alias system-config="sudo -E guix system reconfigure ~/Code/dotfiles/guix/otter-system.scm"
 alias pm="podman"
 alias pc="podman-compose"
@@ -130,13 +130,23 @@ oc-setup() {
 }
 
 openclaw() {
+    oc-perms-fix
     sudo -i -u openclaw podman run -it --rm \
         --name openclaw-cli \
         --network container:openclaw \
         --userns keep-id \
-        -v "/home/openclaw/.openclaw:/home/node/.openclaw:rw" \
+        -v "/home/openclaw/.openclaw:/home/node/.openclaw:rw,z" \
         "openclaw:local" \
         openclaw "$@"
+}
+
+openclaw-onboard() {
+    sudo -i -u openclaw podman run -it --rm \
+        --name openclaw-cli \
+        --userns keep-id \
+        -v "/home/openclaw/.openclaw:/home/node/.openclaw:rw,z" \
+        "openclaw:local" \
+    node dist/index.js onboard 
 }
 
 oc-cli-shell() {
@@ -144,7 +154,7 @@ oc-cli-shell() {
         --name openclaw-cli \
         --network container:openclaw \
         --userns keep-id \
-        -v "/home/openclaw/.openclaw:/home/node/.openclaw:rw" \
+        -v "/home/openclaw/.openclaw:/home/node/.openclaw:rw,z" \
         "openclaw:local" \
         /bin/sh
 }

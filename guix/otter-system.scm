@@ -219,6 +219,10 @@ EndSection
                   (shell (file-append zsh "/bin/zsh"))
                   (supplementary-groups '("cgroup" "wheel" "netdev")))
                 %base-user-accounts))
+(sudoers-file (plain-file "sudoers" "\
+root ALL=(ALL) ALL
+%wheel ALL=(ALL) ALL
+ben ALL=(openclaw) NOPASSWD: ALL\n"))
   (setuid-programs
    (append (list (setuid-program
                   (program (file-append stumpwm+slynk "/bin/stumpwm"))))
