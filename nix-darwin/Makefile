@@ -10,8 +10,8 @@ HOME_MAN     := $(HOME)/.nix-profile/bin/home-manager
 
 
 # Colors for the help menu
-CYAN  := \033[36m
-RESET := \033[0m
+CYAN  := $(shell printf "\033[36m")
+RESET := $(shell printf "\033[0m")
 
 .DEFAULT_GOAL := help
 
@@ -42,12 +42,12 @@ home: ## Reconfigure home-manager (User level)
 
 ## --- Flake Profiles ---
 
-personal: check-sudo ## Switch to 'kite' flake profile (Impure)
-	@echo "$(CYAN)>>> Applying Personal Flake (kite)...$(RESET)"
+kite: check-sudo ## Switch to 'kite' flake profile (Impure)
+	@echo "$(CYAN)>>> Applying Kite Flake (kite)...$(RESET)"
 	@sudo darwin-rebuild switch --flake $(FLAKE_DIR)#kite --impure
 
-work: check-sudo ## Switch to 'zo' flake profile (Impure)
-	@echo "$(CYAN)>>> Applying Work Flake (zo)...$(RESET)"
+onyx: check-sudo ## Switch to 'onyx' flake profile (Impure)
+	@echo "$(CYAN)>>> Applying Onyx Flake (zo)...$(RESET)"
 	@sudo darwin-rebuild switch --flake $(FLAKE_DIR)#zo --impure
 
 %!: ## Suffix with ! to run a profile (e.g., make kite!)
@@ -179,7 +179,7 @@ update: ## Update flake.lock inputs
 	@echo "$(CYAN)>>> Updating Flake inputs...$(RESET)"
 	@nix flake update $(FLAKE_DIR)
 
-upgrade: update personal ## Update pins and apply personal profile
+upgrade: update kite ## Update pins and apply kite profile
 
 ## --- Remote Builds ---
 

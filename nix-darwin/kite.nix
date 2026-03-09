@@ -103,6 +103,7 @@ in
   };
 
   environment.systemPackages = [
+    # pkgs.witr
     pkgs.nix-tree
     pkgs.nix-diff
     pkgs.nix-index
@@ -298,7 +299,7 @@ in
       };
     };
     # Point mcron to the directory we created in /etc
-    command = "${pkgs.mcron}/bin/mcron /etc/mcron.d";
+    command = "${pkgs.mcron}/bin/mcron /etc/mcron.d/jobs.guile";
   };
 
   # You should generally set this to the total number of logical cores in your system.

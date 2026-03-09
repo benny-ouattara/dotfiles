@@ -17,7 +17,7 @@
         # $ darwin-rebuild build --flake .#kite
         darwinConfigurations."kite" = nix-darwin.lib.darwinSystem {
           system = "x86_64-darwin";
-          modules = [ ./personal-dw.nix
+          modules = [ ./kite.nix
                       home-manager.darwinModules.home-manager
                       {
                         home-manager.useGlobalPkgs = true;
@@ -36,7 +36,7 @@
 
         # $ darwin-rebuild build --flake .#onyx
         darwinConfigurations."onyx" = nix-darwin.lib.darwinSystem {
-          modules = [ ./work-dw.nix
+          modules = [ ./onyx.nix
                       home-manager.darwinModules.home-manager
                       {
                         home-manager.useGlobalPkgs = true;
