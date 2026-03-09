@@ -1,12 +1,14 @@
 # Paths and Binaries
 FLAKE_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 LOG_FILE  := $(HOME)/.logs/nix_telemetry.csv
+LOGS := $(HOME)/.logs/mcron.out.log $(HOME)/.logs/mcron.err.log /tmp/yabai.err.log /tmp/skhd.err.log
 
 # Binaries
 MAKE         ?= make
 SHELL        := $(shell which bash)
 DARWIN_REB   := $(shell which darwin-rebuild 2>/dev/null || echo "/run/current-system/sw/bin/darwin-rebuild")
 HOME_MAN     := $(HOME)/.nix-profile/bin/home-manager
+BREW         := /usr/local/bin/brew
 
 
 # Colors for the help menu
@@ -32,23 +34,22 @@ all: darwin home ## Reconfigure both Darwin (System) and Home-Manager
 darwin: ## Reconfigure nix-darwin (System level)
 	@echo "$(CYAN)>>> Building Darwin System...$(RESET)"
 	@sudo -v
-	@sudo $(DARWIN_REB) switch --flake $(FLAKE_DIR) --impure
+	@sudo $(DARWIN_REB) switch --flake $(FLAKE_DIR)#kite --impure
 	@echo "Darwin generation: $$($(DARWIN_REB) --list-generations | tail -1)"
 
 home: ## Reconfigure home-manager (User level)
-	@echo "$(CYAN)>>> Building Home Environment...$(RESET)"
-	@$(HOME_MAN) switch --flake $(FLAKE_DIR)
-	@echo "Home generation: $$($(HOME_MAN) generations | head -1)"
+	@echo "$(CYAN)>>> Applying Home-Manager via Flake...$(RESET)"
+	@nix run github:nix-community/home-manager -- switch --flake $(FLAKE_DIR)#kite
 
 ## --- Flake Profiles ---
 
 kite: check-sudo ## Switch to 'kite' flake profile (Impure)
 	@echo "$(CYAN)>>> Applying Kite Flake (kite)...$(RESET)"
-	@sudo darwin-rebuild switch --flake $(FLAKE_DIR)#kite --impure
+	@sudo $(DARWIN_REB) switch --flake $(FLAKE_DIR)#kite --impure
 
 onyx: check-sudo ## Switch to 'onyx' flake profile (Impure)
 	@echo "$(CYAN)>>> Applying Onyx Flake (zo)...$(RESET)"
-	@sudo darwin-rebuild switch --flake $(FLAKE_DIR)#zo --impure
+	@sudo $(DARWIN_REB) switch --flake $(FLAKE_DIR)#onyx --impure
 
 %!: ## Suffix with ! to run a profile (e.g., make kite!)
 	@echo "$(CYAN)>>> Activating profile: $*...$(RESET)"
@@ -74,18 +75,18 @@ restart-%: ## Restart a service (e.g., make restart-yabai)
 
 ## --- Maintenance ---
 
-build: ## Dry build current directory and cleanup results
+build: ## Dry build current directory and cleanup results(e.g make build PATH=test.nix)
 	@echo "$(CYAN)>>> Running nix build...$(RESET)"
-	@nix build -f .
+	@nix build -f $(PATH)
 	@rm -f result*
 
 gc: ## Collect Nix garbage and delete old generations
 	@echo "$(CYAN)>>> Collecting garbage...$(RESET)"
 	@nix-collect-garbage -d
 
-clean-safe: ## Delete system generations older than 60 days
-	@echo "$(CYAN)>>> Deleting old generations (60d+)...$(RESET)"
-	@sudo nix-env --delete-generations +60d -p /nix/var/nix/profiles/system
+clean-safe: ## Delete system generations older than 30 days
+	@echo "$(CYAN)>>> Deleting old generations (30d+)...$(RESET)"
+	@sudo nix-env --delete-generations +30d -p /nix/var/nix/profiles/system
 	@nix-collect-garbage
 
 # Quick way to see what's taking up space in the Nix store
@@ -121,7 +122,7 @@ list: check-sudo ## List system generations with dates
 check-git: ## Ensure no uncommitted changes in $(FLAKE_DIR)
 	@cd $(FLAKE_DIR) && git diff --quiet || (echo "❌ Uncommitted changes in $(FLAKE_DIR)! Commit them first." && exit 1)
 
-status: check-sudo ## Show Nix store size and generation count
+status: check-sudo ## Complete system health dashboard for Kite
 	@echo "$(CYAN)>>> Nix Store Status$(RESET)"
 	@sudo du -sh /nix 2>/dev/null || echo "Nix Store: Access Denied (use sudo)"
 	@echo -n "Generations: "
@@ -132,9 +133,18 @@ status: check-sudo ## Show Nix store size and generation count
 	@echo ""
 	@echo "$(CYAN)>>> Disk Pressure$(RESET)"
 	@sudo df -h /nix | tail -1 | awk '{print "Usage: " $$5 " (Free: " $$4 ")"}'
+	@echo ""
+	@echo "$(CYAN)--- Host Identity ---$(RESET)"
+	@hostname && uname -m
+	@echo ""
+	@echo "$(CYAN)--- Service Health ---$(RESET)"
+	@launchctl list | grep -E "mcron|skhd|yabai" || echo "Some services are DOWN"
+	@echo ""
+	@echo "$(CYAN)--- Recent Telemetry ---$(RESET)"
+	@if [ -f $(LOG_FILE) ]; then tail -n 5 $(LOG_FILE) | column -t -s ','; fi
 
 why: ## Explain why a path is in the store (Usage: make why PKG=...)
-	@nix-store --query --referrers-closure $(PKG)
+	@nix-store --query --referrers-closure $(shell readlink $(shell which PKG))
 
 install-hooks: ## Install git pre-commit hooks
 	@echo "Installing git hooks..."
@@ -177,7 +187,7 @@ rollback: ## Rollback to the previous system generation
 
 update: ## Update flake.lock inputs
 	@echo "$(CYAN)>>> Updating Flake inputs...$(RESET)"
-	@nix flake update $(FLAKE_DIR)
+	@nix flake update --flake $(FLAKE_DIR)
 
 upgrade: update kite ## Update pins and apply kite profile
 
@@ -210,7 +220,8 @@ health-wm: ## Check if yabai has proper macOS permissions
 
 trace: ## Trace why a package is in your system (Usage: make trace PKG=...)
 	@echo "$(CYAN)>>> Finding paths that depend on $(PKG)...$(RESET)"
-	@nix-store --query --referrers-closure $$(which $(PKG) || echo $(PKG)) | xargs nix-store --query --referrers
+	$(eval TARGET_PATH := $(shell which $(PKG) || echo $(PKG)))
+	@nix-store --query --referrers-closure $(TARGET_PATH)
 
 tree: ## Visual tree of system dependencies (requires nix-tree)
 	@nix shell nixpkgs#nix-tree -c nix-tree /run/current-system
@@ -222,3 +233,41 @@ commit: ## Stage and commit all changes
 
 ship: commit ## Commit and then deploy
 	@$(MAKE) kite!
+
+visualize-storage: ## Generate a storage usage graph
+	@echo "$(CYAN)>>> Analyzing 36GB store (this takes a moment)...$(RESET)"
+	@nix shell nixpkgs#nix-du nixpkgs#graphviz --command bash -c \
+		"nix-du -s 500M | dot -Tpng > $(HOME)/Desktop/nix-store-usage.png"
+	@echo "$(CYAN)>>> Graph saved to Desktop/nix-store-usage.png$(RESET)"
+
+find-app: ## Search Homebrew for Casks and Formulae (Usage: make find-app QUERY=...)
+	@echo "$(CYAN)>>> Searching Homebrew for '$(QUERY)'...$(RESET)"
+	@brew search --casks "$(QUERY)" | sed 's/^/  [Cask]    /'
+	@brew search --formulae "$(QUERY)" | sed 's/^/  [Formula] /'
+	@echo ""
+	@echo "$(CYAN)Tip: Add the name to brew.nix and run 'make kite!'$(RESET)"
+
+check-updates: ## See which Homebrew apps have updates available
+	@echo "$(CYAN)>>> Checking for App Updates...$(RESET)"
+	@$(BREW) outdated
+
+## --- Logging ---
+
+logs: ## Tail all system and service logs in one view
+	@echo "$(CYAN)>>> Tailing Kite Service Logs...$(RESET)"
+	@tail -f $(LOGS) 2>/dev/null | awk '/==>/ {print "\033[33m" $$0 "\033[0m"; next} {print}'
+
+## --- Bootstrap ---
+
+bootstrap: ## Setup a fresh Mac as "Kite"
+	@echo "$(CYAN)>>> Starting Kite Bootstrap...$(RESET)"
+	@# 1. Install Nix if missing
+	@command -v nix >/dev/null 2>&1 || \
+		(echo "Installing Nix..." && curl -L https://nixos.org/nix/install | sh)
+	@# 2. Install Homebrew if missing
+	@command -v brew >/dev/null 2>&1 || \
+		(echo "Installing Homebrew..." && /bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)")
+	@# 3. Initial Build
+	@echo "Applying Kite configuration..."
+	nix run nix-darwin -- switch --flake .#kite
+	@echo "$(CYAN)>>> Bootstrap Complete. Please restart your terminal.$(RESET)"

@@ -7,29 +7,38 @@
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    homebrew.url = "github:zhaofengli-wip/nix-homebrew";
   };
 
-  outputs = inputs@{ self, nix-darwin, nixpkgs, home-manager, ... }:
+  outputs = inputs@{ self, nix-darwin, nixpkgs, home-manager, homebrew, ... }:
     let
-      system = "x86_64-darwin";
+      system = "x86_64-darwin"; # Or aarch64-darwin for Silicon
     in
       {
         # $ darwin-rebuild build --flake .#kite
         darwinConfigurations."kite" = nix-darwin.lib.darwinSystem {
-          system = "x86_64-darwin";
+          system = "x86_64-darwin"; # Or aarch64-darwin for Silicon
           modules = [ ./kite.nix
+                      ./brew.nix
                       home-manager.darwinModules.home-manager
                       {
                         home-manager.useGlobalPkgs = true;
                         home-manager.useUserPackages = true;
-                        home-manager.users.benouattara = import ./personal-hm.nix;
+                        home-manager.users.benouattara = import ./home.nix;
+                      }
+                      homebrew.darwinModules.nix-homebrew
+                      {
+                        nix-homebrew = {
+                          enable = true;
+                          user = "benouattara";
+                          autoMigrate = true;
+                        };
                       }
                     ];
           pkgs = import nixpkgs {
             inherit system;
             overlays = [
               (import ./overlays/custom-scripts.nix { scriptsPath = ./scripts; })
-              (import ./overlays/z.nix)
             ];
           };
         };
@@ -41,7 +50,7 @@
                       {
                         home-manager.useGlobalPkgs = true;
                         home-manager.useUserPackages = true;
-                        home-manager.users.benouattara = import ./work-hm.nix;
+                        home-manager.users.benouattara = import ./home.nix;
                       }
                     ];
         };

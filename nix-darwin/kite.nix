@@ -8,6 +8,7 @@ let
     ${pkgs.notmuch}/bin/notmuch new
   '';
   watchdog-script = pkgs.writeShellScript "wm-watchdog" (builtins.readFile ./scripts/wm-watchdog.sh);
+  nix-gc = pkgs.writeShellScript "nix-gc" (builtins.readFile ./scripts/nix-gc.sh);
   key-benchmark   = pkgs.writeShellScript "key-bench"   (builtins.readFile ./scripts/key-bench.sh);
   wm-health-check = pkgs.writeShellScript "wm-health"   (builtins.readFile ./scripts/wm-health.sh);
 in
@@ -29,6 +30,13 @@ in
   # Used for backwards compatibility, please read the changelog before changing.
   # $ darwin-rebuild changelog
   system.stateVersion = 4;
+
+  system.activationScripts.postActivation.text = ''
+  printf "\033[36m"
+  echo "Welcome to KITE (Gen $(readlink /nix/var/nix/profiles/system | cut -d- -f2))"
+  echo "Status: System is Healthy"
+  printf "\033[0m"
+  '';
 
   # The platform the configuration will be used on.
   nixpkgs.hostPlatform = "x86_64-darwin";
@@ -103,10 +111,16 @@ in
   };
 
   environment.systemPackages = [
-    # pkgs.witr
+    pkgs.zoxide
+    pkgs.eza
+    pkgs.witr
+    pkgs.bat
+    pkgs.graphviz
+    pkgs.nix-du
     pkgs.nix-tree
     pkgs.nix-diff
     pkgs.nix-index
+    pkgs.nixfmt
     pkgs.sshfs
     pkgs.ollama
     pkgs.just
@@ -146,7 +160,7 @@ in
     pkgs.cloc
     pkgs.overmind
     pkgs.metals
-    pkgs.neofetch
+    pkgs.fastfetch
     pkgs.ranger
     pkgs.zsh
     pkgs.ansible
@@ -163,7 +177,6 @@ in
     pkgs.ripgrep
     pkgs.silver-searcher
     pkgs.fd
-    pkgs.nixfmt-classic
     pkgs.coreutils-full
     pkgs.clojure
     pkgs.clj-kondo
@@ -177,7 +190,6 @@ in
     pkgs.m-cli
     pkgs.hydroxide
     pkgs.gcc
-    pkgs.z
     pkgs.custom-scripts
     pkgs.fontconfig
     # pkgs.scala
@@ -189,82 +201,6 @@ in
     nerd-fonts.iosevka
     nerd-fonts.iosevka-term
   ];
-
-  homebrew = {
-    enable = true;
-    caskArgs.require_sha = true;
-    onActivation = {
-      autoUpdate = true;
-      cleanup = "uninstall";
-      upgrade = true;
-    };
-    brews = [
-      "choose-gui"
-      "yabai"
-      "sbcl"
-      "btop"
-      # "sshfs"
-      # "reroutingcli"
-      # "mmp"
-      # "kubectl-site"
-      "openjdk"
-      "node"
-    ];
-    casks = let
-      skipSha = name: {
-        inherit name;
-        args = { require_sha = false; };
-      };
-      noQuarantine = name: {
-        inherit name;
-        args = { no_quarantine = true; };
-      };
-    in [
-      (skipSha "spotify")
-      "gimp"
-      (noQuarantine "olive")
-      "vlc"
-      "appcleaner"
-      "discord"
-      "blender"
-      "utm"
-      "maccy"
-      "balenaetcher"
-      "dmenu-mac"
-      "protonvpn"
-      "alacritty"
-      "syncthing"
-      "kitty"
-      "macfuse"
-      "font-symbols-only-nerd-font"
-      "sf-symbols"
-      "wezterm"
-      "monitorcontrol"
-      "meetingbar"
-      "corretto@17"
-      "corretto@11"
-      "tableplus"
-      # "google-cloud-sdk"
-      "background-music"
-      "docker-desktop"
-    ];
-    taps = [
-      # "homebrew/cask-versions"
-      # "homebrew/cask-fonts"
-      "homebrew/bundle"
-      "homebrew/services"
-      "koekeishiya/formulae"
-      "d12frosted/emacs-plus"
-      "clojure/tools"
-      # "flyteorg/tap"
-      # "spotify/public"
-      # "spotify/sptaps"
-      # "spotify/mmptaps"
-    ];
-    extraConfig = ''
-      brew "emacs-plus@30", args: ["with-imagemagick", "with-modern-sexy-v2-icon", "with-xwidgets"], link: true
-    '';
-  };
 
   services.sketchybar.enable = true;
   services = {
@@ -287,6 +223,9 @@ in
 
     ;; Heartbeat: Check WM services every 10 minutes
     (job '(next-minute (range 0 60 10)) "${watchdog-script}")
+
+    ;; Run GC every Sunday at 3 AM
+    (job '(next-hour '(3) (next-day '(0))) "${nix-gc}")
   '';
 
   launchd.user.agents.mcron = {
