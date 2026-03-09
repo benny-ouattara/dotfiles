@@ -189,6 +189,12 @@ bootstrap: ## Provision a new machine (Usage: make bootstrap REMOTE_HOST=192.168
 		sudo guix system reconfigure otter-system.scm"
 	@echo "✅ System provisioned. Now run 'make restore' on the new machine."
 
+install-hooks: ## Install git pre-commit hooks
+	@echo "Installing git hooks..."
+	@ln -sf $(HERE)/scripts/validate.sh .git/hooks/pre-commit
+	@chmod +x .git/hooks/pre-commit
+	@echo "✅ Hooks installed."
+
 # Add libnotify to your manifest to ensure notify-send is available
 done: ## Send a desktop notification
 	@notify-send "Guix System" "Deployment on $(NAME) complete! 🦦" --icon=system-software-update

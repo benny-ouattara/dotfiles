@@ -14,8 +14,8 @@
       system = "x86_64-darwin";
     in
       {
-        # $ darwin-rebuild build --flake .#beno
-        darwinConfigurations."beno" = nix-darwin.lib.darwinSystem {
+        # $ darwin-rebuild build --flake .#kite
+        darwinConfigurations."kite" = nix-darwin.lib.darwinSystem {
           system = "x86_64-darwin";
           modules = [ ./personal-dw.nix
                       home-manager.darwinModules.home-manager
@@ -34,8 +34,8 @@
           };
         };
 
-        # $ darwin-rebuild build --flake .#zo
-        darwinConfigurations."zo" = nix-darwin.lib.darwinSystem {
+        # $ darwin-rebuild build --flake .#onyx
+        darwinConfigurations."onyx" = nix-darwin.lib.darwinSystem {
           modules = [ ./work-dw.nix
                       home-manager.darwinModules.home-manager
                       {
@@ -47,6 +47,6 @@
         };
 
         # Expose the package set, including overlays, for convenience.
-        # darwinPackages = self.darwinConfigurations."beno".pkgs;
+        # darwinPackages = self.darwinConfigurations."kite".pkgs;
       };
 }

@@ -1,7 +1,15 @@
 { config, pkgs, ... }:
 let
-  home-dir = builtins.getEnv ("HOME");
+  home-dir = config.users.users.benouattara.home;
   log-dir = home-dir + "/.logs";
+  # Define a simple backup script as a Nix string
+  sync-mail-job = pkgs.writeShellScript "sync-mail" ''
+    ${pkgs.isync}/bin/mbsync -a
+    ${pkgs.notmuch}/bin/notmuch new
+  '';
+  watchdog-script = pkgs.writeShellScript "wm-watchdog" (builtins.readFile ./scripts/wm-watchdog.sh);
+  key-benchmark   = pkgs.writeShellScript "key-bench"   (builtins.readFile ./scripts/key-bench.sh);
+  wm-health-check = pkgs.writeShellScript "wm-health"   (builtins.readFile ./scripts/wm-health.sh);
 in
 {
   # services.nix-daemon.enable = true;
@@ -28,6 +36,9 @@ in
   # Set Git commit hash for darwin-version.
   # system.configurationRevision = self.rev or self.dirtyRev or null;
 
+  networking.hostName = "kite";
+  networking.computerName = "kite";
+
   # users
   users.users.benouattara = {
     name = "benouattara";
@@ -50,7 +61,14 @@ in
         NSAutomaticSpellingCorrectionEnabled = false;
         NSNavPanelExpandedStateForSaveMode = true;
         NSNavPanelExpandedStateForSaveMode2 = true;
+        NSWindowShouldDragOnGesture = true; # Commmand+Control+Click to drag windows
         _HIHideMenuBar = true;
+      };
+
+      CustomUserPreferences = {
+        "com.apple.WindowManager" = {
+          EnableStandardClickToShowDesktop = 0; # Disables the annoying "click wallpaper to reveal desktop"
+        };
       };
 
       dock = {
@@ -85,6 +103,9 @@ in
   };
 
   environment.systemPackages = [
+    pkgs.nix-tree
+    pkgs.nix-diff
+    pkgs.nix-index
     pkgs.sshfs
     pkgs.ollama
     pkgs.just
@@ -97,7 +118,6 @@ in
     pkgs.cmake
     pkgs.postgresql
     pkgs.scalafmt
-    pkgs.sketchybar
     pkgs.foreman
     pkgs.yarn
     pkgs.ffmpeg
@@ -128,7 +148,6 @@ in
     pkgs.neofetch
     pkgs.ranger
     pkgs.zsh
-    pkgs.skhd
     pkgs.ansible
     pkgs.tmux
     pkgs.direnv
@@ -187,8 +206,6 @@ in
       # "reroutingcli"
       # "mmp"
       # "kubectl-site"
-      "jdtls"
-      "metals"
       "openjdk"
       "node"
     ];
@@ -252,31 +269,36 @@ in
   services = {
     skhd = {
       enable = true;
-      skhdConfig = builtins.readFile ../skhd/skhdrc;
+      skhdConfig = builtins.readFile (pkgs.replaceVars ../skhd/skhdrc {
+        # Add variables here if your skhdrc has @var@ placeholders
+        # e.g., terminal = "${pkgs.kitty}/bin/kitty";
+      });
     };
   };
-  # (builtins.readFile (pkgs.substituteAll { src = ../skhd/skhdrc; }));
 
-  launchd.user.agents = {
-    # not needed, predefined by services.skhd.enable = true
-    # skhd = {
-    #   serviceConfig = {
-    #     RunAtLoad = true;
-    #     EnvironmentVariables = { NIX_SSL_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt"; };
-    #     StandardErrorPath = log-dir + "/" + "skhd" + ".log";
-    #     StandardOutPath = log-dir + "/" + "skhd" + ".log";
-    #   };
-    # };
+  # We use Nix to generate the mcron configuration file
+  environment.etc."mcron.d/jobs.guile".text = ''
+    ;; Run mail sync every 15 minutes
+    (job '(next-minute '(0 15 30 45)) "${sync-mail-job}")
 
-    mcron = {
-      serviceConfig = {
-        RunAtLoad = true;
-        StandardErrorPath = log-dir + "/" + "mcron" + ".log";
-        StandardOutPath = log-dir + "/" + "mcron" + ".log";
-        EnvironmentVariables = { PATH = "${config.environment.systemPath}"; };
+    ;; Run a cleanup of the Downloads folder every day at 4am
+    (job '(next-hour '(4)) "${pkgs.coreutils}/bin/rm -rf ~/Downloads/*")
+
+    ;; Heartbeat: Check WM services every 10 minutes
+    (job '(next-minute (range 0 60 10)) "${watchdog-script}")
+  '';
+
+  launchd.user.agents.mcron = {
+    serviceConfig = {
+      RunAtLoad = true;
+      StandardErrorPath = log-dir + "/mcron.err.log";
+      StandardOutPath = log-dir + "/mcron.out.log";
+      EnvironmentVariables = { 
+        PATH = "${config.environment.systemPath}"; 
       };
-      command = "/run/current-system/sw/bin/mcron --daemon";
     };
+    # Point mcron to the directory we created in /etc
+    command = "${pkgs.mcron}/bin/mcron /etc/mcron.d";
   };
 
   # You should generally set this to the total number of logical cores in your system.

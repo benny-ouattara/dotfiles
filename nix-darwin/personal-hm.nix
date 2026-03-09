@@ -159,7 +159,7 @@ in
     };
 
     shellAliases = {
-      up = "overmind start";
+      snore="sudo -v; while true; do sudo -n true; sleep 60; kill -0 \"$$\" || exit; done 2>/dev/null &";
       r = "ranger";
       ls = "${pkgs.coreutils}/bin/ls --color=auto -alhrt";
       l = "${pkgs.coreutils}/bin/ls --color=auto -alhrt";
@@ -195,6 +195,8 @@ in
 
       export EDITOR=emacs
       export VISUAL=emacs
+
+      source ${pkgs.nix-index}/etc/profile.d/command-not-found.sh
     '';
   };
 

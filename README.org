@@ -1,0 +1,58 @@
+#+TITLE: 🦦 Dotfiles: The Otter-Ops Fleet
+#+DESCRIPTION: Cross-platform configuration management for Guix and Nix-Darwin
+
+* Introduction
+This repository manages my digital life across **GNU Guix** (Linux) and **Nix-Darwin** (macOS). Everything is driven by =make= to ensure a consistent, "up-style" workflow regardless of the kernel.
+
+* 🚀 Quick Start
+Use the table below to map commands between your different environments.
+
+| Action           | *Guix (Linux/Otter)*      | *Nix (macOS/Beno)* |
+|------------------+-------------------------+------------------|
+| **System Apply** | ~make system-reconfigure~ | ~make beno!~       |
+| **User Apply**     | ~make home-reconfigure~   | ~make home~        |
+| **Health Check** | ~make health~             | ~make health~      |
+| **Status/Gen**     | ~make status~             | ~make status~      |
+| **Cleanup**        | ~make gc~                 | ~make clean-safe~  |
+| **Full Reset**     | ~make ship~               | ~make reset~       |
+
+* 🛠️ Tooling Overview
+** The ~up~ Wrapper
+On both systems, the ~up~ script acts as a sudo-aware entry point. It automatically detects if a target requires elevation and ensures environment variables like =GITHUB_TOKEN= are preserved.
+
+** Secrets & Identity
+Sensitive keys are not stored in this repo. Use the backup/restore targets to move your identity between machines:
+- ~make backup~ :: Encrypts =~/.ssh= and =~/.gnupg= into an AES-256 =.gpg= archive.
+- ~make restore FILE=...~ :: Decrypts and places keys with correct 700/600 permissions.
+
+* 🏥 Troubleshooting
+** GNU Guix
+- *Store Corruption* :: Run ~guix gc --verify=contents~.
+- *Service Hangs* :: Check ~herd status~.
+- *Rollback* :: Use ~guix system roll-back~ or select a previous generation at GRUB.
+
+** Nix-Darwin
+- *Daemon Issues* :: If ~make health~ shows the daemon is down, run:
+  #+begin_src shell
+  sudo launchctl load -w /Library/LaunchDaemons/org.nixos.nix-daemon.plist
+  #+end_src
+- *Rosetta* :: If x86 builds fail on Apple Silicon, run ~make rosetta~.
+- *WM Glitches* :: If ~yabai~ or ~skhd~ stop responding to config changes, run ~make reset~.
+
+* 📁 Repository Structure
+- =/guix= :: System and Home configurations for Linux.
+- =/nix-darwin= :: Flakes and modules for macOS.
+- =/common= :: Shared scripts, templates, and themes.
+- =Makefile= :: The command center.
+
+* 🏷️ Machine Fleet
+- *Otter* :: Main Linux Workstation (Guix).
+- *Mink* :: Portable Linux Laptop (Guix).
+- *Beno* :: macOS Environment (Nix-Darwin).
+- *Roc* :: Headless Home Server (Nix/Guix).
+
+* 🩺 Diagnostics & Benchmarking
+- ~make health~ :: Check if the Nix daemon and Rosetta are healthy.
+- ~make dry-run~ :: See what changes will be applied before committing.
+- ~make bench-keys~ :: Verify keyboard repeat rates are at the "Otter-speed" (1/7).
+- ~make trace PKG=...~ :: Find out why a package exists in your system.
