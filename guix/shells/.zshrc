@@ -70,8 +70,10 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(fzf git podman sudo tailscale aliases aws history z)
 
+export FZF_BASE=/home/ben/.guix-home/profile/bin/fzf
+export FZF_DEFAULT_COMMAND='fzf'
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -109,13 +111,20 @@ if [ -S $XDG_RUNTIME_DIR/ssh-agent/socket ]; then
     ssh-add -q ~/.ssh/id_rsa
 fi
 
-alias home-config="guix home reconfigure -L ~/Code/dotfiles/guix/modules  ~/Code/dotfiles/guix/otter-home.scm"
-alias system-config="sudo -E guix system reconfigure ~/Code/dotfiles/guix/otter-system.scm"
-alias pm="podman"
+alias u='up'
+alias us='up status'
+alias ur='up system-reconfigure'
+alias uh='up home-reconfigure'
+alias guix-rm-cache="sudo rm -rf ~/.cache/guix/"
 alias pc="podman-compose"
 alias edit="nvim"
 alias vim="nvim"
+alias info="info --vi-keys"
 alias oc-perms-fix="sudo -i -u openclaw podman unshare chmod -R 2775 /home/openclaw/.openclaw"
+alias oc-edit="sudo -i -u openclaw nvim /home/openclaw/.openclaw"
+alias tail-oc-upgrade="tail -f ~/.local/state/log/openclaw-upgrade.log"
+alias tail-lama="tail -f ~/.local/state/log/ollama.logs"
+alias tail-tailscale="sudo tail -f /var/log/tailscaled.log"
 
 if [ -f ~/Code/google-cloud-sdk/path.zsh.inc ]; then
     source ~/Code/google-cloud-sdk/path.zsh.inc
@@ -162,3 +171,10 @@ oc-cli-shell() {
 oc-gateway-shell() {
     sudo -i -u openclaw podman exec -it openclaw /bin/sh
 }
+
+# Simple completion for the up command
+_up() {
+    local makefile="$HOME/Code/dotfiles/guix/Makefile"
+    reply=($(grep -oE '^[a-zA-Z_-]+:' "$makefile" | sed 's/://'))
+}
+compctl -K _up up

@@ -43,3 +43,8 @@ git/ignore
 git/config
 nixpkgs/darwin/project/
 aichat/config.yaml
+.env
+.envrc
+guix/backups/*
+guix/backup/*
+*.pdf

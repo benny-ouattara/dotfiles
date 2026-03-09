@@ -1,4 +1,4 @@
-(define-module (openclaw)
+(define-module (beno packages openclaw)
   #:use-module (guix gexp)
   #:use-module (guix packages)
   #:use-module (guix build-system trivial)
@@ -7,6 +7,7 @@
   #:use-module (gnu packages containers)      ; for podman
   #:use-module (gnu packages admin)           ; for sudo
   #:use-module (gnu packages version-control) ; for git
+  #:use-module (gnu packages base)            ; for tail
   #:export (openclaw-scripts
             home-openclaw-service-type))
 
@@ -90,7 +91,6 @@
           (use-modules (guix build utils))
           (let ((bin (string-append #$output "/bin")))
             (mkdir-p bin)
-            ;; Copy the generated program-file into our package output
             (copy-file #$upgrade-openclaw (string-append bin "/upgrade-openclaw"))
             (chmod (string-append bin "/upgrade-openclaw") #o555)))))
     (inputs
@@ -100,25 +100,44 @@
     (description "Managed script for cloning and building OpenClaw via Podman.")
     (license #f)))
 
-(define (openclaw-shepherd-service config)
-  (list (shepherd-service
-          (provision '(openclaw-upgrade))
-          (documentation "Run the OpenClaw image upgrade script.")
-          (requirement '())
-          (one-shot? #t) 
-          (start #~(lambda _
-                     (fork+exec-command 
-                      (list #$(file-append openclaw-scripts "/bin/upgrade-openclaw"))
-                      #:log-file (string-append (getenv "HOME") 
-                                                "/.local/state/log/openclaw-upgrade.log"))))
-          (stop #~(lambda _ #t)))))
+;; (define (openclaw-shepherd-service config)
+;;   (list (shepherd-service
+;;           (provision '(openclaw-upgrade))
+;;           (documentation "Run the OpenClaw image upgrade script.")
+;;           (requirement '())
+;;           (one-shot? #t) 
+;;           (respawn? #f)
+;;           (start #~(lambda _
+;;                      (fork+exec-command 
+;;                       (list #$(file-append openclaw-scripts "/bin/upgrade-openclaw"))
+;;                       #:log-file (string-append (getenv "HOME") 
+;;                                                 "/.local/state/log/openclaw-upgrade.log"))))
+;;           (stop #~(lambda _ #t))
+;;           (actions
+;;            (list
+;;             (shepherd-action
+;;               (name 'logs)
+;;               (documentation "View OpenClaw logs")
+;;               (procedure #~(lambda _
+;;                              (let ((log-file (string-append (passwd:dir (getpwuid (getuid))) "/.local/state/log/openclaw-upgrade.log")))
+;;                                (if (file-exists? log-file)
+;;                                    (begin
+;;                                      (display (string-append "--- Last logs from " log-file " ---\n"))
+;;                                      (call-with-input-file log-file
+;;                                        (lambda (port)
+;;                                          (dump-port port (current-output-port))))
+;;                                      #t)
+;;                                    (begin
+;;                                      (display "Log file not found.\n")
+;;                                      #f))
+;;                                )))))))))
 
-(define-public home-openclaw-service-type
-  (service-type (name 'openclaw-upgrade)
-                (extensions (list (service-extension
-                                   home-shepherd-service-type
-                                   openclaw-shepherd-service)))
-                (default-value #f)
-                (description "Automated OpenClaw image management.")))
+;; (define-public home-openclaw-service-type
+;;   (service-type (name 'openclaw-upgrade)
+;;                 (extensions (list (service-extension
+;;                                    home-shepherd-service-type
+;;                                    openclaw-shepherd-service)))
+;;                 (default-value #f)
+;;                 (description "Automated OpenClaw image management.")))
 
 

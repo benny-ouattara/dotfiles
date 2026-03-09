@@ -1,3 +1,12 @@
+(use-modules
+ (guix)
+ (gnu system)
+ (guix store)
+ (guix monads)
+ (srfi srfi-1)
+ (gnu packages base)
+ (ice-9 readline))
+
 (cond ((false-if-exception (resolve-interface '(ice-9 readline)))
        =>
        (lambda (module)
@@ -17,16 +26,10 @@ convenient interactive line editing and input history.\n\n")))
                (display "Consider installing the 'guile-colorized' package
 for a colorful Guile experience.\n\n"))))
 
-(add-to-load-path "/home/ben/Code/jazacash/guix")
-(add-to-load-path "/home/ben/Code/nonguix")
-(use-modules (guix))
-(use-modules (guix store))
-(use-modules (guix channels))
-(use-modules (guix inferior))
-(use-modules (guix hash))
-(use-modules (guix build utils))
-(use-modules (guix build-system))
-(use-modules (gnu packages guile-xyz))
-(use-modules (gnu packages base))
-(use-modules (jazacash package))
-(use-modules (jazacash service))
+;; Automatically load your local module path
+(let* ((system-mod (string-append (getcwd) "/system/modules"))
+      (home-mod (string-append (getcwd) "/home/modules")))
+  (set! %load-path (cons* system-mod home-mod %load-path)))
+
+(display "--- Otter-System REPL Initialized ---\n")
+(display "Custom modules loaded from ./system/modules and ./home/modules\n")
