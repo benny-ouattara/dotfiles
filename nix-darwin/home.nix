@@ -147,6 +147,7 @@
     enableZshIntegration = true;
     options = [
       "--cmd j" # This lets you use 'j' instead of 'z' if you prefer
+      "--hook prompt"
     ];
   };
 
@@ -188,7 +189,7 @@
       ask = "aichat";
       think = "aichat --model ollama:deepseek-r1:32b";
       reload = "exec $SHELL -l";
-      zi = "z -i";      # Interactive search (uses fzf)
+      z = "__zoxide_zi";
       ls = "eza";
       zstats = "zoxide query -l"; # See your most visited paths
       otter-on = "ssh -M -S ~/.ssh/master-ben@otter:22 -fN otter";

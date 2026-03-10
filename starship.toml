@@ -1,3 +1,4 @@
+scan_timeout = 500
 add_newline = false
 
 [character]
@@ -28,3 +29,9 @@ read_only = "(read only)"
 [git_metrics]
 disabled = false
 format = '([+$added]($added_style)) ([-$deleted]($deleted_style)) '
+
+[package]
+disabled = true
+
+[nix_shell]
+symbol = "❄️ "
