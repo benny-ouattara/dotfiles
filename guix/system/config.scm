@@ -36,7 +36,9 @@
   #:use-module (srfi srfi-1)
   #:use-module (guix packages)
   #:use-module (guix build-system trivial)
-  #:use-module (beno packages cli))
+  #:use-module (beno packages cli)
+  #:use-module (beno services openclaw)
+  #:use-module (beno services openwebui))
 
 (use-service-modules
  shepherd
@@ -49,6 +51,7 @@
  syncthing
  monitoring
  pm
+ nix
  containers
  virtualization
  cuirass
@@ -172,38 +175,6 @@ EndSection
                                            (rules (cons %backlight-udev-rule
                                                         (udev-configuration-rules config)))))))
 
-(define openclaw-shepherd-service
-  (shepherd-service
-    (provision '(openclaw))
-    (requirement '(networking user-homes))
-
-    (start #~(make-forkexec-constructor
-              (list #$(file-append podman "/bin/podman") ; Absolute path to podman
-                    "run" 
-                    "--rm"                       ; Clean up container on stop
-                    "--replace"
-                    "--name" "openclaw"
-                    "--init"
-                    "--env-file" "/home/openclaw/.openclaw/.env"
-                    "--userns" "keep-id"         ; Important for rootless file permissions
-                    "--user" "978:970"           ; Map openclaw UID within container
-                    "-e" "HOME=/home/node"
-                    "-e" "TERM=xterm-256color"
-                    "-v" "/home/openclaw/.openclaw:/home/node/.openclaw:rw,z"
-                    "-p" "18789:18789"
-                    "-p" "18790:18790"
-                    "openclaw:local")
-              #:user "openclaw"
-              #:group "openclaw"
-              #:log-file "/var/log/openclaw.log"
-              #:environment-variables 
-              (list "HOME=/home/openclaw"
-                    (string-append "PATH=" (getenv "PATH")))))
-    (stop #~(lambda _
-              (format #t "Stopping openclaw container...\n")
-              (system* #$(file-append podman "/bin/podman") "kill" "openclaw")
-              #f))))
-
 ;; (service sudoers-service-type
 ;;                    (sudoers-configuration
 ;;                     (contents
@@ -242,6 +213,7 @@ EndSection
 root ALL=(ALL) ALL
 %wheel ALL=(ALL) ALL
 ben ALL=(root) NOPASSWD: ALL
+ben ALL=(openwebui) NOPASSWD: ALL
 ben ALL=(openclaw) NOPASSWD: ALL\n"))
   (setuid-programs
    (append (list (setuid-program
@@ -261,14 +233,10 @@ ben ALL=(openclaw) NOPASSWD: ALL\n"))
              sbcl-stumpwm-pamixer
 	         stumpish
              podman
+             nix
              tailscale
              podman-compose
              otter-cli
-             rocm-opencl-runtime
-             rocm-device-libs
-             rocm-comgr
-             rocr-runtime
-             rocm-hip-runtime
              guile-gnutls
              guile-gcrypt
              guile-git
@@ -285,8 +253,21 @@ ben ALL=(openclaw) NOPASSWD: ALL\n"))
             ;; (service mysql-service-type)
             ;; (service containerd-service-type)
             ;; (service docker-service-type)
+            (service nix-service-type
+                     (nix-configuration
+                       (sandbox #f)
+                       (extra-config
+                        '("experimental-features = nix-command flakes\n"
+                          "extra-platforms = i686-linux aarch64-linux\n"
+                          "keep-outputs = true\n"
+                          "substituters = https://cache.nixos.org/\n" 
+                          "trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=\n"
+                          "keep-derivations = true\n"))))
             (simple-service 'profiles-files etc-profile-d-service-type
-                            (list (plain-file "mock.sh" "MOCK=1")))
+                            (list
+                             (plain-file "mock.sh" "MOCK=1")
+                             (file-append nix "/etc/profile.d/nix-daemon.sh")
+                             (file-append nix "/etc/profile.d/nix.sh")))
             (service iptables-service-type) ; required for podman-service
             (simple-service 'openclaw-file-setup
                             activation-service-type
@@ -298,17 +279,18 @@ ben ALL=(openclaw) NOPASSWD: ALL\n"))
                                   (chown "/home/openclaw/.openclaw" (passwd:uid user) (passwd:gid user))
                                   (chown "/home/openclaw/.openclaw/workspace" (passwd:uid user) (passwd:gid user))
                                   (chmod "/home/openclaw/.openclaw" #o700))))
-            (simple-service 'openclaw-service 
-                            shepherd-root-service-type 
-                            (list openclaw-shepherd-service))
+            (service openwebui-service-type)
+            (service openclaw-service-type)
             (service rootless-podman-service-type
                      (rootless-podman-configuration
                        (subgids
                         (list (subid-range (name "ben"))
-                              (subid-range (name "openclaw"))))
+                              (subid-range (name "openclaw"))
+                              (subid-range (name "openwebui"))))
                        (subuids
                         (list (subid-range (name "ben"))
-                              (subid-range (name "openclaw"))))))
+                              (subid-range (name "openclaw"))
+                              (subid-range (name "openwebui"))))))
             (service tailscale-service-type)
             (service syncthing-service-type
                      (syncthing-configuration (user "ben")))

@@ -15,7 +15,7 @@ REPL_INIT    := $(HERE)/repl-init.scm
 DEPLOY_CONF  := $(HERE)/deploy.scm
 
 # Standard Guix flags
-GUIX_OPTS    := --cores=14 --max-jobs=8
+GUIX_OPTS    := --cores=20 --max-jobs=10
 TIME_MACHINE := guix time-machine -C $(CHANNELS) --
 
 # Default action when running just 'make'

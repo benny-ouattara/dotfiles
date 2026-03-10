@@ -111,6 +111,14 @@ in
   };
 
   environment.systemPackages = [
+    pkgs.wuzz
+    pkgs.hexyl
+    pkgs.broot
+    pkgs.hey
+    pkgs.restic
+    pkgs.tokei
+    pkgs.tldr
+    pkgs.lnav
     pkgs.zoxide
     pkgs.eza
     pkgs.witr
@@ -157,7 +165,6 @@ in
     pkgs.mu
     pkgs.emacsPackages.mu4e
     pkgs.isync
-    pkgs.cloc
     pkgs.overmind
     pkgs.metals
     pkgs.fastfetch

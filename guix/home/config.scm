@@ -10,6 +10,7 @@
   #:use-module (gnu packages ci)
   #:use-module (gnu packages dns)
   #:use-module (gnu packages ruby)
+  #:use-module (gnu packages rust-apps)
   #:use-module (gnu packages guile-xyz)
   #:use-module (guix gexp)
   #:use-module (gnu home services shells)
@@ -22,10 +23,10 @@
   #:use-module (gnu home services desktop)
   #:use-module (gnu packages shells)
   #:use-module (gnu packages shellutils)
-  ;; (openclaw)
-  ;; (ollama)
+  #:use-module (beno services ollama)
   #:use-module (guix packages)
-  #:use-module (guix build-system trivial))
+  #:use-module (guix build-system trivial)
+  #:use-module (beno packages lnav))
 
 (home-environment
   (packages
@@ -33,10 +34,17 @@
     ;; openclaw-scripts
     (specifications->packages
      (list
+      "hexyl@0.16.0"
+      "broot@1.55.0"
+      "restic@0.9.6"
+      "lnav@0.12.4"
+      "tldr@3.4.3"
+      "tokei@12.1.2"
+      "radeontop@1.4"
+      "eza@0.23.4"
       "bat@0.24.0"
       "witr@0.3.0"
       "claude-code@2.1.71"
-      "ollama@0.17.7"
       "fd@10.3.0"
       "alacritty@0.16.1"
       "kitty@0.21.2"
@@ -87,7 +95,7 @@
       "ruby@3.4.7"
       "btop@1.4.6"
       "tree@2.2.1"
-      "neofetch@7.1.0"
+      "fastfetch@2.57.0"
       "direnv@2.37.1"
       "pandoc@2.19.2"
       "python@3.11.14"
@@ -111,7 +119,7 @@
                      `(("LESSHISTFILE" . "$XDG_CACHE_HOME/.lesshst")
                        ("EDITOR" . "emacs")
                        ("VISUAL" . "emacs")))
-     ;; (service home-ollama-service-type)
+     (service home-ollama-service-type)
      (service home-openssh-service-type
               (home-openssh-configuration
                 (add-keys-to-agent "yes")

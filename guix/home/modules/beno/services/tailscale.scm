@@ -85,4 +85,4 @@ to #f.")
           (service-extension profile-service-type
                              (compose list tailscale-configuration-tailscale))))
    (default-value (tailscale-configuration))
-   (description "Run tailscaled.")))
+   (description "Run tailscaled")))

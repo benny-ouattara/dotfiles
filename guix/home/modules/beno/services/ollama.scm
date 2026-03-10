@@ -11,7 +11,7 @@
           (provision '(ollama))
           (documentation "Start the ollama server")
           (start #~(make-forkexec-constructor
-                    (list (string-append #$ollama "/bin/ollama") "serve")
+                    (list "/home/ben/.nix-profile/bin/ollama" "serve")
                     #:environment-variables (list "HOME=/home/ben"
                                                   "OLLAMA_HOST=0.0.0.0"
                                                   "OLLAMA_DEBUG=4"

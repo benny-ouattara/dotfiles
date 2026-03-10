@@ -111,6 +111,12 @@ if [ -S $XDG_RUNTIME_DIR/ssh-agent/socket ]; then
     ssh-add -q ~/.ssh/id_rsa
 fi
 
+export MANPAGER="bat -plman"
+
+alias ls='eza'
+alias less='bat'
+alias tree='eza --long --tree'
+alias reload='exec $SHELL -l'
 alias u='up'
 alias us='up status'
 alias ur='up system-reconfigure'
