@@ -86,7 +86,6 @@
       "rofi@2.0.0"
       "unzip@6.0"
       "firefox@147.0.4"
-      "qutebrowser@3.6.3"
       "the-silver-searcher@2.2.0"
       "ack@3.7.0"
       "lsof@4.99.3"
@@ -114,39 +113,37 @@
    (cons*
     (simple-service 'environment-variables-service
                     home-environment-variables-service-type
-                    `(("LESSHISTFILE" . "$XDG_CACHE_HOME/.lesshst")
-                      ("EDITOR" . "nvim")
-                      ("VISUAL" . "nvim")))
+                    `(("EDITOR" . "nvim") ("VISUAL" . "nvim")))
     (service home-ollama-service-type)
     (service home-openssh-service-type
              (home-openssh-configuration
                (add-keys-to-agent "yes")
                (hosts
-                (list (openssh-host (name "*")
-                                    (extra-content "  StrictHostKeyChecking no"))
+                (list (openssh-host
+                        (name "*")
+                        (extra-content "  StrictHostKeyChecking no"))
                       (openssh-host
                         (name "ops 10.0.0.86")
                         (host-name "10.0.0.86")
-                        (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
+                        (identity-file (string-append (getenv "HOME") "/.ssh/jazacash"))
                         (user "root")
                         (proxy (proxy-command "ssh -W %h:%p root@44.201.64.217")))
                       (openssh-host
                         (name "dev 44.201.64.217")
                         (host-name "44.201.64.217")
-                        (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
+                        (identity-file (string-append (getenv "HOME") "/.ssh/jazacash"))
                         (user "root"))
                       (openssh-host
                         (name "prod 13.244.104.50")
                         (host-name "13.244.104.50")
-                        (identity-file (format #f "~a/.ssh/jazacash" (getenv "HOME")))
+                        (identity-file (string-append (getenv "HOME") "/.ssh/jazacash"))
                         (user "root"))))))
     (service home-ssh-agent-service-type
              (home-ssh-agent-configuration
                (extra-options '("-t" "1h30m"))))
     (service home-gpg-agent-service-type
              (home-gpg-agent-configuration
-               (pinentry-program
-                (file-append pinentry-emacs "/bin/pinentry"))
+               (pinentry-program (file-append pinentry-emacs "/bin/pinentry"))
                (ssh-support? #f)))
     (service
      home-zsh-service-type
@@ -161,6 +158,5 @@
           ("ll" . "ls -l")
           ("ls" . "ls -p --color=auto")))
        (bashrc (list (local-file "../shells/.bashrc" "bashrc")))
-       (bash-profile
-        (list (local-file "../shells/.bash_profile" "bash_profile")))))
+       (bash-profile (list (local-file "../shells/.bash_profile" "bash_profile")))))
     %base-home-services)))

@@ -1,11 +1,11 @@
 (define-module (beno services openwebui)
   #:use-module (guix gexp)
   #:use-module (guix records)            ; for match-record
-  #:use-module (guix store)              ; for text-file
-  #:use-module (gnu services)            ; for service-type
+  #:use-module (guix store)              ; for plain-file
+  #:use-module (gnu services)            ; for service-type, activation-service-type
   #:use-module (gnu services shepherd)   ; for shepherd-service-type
   #:use-module (gnu packages containers) ; for podman
-  #:use-module (gnu packages shells)     ; for zsh
+  #:use-module (gnu packages admin)      ; for shadow
   #:use-module (gnu system shadow)       ; for account-service-type
   #:use-module (gnu system accounts)     ; for user-account, user-group
   #:export (openwebui-service-type))
@@ -20,7 +20,7 @@
           (system? #t)
           (group "openwebui")
           (home-directory "/home/openwebui")
-          (shell (file-append zsh "/bin/zsh"))
+          (shell (file-append shadow "/sbin/nologin"))
           (supplementary-groups '("cgroup" "wheel" "netdev")))))
 
 (define-record-type* <openwebui-configuration>
@@ -47,6 +47,11 @@
             (default (plain-file "openwebui-env"
                                  "OLLAMA_BASE_URL=http://host.containers.internal:11434"))))
 
+(define (openwebui-activation config)
+  #~(begin
+      (system* "setfacl" "-R" "-m" "g:users:rwx" "/home/openwebui")
+      (system* "setfacl" "-d" "-m" "g:users:rwx" "/home/openwebui")))
+
 (define (openwebui-shepherd-service config) 
   (match-record config <openwebui-configuration> (runner package group user name volume port log env-file)
     (list
@@ -56,9 +61,9 @@
        (requirement '(networking user-homes))
        (start #~(make-forkexec-constructor
                  (list
-                  #$(file-append runner "/bin/podman") ; Absolute path to podman
+                  #$(file-append runner "/bin/podman") 
                   "run" 
-                  "--rm"                ; Clean up container on stop
+                  "--rm"                
                   "--replace"
                   "--name" #$name
                   "--init"
@@ -81,6 +86,8 @@
     (extensions
      (list (service-extension shepherd-root-service-type
                               openwebui-shepherd-service)
+           (service-extension activation-service-type
+                              openwebui-activation)
            (service-extension account-service-type
                               (const %openwebui-accounts))))
     (default-value (openwebui-configuration))

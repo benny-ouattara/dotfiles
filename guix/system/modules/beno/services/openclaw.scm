@@ -5,7 +5,7 @@
   #:use-module (gnu services shepherd)   ; for home-shepherd-service-type
   #:use-module (gnu packages containers) ; for podman
   #:use-module (gnu system shadow)       ; for account-service-type
-  #:use-module (gnu packages shells)     ; for zsh
+  #:use-module (gnu packages admin)      ; for shadow
   #:export (openclaw-service-type
             openclaw-configuration))
 
@@ -19,8 +19,7 @@
           (system? #t)
           (group "openclaw")
           (home-directory "/home/openclaw")
-          ;; (shell (file-append shadow "/sbin/nologin"))
-          (shell (file-append zsh "/bin/zsh"))
+          (shell (file-append shadow "/sbin/nologin"))
           (supplementary-groups '("cgroup" "wheel" "netdev")))))
 
 (define-record-type* <openclaw-configuration>
@@ -49,7 +48,7 @@
             (default "/home/openclaw/.openclaw/.env"))
   (env-vars openclaw-env-vars
             (default #~(list "HOME=/home/openclaw"
-                           (string-append "PATH=" (getenv "PATH"))))))
+                             (string-append "PATH=" (getenv "PATH"))))))
 
 (define (openclaw-activation config)
   #~(begin

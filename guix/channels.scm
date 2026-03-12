@@ -21,6 +21,8 @@
       (channel
         (name 'pantherx)
         (url "https://codeberg.org/gofranz/panther.git")
+        (branch "master")
+        (commit "3c29b71caf60e5a2efc48287cf325776287d3a5f")
         (introduction
          (make-channel-introduction
           "7e01d7fd21e20f04acbb05c51fbe8b365e70eebd"

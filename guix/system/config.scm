@@ -25,12 +25,12 @@
   #:use-module (gnu packages display-managers)
   #:use-module (gnu packages package-management)
   #:use-module (gnu packages pulseaudio)
+  #:use-module (gnu packages networking)
   #:use-module (gnu system setuid)
   #:use-module (gnu system accounts)
   #:use-module (gnu system shadow)
   #:use-module (gnu system privilege)
   #:use-module (gnu services)
-  ;; (jazacash service)
   #:use-module (px services networking)
   #:use-module (px packages networking)
   #:use-module (guix gexp)
@@ -108,32 +108,14 @@
        "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA")))))
 
 (define %channels (list nonguix guix panther jazacash))
-
-(define %xorg-libinput-config
-  "Section \"InputClass\"
-  Identifier \"Touchpads\"
-  Driver \"libinput\"
-  MatchDevicePath \"/dev/input/event*\"
-  MatchIsTouchpad \"on\"
-
-  Option \"Tapping\" \"on\"
-  Option \"TappingDrag\" \"on\"
-  Option \"DisableWhileTyping\" \"on\"
-  Option \"MiddleEmulation\" \"on\"
-  Option \"ScrollMethod\" \"twofinger\"
-  Option \"NaturalScrolling\" \"true\"
-EndSection
-Section \"InputClass\"
-  Identifier \"Keyboards\"
-  Driver \"libinput\"
-  MatchDevicePath \"/dev/input/event*\"
-  MatchIsKeyboard \"on\"
-EndSection
-")
-
 (define %motd (plain-file "motd" "Hi Ben, welcome!\n\n"))
-
 (define %console-font (file-append font-tamzen "/share/kbd/consolefonts/Tamzen10x20.psf"))
+(define %sudoers (plain-file "sudoers" "\
+root ALL=(ALL) ALL
+%wheel ALL=(ALL) ALL
+# Set ben's sudo session to last for 4 hours (240 mins)
+Defaults:ben timestamp_timeout=240
+ben ALL=(root) NOPASSWD: ALL\n"))
 
 ;; (define %default-secrets `(("secrets.json" ,(local-file "/home/ben/Code/jazacash/aws/staging/secrets/staging.json"))))
 ;; (define secrets-config (jazacash-secrets-configuration (secret-files %default-secrets)))
@@ -150,24 +132,15 @@ EndSection
                                            (channels %channels)
                                            (guix (guix-for-channels %channels))
                                            (substitute-urls
-                                            (append (list "https://substitutes.nonguix.org"
-                                                          "https://substitutes.guix.gofranz.com"
-                                                          ;; "http://substitutes.jazacash.com"
-                                                          )
-                                                    %default-substitute-urls))
+                                            (cons* "https://substitutes.nonguix.org"
+                                                   "https://substitutes.guix.gofranz.com"
+                                                   ;; "http://substitutes.jazacash.com"
+                                                   %default-substitute-urls))
                                            (authorized-keys
-                                            (append (list (local-file "../keys/nonguix-key.pub")
-                                                          (local-file "../keys/pantherx-key.pub")
-                                                          (local-file "../keys/cuirass-key.pub"))
-                                                    %default-authorized-guix-keys))))
-    (elogind-service-type config =>
-                          (elogind-configuration (inherit config)
-                                                 (handle-lid-switch-external-power 'suspend)))))
-
-;; (service sudoers-service-type
-;;                    (sudoers-configuration
-;;                     (contents
-;;                      (list "Defaults env_keep += \"GITHUB_TOKEN\""))))
+                                            (cons* (local-file "../keys/nonguix-key.pub")
+                                                   (local-file "../keys/pantherx-key.pub")
+                                                   (local-file "../keys/cuirass-key.pub")
+                                                   %default-authorized-guix-keys))))))
 
 (operating-system
   (kernel linux)
@@ -185,24 +158,14 @@ EndSection
                   (home-directory "/home/ben")
                   (supplementary-groups '("cgroup" "wheel" "netdev" "audio" "video"))) 
                 %base-user-accounts))
-  (sudoers-file (plain-file "sudoers" "\
-root ALL=(ALL) ALL
-%wheel ALL=(ALL) ALL
-ben ALL=(root) NOPASSWD: ALL
-ben ALL=(openwebui) NOPASSWD: ALL
-ben ALL=(openclaw) NOPASSWD: ALL\n"))
+  (sudoers-file %sudoers)
   (privileged-programs
    (cons*
     (privileged-program
       (program (file-append stumpwm+slynk "/bin/stumpwm"))
       (setuid? #t))
     %default-privileged-programs))
-  ;; (setuid-programs
-  ;;  (append (list (setuid-program
-  ;;                 (program (file-append stumpwm+slynk "/bin/stumpwm"))))
-  ;;          %setuid-programs))
   (packages (cons*
-	         xf86-input-libinput
 	         emacs-next
              neovim
 	         sbcl
@@ -217,6 +180,7 @@ ben ALL=(openclaw) NOPASSWD: ALL\n"))
              podman
              nix
              tailscale
+             wireshark
              podman-compose
              otter-cli
              guile-gnutls
@@ -232,9 +196,6 @@ ben ALL=(openclaw) NOPASSWD: ALL\n"))
    (cons* 
     ;; (service jazacash-secrets-service-type secrets-config)
     ;; (service jazacash-ci-service-type)
-    ;; (service mysql-service-type)
-    ;; (service containerd-service-type)
-    ;; (service docker-service-type)
     (service nix-service-type
              (nix-configuration
                (sandbox #f)
@@ -279,9 +240,7 @@ ben ALL=(openclaw) NOPASSWD: ALL\n"))
                 `(("root" ,(local-file "../keys/mac.pub"))
                   ("ben"  ,(local-file "../keys/mac.pub"))))))
     (set-xorg-configuration
-     (xorg-configuration
-       (keyboard-layout keyboard-layout)
-       (extra-config (list %xorg-libinput-config)))
+     (xorg-configuration (keyboard-layout keyboard-layout))
      sddm-service-type)
     (service sddm-service-type
              (sddm-configuration
@@ -293,19 +252,14 @@ ben ALL=(openclaw) NOPASSWD: ALL\n"))
                 (targets (list "/boot/efi"))
                 (keyboard-layout keyboard-layout)))
   (swap-devices (list (swap-space
-                        (target (uuid
-                                 "893cebe6-5e30-4588-9c99-1a03389facd8")))))
-
+                        (target (uuid "893cebe6-5e30-4588-9c99-1a03389facd8")))))
   ;; sudo blkid to list UUIDs
   (file-systems (cons* (file-system
                          (mount-point "/boot/efi")
-                         (device (uuid "D47F-3FB9"
-                                       'fat32))
+                         (device (uuid "D47F-3FB9" 'fat32))
                          (type "vfat"))
                        (file-system
                          (mount-point "/")
-                         (device (uuid
-                                  "d690f4db-ddfc-45e7-9b77-c4a2e08892b3"
-                                  'ext4))
+                         (device (uuid "d690f4db-ddfc-45e7-9b77-c4a2e08892b3" 'ext4))
                          (type "ext4")) %base-file-systems)))
 

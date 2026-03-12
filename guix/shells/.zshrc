@@ -117,7 +117,6 @@ alias ls='eza'
 alias less='bat'
 alias tree='eza --long --tree'
 alias reload='exec $SHELL -l'
-alias u='up'
 alias us='up status'
 alias ur='up system-reconfigure'
 alias uh='up home-reconfigure'
@@ -126,10 +125,9 @@ alias pc="podman-compose"
 alias edit="nvim"
 alias vim="nvim"
 alias info="info --vi-keys"
-alias oc-edit="emacs /home/openclaw/.openclaw"
-alias tail-oc-upgrade="tail -f ~/.local/state/log/openclaw-upgrade.log"
-alias tail-lama="tail -f ~/.local/state/log/ollama.logs"
-alias tail-tailscale="sudo tail -f /var/log/tailscaled.log"
+alias claw-edit="emacs /home/openclaw/.openclaw"
+alias tail-ollama="lnav ~/.local/state/log/ollama.logs"
+alias tail-tailscale="TERM=xterm-256color sudo lnav /var/log/tailscaled.log"
 
 if [ -f ~/Code/google-cloud-sdk/path.zsh.inc ]; then
     source ~/Code/google-cloud-sdk/path.zsh.inc
