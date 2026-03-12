@@ -2,6 +2,7 @@
   #:use-module (gnu)
   #:use-module (nongnu packages linux)
   #:use-module (gnu artwork)
+  #:use-module (gnu packages linux)
   #:use-module (gnu packages admin)
   #:use-module (gnu packages fonts)
   #:use-module (gnu packages lisp)
@@ -27,6 +28,7 @@
   #:use-module (gnu system setuid)
   #:use-module (gnu system accounts)
   #:use-module (gnu system shadow)
+  #:use-module (gnu system privilege)
   #:use-module (gnu services)
   ;; (jazacash service)
   #:use-module (px services networking)
@@ -107,15 +109,6 @@
 
 (define %channels (list nonguix guix panther jazacash))
 
-(define %backlight-udev-rule
-  (udev-rule
-   "90-backlight.rules"
-   (string-append "ACTION==\"add\", SUBSYSTEM==\"backlight\", "
-                  "RUN+=\"/run/current-system/profile/bin/chgrp video /sys/class/backlight/%k/brightness\""
-                  "\n"
-                  "ACTION==\"add\", SUBSYSTEM==\"backlight\", "
-                  "RUN+=\"/run/current-system/profile/bin/chmod g+w /sys/class/backlight/%k/brightness\"")))
-
 (define %xorg-libinput-config
   "Section \"InputClass\"
   Identifier \"Touchpads\"
@@ -169,11 +162,7 @@ EndSection
                                                     %default-authorized-guix-keys))))
     (elogind-service-type config =>
                           (elogind-configuration (inherit config)
-                                                 (handle-lid-switch-external-power 'suspend)))
-    (udev-service-type config =>
-                       (udev-configuration (inherit config)
-                                           (rules (cons %backlight-udev-rule
-                                                        (udev-configuration-rules config)))))))
+                                                 (handle-lid-switch-external-power 'suspend)))))
 
 ;; (service sudoers-service-type
 ;;                    (sudoers-configuration
@@ -188,26 +177,13 @@ EndSection
   (timezone "America/New_York")
   (keyboard-layout (keyboard-layout "us"))
   (host-name "otter")
-  (groups (cons* (user-group
-                   (name "openclaw")
-                   (system? #t))
-                 %base-groups))
   (users (cons* (user-account
                   (name "ben")
                   (comment "Primary User")
                   (group "users")
                   (shell (file-append zsh "/bin/zsh"))
                   (home-directory "/home/ben")
-                  (supplementary-groups '("cgroup" "wheel" "netdev" "audio" "video")))
-                (user-account
-                  (name "openclaw")
-                  (comment "Openclaw Podman User")
-                  (system? #t)
-                  (group "openclaw")
-                  (home-directory "/home/openclaw")
-                  ;; (shell (file-append shadow "/sbin/nologin"))
-                  (shell (file-append zsh "/bin/zsh"))
-                  (supplementary-groups '("cgroup" "wheel" "netdev")))
+                  (supplementary-groups '("cgroup" "wheel" "netdev" "audio" "video"))) 
                 %base-user-accounts))
   (sudoers-file (plain-file "sudoers" "\
 root ALL=(ALL) ALL
@@ -215,10 +191,16 @@ root ALL=(ALL) ALL
 ben ALL=(root) NOPASSWD: ALL
 ben ALL=(openwebui) NOPASSWD: ALL
 ben ALL=(openclaw) NOPASSWD: ALL\n"))
-  (setuid-programs
-   (append (list (setuid-program
-                  (program (file-append stumpwm+slynk "/bin/stumpwm"))))
-           %setuid-programs))
+  (privileged-programs
+   (cons*
+    (privileged-program
+      (program (file-append stumpwm+slynk "/bin/stumpwm"))
+      (setuid? #t))
+    %default-privileged-programs))
+  ;; (setuid-programs
+  ;;  (append (list (setuid-program
+  ;;                 (program (file-append stumpwm+slynk "/bin/stumpwm"))))
+  ;;          %setuid-programs))
   (packages (cons*
 	         xf86-input-libinput
 	         emacs-next
@@ -247,71 +229,65 @@ ben ALL=(openclaw) NOPASSWD: ALL\n"))
              chili-sddm-theme
 	         %base-packages))
   (services
-   (append (list
-            ;; (service jazacash-secrets-service-type secrets-config)
-            ;; (service jazacash-ci-service-type)
-            ;; (service mysql-service-type)
-            ;; (service containerd-service-type)
-            ;; (service docker-service-type)
-            (service nix-service-type
-                     (nix-configuration
-                       (sandbox #f)
-                       (extra-config
-                        '("experimental-features = nix-command flakes\n"
-                          "extra-platforms = i686-linux aarch64-linux\n"
-                          "keep-outputs = true\n"
-                          "substituters = https://cache.nixos.org/\n" 
-                          "trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=\n"
-                          "keep-derivations = true\n"))))
-            (simple-service 'profiles-files etc-profile-d-service-type
-                            (list
-                             (plain-file "mock.sh" "MOCK=1")
-                             (file-append nix "/etc/profile.d/nix-daemon.sh")
-                             (file-append nix "/etc/profile.d/nix.sh")))
-            (service iptables-service-type) ; required for podman-service
-            (simple-service 'openclaw-file-setup
-                            activation-service-type
-                            #~(begin
-                                (use-modules (guix build utils))
-                                (let ((user (getpwnam "openclaw")))
-                                  (mkdir-p "/home/openclaw/.openclaw/workspace")
-                                  ;; Set ownership to the openclaw user (UID/GID)
-                                  (chown "/home/openclaw/.openclaw" (passwd:uid user) (passwd:gid user))
-                                  (chown "/home/openclaw/.openclaw/workspace" (passwd:uid user) (passwd:gid user))
-                                  (chmod "/home/openclaw/.openclaw" #o700))))
-            (service openwebui-service-type)
-            (service openclaw-service-type)
-            (service rootless-podman-service-type
-                     (rootless-podman-configuration
-                       (subgids
-                        (list (subid-range (name "ben"))
-                              (subid-range (name "openclaw"))
-                              (subid-range (name "openwebui"))))
-                       (subuids
-                        (list (subid-range (name "ben"))
-                              (subid-range (name "openclaw"))
-                              (subid-range (name "openwebui"))))))
-            (service tailscale-service-type)
-            (service syncthing-service-type
-                     (syncthing-configuration (user "ben")))
-            (service gnome-desktop-service-type)
-            (service openssh-service-type
-                     (openssh-configuration
-                       (permit-root-login 'prohibit-password)
-                       (password-authentication? #f)
-                       (authorized-keys
-                        `(("root" ,(local-file "../keys/mac.pub"))
-                          ("ben"  ,(local-file "../keys/mac.pub"))))))
-            (set-xorg-configuration
-             (xorg-configuration
-               (keyboard-layout keyboard-layout)
-               (extra-config (list %xorg-libinput-config)))
-             sddm-service-type)
-            (service sddm-service-type
-                     (sddm-configuration
-                       ;; valid values are elarun, maldives or maya, chili, sugar-light
-                       (theme "chili"))))
-           %modified-desktop-services))
+   (cons* 
+    ;; (service jazacash-secrets-service-type secrets-config)
+    ;; (service jazacash-ci-service-type)
+    ;; (service mysql-service-type)
+    ;; (service containerd-service-type)
+    ;; (service docker-service-type)
+    (service nix-service-type
+             (nix-configuration
+               (sandbox #f)
+               (extra-config
+                '("experimental-features = nix-command flakes\n"
+                  "extra-platforms = i686-linux aarch64-linux\n"
+                  "keep-outputs = true\n"
+                  "substituters = https://cache.nixos.org/\n" 
+                  "trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=\n"
+                  "keep-derivations = true\n"))))
+    (simple-service 'profiles-files etc-profile-d-service-type
+                    (list
+                     (plain-file "mock.sh" "MOCK=1")
+                     (file-append nix "/etc/profile.d/nix-daemon.sh")
+                     (file-append nix "/etc/profile.d/nix.sh")))
+    (service iptables-service-type)        ; required for podman-service
+    (service openwebui-service-type)
+    (service openclaw-service-type)
+    (service rootless-podman-service-type
+             (rootless-podman-configuration
+               (subgids
+                (list (subid-range (name "ben"))
+                      (subid-range (name "openclaw"))
+                      (subid-range (name "openwebui"))))
+               (subuids
+                (list (subid-range (name "ben"))
+                      (subid-range (name "openclaw"))
+                      (subid-range (name "openwebui"))))))
+    (service tailscale-service-type)
+    (service syncthing-service-type
+             (syncthing-configuration (user "ben")))
+    (service gnome-desktop-service-type)
+    (service qemu-binfmt-service-type
+             (qemu-binfmt-configuration
+               (platforms (lookup-qemu-platforms "arm" "aarch64"))))
+    (udev-rules-service 'brightness brightnessctl)
+    (service openssh-service-type
+             (openssh-configuration
+               (permit-root-login 'prohibit-password)
+               (password-authentication? #f)
+               (authorized-keys
+                `(("root" ,(local-file "../keys/mac.pub"))
+                  ("ben"  ,(local-file "../keys/mac.pub"))))))
+    (set-xorg-configuration
+     (xorg-configuration
+       (keyboard-layout keyboard-layout)
+       (extra-config (list %xorg-libinput-config)))
+     sddm-service-type)
+    (service sddm-service-type
+             (sddm-configuration
+               ;; valid values are elarun, maldives or maya, chili, sugar-light
+               (theme "chili")))
+    %modified-desktop-services))
   (bootloader (bootloader-configuration
                 (bootloader grub-efi-bootloader)
                 (targets (list "/boot/efi"))

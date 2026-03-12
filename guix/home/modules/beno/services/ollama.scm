@@ -15,15 +15,15 @@
   (package ollama-package
            (default "/home/ben/.nix-profile/bin/ollama"))
   (env ollama-env
-       (default (list "HOME=/home/ben"
+       (default #~(list "HOME=/home/ben"
                       "OLLAMA_HOST=0.0.0.0"
                       "OLLAMA_DEBUG=4"
+                      "OLLAMA_KEEP_ALIVE=6h"
                       "HSA_OVERRIDE_GFX_VERSION=11.0.2"
                       "OLLAMA_MODELS=/home/ben/.ollama/models")))
   (log ollama-log
        (default "/home/ben/.local/state/log/ollama.logs")))
 
-;; "OLLAMA_KEEP_ALIVE=24h"
 (define (home-ollama-shepherd-service config)
   (match-record config <ollama-configuration> (package env log)
     (list (shepherd-service

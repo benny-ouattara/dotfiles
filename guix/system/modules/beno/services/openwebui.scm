@@ -63,7 +63,6 @@
                   "--name" #$name
                   "--init"
                   "--env-file" #$env-file
-                  ;; "-e" "OLLAMA_BASE_URL=http://host.containers.internal:11434"
                   "-v" #$volume
                   "-p" #$port
                   #$package)

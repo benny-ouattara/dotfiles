@@ -93,20 +93,15 @@
     (menu-bar-mode -1)
     (tool-bar-mode -1)
     (mapc #'disable-theme custom-enabled-themes)
-    (setq doom-theme 'doom-acario-light
-          evil-emacs-state-cursor '("red" box)
-          evil-normal-state-cursor '("black" box)
-          evil-visual-state-cursor '("black" box)
-          evil-insert-state-cursor '("red" bar)
-          evil-motion-state-cursor '("gray" box))))
+    (setq doom-theme 'catppuccin
+          ;evil-emacs-state-cursor '("red" box)
+          ;evil-normal-state-cursor '("black" box)
+          ;evil-visual-state-cursor '("black" box)
+          ;evil-insert-state-cursor '("red" bar)
+          ;evil-motion-state-cursor '("gray" box)
+          )))
 
 (setq
- ;; org-ellipsis " ▾ "
- ;; org-ellipsis " ⤵ "
- ;; org-ellipsis " ↓ "
- ;; org-ellipsis " ∵ "
- ;; org-ellipsis " ⌄ "
- ;; org-ellipsis " ⁂ "
  ;; org-startup-folded 'content
  org-startup-folded 'show2levels
  org-auto-align-tags nil

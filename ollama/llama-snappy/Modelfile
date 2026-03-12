@@ -1,0 +1,5 @@
+FROM llama3.1:8b-instruct-q8_0
+# Increase context to 32k tokens
+PARAMETER num_ctx 131072
+# Lower temperature for precise coding/tooling
+PARAMETER temperature 0.1

@@ -1,0 +1,14 @@
+# Base the new model on gpt-oss:20b
+FROM gpt-oss:20b
+
+# Set performance parameters
+PARAMETER temperature 0.1
+PARAMETER num_ctx 32768
+
+# Set the reasoning effort to low for snappiness
+SYSTEM """
+Reasoning: low. 
+You are a highly efficient assistant optimized for speed and tool calling.
+Do not show your internal thinking process. 
+Respond only with the final answer or the required tool call.
+"""
