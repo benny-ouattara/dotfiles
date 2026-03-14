@@ -220,7 +220,8 @@
 
 (after! tramp
   (setq
-   tramp-histfile-override "/dev/null")
+   tramp-histfile-override "/dev/null"
+   tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath=~/.ssh/master-%%r@%%h:%%p -o ControlPersist=30m")
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
 
 (defun beno--indent (n)
