@@ -232,7 +232,7 @@ commit: ## Stage and commit all changes
 	git commit -m "$$msg"
 
 ship: commit ## Commit and then deploy
-	@$(MAKE) kite!
+	@$(MAKE) kite
 
 visualize-storage: ## Generate a storage usage graph
 	@echo "$(CYAN)>>> Analyzing 36GB store (this takes a moment)...$(RESET)"
