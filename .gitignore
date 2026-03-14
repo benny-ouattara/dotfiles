@@ -48,3 +48,4 @@ aichat/config.yaml
 guix/backups/*
 guix/backup/*
 *.pdf
+containers/

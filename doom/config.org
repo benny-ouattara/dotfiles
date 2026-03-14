@@ -1239,6 +1239,7 @@ commands run at the project level
         (set-popup-rule! "^\\*cider-repl.*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
         (set-popup-rule! "^\\*HTTP Response.*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
         (set-popup-rule! "^\\*ChatGPT*" :size 0.40 :vslot -4 :select t :quit nil :ttl nil :side 'right)
+        (set-popup-rule! "^\\*Ollama*" :size 0.40 :vslot -4 :select t :quit nil :ttl nil :side 'right)
         (set-popup-rule! "^\\*Async Shell.*" :size 0.40 :vslot -4 :select t :quit t :ttl t :side 'right)
         (set-popup-rule! "^\\*Geiser Guile REPL.*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
         (set-popup-rule! "^\\*Proced*" :size 0.40 :vslot -4 :select t :quit t :ttl t :side 'right))
@@ -1266,7 +1267,8 @@ commands run at the project level
       (set-popup-rule! "^\\*cider-repl.*" :size 0.35 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
       (set-popup-rule! "^\\*Geiser Guile REPL.*" :size 0.35 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
       (set-popup-rule! "^\\*HTTP Response.*" :size 0.35 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
-      (set-popup-rule! "^\\*ChatGPT*" :size 0.35 :vslot -4 :select t :quit nil :ttl nil :side 'bottom))))
+      (set-popup-rule! "^\\*ChatGPT*" :size 0.35 :vslot -4 :select t :quit nil :ttl nil :side 'bottom)
+      (set-popup-rule! "^\\*Ollama*" :size 0.35 :vslot -4 :select t :quit nil :ttl nil :side 'bottom))))
 #+end_src
 
 * vertico-posframe
@@ -2098,10 +2100,15 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
       'gptel)
 
 (after! gptel
-  (setq gpt-api-key "api.openai.com"
-        gptel-default-mode 'org-mode
-        gptel-api-key #'beno-gpt-key))
-#+end_src
+  (setq
+   gptel-default-mode 'org-mode
+   ;; gpt-api-key "api.openai.com"
+   ;; gptel-api-key #'beno-gpt-key
+   gptel-model 'mistral:latest
+   gptel-backend (gptel-make-ollama "Ollama"
+                   :host "otter:11434"
+                   :stream t
+                   :models '(mistral:latest))))
 
 * clojure
 ** cider

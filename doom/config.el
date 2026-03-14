@@ -93,13 +93,7 @@
     (menu-bar-mode -1)
     (tool-bar-mode -1)
     (mapc #'disable-theme custom-enabled-themes)
-    (setq doom-theme 'catppuccin
-          ;evil-emacs-state-cursor '("red" box)
-          ;evil-normal-state-cursor '("black" box)
-          ;evil-visual-state-cursor '("black" box)
-          ;evil-insert-state-cursor '("red" bar)
-          ;evil-motion-state-cursor '("gray" box)
-          )))
+    (setq doom-theme 'catppuccin)))
 
 (setq
  ;; org-startup-folded 'content
@@ -1018,6 +1012,7 @@ $stderr = File.open(\"err.txt\", \"w\")")
         (set-popup-rule! "^\\*cider-repl.*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
         (set-popup-rule! "^\\*HTTP Response.*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
         (set-popup-rule! "^\\*ChatGPT*" :size 0.40 :vslot -4 :select t :quit nil :ttl nil :side 'right)
+        (set-popup-rule! "^\\*Ollama*" :size 0.40 :vslot -4 :select t :quit nil :ttl nil :side 'right)
         (set-popup-rule! "^\\*Async Shell.*" :size 0.40 :vslot -4 :select t :quit t :ttl t :side 'right)
         (set-popup-rule! "^\\*Geiser Guile REPL.*" :size 0.40 :vslot -4 :select t :quit nil :ttl t :side 'right)
         (set-popup-rule! "^\\*Proced*" :size 0.40 :vslot -4 :select t :quit t :ttl t :side 'right))
@@ -1045,7 +1040,8 @@ $stderr = File.open(\"err.txt\", \"w\")")
       (set-popup-rule! "^\\*cider-repl.*" :size 0.35 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
       (set-popup-rule! "^\\*Geiser Guile REPL.*" :size 0.35 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
       (set-popup-rule! "^\\*HTTP Response.*" :size 0.35 :vslot -4 :select t :quit nil :ttl t :side 'bottom)
-      (set-popup-rule! "^\\*ChatGPT*" :size 0.35 :vslot -4 :select t :quit nil :ttl nil :side 'bottom))))
+      (set-popup-rule! "^\\*ChatGPT*" :size 0.35 :vslot -4 :select t :quit nil :ttl nil :side 'bottom)
+      (set-popup-rule! "^\\*Ollama*" :size 0.35 :vslot -4 :select t :quit nil :ttl nil :side 'bottom))))
 
 ;; (vertico-posframe-mode 1)
 ;; (setq vertico-posframe-parameters
@@ -1149,45 +1145,6 @@ $stderr = File.open(\"err.txt\", \"w\")")
 
 (after! eww
   (eww-toggle-fonts))
-
-(defun beno-gpt-key ()
-  "Read gpt secret from authsource."
-  (funcall (plist-get (car (auth-source-search :host gpt-api-key))
-                      :secret)))
-(map! :leader
-      :desc "gpt"
-      :n "o g"
-      'gptel)
-
-(after! gptel
-  (setq gpt-api-key "api.openai.com"
-        gptel-default-mode 'org-mode
-        gptel-api-key #'beno-gpt-key))
-
-(after! cider-repl
-  (add-hook 'before-save-hook 'cider-format-buffer t t)
-
-  (defun portal.api/open ()
-    (interactive)
-    (cider-nrepl-sync-request:eval
-     "(do (ns dev) (def portal ((requiring-resolve 'portal.api/open) {:theme :portal.colors/material-ui})) (add-tap (requiring-resolve 'portal.api/submit)))"))
-
-  (defun portal.api/clear ()
-    (interactive)
-    (cider-nrepl-sync-request:eval "(portal.api/clear)"))
-
-  (defun portal.api/close ()
-    (interactive)
-    (cider-nrepl-sync-request:eval "(portal.api/close)"))
-
-  (map! :map clojure-mode-map
-        :localleader
-        :desc "open portal"  :n "o" #'portal.api/open
-        :desc "close portal" :n "q" #'portal.api/close
-        :desc "clear portal" :n "l" #'portal.api/clear)
-
-  ;; NOTE: You do need to have portal on the class path
-  (setq cider-clojure-cli-aliases ":portal"))
 
 (defun beno-find-file-in-dotfiles ()
   "Search for a file in `dotfiles'."

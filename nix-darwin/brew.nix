@@ -33,12 +33,12 @@
       "btop"
       "openjdk"
       "node"
+      "aider"
       # "reroutingcli"
       # "mmp"
     ];
 
     casks = [
-      "ghostty"
       "discord"
       "spotify"
       "gimp"

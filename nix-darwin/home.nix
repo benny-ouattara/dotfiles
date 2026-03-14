@@ -189,10 +189,11 @@
     };
 
     shellAliases = {
+      aider="OLLAMA_API_BASE=\"http://otter:11434\" aider";
       snore="sudo -v; while true; do sudo -n true; sleep 60; kill -0 \"$$\" || exit; done 2>/dev/null &";
       r = "ranger";
       ask = "aichat";
-      think = "aichat --model ollama:deepseek-r1:32b";
+      think = "aichat --model ollama:mistral:latest";
       reload = "exec $SHELL -l";
       z = "__zoxide_zi";
       ls = "eza";
