@@ -168,7 +168,7 @@ telemetry: ## Record current system size and package count
 	@echo -n "$$(date +%Y-%m-%d)," >> $(LOG_FILE)
 	@echo -n "$$(readlink /nix/var/nix/profiles/system | cut -d- -f2)," >> $(LOG_FILE)
 	@echo -n "$$(nix-store --query --requisites /run/current-system | wc -l | tr -d ' ')," >> $(LOG_FILE)
-	@echo "$$(du -sg /nix/store | awk '{print $$1}')" >> $(LOG_FILE)
+	@echo "$$(du -s --block-size=G /nix/store | awk '{print $$1}')" >> $(LOG_FILE)
 	@echo "$(CYAN)>>> Telemetry recorded to $(LOG_FILE)$(RESET)"
 
 find-config: ## Advanced search using ripgrep (Usage: make find-config QUERY=...)
@@ -227,8 +227,8 @@ tree: ## Visual tree of system dependencies (requires nix-tree)
 	@nix shell nixpkgs#nix-tree -c nix-tree /run/current-system
 
 commit: ## Stage and commit all changes
-	@git add .
-	@read -p "Commit message: " msg; \
+	@cd $(FLAKE_DIR) && git add .
+	@cd $(FLAKE_DIR) && read -p "Commit message: " msg; \
 	git commit -m "$$msg"
 
 ship: commit ## Commit and then deploy

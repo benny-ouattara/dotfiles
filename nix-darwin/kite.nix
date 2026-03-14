@@ -111,6 +111,11 @@ in
   };
 
   environment.systemPackages = [
+    pkgs.dbeaver-bin
+    pkgs.podman
+    pkgs.podman-tui
+    pkgs.podman-compose
+    pkgs.podman-desktop
     pkgs.wuzz
     pkgs.hexyl
     pkgs.broot
