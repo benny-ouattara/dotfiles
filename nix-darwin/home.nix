@@ -272,9 +272,8 @@
         serverAliveInterval = 60;
         
         extraOptions = {
-          "UseKeychain" = "yes";
-          "AddKeysToAgent" = "yes";
-          "IgnoreUnknown" = "UseKeychain";
+          "UseKeychain" = "no";
+          "AddKeysToAgent" = "no";
         };
       };
 
