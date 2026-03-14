@@ -278,6 +278,10 @@
         };
       };
 
+      "github.com" = {
+        controlMaster = "no";
+      };
+
       "otter" = {
         user = "ben";
         compression = true;
