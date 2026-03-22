@@ -34,6 +34,7 @@
       "openjdk"
       "node"
       "aider"
+      "podman"
       # "reroutingcli"
       # "mmp"
     ];
@@ -65,7 +66,7 @@
       "tableplus"
       # "google-cloud-sdk"
       "background-music"
-      "docker-desktop"
+      "podman-desktop"
     ];
 
     extraConfig = ''

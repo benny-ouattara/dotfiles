@@ -112,10 +112,8 @@ in
 
   environment.systemPackages = [
     pkgs.dbeaver-bin
-    pkgs.podman
     pkgs.podman-tui
     pkgs.podman-compose
-    pkgs.podman-desktop
     pkgs.wuzz
     pkgs.hexyl
     pkgs.broot
@@ -141,7 +139,6 @@ in
     pkgs.babashka
     pkgs.bore-cli
     pkgs.mailcatcher
-    pkgs.docker-compose
     pkgs.google-cloud-sdk
     pkgs.cmake
     pkgs.postgresql
