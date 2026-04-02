@@ -111,6 +111,7 @@ in
   };
 
   environment.systemPackages = [
+    pkgs.jet
     pkgs.dbeaver-bin
     pkgs.podman-tui
     pkgs.podman-compose

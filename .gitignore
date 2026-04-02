@@ -49,3 +49,4 @@ guix/backups/*
 guix/backup/*
 *.pdf
 containers/
+lnav/*

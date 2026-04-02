@@ -40,6 +40,7 @@
     ];
 
     casks = [
+      "visualvm"
       "discord"
       "spotify"
       "gimp"
