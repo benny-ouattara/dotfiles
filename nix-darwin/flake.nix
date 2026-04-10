@@ -37,6 +37,7 @@
                     ];
           pkgs = import nixpkgs {
             inherit system;
+            config.allowUnfree = true; 
             overlays = [
               (import ./overlays/custom-scripts.nix { scriptsPath = ./scripts; })
             ];

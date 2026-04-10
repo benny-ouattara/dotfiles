@@ -293,16 +293,19 @@
       "dev" = {
         user = "root";
         compression = true;
+        controlMaster = "no";
       };
 
       "ops" = {
         user = "root";
         compression = true;
+        controlMaster = "no";
       };
 
       "prod" = {
         user = "root";
         compression = true;
+        controlMaster = "no";
       };
 
       "oc-tunnel" = {

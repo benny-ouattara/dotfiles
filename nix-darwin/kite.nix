@@ -14,7 +14,7 @@ let
 in
 {
   # services.nix-daemon.enable = true;
-
+  
   nixpkgs = {
     config = {
       allowUnfree = true;
@@ -111,6 +111,7 @@ in
   };
 
   environment.systemPackages = [
+    pkgs.claude-code
     pkgs.jet
     pkgs.dbeaver-bin
     pkgs.podman-tui
