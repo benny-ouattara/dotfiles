@@ -111,6 +111,8 @@ in
   };
 
   environment.systemPackages = [
+    pkgs.lima
+    pkgs.awscli
     pkgs.claude-code
     pkgs.jet
     pkgs.dbeaver-bin
