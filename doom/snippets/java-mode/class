@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: class
-# key: class
-# condition: t
-# --
-${1:public }class ${2:`(f-base buffer-file-name)`} {
-    $0
-}

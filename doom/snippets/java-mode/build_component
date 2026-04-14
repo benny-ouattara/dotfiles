@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: Build Dagger component
-# key: dcb
-# --
-$1 = Dagger$1Component.builder()
-    .environmentModule(new EnvironmentModule(environment))
-    .build();

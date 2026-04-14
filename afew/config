@@ -1,20 +1,24 @@
+[FolderNameFilter]
+folder_explicit_list = spotify gmail protonmail
+folder_lowercases = true
+
 [SpamFilter]
 [KillThreadsFilter]
 [ListMailsFilter]
 [ArchiveSentMailsFilter]
 
 [Filter.1]
-query = 'zangao@spotify.com'
+query = to:zangao@spotify.com
 tags = +spotify
 message = Spotify mail
 
 [Filter.2]
-query = 'benny.ouattara@gmail.com'
+query = to:benny.ouattara@gmail.com
 tags = +gmail
 message = Personal gmail
 
 [Filter.3]
-query = 'benny.ouattara@protonmail.com'
+query = to:benny.ouattara@protonmail.com
 tags = +protonmail
 message = Personal protonmail
 

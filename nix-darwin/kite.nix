@@ -9,12 +9,12 @@ let
   '';
   watchdog-script = pkgs.writeShellScript "wm-watchdog" (builtins.readFile ./scripts/wm-watchdog.sh);
   nix-gc = pkgs.writeShellScript "nix-gc" (builtins.readFile ./scripts/nix-gc.sh);
-  key-benchmark   = pkgs.writeShellScript "key-bench"   (builtins.readFile ./scripts/key-bench.sh);
-  wm-health-check = pkgs.writeShellScript "wm-health"   (builtins.readFile ./scripts/wm-health.sh);
+  key-benchmark = pkgs.writeShellScript "key-bench" (builtins.readFile ./scripts/key-bench.sh);
+  wm-health-check = pkgs.writeShellScript "wm-health" (builtins.readFile ./scripts/wm-health.sh);
 in
 {
   # services.nix-daemon.enable = true;
-  
+
   nixpkgs = {
     config = {
       allowUnfree = true;
@@ -32,10 +32,10 @@ in
   system.stateVersion = 4;
 
   system.activationScripts.postActivation.text = ''
-  printf "\033[36m"
-  echo "Welcome to KITE (Gen $(readlink /nix/var/nix/profiles/system | cut -d- -f2))"
-  echo "Status: System is Healthy"
-  printf "\033[0m"
+    printf "\033[36m"
+    echo "Welcome to KITE (Gen $(readlink /nix/var/nix/profiles/system | cut -d- -f2))"
+    echo "Status: System is Healthy"
+    printf "\033[0m"
   '';
 
   # The platform the configuration will be used on.
@@ -111,6 +111,8 @@ in
   };
 
   environment.systemPackages = [
+    pkgs.msmtp
+    pkgs.clojure-lsp
     pkgs.lima
     pkgs.awscli
     pkgs.claude-code
@@ -219,10 +221,12 @@ in
   services = {
     skhd = {
       enable = true;
-      skhdConfig = builtins.readFile (pkgs.replaceVars ../skhd/skhdrc {
-        # Add variables here if your skhdrc has @var@ placeholders
-        # e.g., terminal = "${pkgs.kitty}/bin/kitty";
-      });
+      skhdConfig = builtins.readFile (
+        pkgs.replaceVars ../skhd/skhdrc {
+          # Add variables here if your skhdrc has @var@ placeholders
+          # e.g., terminal = "${pkgs.kitty}/bin/kitty";
+        }
+      );
     };
   };
 
@@ -246,8 +250,8 @@ in
       RunAtLoad = true;
       StandardErrorPath = log-dir + "/mcron.err.log";
       StandardOutPath = log-dir + "/mcron.out.log";
-      EnvironmentVariables = { 
-        PATH = "${config.environment.systemPath}"; 
+      EnvironmentVariables = {
+        PATH = "${config.environment.systemPath}";
       };
     };
     # Point mcron to the directory we created in /etc

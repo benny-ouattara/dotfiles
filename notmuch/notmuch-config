@@ -31,7 +31,7 @@ path=.mail
 [user]
 name=Ben O.
 primary_email=benny.ouattara@gmail.com
-other_email=zangao@spotify.com;benny.ouattara@protonmail.com;
+other_email=zangao@spotify.com;benny.ouattara@protonmail.com
 
 # Configuration for "notmuch new"
 #
@@ -49,6 +49,7 @@ other_email=zangao@spotify.com;benny.ouattara@protonmail.com;
 #
 [new]
 tags=new
+ignore=.mbsyncstate;.strstrname;.uidvalidity
 
 # Search configuration
 #
@@ -60,6 +61,7 @@ tags=new
 #		query will override that exclusion.
 #
 [search]
+exclude_tags=deleted;spam;trash
 
 # Maildir compatibility configuration
 #

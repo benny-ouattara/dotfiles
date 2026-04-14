@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: value
-# key: val
-# --
-final ${1:int} ${2:n} = $0;

@@ -1,8 +1,0 @@
-#+author: Ben O.
-
-* overview
- %?
-
-* concepts
-
-* data structures

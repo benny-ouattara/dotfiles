@@ -1,7 +1,0 @@
-#+author: Ben O.
-
-* problem statement
-
-%?
-
-* solution
