@@ -85,23 +85,23 @@ Set auto theme based on system appearance setting with default themes
 #+end_src
 ** TTY frames theme management
 Manages look and feel on tty frames i.e emacs in the terminal
-Depreacte in favor of doom tty module
+Deprecate in favor of doom tty module
 #+begin_src emacs-lisp :results silent
-;; (unless (display-graphic-p) 
-;;   (require 'evil-terminal-cursor-changer)
-;;   (etcc-on)
+(unless (display-graphic-p) 
+  (require 'evil-terminal-cursor-changer)
+  (etcc-on)
 
-;;   (setq
-;;    select-enable-clipboard t
-;;    evil-motion-state-cursor 'box
-;;    evil-visual-state-cursor 'box
-;;    evil-normal-state-cursor 'box
-;;    evil-insert-state-cursor 'bar
-;;    evil-emacs-state-cursor  'hbar)
+  (setq
+   select-enable-clipboard t
+   evil-motion-state-cursor 'box
+   evil-visual-state-cursor 'box
+   evil-normal-state-cursor 'box
+   evil-insert-state-cursor 'bar
+   evil-emacs-state-cursor  'hbar)
   
-;;   (menu-bar-mode -1)
-;;   (xterm-mouse-mode 1)
-;;   (consult-theme 'catppuccin))
+  (menu-bar-mode -1)
+  (xterm-mouse-mode 1)
+  (consult-theme 'catppuccin))
 #+end_src
 * org mode
 ** variable

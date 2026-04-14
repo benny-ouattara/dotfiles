@@ -67,21 +67,21 @@
 
   (add-hook 'ns-system-appearance-change-functions #'beno--auto-theme))
 
-;; (unless (display-graphic-p) 
-;;   (require 'evil-terminal-cursor-changer)
-;;   (etcc-on)
+(unless (display-graphic-p) 
+  (require 'evil-terminal-cursor-changer)
+  (etcc-on)
 
-;;   (setq
-;;    select-enable-clipboard t
-;;    evil-motion-state-cursor 'box
-;;    evil-visual-state-cursor 'box
-;;    evil-normal-state-cursor 'box
-;;    evil-insert-state-cursor 'bar
-;;    evil-emacs-state-cursor  'hbar)
+  (setq
+   select-enable-clipboard t
+   evil-motion-state-cursor 'box
+   evil-visual-state-cursor 'box
+   evil-normal-state-cursor 'box
+   evil-insert-state-cursor 'bar
+   evil-emacs-state-cursor  'hbar)
   
-;;   (menu-bar-mode -1)
-;;   (xterm-mouse-mode 1)
-;;   (consult-theme 'catppuccin))
+  (menu-bar-mode -1)
+  (xterm-mouse-mode 1)
+  (consult-theme 'catppuccin))
 
 (setq
  org-startup-folded 'show2levels
