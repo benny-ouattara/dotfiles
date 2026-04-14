@@ -1,0 +1,22 @@
+defaults
+auth           on
+tls            on
+tls_trust_file /etc/ssl/certs/ca-certificates.crt
+logfile        ~/.local/state/msmtp.log
+
+account        gmail
+host           smtp.gmail.com
+port           587
+tls_starttls   on
+from           benny.ouattara@gmail.com
+user           benny.ouattara@gmail.com
+passwordeval   "pass show Email/gmail-mu-app.com"
+
+account        protonmail
+host           127.0.0.1
+port           1025
+tls_starttls   off
+from           benny.ouattara@protonmail.com
+user           benny.ouattara@protonmail.com
+
+account default : gmail

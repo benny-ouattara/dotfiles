@@ -85,8 +85,8 @@
        yaml                          ; JSON, but readable
 
        :email
-       (mu4e +gmail)
-       ;;(notmuch +afew +org)
+       ;; (mu4e +gmail)
+       (notmuch +afew +org)
 
        :app
        (rss +org)                    ; emacs as an RSS reader
