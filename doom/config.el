@@ -219,6 +219,11 @@
                                  notmuch-hello-insert-alltags)
         notmuch-message-headers-visible nil)
 
+  (setq sendmail-program (executable-find "msmtp")
+        message-sendmail-f-is-evil t
+        message-sendmail-extra-arguments '("--read-envelope-from")
+        message-send-mail-function #'message-send-mail-with-sendmail)
+
   (setq notmuch-saved-searches
         '((:name "inbox"             :query "tag:inbox and tag:unread"        :key "i")
           (:name "spotify"           :query "tag:spotify and tag:unread"      :key "s")
@@ -707,4 +712,17 @@ With prefix ARG, reset the eshell buffer."
       (:prefix ("j" . "system")
        :desc "async shell command"  "!"   #'async-shell-command
        :desc "sync mail"            "m"   #'beno-sync-notmuch
-       :desc "up kite!"             "n"   #'beno-kite-up))
+       :desc "up kite!"             "u"   #'beno-kite-up))
+
+(after! org
+  (require 'verb)
+  (map! :map org-mode-map
+        :localleader
+        (:prefix ("v" . "verb")
+                 "v" #'verb-send-request-on-point
+                 "s" #'verb-send-request-on-point-other-window
+                 "f" #'verb-send-request-on-point-other-window-stay
+                 "k" #'verb-kill-all-response-buffers
+                 "e" #'verb-export-request-on-point-curl
+                 "u" #'verb-export-request-on-point-verb
+                 "b" #'verb-export-request-on-point-browse-url)))

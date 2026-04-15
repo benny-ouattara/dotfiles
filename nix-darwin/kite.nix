@@ -111,6 +111,7 @@ in
   };
 
   environment.systemPackages = [
+    pkgs.procps
     pkgs.msmtp
     pkgs.clojure-lsp
     pkgs.lima
@@ -235,14 +236,14 @@ in
     ;; Run mail sync every 15 minutes
     (job '(next-minute '(0 15 30 45)) "${sync-mail-job}")
 
-    ;; Run a cleanup of the Downloads folder every day at 4am
-    (job '(next-hour '(4)) "${pkgs.coreutils}/bin/rm -rf ~/Downloads/*")
+    ;; Run a cleanup of the Downloads folder every day at 8am
+    (job '(next-hour '(8)) "${pkgs.coreutils}/bin/ls ~/Downloads/*")
 
     ;; Heartbeat: Check WM services every 10 minutes
     (job '(next-minute (range 0 60 10)) "${watchdog-script}")
 
-    ;; Run GC every Sunday at 3 AM
-    (job '(next-hour '(3) (next-day '(0))) "${nix-gc}")
+    ;; Run GC every day at 9 AM
+    (job '(next-hour '(9)) "${nix-gc}")
   '';
 
   launchd.user.agents.mcron = {
@@ -250,9 +251,6 @@ in
       RunAtLoad = true;
       StandardErrorPath = log-dir + "/mcron.err.log";
       StandardOutPath = log-dir + "/mcron.out.log";
-      EnvironmentVariables = {
-        PATH = "${config.environment.systemPath}";
-      };
     };
     # Point mcron to the directory we created in /etc
     command = "${pkgs.mcron}/bin/mcron /etc/mcron.d/jobs.guile";
