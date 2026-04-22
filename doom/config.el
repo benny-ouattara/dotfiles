@@ -130,7 +130,7 @@
 (map! :n "C-d" #'beno-evil-scroll-down
       :n "C-u" #'beno-evil-scroll-up)
 
-(if (equal "otter" (system-name))
+(if (equal "kite" (system-name))
     (add-to-list 'load-path mu4e-path)
   (condition-case err
       (let* ((refs (cdr (doom-call-process "nix-store" "--query" "--referrers"
@@ -142,21 +142,22 @@
         (add-to-list 'load-path path))
     (error (warn "Failed to locate mu4e: %s" err))))
 
-(after! mu4e
-  (setq mu4e-update-interval 180))
-(setq +mu4e-workspace-name "*mail*")
+(when (equal "kite" (system-name))
+  (after! mu4e
+    (setq mu4e-update-interval 180))
+  (setq +mu4e-workspace-name "*mail*")
 
-(after! mu4e-main
-  (setq mu4e-main-hide-personal-addresses t))
+  (after! mu4e-main
+    (setq mu4e-main-hide-personal-addresses t))
 
-(after! mu4e-alert
-  (mu4e-alert-set-default-style 'ignore))
+  (after! mu4e-alert
+    (mu4e-alert-set-default-style 'ignore))
 
-(after! mu4e-modeline
-  (setq mu4e-modeline-unread-items `("U:" . ,(+mu4e-normalised-icon "nf-fa-fire"))
-        mu4e-modeline-all-clear `("C:" .    ,(+mu4e-normalised-icon "nf-fa-check"))
-        mu4e-modeline-all-read `("R:" .     ,(+mu4e-normalised-icon "nf-fa-check"))
-        mu4e-modeline-new-items `("N:" .    ,(+mu4e-normalised-icon "nf-fa-fire"))))
+  (after! mu4e-modeline
+    (setq mu4e-modeline-unread-items `("U:" . ,(+mu4e-normalised-icon "nf-fa-fire"))
+          mu4e-modeline-all-clear `("C:" .    ,(+mu4e-normalised-icon "nf-fa-check"))
+          mu4e-modeline-all-read `("R:" .     ,(+mu4e-normalised-icon "nf-fa-check"))
+          mu4e-modeline-new-items `("N:" .    ,(+mu4e-normalised-icon "nf-fa-fire")))))
 
 (setq +org-capture-emails-file "tasks.org")
 
