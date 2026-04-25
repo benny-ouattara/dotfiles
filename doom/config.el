@@ -130,8 +130,7 @@
 (map! :n "C-d" #'beno-evil-scroll-down
       :n "C-u" #'beno-evil-scroll-up)
 
-(if (equal "kite" (system-name))
-    (add-to-list 'load-path mu4e-path)
+(when (equal "ignored" (system-name))
   (condition-case err
       (let* ((refs (cdr (doom-call-process "nix-store" "--query" "--referrers"
                                            (file-truename (executable-find "mu")))))
@@ -142,7 +141,7 @@
         (add-to-list 'load-path path))
     (error (warn "Failed to locate mu4e: %s" err))))
 
-(when (equal "kite" (system-name))
+(when (equal "ignored" (system-name))
   (after! mu4e
     (setq mu4e-update-interval 180))
   (setq +mu4e-workspace-name "*mail*")
