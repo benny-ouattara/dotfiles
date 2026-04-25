@@ -262,11 +262,11 @@ Using advices doesn't work for these, it gets stuck after the first call
 #+end_src
 * notmuch
 #+begin_src emacs-lisp :results silent
-(after! notmuch
-  (setq +notmuch-sync-backend 'mbsync
-        notmuch-show-log nil
-        notmuch-hello-sections '(notmuch-hello-insert-saved-searches
-                                 notmuch-hello-insert-alltags)
+(after! notmuch                                                                                                                                    
+  (setq +notmuch-sync-backend 'mbsync                                                                                                              
+        notmuch-show-log nil                                                                                                                       
+        notmuch-hello-sections '(notmuch-hello-insert-saved-searches                                                                               
+                                 notmuch-hello-insert-alltags)                                                                                     
         notmuch-message-headers-visible nil)
 
   (setq sendmail-program (executable-find "msmtp")
@@ -276,13 +276,15 @@ Using advices doesn't work for these, it gets stuck after the first call
 
   (setq notmuch-saved-searches
         '((:name "inbox"             :query "tag:inbox and tag:unread"        :key "i")
-          (:name "spotify"           :query "tag:spotify and tag:unread"      :key "s")
           (:name "gmail"             :query "tag:gmail and tag:unread"        :key "g")
           (:name "protonmail"        :query "tag:protonmail and tag:unread"   :key "p")
+          (:name "jc"                :query "tag:jc and tag:unread"           :key "j")
+          (:name "jfund"             :query "tag:jfund and tag:unread"        :key "f")
           (:name "all inbox"         :query "tag:inbox not tag:trash"         :key "I")
-          (:name "all spotify"       :query "tag:spotify"                     :key "S")
           (:name "all gmail"         :query "tag:gmail"                       :key "G")
           (:name "all protonmail"    :query "tag:protonmail"                  :key "P")
+          (:name "all jc"            :query "tag:jc"                          :key "J")
+          (:name "all jfund"         :query "tag:jfund"                       :key "F")
           (:name "sent"              :query "tag:sent"                        :key "t")
           (:name "drafts"            :query "tag:draft"                       :key "d")))
 
@@ -297,13 +299,15 @@ Using advices doesn't work for these, it gets stuck after the first call
 
   (evil-define-key 'normal notmuch-hello-mode-map
     "i" (cmd! (notmuch-search "tag:inbox and tag:unread"))
-    "s" (cmd! (notmuch-search "tag:spotify and tag:unread"))
     "g" (cmd! (notmuch-search "tag:gmail and tag:unread"))
     "p" (cmd! (notmuch-search "tag:protonmail and tag:unread"))
+    "j" (cmd! (notmuch-search "tag:jc and tag:unread"))
+    "f" (cmd! (notmuch-search "tag:jfund and tag:unread"))
     "I" (cmd! (notmuch-search "tag:inbox not tag:trash"))
-    "S" (cmd! (notmuch-search "tag:spotify"))
     "G" (cmd! (notmuch-search "tag:gmail"))
-    "P" (cmd! (notmuch-search "tag:protonmail")))
+    "P" (cmd! (notmuch-search "tag:protonmail"))
+    "J" (cmd! (notmuch-search "tag:jc"))
+    "F" (cmd! (notmuch-search "tag:jfund")))
 
   (map! :localleader
         :map (notmuch-hello-mode-map notmuch-search-mode-map

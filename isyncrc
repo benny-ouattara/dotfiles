@@ -1,106 +1,547 @@
-    ################################ PERSONAL GMAIL ##############################################
-    # ACCOUNT INFORMATION
-    IMAPAccount gmail
-    # Address to connect to
-    Host imap.gmail.com
-    User benny.ouattara@gmail.com
-    PassCmd "/run/current-system/sw/bin/pass Email/gmail-mu-app.com"
-    AuthMechs LOGIN
-    SSLType IMAPS
-    # SSLVersions SSLv3 # deprecated, use default
-    # ssl config for running mbsync as a launchd agent
-    # CertificateFile /etc/ssl/certs/ca-certificates.crt
-    # CertificateFile ~/.config/certificates/gmail.crt
-    # CertificateFile ~/Sync/certificates/gmail.crt
-    # CertificateFile /Users/benouattara/gmail.crt
-    # CertificateFile /usr/local/etc/openssl@1.1/cert.pem
-    # CertificateFile /usr/local/etc/ca-certificates/cert.pem
-    # CertificateFile /usr/local/etc/openssl/cert.pem
+################################ JC ##############################################
+IMAPAccount jc-support
+Host heracles.mxrouting.net
+User support@jaza.cash
+PassCmd "/run/current-system/sw/bin/pass Email/heracles"
+AuthMechs LOGIN
+TLSType IMAPS
 
-    IMAPStore gmail-remote
-    Account gmail
+IMAPStore jc-support-remote
+Account jc-support
 
-    MaildirStore gmail-local
-    Path ~/.mail/gmail/
-    Inbox ~/.mail/gmail/INBOX
+MaildirStore jc-support-local
+Path ~/.mail/jc-support/
+Inbox ~/.mail/jc-support/INBOX
+SubFolders Verbatim
 
-    Channel gmail-inbox
-    Far :gmail-remote:
-    Near :gmail-local:
-    Patterns "INBOX"
-    Create Both
-    Expunge Both
-    SyncState *
+Channel jc-support-inbox
+Far :jc-support-remote:
+Near :jc-support-local:
+Patterns "INBOX"
+Create Both
+Expunge Both
+SyncState *
 
-    Channel gmail-sent
-    Far :gmail-remote:"[Gmail]/Sent Mail"
-    Near :gmail-local:"sent"
-    Create Both
-    Expunge Both
-    SyncState *
+Channel jc-support-sent
+Far :jc-support-remote:"Sent"
+Near :jc-support-local:"sent"
+Create Both
+Expunge Both
+SyncState *
 
-    Channel gmail-all
-    Far :gmail-remote:"[Gmail]/All Mail"
-    Near :gmail-local:"all"
-    Create Both
-    Expunge Both
-    SyncState *
+Channel jc-support-drafts
+Far :jc-support-remote:"Drafts"
+Near :jc-support-local:"drafts"
+Create Both
+Expunge Both
+SyncState *
 
-    Group gmail
-    Channel gmail-inbox
-    Channel gmail-sent
-    # Channel gmail-all
+Channel jc-support-trash
+Far :jc-support-remote:"Trash"
+Near :jc-support-local:"trash"
+Create Both
+Expunge Both
+SyncState *
 
-    ################################# PROTONMAIL ##############################################
-    IMAPAccount protonmail
-    Host 127.0.0.1
-    Port 1143
-    User ben.ouattara@proton.me
-    # PassCmd "gpg --quiet --decrypt ~/.mbsync-pw-mailbox.gpg"
-    PassCmd "/run/current-system/sw/bin/pass Email/protonmail-mu-app.com"
-    AuthMechs LOGIN
-    SSLType NONE
-    #SSLVersions SSLv3
-    # CertificateFile /etc/ssl/certs/ca-bundle.crt
+Group jc-support
+Channel jc-support-inbox
+Channel jc-support-sent
+Channel jc-support-drafts
+Channel jc-support-trash
 
-    IMAPStore pm-remote
-    Account protonmail
+IMAPAccount jc-ops
+Host heracles.mxrouting.net
+User ops@jaza.cash
+PassCmd "/run/current-system/sw/bin/pass Email/heracles"
+AuthMechs LOGIN
+TLSType IMAPS
 
-    MaildirStore pm-local
-    Path ~/.mail/protonmail/
-    Inbox ~/.mail/protonmail/INBOX
+IMAPStore jc-ops-remote
+Account jc-ops
 
-    Channel pm-inbox
-    Far :pm-remote:
-    Near :pm-local:
-    Patterns "INBOX"
-    Create Both
-    Expunge Both
-    SyncState *
+MaildirStore jc-ops-local
+Path ~/.mail/jc-ops/
+Inbox ~/.mail/jc-ops/INBOX
+SubFolders Verbatim
 
-    Channel pm-sent
-    Far :pm-remote:"Sent"
-    Near :pm-local:"sent"
-    Create Both
-    Expunge Both
-    SyncState *
+Channel jc-ops-inbox
+Far :jc-ops-remote:
+Near :jc-ops-local:
+Patterns "INBOX"
+Create Both
+Expunge Both
+SyncState *
 
-    Channel pm-trash
-    Far :pm-remote:"Trash"
-    Near :pm-local:"trash"
-    Create Both
-    Expunge Both
-    SyncState *
+Channel jc-ops-sent
+Far :jc-ops-remote:"Sent"
+Near :jc-ops-local:"sent"
+Create Both
+Expunge Both
+SyncState *
 
-    Channel pm-spam
-    Far :pm-remote:"Spam"
-    Near :pm-local:"spam"
-    Create Both
-    Expunge Both
-    SyncState *
+Channel jc-ops-drafts
+Far :jc-ops-remote:"Drafts"
+Near :jc-ops-local:"drafts"
+Create Both
+Expunge Both
+SyncState *
 
-    Group protonmail
-    Channel pm-inbox
-    Channel pm-sent
-    Channel pm-trash
-    Channel pm-spam
+Channel jc-ops-trash
+Far :jc-ops-remote:"Trash"
+Near :jc-ops-local:"trash"
+Create Both
+Expunge Both
+SyncState *
+
+Group jc-ops
+Channel jc-ops-inbox
+Channel jc-ops-sent
+Channel jc-ops-drafts
+Channel jc-ops-trash
+
+IMAPAccount jc-compliance
+Host heracles.mxrouting.net
+User compliance@jaza.cash
+PassCmd "/run/current-system/sw/bin/pass Email/heracles"
+AuthMechs LOGIN
+TLSType IMAPS
+
+IMAPStore jc-compliance-remote
+Account jc-compliance
+
+MaildirStore jc-compliance-local
+Path ~/.mail/jc-compliance/
+Inbox ~/.mail/jc-compliance/INBOX
+SubFolders Verbatim
+
+Channel jc-compliance-inbox
+Far :jc-compliance-remote:
+Near :jc-compliance-local:
+Patterns "INBOX"
+Create Both
+Expunge Both
+SyncState *
+
+Channel jc-compliance-sent
+Far :jc-compliance-remote:"Sent"
+Near :jc-compliance-local:"sent"
+Create Both
+Expunge Both
+SyncState *
+
+Channel jc-compliance-drafts
+Far :jc-compliance-remote:"Drafts"
+Near :jc-compliance-local:"drafts"
+Create Both
+Expunge Both
+SyncState *
+
+Channel jc-compliance-trash
+Far :jc-compliance-remote:"Trash"
+Near :jc-compliance-local:"trash"
+Create Both
+Expunge Both
+SyncState *
+
+Group jc-compliance
+Channel jc-compliance-inbox
+Channel jc-compliance-sent
+Channel jc-compliance-drafts
+Channel jc-compliance-trash
+
+IMAPAccount jc-info
+Host heracles.mxrouting.net
+User info@jaza.cash
+PassCmd "/run/current-system/sw/bin/pass Email/heracles"
+AuthMechs LOGIN
+TLSType IMAPS
+
+IMAPStore jc-info-remote
+Account jc-info
+
+MaildirStore jc-info-local
+Path ~/.mail/jc-info/
+Inbox ~/.mail/jc-info/INBOX
+SubFolders Verbatim
+
+Channel jc-info-inbox
+Far :jc-info-remote:
+Near :jc-info-local:
+Patterns "INBOX"
+Create Both
+Expunge Both
+SyncState *
+
+Channel jc-info-sent
+Far :jc-info-remote:"Sent"
+Near :jc-info-local:"sent"
+Create Both
+Expunge Both
+SyncState *
+
+Channel jc-info-drafts
+Far :jc-info-remote:"Drafts"
+Near :jc-info-local:"drafts"
+Create Both
+Expunge Both
+SyncState *
+
+Channel jc-info-trash
+Far :jc-info-remote:"Trash"
+Near :jc-info-local:"trash"
+Create Both
+Expunge Both
+SyncState *
+
+Group jc-info
+Channel jc-info-inbox
+Channel jc-info-sent
+Channel jc-info-drafts
+Channel jc-info-trash
+
+IMAPAccount jc-fraud
+Host heracles.mxrouting.net
+User fraud@jaza.cash
+PassCmd "/run/current-system/sw/bin/pass Email/heracles"
+AuthMechs LOGIN
+TLSType IMAPS
+
+IMAPStore jc-fraud-remote
+Account jc-fraud
+
+MaildirStore jc-fraud-local
+Path ~/.mail/jc-fraud/
+Inbox ~/.mail/jc-fraud/INBOX
+SubFolders Verbatim
+
+Channel jc-fraud-inbox
+Far :jc-fraud-remote:
+Near :jc-fraud-local:
+Patterns "INBOX"
+Create Both
+Expunge Both
+SyncState *
+
+Channel jc-fraud-sent
+Far :jc-fraud-remote:"Sent"
+Near :jc-fraud-local:"sent"
+Create Both
+Expunge Both
+SyncState *
+
+Channel jc-fraud-drafts
+Far :jc-fraud-remote:"Drafts"
+Near :jc-fraud-local:"drafts"
+Create Both
+Expunge Both
+SyncState *
+
+Channel jc-fraud-trash
+Far :jc-fraud-remote:"Trash"
+Near :jc-fraud-local:"trash"
+Create Both
+Expunge Both
+SyncState *
+
+Group jc-fraud
+Channel jc-fraud-inbox
+Channel jc-fraud-sent
+Channel jc-fraud-drafts
+Channel jc-fraud-trash
+
+IMAPAccount jc-hr
+Host heracles.mxrouting.net
+User hr@jaza.cash
+PassCmd "/run/current-system/sw/bin/pass Email/heracles"
+AuthMechs LOGIN
+TLSType IMAPS
+
+IMAPStore jc-hr-remote
+Account jc-hr
+
+MaildirStore jc-hr-local
+Path ~/.mail/jc-hr/
+Inbox ~/.mail/jc-hr/INBOX
+SubFolders Verbatim
+
+Channel jc-hr-inbox
+Far :jc-hr-remote:
+Near :jc-hr-local:
+Patterns "INBOX"
+Create Both
+Expunge Both
+SyncState *
+
+Channel jc-hr-sent
+Far :jc-hr-remote:"Sent"
+Near :jc-hr-local:"sent"
+Create Both
+Expunge Both
+SyncState *
+
+Channel jc-hr-drafts
+Far :jc-hr-remote:"Drafts"
+Near :jc-hr-local:"drafts"
+Create Both
+Expunge Both
+SyncState *
+
+Channel jc-hr-trash
+Far :jc-hr-remote:"Trash"
+Near :jc-hr-local:"trash"
+Create Both
+Expunge Both
+SyncState *
+
+Group jc-hr
+Channel jc-hr-inbox
+Channel jc-hr-sent
+Channel jc-hr-drafts
+Channel jc-hr-trash
+
+IMAPAccount jc-sales
+Host heracles.mxrouting.net
+User sales@jaza.cash
+PassCmd "/run/current-system/sw/bin/pass Email/heracles"
+AuthMechs LOGIN
+TLSType IMAPS
+
+IMAPStore jc-sales-remote
+Account jc-sales
+
+MaildirStore jc-sales-local
+Path ~/.mail/jc-sales/
+Inbox ~/.mail/jc-sales/INBOX
+SubFolders Verbatim
+
+Channel jc-sales-inbox
+Far :jc-sales-remote:
+Near :jc-sales-local:
+Patterns "INBOX"
+Create Both
+Expunge Both
+SyncState *
+
+Channel jc-sales-sent
+Far :jc-sales-remote:"Sent"
+Near :jc-sales-local:"sent"
+Create Both
+Expunge Both
+SyncState *
+
+Channel jc-sales-drafts
+Far :jc-sales-remote:"Drafts"
+Near :jc-sales-local:"drafts"
+Create Both
+Expunge Both
+SyncState *
+
+Channel jc-sales-trash
+Far :jc-sales-remote:"Trash"
+Near :jc-sales-local:"trash"
+Create Both
+Expunge Both
+SyncState *
+
+Group jc-sales
+Channel jc-sales-inbox
+Channel jc-sales-sent
+Channel jc-sales-drafts
+Channel jc-sales-trash
+
+IMAPAccount jc-system
+Host heracles.mxrouting.net
+User system@jaza.cash
+PassCmd "/run/current-system/sw/bin/pass Email/heracles"
+AuthMechs LOGIN
+TLSType IMAPS
+
+IMAPStore jc-system-remote
+Account jc-system
+
+MaildirStore jc-system-local
+Path ~/.mail/jc-system/
+Inbox ~/.mail/jc-system/INBOX
+SubFolders Verbatim
+
+Channel jc-system-inbox
+Far :jc-system-remote:
+Near :jc-system-local:
+Patterns "INBOX"
+Create Both
+Expunge Both
+SyncState *
+
+Channel jc-system-sent
+Far :jc-system-remote:"Sent"
+Near :jc-system-local:"sent"
+Create Both
+Expunge Both
+SyncState *
+
+Channel jc-system-drafts
+Far :jc-system-remote:"Drafts"
+Near :jc-system-local:"drafts"
+Create Both
+Expunge Both
+SyncState *
+
+Channel jc-system-trash
+Far :jc-system-remote:"Trash"
+Near :jc-system-local:"trash"
+Create Both
+Expunge Both
+SyncState *
+
+Group jc-system
+Channel jc-system-inbox
+Channel jc-system-sent
+Channel jc-system-drafts
+Channel jc-system-trash
+
+################################ PERSONAL GMAIL ##############################################
+IMAPAccount gmail
+Host imap.gmail.com
+User benny.ouattara@gmail.com
+PassCmd "/run/current-system/sw/bin/pass Email/gmail"
+AuthMechs LOGIN
+TLSType IMAPS
+
+IMAPStore gmail-remote
+Account gmail
+
+MaildirStore gmail-local
+Path ~/.mail/gmail/
+Inbox ~/.mail/gmail/INBOX
+SubFolders Verbatim
+
+Channel gmail-inbox
+Far :gmail-remote:
+Near :gmail-local:
+Patterns "INBOX"
+Create Both
+Expunge Both
+SyncState *
+
+Channel gmail-sent
+Far :gmail-remote:"[Gmail]/Sent Mail"
+Near :gmail-local:"sent"
+Create Both
+Expunge Both
+SyncState *
+
+Channel gmail-all
+Far :gmail-remote:"[Gmail]/All Mail"
+Near :gmail-local:"all"
+Create Both
+Expunge Both
+SyncState *
+
+Group gmail
+Channel gmail-inbox
+Channel gmail-sent
+Channel gmail-all
+
+################################# PROTONMAIL ##############################################
+IMAPAccount protonmail
+Host 127.0.0.1
+Port 1143
+User ben.ouattara@proton.me
+PassCmd "/run/current-system/sw/bin/pass Email/proton"
+AuthMechs LOGIN
+TLSType NONE
+
+IMAPStore pm-remote
+Account protonmail
+
+MaildirStore pm-local
+Path ~/.mail/protonmail/
+Inbox ~/.mail/protonmail/INBOX
+SubFolders Verbatim
+
+Channel pm-inbox
+Far :pm-remote:
+Near :pm-local:
+Patterns "INBOX"
+Create Both
+Expunge Both
+SyncState *
+
+Channel pm-sent
+Far :pm-remote:"Sent"
+Near :pm-local:"sent"
+Create Both
+Expunge Both
+SyncState *
+
+Channel pm-trash
+Far :pm-remote:"Trash"
+Near :pm-local:"trash"
+Create Both
+Expunge Both
+SyncState *
+
+Channel pm-spam
+Far :pm-remote:"Spam"
+Near :pm-local:"spam"
+Create Both
+Expunge Both
+SyncState *
+
+Group protonmail
+Channel pm-inbox
+Channel pm-sent
+Channel pm-trash
+Channel pm-spam
+
+################################# JFUND ##############################################
+IMAPAccount jfund
+Host 127.0.0.1
+Port 1143
+User jazafund@proton.me
+PassCmd "/run/current-system/sw/bin/pass Email/jfund"
+AuthMechs LOGIN
+TLSType NONE
+
+IMAPStore jfund-remote
+Account jfund
+
+MaildirStore jfund-local
+Path ~/.mail/jfund/
+Inbox ~/.mail/jfund/INBOX
+SubFolders Verbatim
+
+Channel jfund-inbox
+Far :jfund-remote:
+Near :jfund-local:
+Patterns "INBOX"
+Create Both
+Expunge Both
+SyncState *
+
+Channel jfund-sent
+Far :jfund-remote:"Sent"
+Near :jfund-local:"sent"
+Create Both
+Expunge Both
+SyncState *
+
+Channel jfund-trash
+Far :jfund-remote:"Trash"
+Near :jfund-local:"trash"
+Create Both
+Expunge Both
+SyncState *
+
+Channel jfund-spam
+Far :jfund-remote:"Spam"
+Near :jfund-local:"spam"
+Create Both
+Expunge Both
+SyncState *
+
+Group jfund
+Channel jfund-inbox
+Channel jfund-sent
+Channel jfund-trash
+Channel jfund-spam

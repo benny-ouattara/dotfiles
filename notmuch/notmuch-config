@@ -29,9 +29,9 @@ path=.mail
 # address to which the original email was addressed.
 #
 [user]
-name=Ben O.
+name=Ben A.
 primary_email=benny.ouattara@gmail.com
-other_email=zangao@spotify.com;benny.ouattara@protonmail.com
+other_email=ben.ouattara@proton.me;jazafund@proton.me;support@jaza.cash;ops@jaza.cash;compliance@jaza.cash;info@jaza.cash;fraud@jaza.cash;hr@jaza.cash;sales@jaza.cash;system@jaza.cash;admin@jazafund.com;ben@jazafund.com
 
 # Configuration for "notmuch new"
 #
@@ -49,7 +49,7 @@ other_email=zangao@spotify.com;benny.ouattara@protonmail.com
 #
 [new]
 tags=new
-ignore=.mbsyncstate;.strstrname;.uidvalidity
+ignore=.mbsyncstate;.uidvalidity
 
 # Search configuration
 #
