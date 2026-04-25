@@ -50,3 +50,4 @@ guix/backup/*
 *.pdf
 containers/
 lnav/*
+broot/

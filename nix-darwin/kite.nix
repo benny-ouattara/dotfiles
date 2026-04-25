@@ -111,7 +111,11 @@ in
   };
 
   environment.systemPackages = [
-    pkgs.procps
+    pkgs.hwatch
+    pkgs.dust
+    pkgs.xcp
+    pkgs.procs
+    pkgs.bottom
     pkgs.msmtp
     pkgs.clojure-lsp
     pkgs.lima
