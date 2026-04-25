@@ -10,13 +10,86 @@ port           587
 tls_starttls   on
 from           benny.ouattara@gmail.com
 user           benny.ouattara@gmail.com
-passwordeval   "pass show Email/gmail-mu-app.com"
+passwordeval   "pass show Email/gmail"
 
 account        protonmail
 host           127.0.0.1
 port           1025
 tls_starttls   off
-from           benny.ouattara@protonmail.com
-user           benny.ouattara@protonmail.com
+from           ben.ouattara@proton.me
+user           ben.ouattara@proton.me
+passwordeval   "pass show Email/proton"
+
+account        jfund
+host           127.0.0.1
+port           1025
+tls_starttls   off
+from           jazafund@proton.me
+user           jazafund@proton.me
+passwordeval   "pass show Email/jfund"
+
+account        jc-support
+host           heracles.mxrouting.net
+port           587
+tls_starttls   on
+from           support@jaza.cash
+user           support@jaza.cash
+passwordeval   "pass show Email/heracles"
+
+account        jc-ops
+host           heracles.mxrouting.net
+port           587
+tls_starttls   on
+from           ops@jaza.cash
+user           ops@jaza.cash
+passwordeval   "pass show Email/heracles"
+
+account        jc-compliance
+host           heracles.mxrouting.net
+port           587
+tls_starttls   on
+from           compliance@jaza.cash
+user           compliance@jaza.cash
+passwordeval   "pass show Email/heracles"
+
+account        jc-info
+host           heracles.mxrouting.net
+port           587
+tls_starttls   on
+from           info@jaza.cash
+user           info@jaza.cash
+passwordeval   "pass show Email/heracles"
+
+account        jc-fraud
+host           heracles.mxrouting.net
+port           587
+tls_starttls   on
+from           fraud@jaza.cash
+user           fraud@jaza.cash
+passwordeval   "pass show Email/heracles"
+
+account        jc-hr
+host           heracles.mxrouting.net
+port           587
+tls_starttls   on
+from           hr@jaza.cash
+user           hr@jaza.cash
+passwordeval   "pass show Email/heracles"
+
+account        jc-sales
+host           heracles.mxrouting.net
+port           587
+tls_starttls   on
+from           sales@jaza.cash
+user           sales@jaza.cash
+passwordeval   "pass show Email/heracles"
+
+account        jc-system
+host           heracles.mxrouting.net
+port           587
+tls_starttls   on
+from           system@jaza.cash
+user           system@jaza.cash
+passwordeval   "pass show Email/heracles"
 
 account default : gmail

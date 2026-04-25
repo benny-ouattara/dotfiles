@@ -80,7 +80,7 @@
     # Address to connect to
     Host imap.gmail.com
     User benny.ouattara@gmail.com
-    PassCmd "/run/current-system/sw/bin/pass Email/gmail-mu-app.com"
+    PassCmd "/run/current-system/sw/bin/pass Email/gmail"
     AuthMechs LOGIN
     SSLType IMAPS
     # SSLVersions SSLv3 # deprecated, use default
