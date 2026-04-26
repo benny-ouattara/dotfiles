@@ -6,6 +6,7 @@ let
   sync-mail-job = pkgs.writeShellScript "sync-mail" ''
     ${pkgs.isync}/bin/mbsync -a
     ${pkgs.notmuch}/bin/notmuch new
+    ${pkgs.afew}/bin/afew -n -t
   '';
   watchdog-script = pkgs.writeShellScript "wm-watchdog" (builtins.readFile ./scripts/wm-watchdog.sh);
   nix-gc = pkgs.writeShellScript "nix-gc" (builtins.readFile ./scripts/nix-gc.sh);
@@ -237,8 +238,8 @@ in
 
   # We use Nix to generate the mcron configuration file
   environment.etc."mcron.d/jobs.guile".text = ''
-    ;; Run mail sync every 15 minutes
-    (job '(next-minute '(0 15 30 45)) "${sync-mail-job}")
+    ;; Run mail sync every 5 minutes
+    (job '(next-minute (range 0 60 5)) "${sync-mail-job}")
 
     ;; Run a cleanup of the Downloads folder every day at 8am
     (job '(next-hour '(8)) "${pkgs.coreutils}/bin/ls ~/Downloads/*")

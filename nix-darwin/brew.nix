@@ -8,7 +8,7 @@
       upgrade = true;
       # 'zap' uninstalls anything not listed here—be careful!
       # Use 'uninstall' if you want to keep manual installs.
-      # cleanup = "zap"; 
+      # cleanup = "zap";
       cleanup = "uninstall";
     };
 
@@ -43,7 +43,6 @@
       "visualvm"
       "discord"
       "spotify"
-      "gimp"
       "vlc"
       "appcleaner"
       "discord"
