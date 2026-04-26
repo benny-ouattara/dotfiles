@@ -645,7 +645,7 @@ some doom themes don't deal well with wgrep faces, this sets sensible defaults
 (add-hook 'window-size-change-functions #'beno-apply-popup-rules)
 #+end_src
 * hide title bar
-Emacs 29 allows you to hide the title bar, no need to compile emacs with title bar removed
+Emacs 29+ allows you to hide the title bar, no need to compile emacs with title bar removed
 #+begin_src emacs-lisp :results silent
 (add-to-list 'default-frame-alist '(undecorated . t))
 #+end_src
@@ -1204,15 +1204,17 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
          :desc "Stop Tasks"  "T" (cmd! (cider-interactive-eval "(user/stop-tasks)"))
          :desc "Reload queries" "q" (cmd! (cider-interactive-eval "(user/reload-queries)")))))
 #+end_src
-* find file in dotfiles
+* file keybindings
 #+begin_src emacs-lisp :results silent
 (defun beno-find-file-in-dotfiles ()
   "Search for a file in `dotfiles'."
   (interactive)
   (doom-project-find-file "~/Code/dotfiles"))
 
+(map! :n "gF" #'find-file-at-point)
+
 (map! :leader
-      :desc "find in dotfiles"      "f d" #'beno-find-file-in-dotfiles
+      :desc "find in dotfiles"       "f d" #'beno-find-file-in-dotfiles
       :desc "find in private config" "f p" #'doom/find-file-in-private-config)
 #+end_src
 * search related advices

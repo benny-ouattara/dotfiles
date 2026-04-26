@@ -716,8 +716,10 @@ With prefix ARG, reset the eshell buffer."
   (interactive)
   (doom-project-find-file "~/Code/dotfiles"))
 
+(map! :n "gF" #'find-file-at-point)
+
 (map! :leader
-      :desc "find in dotfiles"      "f d" #'beno-find-file-in-dotfiles
+      :desc "find in dotfiles"       "f d" #'beno-find-file-in-dotfiles
       :desc "find in private config" "f p" #'doom/find-file-in-private-config)
 
 (defun beno-recenter (&rest _)
