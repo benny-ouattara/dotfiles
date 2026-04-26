@@ -4,7 +4,10 @@ let
   log-dir = home-dir + "/.logs";
   # Define a simple backup script as a Nix string
   sync-mail-job = pkgs.writeShellScript "sync-mail" ''
-    ${pkgs.isync}/bin/mbsync -a
+    for group in jc-support jc-ops jc-compliance jc-info jc-fraud jc-hr jc-sales jc-system gmail protonmail jfund; do
+      ${pkgs.isync}/bin/mbsync "$group" || true
+      sleep 1
+    done
     ${pkgs.notmuch}/bin/notmuch new
     ${pkgs.afew}/bin/afew -n -t
   '';

@@ -5,6 +5,7 @@ User support@jaza.cash
 PassCmd "/run/current-system/sw/bin/pass Email/heracles"
 AuthMechs LOGIN
 TLSType IMAPS
+CertificateFile /etc/ssl/certs/ca-certificates.crt
 
 IMAPStore jc-support-remote
 Account jc-support
@@ -55,6 +56,7 @@ User ops@jaza.cash
 PassCmd "/run/current-system/sw/bin/pass Email/heracles"
 AuthMechs LOGIN
 TLSType IMAPS
+CertificateFile /etc/ssl/certs/ca-certificates.crt
 
 IMAPStore jc-ops-remote
 Account jc-ops
@@ -105,6 +107,7 @@ User compliance@jaza.cash
 PassCmd "/run/current-system/sw/bin/pass Email/heracles"
 AuthMechs LOGIN
 TLSType IMAPS
+CertificateFile /etc/ssl/certs/ca-certificates.crt
 
 IMAPStore jc-compliance-remote
 Account jc-compliance
@@ -155,6 +158,7 @@ User info@jaza.cash
 PassCmd "/run/current-system/sw/bin/pass Email/heracles"
 AuthMechs LOGIN
 TLSType IMAPS
+CertificateFile /etc/ssl/certs/ca-certificates.crt
 
 IMAPStore jc-info-remote
 Account jc-info
@@ -205,6 +209,7 @@ User fraud@jaza.cash
 PassCmd "/run/current-system/sw/bin/pass Email/heracles"
 AuthMechs LOGIN
 TLSType IMAPS
+CertificateFile /etc/ssl/certs/ca-certificates.crt
 
 IMAPStore jc-fraud-remote
 Account jc-fraud
@@ -255,6 +260,7 @@ User hr@jaza.cash
 PassCmd "/run/current-system/sw/bin/pass Email/heracles"
 AuthMechs LOGIN
 TLSType IMAPS
+CertificateFile /etc/ssl/certs/ca-certificates.crt
 
 IMAPStore jc-hr-remote
 Account jc-hr
@@ -305,6 +311,7 @@ User sales@jaza.cash
 PassCmd "/run/current-system/sw/bin/pass Email/heracles"
 AuthMechs LOGIN
 TLSType IMAPS
+CertificateFile /etc/ssl/certs/ca-certificates.crt
 
 IMAPStore jc-sales-remote
 Account jc-sales
@@ -355,6 +362,7 @@ User system@jaza.cash
 PassCmd "/run/current-system/sw/bin/pass Email/heracles"
 AuthMechs LOGIN
 TLSType IMAPS
+CertificateFile /etc/ssl/certs/ca-certificates.crt
 
 IMAPStore jc-system-remote
 Account jc-system
@@ -406,6 +414,7 @@ User benny.ouattara@gmail.com
 PassCmd "/run/current-system/sw/bin/pass Email/gmail"
 AuthMechs LOGIN
 TLSType IMAPS
+CertificateFile /etc/ssl/certs/ca-certificates.crt
 
 IMAPStore gmail-remote
 Account gmail
