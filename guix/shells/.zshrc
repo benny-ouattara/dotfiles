@@ -8,7 +8,7 @@ export ZSH="$HOME/.oh-my-zsh"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="robbyrussell"
+ZSH_THEME=""
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -70,7 +70,7 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(fzf git podman sudo tailscale aliases aws history z)
+plugins=(fzf git podman sudo tailscale aliases aws history)
 
 export FZF_BASE=/home/ben/.guix-home/profile/bin/fzf
 export FZF_DEFAULT_COMMAND='fzf'
@@ -122,7 +122,7 @@ alias ur='up system-reconfigure'
 alias uh='up home-reconfigure'
 alias guix-rm-cache="sudo rm -rf ~/.cache/guix/"
 alias pc="podman-compose"
-alias edit="nvim"
+alias edit="emacsclient -t"
 alias vim="nvim"
 alias info="info --vi-keys"
 alias claw-edit="emacs /home/openclaw/.openclaw"
@@ -181,3 +181,10 @@ _up() {
     reply=($(grep -oE '^[a-zA-Z_-]+:' "$makefile" | sed 's/://'))
 }
 compctl -K _up up
+
+eval "$(starship init zsh)"
+eval "$(zoxide init zsh)"
+
+alias ff='fzf --preview "bat --color=always {}"'
+alias c='claude'
+alias cx='claude --dangerously-skip-permissions'

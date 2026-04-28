@@ -610,6 +610,9 @@ With prefix ARG, reset the eshell buffer."
 (map! :leader
       :desc "toggle modus theme" "t m" #'modus-themes-toggle)
 
+(after! catppuccin-theme
+  (setq catppuccin-flavor 'mocha))
+
 (add-to-list 'load-path  "~/Code/dotfiles/lib/")
 (require 'soccer)
 (map! :leader

@@ -1094,6 +1094,11 @@ Emacs 29 allows you to hide the title bar, no need to compile emacs with title b
 (map! :leader
       :desc "toggle modus theme" "t m" #'modus-themes-toggle)
 #+end_src
+* catpuccin theme
+#+begin_src emacs-lisp :results silent
+(after! catppuccin-theme
+  (setq catppuccin-flavor 'mocha))
+#+end_src
 * soccer.el
 #+begin_src emacs-lisp :results silent
 (add-to-list 'load-path  "~/Code/dotfiles/lib/")

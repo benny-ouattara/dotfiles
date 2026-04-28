@@ -25,19 +25,19 @@
  *debug-level* 10)
 (redirect-all-output (data-dir-file "debug" "log"))
 
-;; Message bar
-(set-fg-color "white")
-(set-bg-color "#111111")
-(set-border-color "white")
+;; Message bar - Catppuccin Mocha
+(set-fg-color "#CDD6F4")
+(set-bg-color "#1E1E2E")
+(set-border-color "#89B4FA")
 (setf *colors*
-      '("#111111"   ; 0 black
-        "#dc322f"   ; 1 red
-        "#859900"   ; 2 green
-        "#b58900"   ; 3 yellow
-        "#268bd2"   ; 4 blue
-        "#d33682"   ; 5 magenta
-        "#2aa198"   ; 6 cyan
-        "#fdf6e3")) ; 7 white
+      '("#1E1E2E"   ; 0 black  (Base)
+        "#F38BA8"   ; 1 red
+        "#A6E3A1"   ; 2 green
+        "#F9E2AF"   ; 3 yellow
+        "#89B4FA"   ; 4 blue
+        "#CBA6F7"   ; 5 magenta (Mauve)
+        "#94E2D5"   ; 6 cyan   (Teal)
+        "#CDD6F4")) ; 7 white  (Text)
 (update-color-map (current-screen))
 
 ;; set modules path
@@ -55,26 +55,96 @@
   (move-focus :right))
 
 (defcommand vsplit-and-focus () ()
-            "Create a new frame below and move focus to it."
-            (vsplit)
-            (move-focus :down))
+  "Create a new frame below and move focus to it."
+  (vsplit)
+  (move-focus :down))
 
 (defcommand delete-window-and-frame () ()
-            "Delete the current frame with its window."
-            (delete-window)
-            (remove-split))
+  "Delete the current frame with its window."
+  (delete-window)
+  (remove-split))
 
 (defcommand start-firefox () ()
-            "Run or raise firefox web browser."
-            (run-or-raise "firefox" '(:class "Firefox") t nil))
+  "Run or raise firefox web browser."
+  (run-or-raise "firefox" '(:class "Firefox") t nil))
 
 (defcommand start-emacs () ()
   "Run or raise emacs."
   (run-or-raise "emacs" '(:class "Emacs") t nil))
 
 (defcommand start-kitty () ()
-            "Run or raise kitty."
-            (run-or-raise "kitty" '(:class "kitty") t nil))
+  "Run or raise kitty."
+  (run-or-raise "kitty" '(:class "kitty") t nil))
+
+(defcommand unified-copy () ()
+  "Copy: send M-w to Emacs, C-c to everything else."
+  (let ((win-class (window-class (current-window))))
+    (if (string-equal win-class "Emacs")
+        (run-shell-command "xdotool keyup super key alt+w")
+        (run-shell-command "xdotool keyup super key ctrl+c"))))
+
+(defcommand unified-cut () ()
+  "Cut: send C-w to Emacs, C-x to everything else."
+  (let ((win-class (window-class (current-window))))
+    (if (string-equal win-class "Emacs")
+        (run-shell-command "xdotool keyup super key ctrl+w")
+        (run-shell-command "xdotool keyup super key ctrl+x"))))
+
+(defcommand unified-paste () ()
+  "Paste: send C-y to Emacs, C-v to everything else."
+  (let ((win-class (window-class (current-window))))
+    (if (string-equal win-class "Emacs")
+        (run-shell-command "xdotool keyup super key ctrl+y")
+        (run-shell-command "xdotool keyup super key ctrl+v"))))
+
+(defcommand clipboard-history () ()
+  "Show clipboard history via clipmenu with rofi."
+  (run-shell-command "clipmenu"))
+
+(defcommand show-keybindings () ()
+  "Display all top-level keybindings in a message."
+  (let ((bindings
+          '("s-RET     Terminal (kitty)"
+            "s-S-RET   Browser (firefox)"
+            "s-SPC     App launcher (rofi)"
+            "s-M-SPC   System menu"
+            "s-e       Emacs"
+            "s-c       Copy  |  s-x  Cut"
+            "s-v       Paste |  s-C-v Clipboard history"
+            "s-j/k/h/l Focus left/right/down/up"
+            "s-C-j/k/h/l Move window"
+            "s-s       HSplit  |  s-S  VSplit"
+            "s-f       Fullscreen"
+            "s-q       Close window  |  s-r  Remove frame"
+            "s-1..5    Switch workspace"
+            "C-s-1..5  Move to workspace"
+            "s-K       This help")))
+    (message "~{~a~%~}" bindings)))
+
+(defcommand system-menu () ()
+  "Show system menu via rofi."
+  (run-shell-command
+   (concatenate 'string
+                "choice=$(echo -e "
+                "'Guix System Reconfigure\\n"
+                "Guix Home Reconfigure\\n"
+                "Restart StumpWM\\n"
+                "Quit StumpWM\\n"
+                "Lock Screen\\n"
+                "Edit System Config\\n"
+                "Edit Home Config' "
+                "| rofi -dmenu -p 'System'); "
+                "case \"$choice\" in "
+                "'Guix System Reconfigure') "
+                "exec kitty --directory=/home/ben/Code/dotfiles/guix zsh -c 'sudo -E guix system reconfigure system/config.scm; exec zsh;' ;; "
+                "'Guix Home Reconfigure') "
+                "exec kitty --directory=/home/ben/Code/dotfiles/guix zsh -c 'guix home reconfigure home/config.scm; exec zsh;' ;; "
+                "'Restart StumpWM') stumpish restart-hard ;; "
+                "'Quit StumpWM') stumpish quit ;; "
+                "'Lock Screen') slock ;; "
+                "'Edit System Config') emacsclient -c /home/ben/Code/dotfiles/guix/system/config.scm ;; "
+                "'Edit Home Config') emacsclient -c /home/ben/Code/dotfiles/guix/home/config.scm ;; "
+                "esac")))
 
 (defcommand start-slynk (port) ((:string "Port number: "))
   (sb-thread:make-thread
@@ -140,7 +210,18 @@
 (define-key *top-map* (kbd "s-g") "guix-system")
 (define-key *top-map* (kbd "s-G") "guix-home")
 (define-key *top-map* (kbd "s-w") "exec firefox")
+(define-key *top-map* (kbd "s-S-RET") "exec firefox")
 (define-key *top-map* (kbd "s-e") "emacs")
+
+;; Omarchy-style clipboard
+(define-key *top-map* (kbd "s-c") "unified-copy")
+(define-key *top-map* (kbd "s-x") "unified-cut")
+(define-key *top-map* (kbd "s-v") "unified-paste")
+(define-key *top-map* (kbd "s-C-v") "clipboard-history")
+
+;; System menu and keybinding help
+(define-key *top-map* (kbd "s-M-SPC") "system-menu")
+(define-key *top-map* (kbd "s-K") "show-keybindings")
 
 (define-key *top-map* (kbd "s-j") "move-focus left")
 (define-key *top-map* (kbd "s-k") "move-focus right")
@@ -189,7 +270,7 @@
 
 ;; window placement rules
 (define-frame-preference "dev"
-  (1 t t :class "Emacs"))
+    (1 t t :class "Emacs"))
 
 (define-frame-preference "web"
     (2 t t :class "Firefox"))
@@ -208,6 +289,7 @@
 (run-shell-command "xset r rate 150 60")
 (run-shell-command "feh --randomize --bg-fill ~/Sync/wallpapers/*")
 (run-shell-command "picom")
+(run-shell-command "clipmenud")
 (run-shell-command "xsetroot -cursor_name left_ptr")
 (run-shell-command "amixer")
 
@@ -225,7 +307,7 @@
 ;; take screenshot C-a ; then type command screenshot
 (asdf:load-system :screenshot)
 
-(asdf:load-system :rofi)
+;; (asdf:load-system :rofi) ;; disabled: module not found
 
 ;; Polybar
 (defun icon-by-group (name)
@@ -251,11 +333,11 @@
                    (number (write-to-string (group-number g)))
                    (n-win (write-to-string (length (group-windows g))))
                    (icon (icon-by-group name))
-                   (text (concat " %{F#54728E}" icon "%{F-} " number ":" name " ")))
+                   (text (concat " %{F#89B4FA}" icon "%{F-} " number ":" name " ")))
               (cond
-                ((eq g (current-group)) (concat "%{F#FFFFFF B#000000 u#54728E +u}" text "[" n-win "] " "%{F- B- u- -u}"))
+                ((eq g (current-group)) (concat "%{F#CDD6F4 B#313244 u#89B4FA +u}" text "[" n-win "] " "%{F- B- u- -u}"))
                 ((string-equal n-win "0") "")
-                (t (concat "%{F#FFFFFF}" text "[" n-win "] " "%{F-}")))))
+                (t (concat "%{F#CDD6F4}" text "[" n-win "] " "%{F-}")))))
           (sort (screen-groups (current-screen)) #'< :key #'group-number))))
 
 (defun polybar-update-groups ()
