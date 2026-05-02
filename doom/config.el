@@ -653,7 +653,7 @@ With prefix ARG, reset the eshell buffer."
    (ex/catch 2)
    (jui/form 'defun))
 
-  (map! :map clojure-mode-map                                                   
+  (map! :map (list clojure-mode-map clojurec-mode-map clojurescript-mode-map)
         :localleader "TAB" #'jazacash-cycle-slice-file
         (:prefix ("b" . "bb")
          :desc "Test unit"  "u" (cmd! (bb! "bb test unit"))                     
