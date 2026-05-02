@@ -680,7 +680,7 @@ With prefix ARG, reset the eshell buffer."
     (interactive)
     (cider-nrepl-sync-request:eval "(portal.api/close)"))
 
-  (map! :map clojure-mode-map
+  (map! :map (list clojure-mode-map clojurec-mode-map clojurescript-mode-map)
         :localleader
         :desc "open portal"  :n "o" #'beno-portal-open
         :desc "close portal" :n "q" #'beno-portal-close
