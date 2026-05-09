@@ -41,9 +41,6 @@
         "#CDD6F4")) ; 7 white  (Text)
 (update-color-map (current-screen))
 
-;; set modules path
-;; (set-module-dir "~/.stumpwm.d/modules")
-
 ;; define commands
 (defcommand now-we-are-six (name age)
   ((:string "Enter your name: ")
@@ -264,10 +261,7 @@
 (define-key *top-map* (kbd "s-f") "fullscreen")
 (define-key *top-map* (kbd "s-s") "hsplit-and-focus")
 (define-key *top-map* (kbd "s-S") "vsplit-and-focus")
-;; (define-key *top-map* (kbd "s-SPC") "run-shell-command /home/ben/.config/rofi/launchers/type-1/launcher.sh")
 (define-key *top-map* (kbd "s-SPC") "launch-rofi")
-
-;; (define-key *top-map* (kbd "C-s-l") "run-shell-command slock")
 (define-key *top-map* (kbd "C-s-r") "iresize")
 
 (define-key *top-map* (kbd "s-1") "gselect dev")
@@ -298,9 +292,6 @@
 (define-frame-preference "web"
     (2 t t :class "Firefox"))
 
-;; (define-frame-preference "term"
-;;     (3 t t :class "kitty"))
-
 ;; start processes
 (run-commands
  "start-polybar"
@@ -316,21 +307,13 @@
 (run-shell-command "xsetroot -cursor_name left_ptr")
 (run-shell-command "amixer")
 
-;; backlight
-;; (load-module "acpi-backlight")
-;; (acpi-backlight:init "intel_backlight")
-
 ;; gaps
-;; (load-module "swm-gaps")
 (asdf:load-system :swm-gaps)
 (setf swm-gaps:*inner-gaps-size* 5
       swm-gaps:*outer-gaps-size* 10)
 (swm-gaps:toggle-gaps-on)
 
-;; take screenshot C-a ; then type command screenshot
 (asdf:load-system :screenshot)
-
-;; (asdf:load-system :rofi) ;; disabled: module not found
 
 ;; Polybar
 (defun icon-by-group (name)
@@ -371,16 +354,6 @@
 (add-hook *focus-window-hook* (lambda (win lastw) (polybar-update-groups)))
 (add-hook *focus-group-hook* (lambda (grp lastg) (polybar-update-groups)))
 
-;; (load-module "stump-volume-control")
-
-;; primitive and unsecure screen lock, prefer slock bound to C-s-l
-;; (load-module "stump-lock")
-;; (setf stump-lock:*password* "asdf")
-;; (define-key *top-map* (kbd "s-l") "lock-screen")
-
-;; password
-;; (load-module "pass")
-
 ;; TTF fonts
 (asdf:initialize-source-registry
  '(:source-registry
@@ -394,8 +367,7 @@
 (set-font (make-instance 'xft:font :family "Iosevka Term" :subfamily "Regular" :size 14))
 
 (run-shell-command "nm-applet")
-;; (run-shell-command "volumeicon") ;; the polybar theme used provides volume icon and partial control
 
-;; load this last to avoid issues
+;; Slynk REPL (uncomment to connect Sly/Slime to StumpWM)
 ;; (require :slynk)
 ;; (slynk:create-server :port 4009 :dont-close t)
