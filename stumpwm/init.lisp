@@ -27,9 +27,9 @@
 (redirect-all-output (data-dir-file "debug" "log"))
 
 ;; Message bar - Catppuccin Mocha
-(set-fg-color "#c0caf5")
-(set-bg-color "#1a1b26")
-(set-border-color "#7aa2f7")
+(set-fg-color "#CDD6F4")
+(set-bg-color "#1E1E2E")
+(set-border-color "#89B4FA")
 (setf *colors*
       '("#1E1E2E"   ; 0 black  (Base)
         "#F38BA8"   ; 1 red
@@ -349,7 +349,7 @@
           (sort (screen-groups (current-screen)) #'< :key #'group-number))))
 
 (defun polybar-update-groups ()
-  (run-shell-command "polybar-msg hook stumpwmgroups 1"))
+  (run-shell-command "polybar-msg action '#stumpwmgroups.hook.0'"))
 
 (add-hook *new-window-hook* (lambda (win) (polybar-update-groups)))
 (add-hook *destroy-window-hook* (lambda (win) (polybar-update-groups)))
