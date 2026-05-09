@@ -31,19 +31,19 @@
   ("onyx" (setq
            doom-font (font-spec :family "Iosevka" :size 19 :weight 'normal)
            doom-big-font (font-spec :family "Iosevka" :size 27)
-           doom-theme 'modus-operandi))
+           doom-theme 'doom-tokyo-night)
   ("oryx" (setq
            doom-font (font-spec :family "Iosevka" :size 17 :weight 'normal)
            doom-big-font (font-spec :family "Iosevka" :size 25)
-           doom-theme 'modus-operandi))
+           doom-theme 'doom-tokyo-night)
   ("kite" (setq
            doom-font (font-spec :family "Iosevka" :size 17 :weight 'normal)
            doom-big-font (font-spec :family "Iosevka" :size 25)
-           doom-theme 'modus-operandi))
+           doom-theme 'doom-tokyo-night)
   ("otter" (setq
             doom-font (font-spec :family "Iosevka" :size 21 :weight 'normal)
             doom-big-font (font-spec :family "Iosevka" :size 29)
-            doom-theme 'modus-operandi)))
+            doom-theme 'doom-tokyo-night)
 
 (setq
  mac-command-modifier 'meta
@@ -62,8 +62,8 @@
 
   (defun beno--auto-theme (appearance)
     (pcase appearance
-      ('light (consult-theme 'modus-operandi))
-      ('dark (consult-theme 'catppuccin))))
+      ('light (consult-theme 'doom-tokyo-night))
+      ('dark (consult-theme 'doom-tokyo-night))
 
   (add-hook 'ns-system-appearance-change-functions #'beno--auto-theme))
 
@@ -81,7 +81,7 @@
   
   (menu-bar-mode -1)
   (xterm-mouse-mode 1)
-  (consult-theme 'catppuccin))
+  (consult-theme 'doom-tokyo-night))
 
 (setq
  org-startup-folded 'show2levels

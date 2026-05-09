@@ -134,10 +134,20 @@ green = ${GREEN[$THEME]}
 yellow = ${YELLOW[$THEME]}
 blue = ${BLUE[$THEME]}
 purple = ${PURPLE[$THEME]}
+purpledark = ${PURPLE[$THEME]}
 cyan = ${CYAN[$THEME]}
+teal = ${CYAN[$THEME]}
+ocean = ${BLUE[$THEME]}
 orange = ${YELLOW[$THEME]}
 magenta = ${PURPLE[$THEME]}
 gray = ${FG[$THEME]}
+bluedark = ${BG_ALT[$THEME]}
+cream = ${FG[$THEME]}
+indigo = ${BG_ALT[$THEME]}
+pink = ${PURPLE[$THEME]}
+shade2 = ${BG_ALT[$THEME]}
+shade3 = ${BG_ALT[$THEME]}
+shade4 = ${BG_ALT[$THEME]}
 
 ;; _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 EOF
@@ -242,9 +252,8 @@ else
 fi
 
 # --- Reload running applications ---
-# Polybar (kill and relaunch)
-killall polybar 2>/dev/null; sleep 0.5
-polybar &
+# Polybar (restart via StumpWM command)
+stumpish start-polybar 2>/dev/null
 
 # Kitty (reload config)
 kill -SIGUSR1 $(pgrep kitty) 2>/dev/null || true

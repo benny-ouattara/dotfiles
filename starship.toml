@@ -2,21 +2,21 @@ scan_timeout = 500
 add_newline = false
 
 [character]
-success_symbol = "[>](bold #50fa7b)"
-error_symbol = "[x](bold #ff5555)"
-vicmd_symbol = "[V](bold #6272a4)"
+success_symbol = "[>](bold #9ece6a)"
+error_symbol = "[x](bold #f7768e)"
+vicmd_symbol = "[V](bold #7aa2f7)"
 
 [directory]
-style = "bold #6272a4"
+style = "bold #7aa2f7"
 read_only = " ro"
 truncation_length = 3
 
 [git_branch]
-style = "bold #bd93f9"
+style = "bold #bb9af7"
 
 [git_status]
 disabled = false
-style = "#f1fa8c"
+style = "#e0af68"
 
 [git_commit]
 commit_hash_length = 7
@@ -26,8 +26,8 @@ only_detached = false
 [git_metrics]
 disabled = false
 format = '([+$added]($added_style)) ([-$deleted]($deleted_style)) '
-added_style = "#50fa7b"
-deleted_style = "#ff5555"
+added_style = "#9ece6a"
+deleted_style = "#f7768e"
 
 [battery]
 disabled = true
@@ -43,4 +43,4 @@ disabled = true
 
 [nix_shell]
 symbol = " "
-style = "#8be9fd"
+style = "#7dcfff"

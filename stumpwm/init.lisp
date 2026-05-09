@@ -27,9 +27,9 @@
 (redirect-all-output (data-dir-file "debug" "log"))
 
 ;; Message bar - Catppuccin Mocha
-(set-fg-color "#f8f8f2")
-(set-bg-color "#282a36")
-(set-border-color "#6272a4")
+(set-fg-color "#c0caf5")
+(set-bg-color "#1a1b26")
+(set-border-color "#7aa2f7")
 (setf *colors*
       '("#1E1E2E"   ; 0 black  (Base)
         "#F38BA8"   ; 1 red
@@ -124,6 +124,7 @@
                 "C-s-1..5     Move to workspace\\n"
                 "s-g / s-G    Guix system / home\\n"
                 "s-;          System menu\\n"
+                "s-:          Command prompt\\n"
                 "s-R          Restart StumpWM\\n"
                 "s-Q          Quit StumpWM\\n"
                 "s-K          This help"
@@ -178,8 +179,8 @@
    :name "manual-slynk-stumpwm"))
 
 (defcommand start-polybar () ()
-  "Run the polybar status bar."
-  (run-shell-command "polybar"))   ;; --reload doesn't work on config changes, the modeline simply disappears
+  "Kill existing polybar and start fresh."
+  (run-shell-command "polybar-msg cmd quit 2>/dev/null; sleep 0.5; polybar main &"))
 
 (defun rofi (mode)
   (run-shell-command (concat "rofi -show " mode " -m " (write-to-string (head-number (current-head))))))
@@ -188,7 +189,7 @@
   (rofi "run -sidebar-mode"))
 
 (defcommand launch-rofi () ()
-  (rofi "drun -theme /home/ben/.config/rofi/launchers/type-1/style-8.rasi"))
+  (rofi "drun -theme /home/ben/.config/rofi/launchers/type-1/style-5.rasi"))
 
 (defcommand rofi-window () ()
   (rofi "window"))
@@ -241,6 +242,7 @@
 
 ;; System menu and keybinding help
 (define-key *top-map* (kbd "s-;") "system-menu")
+(define-key *top-map* (kbd "s-:") "colon")
 (define-key *top-map* (kbd "s-K") "show-keybindings")
 
 (define-key *top-map* (kbd "s-j") "move-focus left")
