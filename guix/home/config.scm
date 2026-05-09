@@ -113,6 +113,9 @@
      "starship@1.21.1"
      "xdotool@3.20211022.1"
      "xclip@0.13"
+     "font-google-material-design-icons@4.0.0"
+     "font-nerd-symbols@3.4.0"
+     "sbcl-stumpwm-ttf-fonts@0.0.1-7.c4f077b"
      "clipmenu@6.2.0-1.7c34ace"))))
  (services
   (cons*

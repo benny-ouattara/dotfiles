@@ -7,7 +7,8 @@
 (in-package :stumpwm)
 (setf *default-package* :stumpwm)
 
-(set-prefix-key (kbd "C-a"))
+;; Unbind prefix key - all bindings are on Super directly
+(define-key *top-map* (kbd "C-a") nil)
 (setf
  *resize-increment* 50
  *startup-message* nil
@@ -102,24 +103,34 @@
   (run-shell-command "clipmenu"))
 
 (defcommand show-keybindings () ()
-  "Display all top-level keybindings in a message."
-  (let ((bindings
-          '("s-RET     Terminal (kitty)"
-            "s-S-RET   Browser (firefox)"
-            "s-SPC     App launcher (rofi)"
-            "s-M-SPC   System menu"
-            "s-e       Emacs"
-            "s-c       Copy  |  s-x  Cut"
-            "s-v       Paste |  s-C-v Clipboard history"
-            "s-j/k/h/l Focus left/right/down/up"
-            "s-C-j/k/h/l Move window"
-            "s-s       HSplit  |  s-S  VSplit"
-            "s-f       Fullscreen"
-            "s-q       Close window  |  s-r  Remove frame"
-            "s-1..5    Switch workspace"
-            "C-s-1..5  Move to workspace"
-            "s-K       This help")))
-    (message "~{~a~%~}" bindings)))
+  "Display keybindings via rofi."
+  (run-shell-command
+   (concatenate 'string
+                "echo -e '"
+                "s-RET        Terminal\\n"
+                "s-S-RET      Browser\\n"
+                "s-SPC        App launcher\\n"
+                "s-e          Emacs\\n"
+                "s-o / s-O    Edit system / home config\\n"
+                "s-c          Copy\\n"
+                "s-x          Cut\\n"
+                "s-v          Paste\\n"
+                "s-C-v        Clipboard history\\n"
+                "s-j/k/h/l    Focus direction\\n"
+                "s-C-j/k/h/l  Move window\\n"
+                "M-j/k/h/l    Resize direction\\n"
+                "s-s / s-S    HSplit / VSplit\\n"
+                "s-f          Fullscreen\\n"
+                "s-q          Close window\\n"
+                "s-r          Remove frame\\n"
+                "s-1..5       Switch workspace\\n"
+                "C-s-1..5     Move to workspace\\n"
+                "s-g / s-G    Guix system / home\\n"
+                "s-;          System menu\\n"
+                "s-R          Restart StumpWM\\n"
+                "s-Q          Quit StumpWM\\n"
+                "s-K          This help"
+                "' | rofi -dmenu -i -p 'Keys' -theme ~/.config/rofi/launchers/type-1/style-8.rasi")))
 
 (defcommand system-menu () ()
   "Show system menu via rofi."
@@ -133,12 +144,12 @@
                 "Lock Screen\\n"
                 "Edit System Config\\n"
                 "Edit Home Config' "
-                "| rofi -dmenu -p 'System'); "
+                "| rofi -dmenu -p 'System' -theme ~/.config/rofi/launchers/type-1/style-8.rasi); "
                 "case \"$choice\" in "
                 "'Guix System Reconfigure') "
-                "exec kitty --directory=/home/ben/Code/dotfiles/guix zsh -c 'sudo -E guix system reconfigure system/config.scm; exec zsh;' ;; "
+                "exec kitty zsh -c 'up system-reconfigure; exec zsh;' ;; "
                 "'Guix Home Reconfigure') "
-                "exec kitty --directory=/home/ben/Code/dotfiles/guix zsh -c 'guix home reconfigure home/config.scm; exec zsh;' ;; "
+                "exec kitty zsh -c 'up home-reconfigure; exec zsh;' ;; "
                 "'Restart StumpWM') stumpish restart-hard ;; "
                 "'Quit StumpWM') stumpish quit ;; "
                 "'Lock Screen') slock ;; "
@@ -172,31 +183,26 @@
   (rofi "windowcd"))
 
 (defun guix-run (cmd)
-  (gselect "random")
+  (gselect "sys")
   (run-shell-command cmd))
 
 (defcommand guix-system () ()
   "Reconfigure guix system."
-  (guix-run "exec kitty --directory=/home/ben/Code/dotfiles/guix zsh -c 'sudo -E guix system reconfigure otter-system.scm; exec zsh;'"))
+  (guix-run "exec kitty zsh -c 'up system-reconfigure; exec zsh;'"))
 
 (defcommand guix-home () ()
   "Reconfigure guix home."
-  (guix-run "exec kitty --directory=/home/ben/Code/dotfiles/guix zsh -c 'guix home reconfigure otter-home.scm; exec zsh;'"))
+  (guix-run "exec kitty zsh -c 'up home-reconfigure; exec zsh;'"))
 
 ;; enable which-key-mode
 (which-key-mode)
 
 ;; define workspaces
-(defvar *df/workspaces* (list "dev" "web" "term" "random"))
+(defvar *df/workspaces* (list "dev" "web" "term" "mail" "sys"))
 (stumpwm:grename (nth 0 *df/workspaces*))
 (dolist (workspace (cdr *df/workspaces*))
   (stumpwm:gnewbg workspace))
 
-(defvar *move-to-keybinds* (list "!" "@" "#" "$" "%" "^" "&" "*" "("))
-(dotimes (y (length *df/workspaces*))
-  (let ((workspace (write-to-string (+ y 1))))
-    (define-key *root-map* (kbd workspace) (concat "gselect " workspace))
-    (define-key *root-map* (kbd (nth y *move-to-keybinds*)) (concat "gmove-and-follow " workspace))))
 
 ;; define keybindings
 (define-key *top-map* (kbd "M-k") "resize-direction Right")
@@ -220,7 +226,7 @@
 (define-key *top-map* (kbd "s-C-v") "clipboard-history")
 
 ;; System menu and keybinding help
-(define-key *top-map* (kbd "s-M-SPC") "system-menu")
+(define-key *top-map* (kbd "s-;") "system-menu")
 (define-key *top-map* (kbd "s-K") "show-keybindings")
 
 (define-key *top-map* (kbd "s-j") "move-focus left")
@@ -250,14 +256,14 @@
 (define-key *top-map* (kbd "s-1") "gselect dev")
 (define-key *top-map* (kbd "s-2") "gselect web")
 (define-key *top-map* (kbd "s-3") "gselect term")
-(define-key *top-map* (kbd "s-4") "gselect random")
-(define-key *top-map* (kbd "s-5") "gselect misc")
+(define-key *top-map* (kbd "s-4") "gselect mail")
+(define-key *top-map* (kbd "s-5") "gselect sys")
 
 (define-key *top-map* (kbd "C-s-1") "gmove dev")
-(define-key *top-map* (kbd "C-s-2") "gmove term")
-(define-key *top-map* (kbd "C-s-3") "gmove web")
-(define-key *top-map* (kbd "C-s-4") "gmove random")
-(define-key *top-map* (kbd "C-s-5") "gmove misc")
+(define-key *top-map* (kbd "C-s-2") "gmove web")
+(define-key *top-map* (kbd "C-s-3") "gmove term")
+(define-key *top-map* (kbd "C-s-4") "gmove mail")
+(define-key *top-map* (kbd "C-s-5") "gmove sys")
 
 (define-key *top-map* (kbd "XF86MonBrightnessUp") "backlight-up")
 (define-key *top-map* (kbd "XF86MonBrightnessDown") "backlight-down")
@@ -318,9 +324,9 @@
      "")
     ((string-equal name "term")
      "")
-    ((string-equal name "Top")
+    ((string-equal name "mail")
      "")
-    ((string-equal name "Logs")
+    ((string-equal name "sys")
      "")
     (t (concat ""))))
 
@@ -343,10 +349,10 @@
 (defun polybar-update-groups ()
   (run-shell-command "polybar-msg hook stumpwmgroups 1"))
 
-;; (add-hook *new-window-hook* (lambda (win) (polybar-update-groups)))
-;; (add-hook *destroy-window-hook* (lambda (win) (polybar-update-groups)))
-;; (add-hook *focus-window-hook* (lambda (win lastw) (polybar-update-groups)))
-;; (add-hook *focus-group-hook* (lambda (grp lastg) (polybar-update-groups)))
+(add-hook *new-window-hook* (lambda (win) (polybar-update-groups)))
+(add-hook *destroy-window-hook* (lambda (win) (polybar-update-groups)))
+(add-hook *focus-window-hook* (lambda (win lastw) (polybar-update-groups)))
+(add-hook *focus-group-hook* (lambda (grp lastg) (polybar-update-groups)))
 
 ;; (load-module "stump-volume-control")
 
@@ -358,16 +364,19 @@
 ;; password
 ;; (load-module "pass")
 
-;; load modules last so that they don't break system in failure case
-;; (ql:quickload :clx-truetype)
-;; (setf xft:*font-dirs* '("/home/ben/.guix-profile/share/fonts/"))
-;; (xft:cache-fonts)
-;; (load-module "ttf-fonts")
-;; the window starts shrinking when the :size >= 15 for mode-line
-;; (set-font (make-instance 'xft:font :family "JetBrains Mono" :subfamily "Regular" :size 16))
+;; TTF fonts
+(asdf:initialize-source-registry
+ '(:source-registry
+   (:include "/home/ben/.guix-home/profile/etc/common-lisp/source-registry.conf.d/")
+   :inherit-configuration))
+(asdf:load-system :clx-truetype)
+(asdf:load-system :ttf-fonts)
+(setf xft:*font-dirs* '("/home/ben/.guix-home/profile/share/fonts/truetype/"
+                        "/home/ben/.guix-home/profile/share/fonts/opentype/"))
+(xft:cache-fonts)
+(set-font (make-instance 'xft:font :family "Iosevka Term" :subfamily "Regular" :size 14))
 
 (run-shell-command "nm-applet")
-(run-shell-command "mpd")
 ;; (run-shell-command "volumeicon") ;; the polybar theme used provides volume icon and partial control
 
 ;; load this last to avoid issues
