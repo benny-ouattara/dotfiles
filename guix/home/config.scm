@@ -5,7 +5,6 @@
   #:use-module (gnu packages admin)
   #:use-module (gnu packages ssh)
   #:use-module (gnu packages gnupg)
-  #:use-module (gnu packages tmux)
   #:use-module (gnu services)
   #:use-module (gnu packages ci)
   #:use-module (gnu packages dns)
@@ -103,7 +102,6 @@
      "python@3.11.14"
      "babashka@1.12.214"
      "awscli@1.43.11"
-     "tmux@3.6a"
      "podman-compose@1.5.0"
      "bind@9.19.24"
      "jtools@0.0.0"

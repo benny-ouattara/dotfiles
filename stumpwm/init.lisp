@@ -27,9 +27,9 @@
 (redirect-all-output (data-dir-file "debug" "log"))
 
 ;; Message bar - Catppuccin Mocha
-(set-fg-color "#CDD6F4")
-(set-bg-color "#1E1E2E")
-(set-border-color "#89B4FA")
+(set-fg-color "#f8f8f2")
+(set-bg-color "#282a36")
+(set-border-color "#6272a4")
 (setf *colors*
       '("#1E1E2E"   ; 0 black  (Base)
         "#F38BA8"   ; 1 red
@@ -139,6 +139,12 @@
                 "choice=$(echo -e "
                 "'Guix System Reconfigure\\n"
                 "Guix Home Reconfigure\\n"
+                "Guix Pull\\n"
+                "Guix Garbage Collect\\n"
+                "Guix Rollback\\n"
+                "Guix Status\\n"
+                "Guix Health\\n"
+                "Switch Theme\\n"
                 "Restart StumpWM\\n"
                 "Quit StumpWM\\n"
                 "Lock Screen\\n"
@@ -150,6 +156,17 @@
                 "exec kitty zsh -c 'up system-reconfigure; exec zsh;' ;; "
                 "'Guix Home Reconfigure') "
                 "exec kitty zsh -c 'up home-reconfigure; exec zsh;' ;; "
+                "'Guix Pull') "
+                "exec kitty zsh -c 'up pull; exec zsh;' ;; "
+                "'Guix Garbage Collect') "
+                "exec kitty zsh -c 'up gc-safe; exec zsh;' ;; "
+                "'Guix Rollback') "
+                "exec kitty zsh -c 'up rollback; exec zsh;' ;; "
+                "'Guix Status') "
+                "exec kitty zsh -c 'up status; exec zsh;' ;; "
+                "'Guix Health') "
+                "exec kitty zsh -c 'up health; exec zsh;' ;; "
+                "'Switch Theme') /home/ben/Code/dotfiles/bin/theme-switch ;; "
                 "'Restart StumpWM') stumpish restart-hard ;; "
                 "'Quit StumpWM') stumpish quit ;; "
                 "'Lock Screen') slock ;; "
@@ -380,5 +397,5 @@
 ;; (run-shell-command "volumeicon") ;; the polybar theme used provides volume icon and partial control
 
 ;; load this last to avoid issues
-(require :slynk)
-(slynk:create-server :port 4009 :dont-close t)
+;; (require :slynk)
+;; (slynk:create-server :port 4009 :dont-close t)

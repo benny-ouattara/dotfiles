@@ -1,0 +1,261 @@
+#!/usr/bin/env bash
+# Switch theme across all desktop components
+# Usage: theme-switch [theme-name]
+# Available: catppuccin, tokyonight, dracula, nord, gruvbox, everforest, onedark
+
+DOTFILES="$HOME/Code/dotfiles"
+THEME="${1:-}"
+
+THEMES=(catppuccin tokyonight dracula nord gruvbox everforest onedark)
+
+if [[ -z "$THEME" ]]; then
+    THEME=$(printf '%s\n' "${THEMES[@]}" | rofi -dmenu -p 'Theme' -theme ~/.config/rofi/launchers/type-1/style-8.rasi)
+    [[ -z "$THEME" ]] && exit 0
+fi
+
+if [[ ! " ${THEMES[*]} " =~ " ${THEME} " ]]; then
+    echo "Unknown theme: $THEME"
+    echo "Available: ${THEMES[*]}"
+    exit 1
+fi
+
+# --- Color definitions ---
+declare -A BG BG_ALT FG SELECTED RED GREEN YELLOW BLUE PURPLE CYAN
+declare -A DOOM_THEME KITTY_THEME
+# Terminal color arrays (color0-15)
+declare -A C0 C1 C2 C3 C4 C5 C6 C7 C8 C9 C10 C11 C12 C13 C14 C15
+
+# Catppuccin Mocha
+BG[catppuccin]="#1E1E2E"; BG_ALT[catppuccin]="#313244"; FG[catppuccin]="#CDD6F4"
+SELECTED[catppuccin]="#89B4FA"; RED[catppuccin]="#F38BA8"; GREEN[catppuccin]="#A6E3A1"
+YELLOW[catppuccin]="#F9E2AF"; BLUE[catppuccin]="#89B4FA"; PURPLE[catppuccin]="#CBA6F7"
+CYAN[catppuccin]="#94E2D5"
+DOOM_THEME[catppuccin]="catppuccin"
+C0[catppuccin]="#45475A"; C1[catppuccin]="#F38BA8"; C2[catppuccin]="#A6E3A1"; C3[catppuccin]="#F9E2AF"
+C4[catppuccin]="#89B4FA"; C5[catppuccin]="#F5C2E7"; C6[catppuccin]="#94E2D5"; C7[catppuccin]="#BAC2DE"
+C8[catppuccin]="#585B70"; C9[catppuccin]="#F38BA8"; C10[catppuccin]="#A6E3A1"; C11[catppuccin]="#F9E2AF"
+C12[catppuccin]="#89B4FA"; C13[catppuccin]="#F5C2E7"; C14[catppuccin]="#94E2D5"; C15[catppuccin]="#A6ADC8"
+
+# Tokyo Night
+BG[tokyonight]="#1a1b26"; BG_ALT[tokyonight]="#24283b"; FG[tokyonight]="#c0caf5"
+SELECTED[tokyonight]="#7aa2f7"; RED[tokyonight]="#f7768e"; GREEN[tokyonight]="#9ece6a"
+YELLOW[tokyonight]="#e0af68"; BLUE[tokyonight]="#7aa2f7"; PURPLE[tokyonight]="#bb9af7"
+CYAN[tokyonight]="#7dcfff"
+DOOM_THEME[tokyonight]="doom-tokyo-night"
+C0[tokyonight]="#15161e"; C1[tokyonight]="#f7768e"; C2[tokyonight]="#9ece6a"; C3[tokyonight]="#e0af68"
+C4[tokyonight]="#7aa2f7"; C5[tokyonight]="#bb9af7"; C6[tokyonight]="#7dcfff"; C7[tokyonight]="#a9b1d6"
+C8[tokyonight]="#414868"; C9[tokyonight]="#f7768e"; C10[tokyonight]="#9ece6a"; C11[tokyonight]="#e0af68"
+C12[tokyonight]="#7aa2f7"; C13[tokyonight]="#bb9af7"; C14[tokyonight]="#7dcfff"; C15[tokyonight]="#c0caf5"
+
+# Dracula
+BG[dracula]="#282a36"; BG_ALT[dracula]="#44475a"; FG[dracula]="#f8f8f2"
+SELECTED[dracula]="#bd93f9"; RED[dracula]="#ff5555"; GREEN[dracula]="#50fa7b"
+YELLOW[dracula]="#f1fa8c"; BLUE[dracula]="#6272a4"; PURPLE[dracula]="#bd93f9"
+CYAN[dracula]="#8be9fd"
+DOOM_THEME[dracula]="doom-dracula"
+C0[dracula]="#21222c"; C1[dracula]="#ff5555"; C2[dracula]="#50fa7b"; C3[dracula]="#f1fa8c"
+C4[dracula]="#bd93f9"; C5[dracula]="#ff79c6"; C6[dracula]="#8be9fd"; C7[dracula]="#f8f8f2"
+C8[dracula]="#6272a4"; C9[dracula]="#ff6e6e"; C10[dracula]="#69ff94"; C11[dracula]="#ffffa5"
+C12[dracula]="#d6acff"; C13[dracula]="#ff92df"; C14[dracula]="#a4ffff"; C15[dracula]="#ffffff"
+
+# Nord
+BG[nord]="#2e3440"; BG_ALT[nord]="#3b4252"; FG[nord]="#eceff4"
+SELECTED[nord]="#81a1c1"; RED[nord]="#bf616a"; GREEN[nord]="#a3be8c"
+YELLOW[nord]="#ebcb8b"; BLUE[nord]="#81a1c1"; PURPLE[nord]="#b48ead"
+CYAN[nord]="#88c0d0"
+DOOM_THEME[nord]="doom-nord"
+C0[nord]="#3b4252"; C1[nord]="#bf616a"; C2[nord]="#a3be8c"; C3[nord]="#ebcb8b"
+C4[nord]="#81a1c1"; C5[nord]="#b48ead"; C6[nord]="#88c0d0"; C7[nord]="#e5e9f0"
+C8[nord]="#4c566a"; C9[nord]="#bf616a"; C10[nord]="#a3be8c"; C11[nord]="#ebcb8b"
+C12[nord]="#81a1c1"; C13[nord]="#b48ead"; C14[nord]="#8fbcbb"; C15[nord]="#eceff4"
+
+# Gruvbox
+BG[gruvbox]="#282828"; BG_ALT[gruvbox]="#3c3836"; FG[gruvbox]="#ebdbb2"
+SELECTED[gruvbox]="#83a598"; RED[gruvbox]="#fb4934"; GREEN[gruvbox]="#b8bb26"
+YELLOW[gruvbox]="#fabd2f"; BLUE[gruvbox]="#83a598"; PURPLE[gruvbox]="#d3869b"
+CYAN[gruvbox]="#8ec07c"
+DOOM_THEME[gruvbox]="doom-gruvbox"
+C0[gruvbox]="#282828"; C1[gruvbox]="#cc241d"; C2[gruvbox]="#98971a"; C3[gruvbox]="#d79921"
+C4[gruvbox]="#458588"; C5[gruvbox]="#b16286"; C6[gruvbox]="#689d6a"; C7[gruvbox]="#a89984"
+C8[gruvbox]="#928374"; C9[gruvbox]="#fb4934"; C10[gruvbox]="#b8bb26"; C11[gruvbox]="#fabd2f"
+C12[gruvbox]="#83a598"; C13[gruvbox]="#d3869b"; C14[gruvbox]="#8ec07c"; C15[gruvbox]="#ebdbb2"
+
+# Everforest
+BG[everforest]="#2d353b"; BG_ALT[everforest]="#3d484d"; FG[everforest]="#d3c6aa"
+SELECTED[everforest]="#7fbbb3"; RED[everforest]="#e67e80"; GREEN[everforest]="#a7c080"
+YELLOW[everforest]="#dbbc7f"; BLUE[everforest]="#7fbbb3"; PURPLE[everforest]="#d699b6"
+CYAN[everforest]="#83c092"
+DOOM_THEME[everforest]="doom-everforest"
+C0[everforest]="#343f44"; C1[everforest]="#e67e80"; C2[everforest]="#a7c080"; C3[everforest]="#dbbc7f"
+C4[everforest]="#7fbbb3"; C5[everforest]="#d699b6"; C6[everforest]="#83c092"; C7[everforest]="#d3c6aa"
+C8[everforest]="#475258"; C9[everforest]="#e67e80"; C10[everforest]="#a7c080"; C11[everforest]="#dbbc7f"
+C12[everforest]="#7fbbb3"; C13[everforest]="#d699b6"; C14[everforest]="#83c092"; C15[everforest]="#d3c6aa"
+
+# OneDark
+BG[onedark]="#282c34"; BG_ALT[onedark]="#353b45"; FG[onedark]="#abb2bf"
+SELECTED[onedark]="#61afef"; RED[onedark]="#e06c75"; GREEN[onedark]="#98c379"
+YELLOW[onedark]="#e5c07b"; BLUE[onedark]="#61afef"; PURPLE[onedark]="#c678dd"
+CYAN[onedark]="#56b6c2"
+DOOM_THEME[onedark]="doom-one"
+C0[onedark]="#282c34"; C1[onedark]="#e06c75"; C2[onedark]="#98c379"; C3[onedark]="#e5c07b"
+C4[onedark]="#61afef"; C5[onedark]="#c678dd"; C6[onedark]="#56b6c2"; C7[onedark]="#abb2bf"
+C8[onedark]="#545862"; C9[onedark]="#e06c75"; C10[onedark]="#98c379"; C11[onedark]="#e5c07b"
+C12[onedark]="#61afef"; C13[onedark]="#c678dd"; C14[onedark]="#56b6c2"; C15[onedark]="#c8ccd4"
+
+# --- Apply to Rofi ---
+for f in $(find "$DOTFILES/rofi" -path "*/shared/colors.rasi"); do
+    sed -i "s|@import.*colors/.*\.rasi\"|@import \"~/.config/rofi/colors/${THEME}.rasi\"|" "$f"
+done
+
+# --- Apply to Polybar ---
+cat > "$DOTFILES/polybar/tokyo/colors.ini" << EOF
+;; Theme: ${THEME}
+;; _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+
+[color]
+
+alpha = #0000ffff
+bg = ${BG[$THEME]}
+bg1 = ${BG_ALT[$THEME]}
+bg2 = ${BG_ALT[$THEME]}
+fg = ${FG[$THEME]}
+
+;; for 50% transparent
+trans1 = #80000000
+;; 100% transparent
+trans2 = #00
+
+;; colors
+black = ${BG[$THEME]}
+black1 = ${BG[$THEME]}
+white = ${FG[$THEME]}
+red = ${RED[$THEME]}
+green = ${GREEN[$THEME]}
+yellow = ${YELLOW[$THEME]}
+blue = ${BLUE[$THEME]}
+purple = ${PURPLE[$THEME]}
+cyan = ${CYAN[$THEME]}
+orange = ${YELLOW[$THEME]}
+magenta = ${PURPLE[$THEME]}
+gray = ${FG[$THEME]}
+
+;; _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+EOF
+
+# --- Apply to Kitty ---
+sed -i '/^## name:/,/^$/{ /^## name:/c\## name: '"$THEME"'
+}' "$DOTFILES/kitty/kitty.conf"
+sed -i "s/^foreground .*/foreground              ${FG[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
+sed -i "s/^background .*/background              ${BG[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
+sed -i "s/^selection_foreground .*/selection_foreground    ${BG[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
+sed -i "s/^selection_background .*/selection_background    ${FG[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
+sed -i "s/^cursor .*/cursor                  ${FG[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
+sed -i "s/^cursor_text_color .*/cursor_text_color       ${BG[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
+sed -i "s/^url_color .*/url_color               ${CYAN[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
+sed -i "s/^active_border_color .*/active_border_color     ${BLUE[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
+sed -i "s/^inactive_border_color .*/inactive_border_color   ${BG_ALT[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
+sed -i "s/^bell_border_color .*/bell_border_color       ${YELLOW[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
+sed -i "s/^active_tab_foreground .*/active_tab_foreground   ${BG[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
+sed -i "s/^active_tab_background .*/active_tab_background   ${GREEN[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
+sed -i "s/^inactive_tab_foreground .*/inactive_tab_foreground ${FG[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
+sed -i "s/^inactive_tab_background .*/inactive_tab_background ${BG_ALT[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
+sed -i "s/^tab_bar_background .*/tab_bar_background      ${BG[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
+sed -i "s/^color0 .*/color0 ${C0[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
+sed -i "s/^color1 .*/color1 ${C1[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
+sed -i "s/^color2 .*/color2  ${C2[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
+sed -i "s/^color3 .*/color3  ${C3[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
+sed -i "s/^color4 .*/color4  ${C4[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
+sed -i "s/^color5 .*/color5  ${C5[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
+sed -i "s/^color6 .*/color6  ${C6[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
+sed -i "s/^color7 .*/color7  ${C7[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
+sed -i "s/^color8 .*/color8 ${C8[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
+sed -i "s/^color9 .*/color9 ${C9[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
+sed -i "s/^color10 .*/color10 ${C10[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
+sed -i "s/^color11 .*/color11 ${C11[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
+sed -i "s/^color12 .*/color12 ${C12[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
+sed -i "s/^color13 .*/color13 ${C13[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
+sed -i "s/^color14 .*/color14 ${C14[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
+sed -i "s/^color15 .*/color15 ${C15[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
+
+# --- Apply to StumpWM ---
+sed -i "s/^(set-fg-color .*)/(set-fg-color \"${FG[$THEME]}\")/" "$DOTFILES/stumpwm/init.lisp"
+sed -i "s/^(set-bg-color .*)/(set-bg-color \"${BG[$THEME]}\")/" "$DOTFILES/stumpwm/init.lisp"
+sed -i "s/^(set-border-color .*)/(set-border-color \"${BLUE[$THEME]}\")/" "$DOTFILES/stumpwm/init.lisp"
+
+# --- Apply to Starship ---
+cat > "$DOTFILES/starship.toml" << EOF
+scan_timeout = 500
+add_newline = false
+
+[character]
+success_symbol = "[>](bold ${GREEN[$THEME]})"
+error_symbol = "[x](bold ${RED[$THEME]})"
+vicmd_symbol = "[V](bold ${BLUE[$THEME]})"
+
+[directory]
+style = "bold ${BLUE[$THEME]}"
+read_only = " ro"
+truncation_length = 3
+
+[git_branch]
+style = "bold ${PURPLE[$THEME]}"
+
+[git_status]
+disabled = false
+style = "${YELLOW[$THEME]}"
+
+[git_commit]
+commit_hash_length = 7
+tag_disabled = false
+only_detached = false
+
+[git_metrics]
+disabled = false
+format = '([+\$added](\$added_style)) ([-\$deleted](\$deleted_style)) '
+added_style = "${GREEN[$THEME]}"
+deleted_style = "${RED[$THEME]}"
+
+[battery]
+disabled = true
+
+[python]
+disabled = true
+
+[cmake]
+disabled = true
+
+[package]
+disabled = true
+
+[nix_shell]
+symbol = " "
+style = "${CYAN[$THEME]}"
+EOF
+
+# --- Apply to Emacs (doom) ---
+DOOM_T="${DOOM_THEME[$THEME]}"
+sed -i "s/doom-theme '.*)/doom-theme '${DOOM_T})/" "$DOTFILES/doom/config.el"
+if [[ "$THEME" == "catppuccin" ]]; then
+    sed -i "s/(consult-theme '.*))/(consult-theme '${DOOM_T}))/" "$DOTFILES/doom/config.el"
+else
+    sed -i "s/(consult-theme '.*))/(consult-theme '${DOOM_T}))/" "$DOTFILES/doom/config.el"
+fi
+
+# --- Reload running applications ---
+# Polybar (kill and relaunch)
+killall polybar 2>/dev/null; sleep 0.5
+polybar &
+
+# Kitty (reload config)
+kill -SIGUSR1 $(pgrep kitty) 2>/dev/null || true
+
+# StumpWM (update colors live)
+stumpish eval "(set-fg-color \"${FG[$THEME]}\")" 2>/dev/null
+stumpish eval "(set-bg-color \"${BG[$THEME]}\")" 2>/dev/null
+stumpish eval "(set-border-color \"${BLUE[$THEME]}\")" 2>/dev/null
+stumpish eval "(update-color-map (current-screen))" 2>/dev/null
+
+# Emacs (reload theme)
+emacsclient -e "(load-theme '${DOOM_T} t)" 2>/dev/null || true
+
+echo "Switched to: $THEME"
