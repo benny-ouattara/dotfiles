@@ -76,24 +76,24 @@
 
 (defcommand unified-copy () ()
   "Copy: send M-w to Emacs, C-c to everything else."
-  (let ((win-class (window-class (current-window))))
-    (if (string-equal win-class "Emacs")
-        (run-shell-command "xdotool keyup super key alt+w")
-        (run-shell-command "xdotool keyup super key ctrl+c"))))
+  (let ((win (current-window)))
+    (if (string-equal (window-class win) "Emacs")
+        (send-fake-key win (kbd "M-w"))
+        (run-shell-command "xdotool key ctrl+c"))))
 
 (defcommand unified-cut () ()
   "Cut: send C-w to Emacs, C-x to everything else."
-  (let ((win-class (window-class (current-window))))
-    (if (string-equal win-class "Emacs")
-        (run-shell-command "xdotool keyup super key ctrl+w")
-        (run-shell-command "xdotool keyup super key ctrl+x"))))
+  (let ((win (current-window)))
+    (if (string-equal (window-class win) "Emacs")
+        (send-fake-key win (kbd "C-w"))
+        (run-shell-command "xdotool key ctrl+x"))))
 
 (defcommand unified-paste () ()
   "Paste: send C-y to Emacs, C-v to everything else."
-  (let ((win-class (window-class (current-window))))
-    (if (string-equal win-class "Emacs")
-        (run-shell-command "xdotool keyup super key ctrl+y")
-        (run-shell-command "xdotool keyup super key ctrl+v"))))
+  (let ((win (current-window)))
+    (if (string-equal (window-class win) "Emacs")
+        (send-fake-key win (kbd "C-y"))
+        (run-shell-command "xdotool key ctrl+v"))))
 
 (defcommand clipboard-history () ()
   "Show clipboard history via clipmenu with rofi."
@@ -164,7 +164,7 @@
                 "exec kitty zsh -c 'up status; exec zsh;' ;; "
                 "'Guix Health') "
                 "exec kitty zsh -c 'up health; exec zsh;' ;; "
-                "'Switch Theme') /home/ben/Code/dotfiles/bin/theme-switch ;; "
+                "'Switch Theme') /home/ben/Code/dotfiles/guix/scripts/theme-switch ;; "
                 "'Restart StumpWM') stumpish restart-hard ;; "
                 "'Quit StumpWM') stumpish quit ;; "
                 "'Lock Screen') slock ;; "
@@ -302,7 +302,7 @@
  "gselect dev")
 (run-shell-command "setxkbmap us -option 'caps:ctrl_modifier'")
 (run-shell-command "xcape -e 'Caps_Lock=Escape'")
-(run-shell-command "xset r rate 150 60")
+(run-shell-command "xset r rate 100 100")
 (run-shell-command "feh --randomize --bg-fill ~/Sync/wallpapers/*")
 (run-shell-command "picom")
 (run-shell-command "clipmenud")
