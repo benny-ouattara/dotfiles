@@ -118,7 +118,7 @@
      "slock@1.6"
      "tmux@3.6a"
      "maim@5.8.1"
-     "libnotify@0.8.8"
+     "libnotify"
      "dunst@1.13.1"))))
  (services
   (cons*
