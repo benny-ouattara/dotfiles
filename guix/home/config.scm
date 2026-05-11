@@ -122,7 +122,11 @@
      "pavucontrol@6.2"
      "arandr@0.1.11"
      "blueman@2.4.6"
-     "bluez@5.79"))))
+     "bluez@5.79"
+     "ripgrep@15.1.0"
+     "jq@1.8.1"
+     "ncdu@2.9.2"
+     "git-delta@0.18.2"))))
  (services
   (cons*
    (simple-service 'environment-variables-service

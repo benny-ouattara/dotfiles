@@ -22,6 +22,8 @@
           discord
           proton-vpn
           proton-pass
+          lazygit
+          yazi
         ];
       };
     };
