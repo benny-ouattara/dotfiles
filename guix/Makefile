@@ -211,7 +211,7 @@ nix-install: ## Install/update nix packages from flake.nix
 
 nix-update: ## Update nix flake inputs and reinstall
 	nix flake update --flake $(NIX_FLAKE)
-	nix profile upgrade '.*'
+	nix profile upgrade guix
 
 nix-gc: ## Garbage collect unused nix store paths
 	nix store gc
