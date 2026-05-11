@@ -304,7 +304,7 @@
 (run-shell-command "xcape -e 'Caps_Lock=Escape'")
 (run-shell-command "xset r rate 100 100")
 (run-shell-command "feh --randomize --bg-fill ~/Sync/wallpapers/*")
-(run-shell-command "picom")
+(run-shell-command "picom --config /home/ben/Code/dotfiles/picom/picom.conf")
 (run-shell-command "clipmenud")
 (run-shell-command "xsetroot -cursor_name left_ptr")
 (run-shell-command "amixer")
