@@ -74,30 +74,40 @@
   "Run or raise kitty."
   (run-or-raise "kitty" '(:class "kitty") t nil))
 
+(defun send-key-to-window (win keys)
+  "Send keys to a window using xdotool with the window's X ID."
+  (run-shell-command
+   (format nil "xdotool key --window ~a --clearmodifiers ~a"
+           (window-xwin win) keys)))
+
 (defcommand unified-copy () ()
   "Copy: send M-w to Emacs, C-c to everything else."
   (let ((win (current-window)))
     (if (string-equal (window-class win) "Emacs")
         (send-fake-key win (kbd "M-w"))
-        (run-shell-command "xdotool key ctrl+c"))))
+        (send-key-to-window win "ctrl+c"))))
 
 (defcommand unified-cut () ()
   "Cut: send C-w to Emacs, C-x to everything else."
   (let ((win (current-window)))
     (if (string-equal (window-class win) "Emacs")
         (send-fake-key win (kbd "C-w"))
-        (run-shell-command "xdotool key ctrl+x"))))
+        (send-key-to-window win "ctrl+x"))))
 
 (defcommand unified-paste () ()
   "Paste: send C-y to Emacs, C-v to everything else."
   (let ((win (current-window)))
     (if (string-equal (window-class win) "Emacs")
         (send-fake-key win (kbd "C-y"))
-        (run-shell-command "xdotool key ctrl+v"))))
+        (send-key-to-window win "ctrl+v"))))
 
 (defcommand clipboard-history () ()
   "Show clipboard history via clipmenu with rofi."
-  (run-shell-command "clipmenu"))
+  (run-shell-command "CM_LAUNCHER=rofi clipmenu -theme ~/.config/rofi/launchers/type-1/style-8.rasi"))
+
+(defcommand cycle-wallpaper () ()
+  "Set a random wallpaper."
+  (run-shell-command "feh --randomize --bg-fill ~/Sync/wallpapers/*"))
 
 (defcommand show-keybindings () ()
   "Display keybindings via rofi."
@@ -226,8 +236,8 @@
 (define-key *top-map* (kbd "M-h") "resize-direction Down")
 
 (define-key *top-map* (kbd "s-RET") "exec kitty --directory=/home/ben/Code/dotfiles/guix")
-(define-key *top-map* (kbd "s-o") "exec kitty --directory=/home/ben/Code/dotfiles/guix emacsclient -t otter-system.scm")
-(define-key *top-map* (kbd "s-O") "exec kitty --directory=/home/ben/Code/dotfiles/guix emacsclient -t otter-home.scm")
+(define-key *top-map* (kbd "s-o") "exec kitty --directory=/home/ben/Code/dotfiles/guix emacsclient -t kome/config.scm")
+(define-key *top-map* (kbd "s-O") "exec kitty --directory=/home/ben/Code/dotfiles/guix emacsclient -t system/config.scm")
 (define-key *top-map* (kbd "s-g") "guix-system")
 (define-key *top-map* (kbd "s-G") "guix-home")
 (define-key *top-map* (kbd "s-w") "exec firefox")
@@ -239,6 +249,8 @@
 (define-key *top-map* (kbd "s-x") "unified-cut")
 (define-key *top-map* (kbd "s-v") "unified-paste")
 (define-key *top-map* (kbd "s-C-v") "clipboard-history")
+
+(define-key *top-map* (kbd "s-b") "cycle-wallpaper")
 
 ;; System menu and keybinding help
 (define-key *top-map* (kbd "s-;") "system-menu")
@@ -297,8 +309,6 @@
 ;; start processes
 (run-commands
  "start-polybar"
- "start-firefox"
- "start-emacs"
  "gselect dev")
 (run-shell-command "setxkbmap us -option 'caps:ctrl_modifier'")
 (run-shell-command "xcape -e 'Caps_Lock=Escape'")

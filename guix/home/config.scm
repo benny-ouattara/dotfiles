@@ -120,7 +120,7 @@
   (cons*
    (simple-service 'environment-variables-service
                    home-environment-variables-service-type
-                   `(("EDITOR" . "emacsclient -t") ("VISUAL" . "emacsclient -c") ("CLIPMENULAUNCHER" . "rofi")
+                   `(("EDITOR" . "emacsclient -t") ("VISUAL" . "emacsclient -c") ("CM_LAUNCHER" . "rofi")
               ("PATH" . ,(string-append (getenv "HOME") "/.emacs.d/bin:"
                                          (getenv "HOME") "/.local/bin:"
                                          (getenv "HOME") "/Code/dotfiles/guix/scripts:"
