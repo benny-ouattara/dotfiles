@@ -310,7 +310,7 @@
 (run-shell-command "clipmenud")
 (run-shell-command "xsetroot -cursor_name left_ptr")
 (run-shell-command "mkdir -p ~/Screenshots")
-(run-shell-command "dunst")
+(run-shell-command "dunst -config /home/ben/Code/dotfiles/dunst/dunstrc")
 
 ;; gaps
 (asdf:load-system :swm-gaps)

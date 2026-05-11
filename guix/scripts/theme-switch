@@ -187,6 +187,44 @@ sed -i "s/^color13 .*/color13 ${C13[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
 sed -i "s/^color14 .*/color14 ${C14[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
 sed -i "s/^color15 .*/color15 ${C15[$THEME]}/" "$DOTFILES/kitty/kitty.conf"
 
+# --- Apply to Dunst ---
+cat > "$DOTFILES/dunst/dunstrc" << DUNSTEOF
+[global]
+    font = Iosevka Term 12
+    origin = top-right
+    offset = (10, 10)
+    width = 300
+    height = (0, 100)
+    padding = 12
+    horizontal_padding = 12
+    frame_width = 2
+    frame_color = "${BLUE[$THEME]}"
+    separator_color = frame
+    corner_radius = 8
+    icon_position = left
+    max_icon_size = 48
+    transparency = 0
+    format = "<b>%s</b>\n%b"
+
+[urgency_low]
+    background = "${BG[$THEME]}"
+    foreground = "${FG[$THEME]}"
+    frame_color = "${BLUE[$THEME]}"
+    timeout = 5
+
+[urgency_normal]
+    background = "${BG[$THEME]}"
+    foreground = "${FG[$THEME]}"
+    frame_color = "${BLUE[$THEME]}"
+    timeout = 10
+
+[urgency_critical]
+    background = "${BG[$THEME]}"
+    foreground = "${FG[$THEME]}"
+    frame_color = "${RED[$THEME]}"
+    timeout = 0
+DUNSTEOF
+
 # --- Apply to StumpWM ---
 sed -i "s/^(set-fg-color .*)/(set-fg-color \"${FG[$THEME]}\")/" "$DOTFILES/stumpwm/init.lisp"
 sed -i "s/^(set-bg-color .*)/(set-bg-color \"${BG[$THEME]}\")/" "$DOTFILES/stumpwm/init.lisp"
@@ -263,6 +301,9 @@ stumpish eval "(set-fg-color \"${FG[$THEME]}\")" 2>/dev/null
 stumpish eval "(set-bg-color \"${BG[$THEME]}\")" 2>/dev/null
 stumpish eval "(set-border-color \"${BLUE[$THEME]}\")" 2>/dev/null
 stumpish eval "(update-color-map (current-screen))" 2>/dev/null
+
+# Dunst (restart to pick up new config)
+killall dunst 2>/dev/null; dunst -config "$DOTFILES/dunst/dunstrc" &
 
 # Emacs (reload theme)
 emacsclient -e "(load-theme '${DOOM_T} t)" 2>/dev/null || true
