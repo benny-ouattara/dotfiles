@@ -195,13 +195,10 @@
 
 (defcommand start-polybar () ()
   "Kill existing polybar and start fresh."
-  (run-shell-command "polybar-msg cmd quit 2>/dev/null; sleep 0.5; polybar main &"))
+  (run-shell-command "polybar-msg cmd quit 2>/dev/null; sleep 0.5; polybar --config=/home/ben/Code/dotfiles/polybar/tokyo/config.ini main &"))
 
 (defun rofi (mode)
   (run-shell-command (concat "rofi -show " mode " -m " (write-to-string (head-number (current-head))) " -theme ~/.config/rofi/launchers/type-1/style-8.rasi")))
-
-(defcommand rofi-run () ()
-  (rofi "run -sidebar-mode"))
 
 (defcommand launch-rofi () ()
   (rofi "drun"))
