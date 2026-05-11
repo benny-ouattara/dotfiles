@@ -24,7 +24,8 @@ TIME_MACHINE := guix time-machine -C $(CHANNELS) --
 # --- TARGETS ---
 
 .PHONY: help pull system-build system-reconfigure system-container \
-        home-reconfigure repl lint gc size graph deploy offload-check debug check
+        home-reconfigure repl lint gc size graph deploy offload-check debug check \
+        nix-install nix-update nix-gc
 
 help: ## Display this help screen
 	@echo "Guix Management Makefile"
@@ -200,3 +201,17 @@ done: ## Send a desktop notification
 	@notify-send "Guix System" "Deployment on $(NAME) complete! 🦦" --icon=system-software-update
 
 up: system-reconfigure done ## Reconfigure and notify when finished
+
+# -- Nix --
+
+NIX_FLAKE := path:$(HERE)
+
+nix-install: ## Install/update nix packages from flake.nix
+	nix profile install $(NIX_FLAKE)#default --refresh
+
+nix-update: ## Update nix flake inputs and reinstall
+	nix flake update --flake $(NIX_FLAKE)
+	nix profile upgrade '.*'
+
+nix-gc: ## Garbage collect unused nix store paths
+	nix store gc
