@@ -48,7 +48,6 @@
      "witr@0.3.0"
      "claude-code@2.1.71"
      "fd@10.3.0"
-     "kitty@0.21.2"
      "ranger@1.9.4"
      "picom@13"
      "feh@3.10.3"
