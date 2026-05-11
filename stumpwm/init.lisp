@@ -197,7 +197,7 @@
   (run-shell-command "polybar-msg cmd quit 2>/dev/null; sleep 0.5; polybar main &"))
 
 (defun rofi (mode)
-  (run-shell-command (concat "rofi -show " mode " -m " (write-to-string (head-number (current-head))))))
+  (run-shell-command (concat "rofi -show " mode " -m " (write-to-string (head-number (current-head))) " -theme ~/.config/rofi/launchers/type-1/style-8.rasi")))
 
 (defcommand rofi-run () ()
   (rofi "run -sidebar-mode"))
