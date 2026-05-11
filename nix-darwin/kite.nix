@@ -115,6 +115,7 @@ in
   };
 
   environment.systemPackages = [
+    pkgs.openai-whisper
     pkgs.hwatch
     pkgs.dust
     pkgs.xcp
@@ -126,7 +127,6 @@ in
     pkgs.awscli
     pkgs.claude-code
     pkgs.jet
-    pkgs.dbeaver-bin
     pkgs.podman-tui
     pkgs.podman-compose
     pkgs.wuzz
