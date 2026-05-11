@@ -116,7 +116,10 @@
      "font-atui-feather@1.1.0-1.2ac7161"
      "clipmenu@6.2.0-1.7c34ace"
      "slock@1.6"
-     "tmux@3.6a"))))
+     "tmux@3.6a"
+     "maim@5.8.1"
+     "libnotify@0.8.8"
+     "dunst@1.13.1"))))
  (services
   (cons*
    (simple-service 'environment-variables-service
@@ -124,6 +127,7 @@
                    `(("EDITOR" . "emacsclient -t") ("VISUAL" . "emacsclient -c") ("CM_LAUNCHER" . "rofi")
               ("PATH" . ,(string-append (getenv "HOME") "/.emacs.d/bin:"
                                          (getenv "HOME") "/.local/bin:"
+                                         (getenv "HOME") "/.local/share/gem/ruby/3.4.0/bin:"
                                          (getenv "HOME") "/Code/dotfiles/guix/scripts:"
                                          (getenv "PATH")))))
    (service home-ollama-service-type)

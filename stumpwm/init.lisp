@@ -42,11 +42,6 @@
 (update-color-map (current-screen))
 
 ;; define commands
-(defcommand now-we-are-six (name age)
-  ((:string "Enter your name: ")
-   (:number "Enter your age:"))
-  (message "~a, in six years you will be ~a" name (+ 6 age)))
-
 (defcommand hsplit-and-focus () ()
   "Create a new frame on the right and focus it."
   (hsplit)
@@ -61,18 +56,6 @@
   "Delete the current frame with its window."
   (delete-window)
   (remove-split))
-
-(defcommand start-firefox () ()
-  "Run or raise firefox web browser."
-  (run-or-raise "firefox" '(:class "Firefox") t nil))
-
-(defcommand start-emacs () ()
-  "Run or raise emacs."
-  (run-or-raise "emacs" '(:class "Emacs") t nil))
-
-(defcommand start-kitty () ()
-  "Run or raise kitty."
-  (run-or-raise "kitty" '(:class "kitty") t nil))
 
 (defcommand unified-copy () ()
   "Copy: in Emacs send M-w, otherwise promote X PRIMARY selection to CLIPBOARD."
@@ -103,6 +86,14 @@
   "Set a random wallpaper."
   (run-shell-command "feh --randomize --bg-fill ~/Sync/wallpapers/*"))
 
+(defcommand screenshot-screen () ()
+  "Take a fullscreen screenshot."
+  (run-shell-command "maim ~/Screenshots/$(date +%Y%m%d-%H%M%S).png && notify-send 'Screenshot saved'"))
+
+(defcommand screenshot-region () ()
+  "Take a screenshot of a selected region."
+  (run-shell-command "maim -s ~/Screenshots/$(date +%Y%m%d-%H%M%S).png && notify-send 'Screenshot saved'"))
+
 (defcommand show-keybindings () ()
   "Display keybindings via rofi."
   (run-shell-command
@@ -121,6 +112,7 @@
                 "s-Tab        Cycle windows\\n"
                 "s-d          Window list\\n"
                 "C-s-l        Lock screen\\n"
+                "s-p / s-P    Screenshot / region\\n"
                 "s-j/k/h/l    Focus direction\\n"
                 "s-C-j/k/h/l  Move window\\n"
                 "M-j/k/h/l    Resize direction\\n"
@@ -202,9 +194,6 @@
 (defcommand rofi-window () ()
   (rofi "window"))
 
-(defcommand rofi-windowcd () ()
-  (rofi "windowcd"))
-
 (defun guix-run (cmd)
   (gselect "sys")
   (run-shell-command cmd))
@@ -252,6 +241,8 @@
 (define-key *top-map* (kbd "s-Tab") "pull-hidden-next")
 (define-key *top-map* (kbd "s-d") "rofi-window")
 (define-key *top-map* (kbd "C-s-l") "exec slock")
+(define-key *top-map* (kbd "s-p") "screenshot-screen")
+(define-key *top-map* (kbd "s-P") "screenshot-region")
 
 ;; System menu and keybinding help
 (define-key *top-map* (kbd "s-;") "system-menu")
@@ -318,15 +309,14 @@
 (run-shell-command "picom --config /home/ben/Code/dotfiles/picom/picom.conf")
 (run-shell-command "clipmenud")
 (run-shell-command "xsetroot -cursor_name left_ptr")
-(run-shell-command "amixer")
+(run-shell-command "mkdir -p ~/Screenshots")
+(run-shell-command "dunst")
 
 ;; gaps
 (asdf:load-system :swm-gaps)
 (setf swm-gaps:*inner-gaps-size* 5
       swm-gaps:*outer-gaps-size* 10)
 (swm-gaps:toggle-gaps-on)
-
-(asdf:load-system :screenshot)
 
 ;; Polybar
 (defun icon-by-group (name)

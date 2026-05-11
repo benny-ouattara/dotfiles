@@ -73,7 +73,7 @@ ZSH_THEME=""
 plugins=(fzf git podman sudo tailscale aliases aws history)
 
 export FZF_BASE=/home/ben/.guix-home/profile/bin/fzf
-export FZF_DEFAULT_COMMAND='fzf'
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -104,7 +104,6 @@ source $ZSH/oh-my-zsh.sh
 
 export GPG_TTY=$(tty)
 eval "$(direnv hook zsh)"
-export PATH=/home/ben/.local/share/gem/ruby/3.3.0/bin:$PATH
 if [ -S $XDG_RUNTIME_DIR/ssh-agent/socket ]; then
     export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/ssh-agent/socket
     ssh-add -q ~/.ssh/jazacash
