@@ -121,7 +121,7 @@
      "dunst@1.13.1"
      "pavucontrol@6.2"
      "arandr@0.1.11"
-     "blueman@2.4.3"
+     "blueman@2.4.6"
      "bluez@5.79"))))
  (services
   (cons*
