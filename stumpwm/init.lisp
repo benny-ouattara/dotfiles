@@ -255,6 +255,7 @@
 (define-key *top-map* (kbd "s-w") "exec brave")
 (define-key *top-map* (kbd "s-S-RET") "exec brave")
 (define-key *top-map* (kbd "s-D") "exec discord")
+(define-key *top-map* (kbd "s-y") "exec kitty yazi")
 (define-key *top-map* (kbd "s-e") "emacs")
 
 ;; Omarchy-style clipboard
