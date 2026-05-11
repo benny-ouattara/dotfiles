@@ -123,6 +123,10 @@
                 "s-x          Cut\\n"
                 "s-v          Paste\\n"
                 "s-C-v        Clipboard history\\n"
+                "s-b          Random wallpaper\\n"
+                "s-Tab        Cycle windows\\n"
+                "s-d          Window list\\n"
+                "s-L          Lock screen\\n"
                 "s-j/k/h/l    Focus direction\\n"
                 "s-C-j/k/h/l  Move window\\n"
                 "M-j/k/h/l    Resize direction\\n"
@@ -251,6 +255,9 @@
 (define-key *top-map* (kbd "s-C-v") "clipboard-history")
 
 (define-key *top-map* (kbd "s-b") "cycle-wallpaper")
+(define-key *top-map* (kbd "s-Tab") "pull-hidden-next")
+(define-key *top-map* (kbd "s-d") "rofi-window")
+(define-key *top-map* (kbd "s-L") "exec slock")
 
 ;; System menu and keybinding help
 (define-key *top-map* (kbd "s-;") "system-menu")

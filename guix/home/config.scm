@@ -115,7 +115,9 @@
      "font-nerd-symbols@3.4.0"
      "sbcl-stumpwm-ttf-fonts@0.0.1-7.c4f077b"
      "font-atui-feather@1.1.0-1.2ac7161"
-     "clipmenu@6.2.0-1.7c34ace"))))
+     "clipmenu@6.2.0-1.7c34ace"
+     "slock@1.6"
+     "tmux@3.6a"))))
  (services
   (cons*
    (simple-service 'environment-variables-service
