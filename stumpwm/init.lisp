@@ -52,11 +52,6 @@
   (vsplit)
   (move-focus :down))
 
-(defcommand delete-window-and-frame () ()
-  "Delete the current frame with its window."
-  (delete-window)
-  (remove-split))
-
 (defcommand unified-copy () ()
   "Copy: in Emacs send M-w, otherwise promote X PRIMARY selection to CLIPBOARD."
   (let ((win (current-window)))
@@ -85,6 +80,26 @@
 (defcommand cycle-wallpaper () ()
   "Set a random wallpaper."
   (run-shell-command "feh --randomize --bg-fill ~/Sync/wallpapers/*"))
+
+(defcommand vol-up () ()
+  "Raise volume and show notification."
+  (run-shell-command "amixer -q set Master 5%+ && notify-send -h string:x-dunst-stack-tag:volume \"Volume\" \"$(amixer get Master | grep -oP '\\d+%' | head -1)\""))
+
+(defcommand vol-down () ()
+  "Lower volume and show notification."
+  (run-shell-command "amixer -q set Master 5%- && notify-send -h string:x-dunst-stack-tag:volume \"Volume\" \"$(amixer get Master | grep -oP '\\d+%' | head -1)\""))
+
+(defcommand vol-toggle () ()
+  "Toggle mute and show notification."
+  (run-shell-command "amixer -q set Master toggle && notify-send -h string:x-dunst-stack-tag:volume \"Volume\" \"$(amixer get Master | grep -oE '\\[on\\]|\\[off\\]' | head -1)\""))
+
+(defcommand bright-up () ()
+  "Raise brightness and show notification."
+  (run-shell-command "brightnessctl set +10% && notify-send -h string:x-dunst-stack-tag:brightness \"Brightness\" \"$(brightnessctl -m | cut -d, -f4)\""))
+
+(defcommand bright-down () ()
+  "Lower brightness and show notification."
+  (run-shell-command "brightnessctl set 10%- && notify-send -h string:x-dunst-stack-tag:brightness \"Brightness\" \"$(brightnessctl -m | cut -d, -f4)\""))
 
 (defcommand screenshot-screen () ()
   "Take a fullscreen screenshot."
@@ -189,7 +204,7 @@
   (rofi "run -sidebar-mode"))
 
 (defcommand launch-rofi () ()
-  (rofi "drun -theme /home/ben/.config/rofi/launchers/type-1/style-5.rasi"))
+  (rofi "drun"))
 
 (defcommand rofi-window () ()
   (rofi "window"))
@@ -223,7 +238,7 @@
 (define-key *top-map* (kbd "M-h") "resize-direction Down")
 
 (define-key *top-map* (kbd "s-RET") "exec kitty --directory=/home/ben/Code/dotfiles/guix")
-(define-key *top-map* (kbd "s-o") "exec kitty --directory=/home/ben/Code/dotfiles/guix emacsclient -t kome/config.scm")
+(define-key *top-map* (kbd "s-o") "exec kitty --directory=/home/ben/Code/dotfiles/guix emacsclient -t home/config.scm")
 (define-key *top-map* (kbd "s-O") "exec kitty --directory=/home/ben/Code/dotfiles/guix emacsclient -t system/config.scm")
 (define-key *top-map* (kbd "s-g") "guix-system")
 (define-key *top-map* (kbd "s-G") "guix-home")
@@ -282,12 +297,12 @@
 (define-key *top-map* (kbd "C-s-4") "gmove mail")
 (define-key *top-map* (kbd "C-s-5") "gmove sys")
 
-(define-key *top-map* (kbd "XF86MonBrightnessUp") "backlight-up")
-(define-key *top-map* (kbd "XF86MonBrightnessDown") "backlight-down")
+(define-key *top-map* (kbd "XF86MonBrightnessUp") "bright-up")
+(define-key *top-map* (kbd "XF86MonBrightnessDown") "bright-down")
 
-(define-key *top-map* (kbd "XF86AudioRaiseVolume") "volume-up")
-(define-key *top-map* (kbd "XF86AudioLowerVolume") "volume-down")
-(define-key *top-map* (kbd "XF86AudioMute") "volume-toggle-mute")
+(define-key *top-map* (kbd "XF86AudioRaiseVolume") "vol-up")
+(define-key *top-map* (kbd "XF86AudioLowerVolume") "vol-down")
+(define-key *top-map* (kbd "XF86AudioMute") "vol-toggle")
 
 (set-msg-border-width 2)
 
