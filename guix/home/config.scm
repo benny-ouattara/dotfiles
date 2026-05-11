@@ -82,7 +82,7 @@
      "polybar@3.7.1"
      "rofi@2.0.0"
      "unzip@6.0"
-     "firefox@147.0.4"
+
      "the-silver-searcher@2.2.0"
      "ack@3.7.0"
      "lsof@4.99.3"
@@ -118,7 +118,8 @@
      "tmux@3.6a"
      "maim@5.8.1"
      "libnotify"
-     "dunst@1.13.1"))))
+     "dunst@1.13.1"
+     "pavucontrol@6.2"))))
  (services
   (cons*
    (simple-service 'environment-variables-service

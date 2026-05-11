@@ -81,6 +81,17 @@
   "Set a random wallpaper."
   (run-shell-command "feh --randomize --bg-fill ~/Sync/wallpapers/*"))
 
+(defcommand audio-switch () ()
+  "Switch audio sink via rofi."
+  (run-shell-command
+   (concatenate 'string
+                "sink=$(pactl list sinks | grep -E 'Name:|Description:' | paste - - | "
+                "sed 's/.*Name: //;s/\\t.*Description: / ➜ /' | "
+                "rofi -dmenu -p 'Audio' -theme ~/.config/rofi/launchers/type-1/style-8.rasi | "
+                "cut -d' ' -f1); "
+                "[ -n \"$sink\" ] && pactl set-default-sink \"$sink\" && "
+                "notify-send -h string:x-dunst-stack-tag:audio 'Audio Output' \"$(pactl list sinks | grep -A1 \"$sink\" | grep Description | sed 's/.*: //')\"")))
+
 (defcommand vol-up () ()
   "Raise volume and show notification."
   (run-shell-command "pactl set-sink-volume @DEFAULT_SINK@ +5% && notify-send -h string:x-dunst-stack-tag:volume \"Volume\" \"$(pactl get-sink-volume @DEFAULT_SINK@ | grep -oP '\\d+%' | head -1)\""))
@@ -115,7 +126,8 @@
    (concatenate 'string
                 "echo -e '"
                 "s-RET        Terminal\\n"
-                "s-S-RET      Browser\\n"
+                "s-S-RET      Brave browser\\n"
+                "s-D          Discord\\n"
                 "s-SPC        App launcher\\n"
                 "s-e          Emacs\\n"
                 "s-o / s-O    Edit system / home config\\n"
@@ -123,6 +135,7 @@
                 "s-x          Cut\\n"
                 "s-v          Paste\\n"
                 "s-C-v        Clipboard history\\n"
+                "s-a          Switch audio output\\n"
                 "s-b          Random wallpaper\\n"
                 "s-Tab        Cycle windows\\n"
                 "s-d          Window list\\n"
@@ -239,8 +252,9 @@
 (define-key *top-map* (kbd "s-O") "exec kitty --directory=/home/ben/Code/dotfiles/guix emacsclient -t system/config.scm")
 (define-key *top-map* (kbd "s-g") "guix-system")
 (define-key *top-map* (kbd "s-G") "guix-home")
-(define-key *top-map* (kbd "s-w") "exec firefox")
-(define-key *top-map* (kbd "s-S-RET") "exec firefox")
+(define-key *top-map* (kbd "s-w") "exec brave")
+(define-key *top-map* (kbd "s-S-RET") "exec brave")
+(define-key *top-map* (kbd "s-D") "exec discord")
 (define-key *top-map* (kbd "s-e") "emacs")
 
 ;; Omarchy-style clipboard
@@ -249,6 +263,7 @@
 (define-key *top-map* (kbd "s-v") "unified-paste")
 (define-key *top-map* (kbd "s-C-v") "clipboard-history")
 
+(define-key *top-map* (kbd "s-a") "audio-switch")
 (define-key *top-map* (kbd "s-b") "cycle-wallpaper")
 (define-key *top-map* (kbd "s-Tab") "pull-hidden-next")
 (define-key *top-map* (kbd "s-d") "rofi-window")
@@ -308,7 +323,8 @@
     (1 t t :class "Emacs"))
 
 (define-frame-preference "web"
-    (2 t t :class "Firefox"))
+    (2 t t :class "Brave-browser")
+    (2 t t :class "discord"))
 
 ;; start processes
 (run-commands
