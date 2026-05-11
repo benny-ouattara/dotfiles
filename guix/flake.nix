@@ -8,13 +8,18 @@
   outputs = { self, nixpkgs }:
     let
       system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
+      pkgs = import nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
+      };
     in
     {
       packages.${system}.default = pkgs.buildEnv {
         name = "nix-extras";
         paths = with pkgs; [
           ollama
+          brave
+          discord
         ];
       };
     };
