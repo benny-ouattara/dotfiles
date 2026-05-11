@@ -74,32 +74,26 @@
   "Run or raise kitty."
   (run-or-raise "kitty" '(:class "kitty") t nil))
 
-(defun send-key-to-window (win keys)
-  "Send keys to a window using xdotool with the window's X ID."
-  (run-shell-command
-   (format nil "xdotool key --window ~a --clearmodifiers ~a"
-           (window-xwin win) keys)))
-
 (defcommand unified-copy () ()
-  "Copy: send M-w to Emacs, C-c to everything else."
+  "Copy: in Emacs send M-w, otherwise promote X PRIMARY selection to CLIPBOARD."
   (let ((win (current-window)))
     (if (string-equal (window-class win) "Emacs")
         (send-fake-key win (kbd "M-w"))
-        (send-key-to-window win "ctrl+c"))))
+        (run-shell-command "xclip -selection primary -o | xclip -selection clipboard -i"))))
 
 (defcommand unified-cut () ()
-  "Cut: send C-w to Emacs, C-x to everything else."
+  "Cut: send C-w to Emacs, copy PRIMARY to CLIPBOARD for everything else."
   (let ((win (current-window)))
     (if (string-equal (window-class win) "Emacs")
         (send-fake-key win (kbd "C-w"))
-        (send-key-to-window win "ctrl+x"))))
+        (run-shell-command "xclip -selection primary -o | xclip -selection clipboard -i"))))
 
 (defcommand unified-paste () ()
-  "Paste: send C-y to Emacs, C-v to everything else."
+  "Paste: send C-y to Emacs, type CLIPBOARD contents for everything else."
   (let ((win (current-window)))
     (if (string-equal (window-class win) "Emacs")
         (send-fake-key win (kbd "C-y"))
-        (send-key-to-window win "ctrl+v"))))
+        (run-shell-command "xdotool type --clearmodifiers -- \"$(xclip -selection clipboard -o)\""))))
 
 (defcommand clipboard-history () ()
   "Show clipboard history via clipmenu with rofi."
