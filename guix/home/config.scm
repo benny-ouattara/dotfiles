@@ -119,7 +119,8 @@
      "maim@5.8.1"
      "libnotify"
      "dunst@1.13.1"
-     "pavucontrol@6.2"))))
+     "pavucontrol@6.2"
+     "arandr@0.1.11"))))
  (services
   (cons*
    (simple-service 'environment-variables-service
