@@ -378,7 +378,8 @@
           (sort (screen-groups (current-screen)) #'< :key #'group-number))))
 
 (defun polybar-update-groups ()
-  (run-shell-command "polybar-msg action '#stumpwmgroups.hook.0'"))
+  (run-shell-command (concat "polybar-msg action stumpwmgroups send '"
+                             (polybar-groups) "'")))
 
 (add-hook *new-window-hook* (lambda (win) (polybar-update-groups)))
 (add-hook *destroy-window-hook* (lambda (win) (polybar-update-groups)))
