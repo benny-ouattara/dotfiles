@@ -83,15 +83,15 @@
 
 (defcommand vol-up () ()
   "Raise volume and show notification."
-  (run-shell-command "amixer -q set Master 5%+ && notify-send -h string:x-dunst-stack-tag:volume \"Volume\" \"$(amixer get Master | grep -oP '\\d+%' | head -1)\""))
+  (run-shell-command "pactl set-sink-volume @DEFAULT_SINK@ +5% && notify-send -h string:x-dunst-stack-tag:volume \"Volume\" \"$(pactl get-sink-volume @DEFAULT_SINK@ | grep -oP '\\d+%' | head -1)\""))
 
 (defcommand vol-down () ()
   "Lower volume and show notification."
-  (run-shell-command "amixer -q set Master 5%- && notify-send -h string:x-dunst-stack-tag:volume \"Volume\" \"$(amixer get Master | grep -oP '\\d+%' | head -1)\""))
+  (run-shell-command "pactl set-sink-volume @DEFAULT_SINK@ -5% && notify-send -h string:x-dunst-stack-tag:volume \"Volume\" \"$(pactl get-sink-volume @DEFAULT_SINK@ | grep -oP '\\d+%' | head -1)\""))
 
 (defcommand vol-toggle () ()
   "Toggle mute and show notification."
-  (run-shell-command "amixer -q set Master toggle && notify-send -h string:x-dunst-stack-tag:volume \"Volume\" \"$(amixer get Master | grep -oE '\\[on\\]|\\[off\\]' | head -1)\""))
+  (run-shell-command "pactl set-sink-mute @DEFAULT_SINK@ toggle && notify-send -h string:x-dunst-stack-tag:volume \"Volume\" \"$(pactl get-sink-mute @DEFAULT_SINK@ | cut -d: -f2)\""))
 
 (defcommand bright-up () ()
   "Raise brightness and show notification."
