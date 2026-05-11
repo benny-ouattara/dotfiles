@@ -128,7 +128,6 @@
    (simple-service 'environment-variables-service
                    home-environment-variables-service-type
                    `(("EDITOR" . "emacsclient -t") ("VISUAL" . "emacsclient -c") ("CM_LAUNCHER" . "rofi")
-             ("DBUS_SESSION_BUS_ADDRESS" . "autolaunch:")
               ("PATH" . ,(string-append (getenv "HOME") "/.emacs.d/bin:"
                                          (getenv "HOME") "/.local/bin:"
                                          (getenv "HOME") "/.local/share/gem/ruby/3.4.0/bin:"

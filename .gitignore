@@ -51,3 +51,4 @@ guix/backup/*
 containers/
 lnav/*
 broot/
+guix/*.log

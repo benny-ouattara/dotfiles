@@ -397,6 +397,13 @@
 (xft:cache-fonts)
 (set-font (make-instance 'xft:font :family "Iosevka Term" :subfamily "Regular" :size 14))
 
+;; Set DBUS_SESSION_BUS_ADDRESS for nix apps (jeepney can't handle autolaunch:)
+(let ((addr (string-trim '(#\Newline #\Space)
+             (run-shell-command
+              "ss -xlp 2>/dev/null | grep dbus-daemon | grep -oP '/tmp/dbus-\\S+' | head -1 | xargs -I{} echo 'unix:path={}'" t))))
+  (when (> (length addr) (length "unix:path="))
+    (sb-posix:setenv "DBUS_SESSION_BUS_ADDRESS" addr 1)))
+
 (run-shell-command "nm-applet")
 
 ;; Slynk REPL (uncomment to connect Sly/Slime to StumpWM)
