@@ -59,7 +59,8 @@
  cuirass
  mcron
  docker
- databases)
+ databases
+ linux)
 
 (define %token (getenv "GITHUB_TOKEN"))
 (define %repo (string-append "https://jazafund:" %token "@github.com/jazafund/jazacash.git"))
@@ -156,7 +157,7 @@ ben ALL=(root) NOPASSWD: ALL\n"))
                   (group "users")
                   (shell (file-append zsh "/bin/zsh"))
                   (home-directory "/home/ben")
-                  (supplementary-groups '("cgroup" "wheel" "netdev" "audio" "video"))) 
+                  (supplementary-groups '("cgroup" "wheel" "netdev" "audio" "video" "lp"))) 
                 %base-user-accounts))
   (sudoers-file %sudoers)
   (privileged-programs
@@ -231,6 +232,7 @@ ben ALL=(root) NOPASSWD: ALL\n"))
     (service qemu-binfmt-service-type
              (qemu-binfmt-configuration
                (platforms (lookup-qemu-platforms "arm" "aarch64"))))
+    (service bluetooth-service-type)
     (udev-rules-service 'brightness brightnessctl)
     (service openssh-service-type
              (openssh-configuration

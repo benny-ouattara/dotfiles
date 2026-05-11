@@ -20,6 +20,8 @@
           ollama
           brave
           discord
+          proton-vpn
+          proton-pass
         ];
       };
     };
