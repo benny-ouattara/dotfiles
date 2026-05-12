@@ -148,6 +148,7 @@
                 "s-f          Fullscreen\\n"
                 "s-q          Close window\\n"
                 "s-r          Remove frame\\n"
+                "C-Left/Right Prev/next workspace\\n"
                 "s-1..5       Switch workspace\\n"
                 "C-s-1..5     Move to workspace\\n"
                 "s-g / s-G    Guix system / home\\n"
@@ -297,6 +298,9 @@
 (define-key *top-map* (kbd "s-S") "vsplit-and-focus")
 (define-key *top-map* (kbd "s-SPC") "launch-rofi")
 (define-key *top-map* (kbd "C-s-r") "iresize")
+
+(define-key *top-map* (kbd "C-Left") "gprev")
+(define-key *top-map* (kbd "C-Right") "gnext")
 
 (define-key *top-map* (kbd "s-1") "gselect dev")
 (define-key *top-map* (kbd "s-2") "gselect web")
