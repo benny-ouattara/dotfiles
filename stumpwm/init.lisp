@@ -71,7 +71,7 @@
   (let ((win (current-window)))
     (if (string-equal (window-class win) "Emacs")
         (send-fake-key win (kbd "C-y"))
-        (run-shell-command "xdotool type --clearmodifiers -- \"$(xclip -selection clipboard -o)\""))))
+        (run-shell-command "xdotool type --clearmodifiers -- \"$(xclip -selection clipboard -o | tr -d '\\n')\""))))
 
 (defcommand clipboard-history () ()
   "Show clipboard history via clipmenu with rofi."

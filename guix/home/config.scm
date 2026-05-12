@@ -23,6 +23,8 @@
   #:use-module (gnu packages shells)
   #:use-module (gnu packages shellutils)
   #:use-module (beno services ollama)
+  #:use-module (beno services protonmail-bridge)
+  #:use-module (gnu home services mcron)
   #:use-module (guix packages)
   #:use-module (guix build-system trivial)
   #:use-module (beno packages lnav))
@@ -125,7 +127,13 @@
      "ripgrep@15.1.0"
      "jq@1.8.1"
      "ncdu@2.9.2"
-     "git-delta@0.18.2"))))
+     "git-delta@0.18.2"
+     "mu@1.12.15"
+     "isync@1.5.1"
+     "msmtp@1.8.26"
+     "notmuch@0.39"
+     "afew@3.0.1"
+     "password-store@1.7.4"))))
  (services
   (cons*
    (simple-service 'environment-variables-service
@@ -137,6 +145,15 @@
                                          (getenv "HOME") "/Code/dotfiles/guix/scripts:"
                                          (getenv "PATH")))))
    (service home-ollama-service-type)
+   (service home-protonmail-bridge-service-type)
+   (service home-mcron-service-type
+            (home-mcron-configuration
+             (jobs
+              (list #~(job '(next-minute (range 0 60 5))
+                           (string-append "mbsync -a"
+                                          " && notmuch new"
+                                          " && afew -n -t")
+                           "sync-mail")))))
    (service home-openssh-service-type
             (home-openssh-configuration
              (add-keys-to-agent "yes")

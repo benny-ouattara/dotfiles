@@ -2,7 +2,7 @@
 IMAPAccount jc-support
 Host heracles.mxrouting.net
 User support@jaza.cash
-PassCmd "/run/current-system/sw/bin/pass Email/heracles"
+PassCmd "pass Email/heracles"
 AuthMechs LOGIN
 TLSType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
@@ -53,7 +53,7 @@ Channel jc-support-trash
 IMAPAccount jc-ops
 Host heracles.mxrouting.net
 User ops@jaza.cash
-PassCmd "/run/current-system/sw/bin/pass Email/heracles"
+PassCmd "pass Email/heracles"
 AuthMechs LOGIN
 TLSType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
@@ -104,7 +104,7 @@ Channel jc-ops-trash
 IMAPAccount jc-compliance
 Host heracles.mxrouting.net
 User compliance@jaza.cash
-PassCmd "/run/current-system/sw/bin/pass Email/heracles"
+PassCmd "pass Email/heracles"
 AuthMechs LOGIN
 TLSType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
@@ -155,7 +155,7 @@ Channel jc-compliance-trash
 IMAPAccount jc-info
 Host heracles.mxrouting.net
 User info@jaza.cash
-PassCmd "/run/current-system/sw/bin/pass Email/heracles"
+PassCmd "pass Email/heracles"
 AuthMechs LOGIN
 TLSType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
@@ -206,7 +206,7 @@ Channel jc-info-trash
 IMAPAccount jc-fraud
 Host heracles.mxrouting.net
 User fraud@jaza.cash
-PassCmd "/run/current-system/sw/bin/pass Email/heracles"
+PassCmd "pass Email/heracles"
 AuthMechs LOGIN
 TLSType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
@@ -257,7 +257,7 @@ Channel jc-fraud-trash
 IMAPAccount jc-hr
 Host heracles.mxrouting.net
 User hr@jaza.cash
-PassCmd "/run/current-system/sw/bin/pass Email/heracles"
+PassCmd "pass Email/heracles"
 AuthMechs LOGIN
 TLSType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
@@ -308,7 +308,7 @@ Channel jc-hr-trash
 IMAPAccount jc-sales
 Host heracles.mxrouting.net
 User sales@jaza.cash
-PassCmd "/run/current-system/sw/bin/pass Email/heracles"
+PassCmd "pass Email/heracles"
 AuthMechs LOGIN
 TLSType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
@@ -359,7 +359,7 @@ Channel jc-sales-trash
 IMAPAccount jc-system
 Host heracles.mxrouting.net
 User system@jaza.cash
-PassCmd "/run/current-system/sw/bin/pass Email/heracles"
+PassCmd "pass Email/heracles"
 AuthMechs LOGIN
 TLSType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
@@ -411,7 +411,7 @@ Channel jc-system-trash
 IMAPAccount gmail
 Host imap.gmail.com
 User benny.ouattara@gmail.com
-PassCmd "/run/current-system/sw/bin/pass Email/gmail"
+PassCmd "pass Email/gmail"
 AuthMechs LOGIN
 TLSType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
@@ -455,8 +455,8 @@ Channel gmail-all
 IMAPAccount protonmail
 Host 127.0.0.1
 Port 1143
-User ben.ouattara@proton.me
-PassCmd "/run/current-system/sw/bin/pass Email/proton"
+User ben.abubaker@proton.me
+PassCmd "pass Email/proton"
 AuthMechs LOGIN
 TLSType NONE
 
@@ -508,7 +508,7 @@ IMAPAccount jfund
 Host 127.0.0.1
 Port 1143
 User jazafund@proton.me
-PassCmd "/run/current-system/sw/bin/pass Email/jfund"
+PassCmd "pass Email/jfund"
 AuthMechs LOGIN
 TLSType NONE
 

@@ -12,7 +12,7 @@
         inherit system;
         config.allowUnfree = true;
       };
-      guixGL = "/run/current-system/profile/lib";
+      mesaDri = "/run/current-system/profile/lib/dri";
       wrapWithGL = pkg: pkgs.symlinkJoin {
         name = pkg.pname or pkg.name;
         paths = [ pkg ];
@@ -20,11 +20,13 @@
         postBuild = ''
           for bin in $out/bin/*; do
             if [ -f "$bin" ] && [ ! -L "$bin" ]; then
-              wrapProgram "$bin" --prefix LD_LIBRARY_PATH : "${guixGL}"
+              wrapProgram "$bin" \
+                --set LIBGL_DRIVERS_PATH "${mesaDri}"
             elif [ -L "$bin" ]; then
               target=$(readlink "$bin")
               rm "$bin"
-              makeWrapper "$target" "$bin" --prefix LD_LIBRARY_PATH : "${guixGL}"
+              makeWrapper "$target" "$bin" \
+                --set LIBGL_DRIVERS_PATH "${mesaDri}"
             fi
           done
         '';
@@ -35,13 +37,29 @@
         name = "nix-extras";
         paths = with pkgs; [
           ollama
-          (wrapWithGL brave)
-          (wrapWithGL discord)
+          brave
+          discord
           proton-vpn
           proton-pass
           lazygit
           yazi
-          (wrapWithGL kitty)
+          protonmail-bridge
+          (pkgs.symlinkJoin {
+            name = "kitty";
+            paths = [ pkgs.kitty ];
+            buildInputs = [ pkgs.makeWrapper ];
+            postBuild = ''
+              for bin in $out/bin/*; do
+                if [ -L "$bin" ]; then
+                  target=$(readlink "$bin")
+                  rm "$bin"
+                  makeWrapper "$target" "$bin" \
+                    --set LIBGL_DRIVERS_PATH "${mesaDri}" \
+                    --prefix LD_LIBRARY_PATH : "/run/current-system/profile/lib"
+                fi
+              done
+            '';
+          })
         ];
       };
     };

@@ -472,11 +472,13 @@ With prefix ARG, reset the eshell buffer."
  secrets-dir (concat sync-dir "secrets/")
  onyx-secrets (concat secrets-dir "onyx/authinfo.gpg")
  oryx-secrets (concat secrets-dir "oryx/authinfo.gpg")
+ otter-secrets (concat secrets-dir "otter/authinfo.gpg")
  kite-secrets (concat secrets-dir "kite/authinfo.gpg"))
 
 (pcase (system-name)
   ("onyx" (pushnew! auth-sources onyx-secrets))
   ("oryx" (pushnew! auth-sources oryx-secrets))
+  ("otter" (pushnew! auth-sources otter-secrets))
   ("kite" (pushnew! auth-sources kite-secrets)))
 
 (defun beno-read-db-password (db)
@@ -489,6 +491,7 @@ With prefix ARG, reset the eshell buffer."
 (setq local-wallet (pcase (system-name)
                      ("onyx" onyx-secrets)
                      ("oryx" oryx-secrets)
+                     ("otter" otter-secrets)
                      ("kite" kite-secrets)))
 
 (after! sql
