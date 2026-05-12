@@ -7,8 +7,8 @@
 (in-package :stumpwm)
 (setf *default-package* :stumpwm)
 
-;; Unbind prefix key - all bindings are on Super directly
-(define-key *top-map* (kbd "C-a") nil)
+;; Move prefix key out of the way - all bindings are on Super directly
+(set-prefix-key (kbd "C-F20"))
 (setf
  *resize-increment* 50
  *startup-message* nil
@@ -329,7 +329,7 @@
 
 (define-frame-preference "web"
     (2 t t :class "Brave-browser")
-    (2 t t :class "discord"))
+  (2 t t :class "discord"))
 
 ;; start processes
 (run-commands
@@ -405,8 +405,8 @@
 
 ;; Set DBUS_SESSION_BUS_ADDRESS for nix apps (jeepney can't handle autolaunch:)
 (let ((addr (string-trim '(#\Newline #\Space)
-             (run-shell-command
-              "ss -xlp 2>/dev/null | grep dbus-daemon | grep -oP '/tmp/dbus-\\S+' | head -1 | xargs -I{} echo 'unix:path={}'" t))))
+                         (run-shell-command
+                          "ss -xlp 2>/dev/null | grep dbus-daemon | grep -oP '/tmp/dbus-\\S+' | head -1 | xargs -I{} echo 'unix:path={}'" t))))
   (when (> (length addr) (length "unix:path="))
     (sb-posix:setenv "DBUS_SESSION_BUS_ADDRESS" addr 1)))
 
