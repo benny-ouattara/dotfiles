@@ -25,13 +25,16 @@
 (defvar soccer-base-url "https://api-football-v1.p.rapidapi.com"
   "Base football API that provides past and realtime soccer data.")
 
-(defvar soccer-season 2024
-  "Soccer season to explore.")
+(defvar soccer-season (let ((now (decode-time)))
+                        (if (>= (decoded-time-month now) 8)
+                            (decoded-time-year now)
+                          (1- (decoded-time-year now))))
+  "Soccer season to explore. Defaults to current season (Aug-Jul cycle).")
 
 (defvar soccer-tz "America/New_York"
   "Date and time timezone.")
 
-(defvar soccer-debug t
+(defvar soccer-debug nil
   "Turn debugging on and off.")
 
 (defvar soccer-api-log-template (concat (make-string 20 ?=)
@@ -212,13 +215,9 @@ Return an alist of (TEAM-NAME . TEAM)."
                                 team)))
       pairs)))
 
-(defun soccer-fetch-fixtures (team-id &optional limit)
-  "Fetch upcoming fixtures of TEAM-ID.
-No caching is applied on fixtures since they are dynamic and change on a daily or even hourly basis.
-We want to always see the latest and greatest in fixture details."
-  (let* ((url (soccer-team-fixtures-url team-id limit))
-         (json (soccer-fetch-url url))
-         (response (append (alist-get 'response json) nil)))
+(defun soccer--parse-fixtures (json)
+  "Parse fixture structs from API response JSON."
+  (let ((response (append (alist-get 'response json) nil)))
     (cl-loop for r in response
              collect (let* ((fixture (alist-get 'fixture r))
                             (teams (alist-get 'teams r))
@@ -242,6 +241,12 @@ We want to always see the latest and greatest in fixture details."
                                                :away away
                                                :home-goals home-goals
                                                :away-goals away-goals)))))
+
+(defun soccer-fetch-fixtures (team-id &optional limit)
+  "Fetch upcoming fixtures of TEAM-ID.
+No caching is applied on fixtures since they are dynamic and change on a daily or even hourly basis.
+We want to always see the latest and greatest in fixture details."
+  (soccer--parse-fixtures (soccer-fetch-url (soccer-team-fixtures-url team-id limit))))
 
 (defun soccer-fetch-current-round (league-id)
   "Fetch current ROUND of LEAGUE-ID."
@@ -253,32 +258,8 @@ We want to always see the latest and greatest in fixture details."
 (defun soccer-fetch-current-league-fixtures (league-id)
   "Fetch current ROUND fixtures of LEAGUED-ID."
   (let* ((round (soccer-fetch-current-round league-id))
-         (url (soccer-league-fixtures-url league-id round))
-         (json (soccer-fetch-url url))
-         (response (append (alist-get 'response json) nil)))
-    (cl-loop for r in response
-             collect (let* ((fixture (alist-get 'fixture r))
-                            (teams (alist-get 'teams r))
-                            (home (alist-get 'name (alist-get 'home teams)))
-                            (away (alist-get 'name (alist-get 'away teams)))
-                            (goals (alist-get 'goals r))
-                            (home-goals (alist-get 'home goals))
-                            (away-goals (alist-get 'away goals))
-                            (league (alist-get 'league r))
-                            (league-name (alist-get 'name league))
-                            (league-round (alist-get 'round league))
-                            (venue (alist-get 'name (alist-get 'venue fixture)))
-                            (timestamp (alist-get 'timestamp fixture))
-                            (status (alist-get 'long (alist-get 'status fixture))))
-                       (soccer-fixture--create :timestamp timestamp
-                                               :venue venue
-                                               :status status
-                                               :league league-name
-                                               :round league-round
-                                               :home home
-                                               :away away
-                                               :home-goals home-goals
-                                               :away-goals away-goals)))))
+         (url (soccer-league-fixtures-url league-id round)))
+    (soccer--parse-fixtures (soccer-fetch-url url))))
 
 (defun soccer--write-to (filepath content)
   "Write CONTENT to FILEPATH.
@@ -317,12 +298,10 @@ It creates the base databse directory if it doesn't exist alongside its subdirec
 The content of FILENAME is expected to be an alist of soccer API response.
 It makes sure to return a list and not a vector."
   (when (file-exists-p filename)
-    (let* ((buff (find-file-noselect filename))
-           (raw (with-current-buffer buff
-                       (goto-char (point-min))
-                       (read (buffer-string)))))
-      (kill-buffer buff)
-      raw)))
+    (with-temp-buffer
+      (insert-file-contents filename)
+      (goto-char (point-min))
+      (read (buffer-string)))))
 
 (defun soccer-fetch-url (url)
   "Fetch content at URL.
@@ -343,9 +322,11 @@ Logs the full API response if `soccer-debug' is non nil."
         (insert (format soccer-api-log-template url))
         (insert-buffer response-buffer)
         (newline)))
-    (with-current-buffer response-buffer
-      (goto-char url-http-end-of-headers)
-      (json-read))))
+    (unwind-protect
+        (with-current-buffer response-buffer
+          (goto-char url-http-end-of-headers)
+          (json-read))
+      (kill-buffer response-buffer))))
 
 (defun soccer--log (content)
   "Log string content to buffer specified by `soccer-log-buffer' when `soccer-debug' is non nil."
@@ -483,7 +464,7 @@ Teams and upcoming fixtures are derived from `soccer-followed-leagues'."
 (defun soccer-follow-team (team-name)
   "Interactively select TEAM-NAME to follow and tracks it as `soccer-local-store-teams-path/followed.data'.
 These are considered as favorite teams and their next fixtures can be queried."
-  (interactive (list (completing-read "Unfollow team: "
+  (interactive (list (completing-read "Follow team: "
                                       (mapcar #'car (soccer--fetch-all-teams)))))
   (let* ((all-teams (soccer--fetch-all-teams))
          (current-teams (soccer-load-file soccer-local-store-teams-followed-path))
@@ -495,7 +476,7 @@ These are considered as favorite teams and their next fixtures can be queried."
 
 (defun soccer-unfollow-team (team-name)
   "Interactively select TEAM-NAME to unfollow and stops tracking it in `soccer-local-store-teams-path/followed.data'."
-  (interactive (list (completing-read "Follow team: "
+  (interactive (list (completing-read "Unfollow team: "
                                       (-map #'car (soccer-load-file soccer-local-store-teams-followed-path)))))
   (let* ((all-teams (soccer--fetch-all-teams))
          (current-teams (soccer-load-file soccer-local-store-teams-followed-path))
@@ -506,20 +487,27 @@ These are considered as favorite teams and their next fixtures can be queried."
                         updated-teams)
       (message "Unfollowed %s" team-name))))
 
+(defun soccer--fixture-to-entry (fixture &optional with-score)
+  "Convert FIXTURE to a tabulated-list entry. Include score column when WITH-SCORE is non-nil."
+  (let ((cols (list (s-truncate 22 (soccer-fixture-league fixture))
+                    (format-time-string "%a, %b %d" (soccer-fixture-timestamp fixture))
+                    (format-time-string "%I:%M %p" (soccer-fixture-timestamp fixture))
+                    (s-truncate 22 (soccer-fixture-home fixture))
+                    (s-truncate 22 (soccer-fixture-away fixture))
+                    (s-truncate 17 (soccer-fixture-status fixture)))))
+    (when with-score
+      (setq cols (append cols (list (format "%s - %s"
+                                           (or (soccer-fixture-home-goals fixture) "")
+                                           (or (soccer-fixture-away-goals fixture) ""))))))
+    (setq cols (append cols (list (soccer-fixture-round fixture))))
+    (list fixture (apply #'vector cols))))
+
 (defun soccer-favorite-fixtures--entries (limit)
   "Populate table entries with upcoming fixtures for `followed' teams."
   (setq tabulated-list-entries nil)
   (let* ((fixtures (soccer--fetch-favorite-fixtures limit)))
     (dolist (fixture fixtures)
-      (push (list fixture (vector (s-truncate 22 (soccer-fixture-league fixture))
-                                  (format-time-string "%a, %b %d" (soccer-fixture-timestamp fixture))
-                                  (format-time-string "%I:%M %p" (soccer-fixture-timestamp fixture))
-                                  (s-truncate 22 (soccer-fixture-home fixture))
-                                  (s-truncate 22 (soccer-fixture-away fixture))
-                                  (s-truncate 17 (soccer-fixture-status fixture))
-                                  (format "%s - %s" (or (soccer-fixture-home-goals fixture) "")
-                                          (or (soccer-fixture-away-goals fixture) ""))
-                                  (soccer-fixture-round fixture)))
+      (push (soccer--fixture-to-entry fixture t)
             tabulated-list-entries))))
 
 
@@ -528,19 +516,11 @@ These are considered as favorite teams and their next fixtures can be queried."
   (setq tabulated-list-entries nil)
   (let* ((fixtures (soccer-fetch-current-league-fixtures league-id))
          (ordered-fixtures (-sort (lambda (x y)
-                                        (> (soccer-fixture-timestamp x)
-                                           (soccer-fixture-timestamp y)))
-                                      fixtures)))
+                                    (> (soccer-fixture-timestamp x)
+                                       (soccer-fixture-timestamp y)))
+                                  fixtures)))
     (dolist (fixture ordered-fixtures)
-      (push (list fixture (vector (s-truncate 22 (soccer-fixture-league fixture))
-                                  (format-time-string "%a, %b %d" (soccer-fixture-timestamp fixture))
-                                  (format-time-string "%I:%M %p" (soccer-fixture-timestamp fixture))
-                                  (s-truncate 22 (soccer-fixture-home fixture))
-                                  (s-truncate 22 (soccer-fixture-away fixture))
-                                  (s-truncate 17 (soccer-fixture-status fixture))
-                                  (format "%s - %s" (or (soccer-fixture-home-goals fixture) "")
-                                          (or (soccer-fixture-away-goals fixture) ""))
-                                  (soccer-fixture-round fixture)))
+      (push (soccer--fixture-to-entry fixture t)
             tabulated-list-entries))))
 
 ;;;###autoload
@@ -668,7 +648,7 @@ The number of fixtures is capped by `soccer-fixtures-limit'."
                                       '("Founded" 0 t)))
   (tabulated-list-init-header))
 
-;;;autoload
+;;;###autoload
 (defun list-soccer-teams (league-id &optional buff)
   "Entry point to list all soccer teams playing in LEAGUE-ID.
 It reads the desired league from the minibuffer if none is provided."
@@ -690,18 +670,11 @@ TEAM-ID are not known in advance, they are retrieved from the leagues.
 The fixtures are sorted in ascending order of schedule."
   (setq tabulated-list-entries nil)
   (let ((fixtures (-sort (lambda (x y)
-                           (>  (soccer-fixture-timestamp x)
-                               (soccer-fixture-timestamp y)))
+                           (> (soccer-fixture-timestamp x)
+                              (soccer-fixture-timestamp y)))
                          (soccer-fetch-fixtures team-id))))
     (dolist (fixture fixtures)
-      (push (list fixture (vector (s-truncate 22 (soccer-fixture-league fixture))
-                                  (format-time-string "%a, %b %d" (soccer-fixture-timestamp fixture))
-                                  (format-time-string "%I:%M %p" (soccer-fixture-timestamp fixture))
-                                  ;; (s-truncate 12 (soccer-fixture-venue fixture))
-                                  (s-truncate 22 (soccer-fixture-home fixture))
-                                  (s-truncate 22 (soccer-fixture-away fixture))
-                                  (s-truncate 17 (soccer-fixture-status fixture))
-                                  (soccer-fixture-round fixture)))
+      (push (soccer--fixture-to-entry fixture nil)
             tabulated-list-entries))))
 
 ;;;###autoload
