@@ -96,26 +96,26 @@
 
 (after! org-journal
   (setq org-journal-enable-agenda-integration t)
-  (map! :leader :desc "Open current journal" "j" #'org-journal-open-current-journal-file))
-
-;; (when (not (file-exists-p (concat doom-cache-dir "tramp-histfile")))
-;;   (make-empty-file (concat doom-cache-dir "tramp-histfile")))
-
-;; (after! tramp
-;;   (setq
-;;    tramp-histfile-override "/dev/null"
-;;    tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath=~/.ssh/master-%%r@%%h:%%p -o ControlPersist=30m")
-;;   (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
+  (map! :leader :desc "Open current journal" "k" #'org-journal-open-current-journal-file))
 
 (map! :leader
       :desc "split with eshell"     ">" #'beno--eshell-toggle-right
       :desc "fuzzy search visible"  "a" #'evil-avy-goto-char-2
       :desc "line in visible"       "A" #'avy-goto-line
       :desc "open file other win"   "V" #'projectile-find-file-other-window
-      :desc "open buffer other win" "v" #'switch-to-buffer-other-window
-      :desc "calendar"              "o c" #'cfw:open-calendar-buffer)
+      :desc "open buffer other win" "v" #'switch-to-buffer-other-window)
 
 (map! "C-s" #'consult-line)
+
+(map! :n "C-1" #'+workspace/switch-to-0                                                                                        
+      :n "C-2" #'+workspace/switch-to-1                                                                                        
+      :n "C-3" #'+workspace/switch-to-2                                                                                        
+      :n "C-4" #'+workspace/switch-to-3
+      :n "C-5" #'+workspace/switch-to-4                                                                                        
+      :n "C-6" #'+workspace/switch-to-5
+      :n "C-7" #'+workspace/switch-to-6
+      :n "C-8" #'+workspace/switch-to-7
+      :n "C-9" #'+workspace/switch-to-8)
 
 (defun beno-evil-scroll-down ()
   (interactive)
@@ -129,88 +129,6 @@
 
 (map! :n "C-d" #'beno-evil-scroll-down
       :n "C-u" #'beno-evil-scroll-up)
-
-(when (equal "ignored" (system-name))
-  (condition-case err
-      (let* ((refs (cdr (doom-call-process "nix-store" "--query" "--referrers"
-                                           (file-truename (executable-find "mu")))))
-             (root (car (-filter (lambda (s) (s-contains? "emacs-mu4e" s))
-                                 (s-split "\n" refs))))
-             (version (s-chop-prefix "-" (cadr (s-split "emacs" root))))
-             (path (concat root "/share/emacs/site-lisp/elpa/" version)))
-        (add-to-list 'load-path path))
-    (error (warn "Failed to locate mu4e: %s" err))))
-
-(when (equal "ignored" (system-name))
-  (after! mu4e
-    (setq mu4e-update-interval 180))
-  (setq +mu4e-workspace-name "*mail*")
-
-  (after! mu4e-main
-    (setq mu4e-main-hide-personal-addresses t))
-
-  (after! mu4e-alert
-    (mu4e-alert-set-default-style 'ignore))
-
-  (after! mu4e-modeline
-    (setq mu4e-modeline-unread-items `("U:" . ,(+mu4e-normalised-icon "nf-fa-fire"))
-          mu4e-modeline-all-clear `("C:" .    ,(+mu4e-normalised-icon "nf-fa-check"))
-          mu4e-modeline-all-read `("R:" .     ,(+mu4e-normalised-icon "nf-fa-check"))
-          mu4e-modeline-new-items `("N:" .    ,(+mu4e-normalised-icon "nf-fa-fire")))))
-
-(setq +org-capture-emails-file "tasks.org")
-
-(set-email-account! "Gmail"
-                    '((mu4e-sent-folder       . "/gmail/sent")
-                      (mu4e-drafts-folder     . "/gmail/drafts")
-                      (mu4e-trash-folder      . "/gmail/trash")
-                      (mu4e-refile-folder     . "/gmail/All Mail")
-                      (smtpmail-smtp-user     . "benny.ouattara@gmail.com")
-                      (smtpmail-smtp-server   . "smtp.gmail.com")
-                      (smtpmail-smtp-service  . 465)
-                      (smtpmail-stream-type   . ssl)
-                      (user-mail-address      . "benny.ouattara@gmail.com") ;; only needed for mu < 1.4
-                      )
-                    t)
-
-(set-email-account! "Protonmail"
-                    '((mu4e-sent-folder       . "/protonmail/sent")
-                      (mu4e-drafts-folder     . "/protonmail/drafts")
-                      (mu4e-trash-folder      . "/protonmail/trash")
-                      (mu4e-refile-folder     . "/protonmail/All Mail")
-                      (smtpmail-smtp-user     . "benny.ouattara@protonmail.com")
-                      (smtpmail-smtp-server   . "127.0.0.1")
-                      (smtpmail-smtp-service  . 1025)
-                      (smtpmail-stream-type   . starttls)
-                      (user-mail-address      . "benny.ouattara@protonmail.com")    ;; only needed for mu < 1.4
-                      )
-                    t)
-
-(set-email-account! "Spotify"
-                    '((mu4e-sent-folder       . "/spotify/sent")
-                      (mu4e-drafts-folder     . "/spotify/drafts")
-                      (mu4e-trash-folder      . "/spotify/trash")
-                      (mu4e-refile-folder     . "/spotify/All Mail")
-                      (smtpmail-smtp-user     . "zangao@spotify.com")
-                      (smtpmail-smtp-server   . "smtp.gmail.com")
-                      (smtpmail-smtp-service  . 465)
-                      (smtpmail-stream-type   . ssl)
-                      (user-mail-address      . "zangao@spotify.com")    ;; only needed for mu < 1.4
-                      )
-                    t)
-
-(setq mu4e-bookmarks
-      '((:name "Unread messages" :query "flag:unread AND NOT flag:trashed" :key 117)
-        (:name "Today's messages" :query "date:today..now" :key 116)
-        (:name "Last 7 days" :query "date:7d..now" :hide-unread t :key 119)
-        (:name "Messages with images" :query "mime:image/*" :key 112)))
-
-(after! mu4e
-  (set-popup-rule! (regexp-quote mu4e-main-buffer-name) :actions :ignore t)
-  (set-popup-rule! (regexp-quote mu4e-headers-buffer-name) :actions :ignore t))
-
-(after! mu4e-compose
-  (add-hook! 'mu4e-compose-mode-hook (auto-fill-mode -1)))
 
 (after! notmuch                                                                                                                                    
   (setq +notmuch-sync-backend 'mbsync                                                                                                              
@@ -242,7 +160,7 @@
           (:name "all protonmail"    :query "tag:protonmail"                  :key "P")
           (:name "all jc"            :query "tag:jc"                          :key "J")
           (:name "all jfund"         :query "tag:jfund"                       :key "F")
-          (:name "sent"              :query "tag:sent"                        :key "t")
+          (:name "sent"              :query "tag:sent"                        :key "s")
           (:name "drafts"            :query "tag:draft"                       :key "d")))
 
   (set-popup-rule! "^\\*notmuch" :ignore t)
@@ -383,7 +301,7 @@ With prefix ARG, reset the eshell buffer."
                 (right-fringe . 0))))
 
 (use-package! nano-theme
-  :hook (after-init . nano-light) ;; swap to nano-dark if preferred
+  :defer t
   :config
   (custom-set-faces
    ;; Flyspell
@@ -466,7 +384,7 @@ With prefix ARG, reset the eshell buffer."
 (setq auto-save-visited-interval 1)
 
 (custom-set-faces!
-  '(wgrep-face :background "#aceaac" :foreground "#004c00"))
+  '(wgrep-face :inherit diff-added))
 
 (setq
  secrets-dir (concat sync-dir "secrets/")
@@ -578,6 +496,7 @@ With prefix ARG, reset the eshell buffer."
       evil-vsplit-window-right t)
 
 (use-package! modus-themes
+  :defer t
   :config
   (setq modus-themes-italic-constructs t
         modus-themes-bold-constructs nil
@@ -604,10 +523,7 @@ With prefix ARG, reset the eshell buffer."
         modus-themes-common-palette-overrides
         '((fringe unspecified)
           (border-mode-line-active bg-mode-line-active)
-          (border-mode-line-inactive bg-mode-line-inactive)))
-
-  ;; Load your preferred variant
-  (load-theme 'modus-vivendi :no-confirm))
+          (border-mode-line-inactive bg-mode-line-inactive))))
 
 ;; Toggle between light/dark
 (map! :leader
