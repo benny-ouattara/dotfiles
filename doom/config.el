@@ -67,22 +67,6 @@
 
   (add-hook 'ns-system-appearance-change-functions #'beno--auto-theme))
 
-(unless (display-graphic-p) 
-  (require 'evil-terminal-cursor-changer)
-  (etcc-on)
-
-  (setq
-   select-enable-clipboard t
-   evil-motion-state-cursor 'box
-   evil-visual-state-cursor 'box
-   evil-normal-state-cursor 'box
-   evil-insert-state-cursor 'bar
-   evil-emacs-state-cursor  'hbar)
-  
-  (menu-bar-mode -1)
-  (xterm-mouse-mode 1)
-  (consult-theme 'catppuccin))
-
 (setq
  org-startup-folded 'show2levels
  org-auto-align-tags nil
@@ -107,15 +91,15 @@
 
 (map! "C-s" #'consult-line)
 
-(map! :n "C-1" #'+workspace/switch-to-0                                                                                        
-      :n "C-2" #'+workspace/switch-to-1                                                                                        
-      :n "C-3" #'+workspace/switch-to-2                                                                                        
-      :n "C-4" #'+workspace/switch-to-3
-      :n "C-5" #'+workspace/switch-to-4                                                                                        
-      :n "C-6" #'+workspace/switch-to-5
-      :n "C-7" #'+workspace/switch-to-6
-      :n "C-8" #'+workspace/switch-to-7
-      :n "C-9" #'+workspace/switch-to-8)
+(map! :nvi "C-1" #'+workspace/switch-to-0                                                                                        
+      :nvi "C-2" #'+workspace/switch-to-1                                                                                        
+      :nvi "C-3" #'+workspace/switch-to-2                                                                                        
+      :nvi "C-4" #'+workspace/switch-to-3
+      :nvi "C-5" #'+workspace/switch-to-4                                                                                        
+      :nvi "C-6" #'+workspace/switch-to-5
+      :nvi "C-7" #'+workspace/switch-to-6
+      :nvi "C-8" #'+workspace/switch-to-7
+      :nvi "C-9" #'+workspace/switch-to-8)
 
 (defun beno-evil-scroll-down ()
   (interactive)
@@ -174,11 +158,6 @@
     (if (eq major-mode 'notmuch-show-mode)
         (notmuch-show-tag '("-unread"))
       (notmuch-search-tag '("-unread"))))
-
-  (defun beno-notmuch-show-in-browser ()
-    "Open current message in external browser."
-    (interactive)
-    (notmuch-show-view-all-mime-parts))
 
   (evil-define-key 'normal notmuch-hello-mode-map
     "i" (cmd! (notmuch-search "tag:inbox and tag:unread"))
@@ -532,20 +511,25 @@ With prefix ARG, reset the eshell buffer."
 (after! catppuccin-theme
   (setq catppuccin-flavor 'mocha))
 
-(add-to-list 'load-path  "~/Code/dotfiles/lib/")
-(require 'soccer)
-(map! :leader
-      (:prefix-map ("o" . "open")
-                   (:prefix ("S" . "soccer")
-                    :desc "Favorite fixtures" "S" #'list-soccer-fixtures
-                    :desc "League fixtures" "s" #'list-league-fixtures
-                    :desc "Followed leagues" "l" #'list-soccer-leagues
-                    :desc "Followed teams" "t" #'list-soccer-teams
-                    :desc "Teams fixtures" "T" #'list-soccer-team-fixtures
-                    :desc "Follow league" "f" #'soccer-follow-league
-                    :desc "Unfollow league" "U" #'soccer-unfollow-league
-                    :desc "Unfollow team" "u" #'soccer-unfollow-team
-                    :desc "Follow team" "F" #'soccer-follow-team)))
+(use-package! soccer
+  :defer t
+  :load-path "~/Code/dotfiles/lib/"
+  :commands (list-soccer-fixtures list-league-fixtures list-soccer-leagues
+             list-soccer-teams list-soccer-team-fixtures soccer-follow-league
+             soccer-unfollow-league soccer-unfollow-team soccer-follow-team)
+  :init
+  (map! :leader
+        (:prefix-map ("o" . "open")
+                     (:prefix ("S" . "soccer")
+                      :desc "Favorite fixtures" "S" #'list-soccer-fixtures
+                      :desc "League fixtures" "s" #'list-league-fixtures
+                      :desc "Followed leagues" "l" #'list-soccer-leagues
+                      :desc "Followed teams" "t" #'list-soccer-teams
+                      :desc "Teams fixtures" "T" #'list-soccer-team-fixtures
+                      :desc "Follow league" "f" #'soccer-follow-league
+                      :desc "Unfollow league" "U" #'soccer-unfollow-league
+                      :desc "Unfollow team" "u" #'soccer-unfollow-team
+                      :desc "Follow team" "F" #'soccer-follow-team))))
 
 (after! clojure-mode
   (defun jazacash-cycle-slice-file ()                                             
@@ -647,6 +631,8 @@ With prefix ARG, reset the eshell buffer."
 (dolist (fn '(consult-line
               evil-ex-search-word-forward
               evil-ex-search-next
+              evil-ex-search-forward
+              evil-ex-search-backward
               evil-ex-search-previous))
   (advice-add fn :after #'beno-recenter))
 
@@ -668,9 +654,15 @@ With prefix ARG, reset the eshell buffer."
        :desc "sync mail"            "m"   #'beno-sync-notmuch
        :desc "up kite!"             "u"   #'beno-kite-up))
 
-(after! org
-  (require 'verb)
-  (map! :map org-mode-map
+(use-package! verb
+  :defer t
+  :commands (verb-send-request-on-point verb-send-request-on-point-other-window
+             verb-send-request-on-point-other-window-stay verb-kill-all-response-buffers
+             verb-export-request-on-point-curl verb-export-request-on-point-verb
+             verb-export-request-on-point-browse-url)
+  :init
+  (map! :after org
+        :map org-mode-map
         :localleader
         (:prefix ("v" . "verb")
                  "v" #'verb-send-request-on-point
