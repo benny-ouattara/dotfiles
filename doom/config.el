@@ -174,6 +174,8 @@
 
   (add-hook 'notmuch-message-mode-hook
             (lambda ()
+              (auto-fill-mode -1)
+              (visual-line-mode 1)
               (add-hook 'completion-at-point-functions
                         #'beno-notmuch-address-capf nil t)))
 
