@@ -203,6 +203,7 @@ Using advices doesn't work for these, it gets stuck after the first call
         (unless (y-or-n-p "No attachment found. Send anyway? ")
           (user-error "Aborted")))))
 
+  (add-hook 'message-send-hook #'beno-check-attachment)
 
   (setq notmuch-multipart/alternative-discouraged '("text/plain" "text/html")) ;; prefer HTML                                                       
   (setq shr-max-image-proportion 0.6)       ;; limit image size
