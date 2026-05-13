@@ -42,6 +42,7 @@
           proton-vpn
           proton-pass
           lazygit
+          nerd-fonts.hack
           yazi
           protonmail-bridge
           (pkgs.symlinkJoin {

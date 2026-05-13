@@ -25,6 +25,7 @@
   #:use-module (beno services ollama)
   #:use-module (beno services protonmail-bridge)
   #:use-module (gnu home services mcron)
+  #:use-module (gnu home services fontutils)
   #:use-module (guix packages)
   #:use-module (guix build-system trivial)
   #:use-module (beno packages lnav))
@@ -67,7 +68,7 @@
      "font-iosevka@33.3.0"
      "font-iosevka-term@33.3.0"
      "font-jetbrains-mono@2.304"
-"sbcl-slynk@1.0.43-9.9c43bf6"
+     "sbcl-slynk@1.0.43-9.9c43bf6"
      "curl@8.6.0"
      "rlwrap@0.48"
      "ripgrep@15.1.0"
@@ -75,6 +76,7 @@
      "xdot@1.4"
      "net-tools@1.60-0.479bb4a"
      "clojure@1.12.4"
+     "clojure-lsp@2025.04.23-18.16.46"
      "alsa-utils@1.2.11"
      "make@4.4.1"
      "network-manager-applet@1.36.0"
@@ -83,7 +85,6 @@
      "polybar@3.7.1"
      "rofi@2.0.0"
      "unzip@6.0"
-
      "the-silver-searcher@2.2.0"
      "ack@3.7.0"
      "lsof@4.99.3"
@@ -139,11 +140,11 @@
    (simple-service 'environment-variables-service
                    home-environment-variables-service-type
                    `(("EDITOR" . "emacsclient -t") ("VISUAL" . "emacsclient -c") ("CM_LAUNCHER" . "rofi")
-              ("PATH" . ,(string-append (getenv "HOME") "/.emacs.d/bin:"
-                                         (getenv "HOME") "/.local/bin:"
-                                         (getenv "HOME") "/.local/share/gem/ruby/3.4.0/bin:"
-                                         (getenv "HOME") "/Code/dotfiles/guix/scripts:"
-                                         (getenv "PATH")))))
+                     ("PATH" . ,(string-append (getenv "HOME") "/.emacs.d/bin:"
+                                               (getenv "HOME") "/.local/bin:"
+                                               (getenv "HOME") "/.local/share/gem/ruby/3.4.0/bin:"
+                                               (getenv "HOME") "/Code/dotfiles/guix/scripts:"
+                                               (getenv "PATH")))))
    (service home-ollama-service-type)
    (service home-protonmail-bridge-service-type)
    (service home-mcron-service-type
@@ -198,4 +199,7 @@
         ("ls" . "ls -p --color=auto")))
      (bashrc (list (local-file "../shells/.bashrc" "bashrc")))
      (bash-profile (list (local-file "../shells/.bash_profile" "bash_profile")))))
+   (simple-service 'nix-fonts-service
+                   home-fontconfig-service-type
+                   (list "~/.nix-profile/share/fonts"))
    %base-home-services)))
