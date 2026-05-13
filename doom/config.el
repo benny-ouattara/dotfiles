@@ -8,6 +8,29 @@
 
 (setq
  org-agenda-skip-scheduled-if-done t
+ org-agenda-skip-deadline-if-done t
+ org-agenda-custom-commands
+ '(("d" "Daily review"
+    ((agenda "" ((org-agenda-span 'day)
+                 (org-super-agenda-groups
+                  '((:name "Schedule" :time-grid t)
+                    (:name "Due today" :deadline today)
+                    (:name "Overdue" :deadline past)
+                    (:name "Due soon" :deadline future)))))
+     (todo "STRT" ((org-agenda-overriding-header "In Progress")))
+     (todo "WAIT" ((org-agenda-overriding-header "Waiting On")))
+     (todo "HOLD" ((org-agenda-overriding-header "On Hold")))))
+   ("p" "Projects" tags-todo "+LEVEL=3"
+    ((org-agenda-files '("~/Sync/org/projects.org"))
+     (org-agenda-overriding-header "All Project Tasks")))
+   ("w" "Weekly review"
+    ((agenda "" ((org-agenda-span 'week)
+                 (org-super-agenda-groups
+                  '((:name "This week" :time-grid t)
+                    (:name "Due" :deadline future)
+                    (:name "Overdue" :deadline past)))))
+     (todo "STRT" ((org-agenda-overriding-header "In Progress")))
+     (todo "WAIT" ((org-agenda-overriding-header "Waiting On"))))))
  org-super-agenda-groups '((:name "Today"
                             :time-grid t
                             :scheduled today)
@@ -75,8 +98,34 @@
  org-agenda-files (ignore-errors (directory-files org-directory t "\\.org$" t))
  org-hide-emphasis-markers t
  org-tags-column -80
- org-refile-targets (quote ((nil :maxlevel . 3)))
+ org-refile-targets '(("projects.org" :maxlevel . 3)
+                      ("tasks.org" :maxlevel . 2)
+                      ("notes.org" :maxlevel . 2))
  +org-capture-todo-file "tasks.org")
+
+(after! org
+  (setq org-capture-templates
+        (append org-capture-templates
+                '(("e" "Email task" entry
+                   (file+headline +org-capture-todo-file "Email")
+                   "* TODO %? :email:\nFrom: %a\n%U"
+                   :empty-lines 1)
+                  ("n" "Email note" entry
+                   (file+headline "notes.org" "Inbox")
+                   "* %? :email:\nFrom: %a\n%U"
+                   :empty-lines 1)
+                  ("P" "Project task" entry
+                   (file+headline "projects.org" "Jazacash")
+                   "* TODO %?\n%U"
+                   :empty-lines 1)
+                  ("s" "Scheduled task" entry
+                   (file+headline +org-capture-todo-file "Inbox")
+                   "* TODO %?\nSCHEDULED: %^t\n%U"
+                   :empty-lines 1)
+                  ("d" "Deadline task" entry
+                   (file+headline +org-capture-todo-file "Inbox")
+                   "* TODO %?\nDEADLINE: %^t\n%U"
+                   :empty-lines 1)))))
 
 (after! org-journal
   (setq org-journal-enable-agenda-integration t)
@@ -341,7 +390,9 @@
         :desc "Reply"           "R" #'notmuch-show-reply-sender
         :desc "Reply all"       "A" #'notmuch-show-reply
         :desc "Forward"         "f" #'notmuch-show-forward-message
-        :desc "Save attachments" "S" #'beno-notmuch-save-all-attachments))
+        :desc "Save attachments" "S" #'beno-notmuch-save-all-attachments
+        :desc "Capture task"    "e" (cmd! (org-capture nil "e"))
+        :desc "Capture note"    "n" (cmd! (org-capture nil "n"))))
 
   (map! :after dired
         :map dired-mode-map
