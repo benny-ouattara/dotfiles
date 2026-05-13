@@ -115,16 +115,39 @@
       :n "C-u" #'beno-evil-scroll-up)
 
 (after! notmuch                                                                                                                                    
-  (setq +notmuch-sync-backend 'mbsync                                                                                                              
-        notmuch-show-log nil                                                                                                                       
-        notmuch-hello-sections '(notmuch-hello-insert-saved-searches                                                                               
-                                 notmuch-hello-insert-alltags)                                                                                     
-        notmuch-message-headers-visible nil)
+  (setq +notmuch-sync-backend 'mbsync
+        notmuch-show-log nil
+        notmuch-hello-sections '(notmuch-hello-insert-saved-searches
+                                 notmuch-hello-insert-alltags)
+        notmuch-message-headers-visible nil
+        notmuch-identities '("Ben A. <benny.ouattara@gmail.com>"
+                             "Ben A. <ben.abubaker@proton.me>"
+                             "Jazafund <jazafund@proton.me>"
+                             "Jaza Support <support@jaza.cash>"
+                             "Jaza Ops <ops@jaza.cash>"
+                             "Jaza Compliance <compliance@jaza.cash>"
+                             "Jaza Info <info@jaza.cash>"
+                             "Jaza Fraud <fraud@jaza.cash>"
+                             "Jaza HR <hr@jaza.cash>"
+                             "Jaza Sales <sales@jaza.cash>"
+                             "Jaza System <system@jaza.cash>"))
 
   (setq sendmail-program (executable-find "msmtp")
         message-sendmail-f-is-evil t
         message-sendmail-extra-arguments '("--read-envelope-from")
         message-send-mail-function #'message-send-mail-with-sendmail)
+
+  (setq notmuch-fcc-dirs '(("benny.ouattara@gmail.com"  . "gmail/sent +sent")
+                            ("ben.abubaker@proton.me"   . "protonmail/sent +sent")
+                            ("jazafund@proton.me"       . "jfund/sent +sent")
+                            ("support@jaza.cash"        . "jc-support/sent +sent")
+                            ("ops@jaza.cash"            . "jc-ops/sent +sent")
+                            ("compliance@jaza.cash"     . "jc-compliance/sent +sent")
+                            ("info@jaza.cash"           . "jc-info/sent +sent")
+                            ("fraud@jaza.cash"          . "jc-fraud/sent +sent")
+                            ("hr@jaza.cash"             . "jc-hr/sent +sent")
+                            ("sales@jaza.cash"          . "jc-sales/sent +sent")
+                            ("system@jaza.cash"         . "jc-system/sent +sent")))
 
   (setq notmuch-multipart/alternative-discouraged '("text/plain" "text/html")) ;; prefer HTML                                                       
   (setq shr-max-image-proportion 0.6)       ;; limit image size
@@ -144,13 +167,19 @@
           (:name "all protonmail"    :query "tag:protonmail"                  :key "P")
           (:name "all jc"            :query "tag:jc"                          :key "J")
           (:name "all jfund"         :query "tag:jfund"                       :key "F")
-          (:name "sent"              :query "tag:sent"                        :key "s")
+          (:name "sent"              :query "tag:sent"                        :key "e")
           (:name "drafts"            :query "tag:draft"                       :key "d")))
 
   (set-popup-rule! "^\\*notmuch" :ignore t)
 
   (add-hook 'notmuch-show-hook
             (lambda () (notmuch-show-tag-all '("-unread"))))
+
+  (defun +notmuch/compose ()
+    "Compose new mail, prompting for identity."
+    (interactive)
+    (let ((from (completing-read "From: " notmuch-identities nil t)))
+      (notmuch-mua-mail nil nil (list (cons 'From from)))))
 
   (defun beno-notmuch-mark-read ()
     "Remove unread tag from current message or thread."
@@ -160,6 +189,8 @@
       (notmuch-search-tag '("-unread"))))
 
   (evil-define-key 'normal notmuch-hello-mode-map
+    "c" #'+notmuch/compose
+    "C" #'+notmuch/compose
     "i" (cmd! (notmuch-search "tag:inbox and tag:unread"))
     "g" (cmd! (notmuch-search "tag:gmail and tag:unread"))
     "p" (cmd! (notmuch-search "tag:protonmail and tag:unread"))
@@ -171,7 +202,8 @@
     "G" (cmd! (notmuch-search "tag:gmail"))
     "P" (cmd! (notmuch-search "tag:protonmail"))
     "J" (cmd! (notmuch-search "tag:jc"))
-    "F" (cmd! (notmuch-search "tag:jfund")))
+    "F" (cmd! (notmuch-search "tag:jfund"))
+    "e" (cmd! (notmuch-search "tag:sent")))
 
   (map! :localleader
         :map (notmuch-hello-mode-map notmuch-search-mode-map
@@ -672,3 +704,7 @@ With prefix ARG, reset the eshell buffer."
                  "e" #'verb-export-request-on-point-curl
                  "u" #'verb-export-request-on-point-verb
                  "b" #'verb-export-request-on-point-browse-url)))
+
+(after! eglot                                                                                                                                      
+  (setq eglot-connect-timeout 300
+        eglot-events-buffer-config '(:size 2000000 :format full)))

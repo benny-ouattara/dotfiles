@@ -115,6 +115,7 @@ in
   };
 
   environment.systemPackages = [
+    pkgs.emacs-lsp-booster
     pkgs.openai-whisper
     pkgs.hwatch
     pkgs.dust
@@ -179,8 +180,6 @@ in
     pkgs.rlwrap
     pkgs.maven
     pkgs.pandoc
-    pkgs.mu
-    pkgs.emacsPackages.mu4e
     pkgs.isync
     pkgs.overmind
     pkgs.metals

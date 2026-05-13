@@ -51,7 +51,7 @@
        docker
        (eval +overlay)               ; run code, run (also, repls)
        lookup                        ; ...or in Dash docsets locally
-       (lsp +eglot)
+       (lsp +eglot +booster)
        llm                           ; when I said you needed friends, I didn't mean...
        magit                         ; a git porcelain for Emacs
        make                          ; run make tasks from Emacs

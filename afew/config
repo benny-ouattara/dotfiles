@@ -13,7 +13,7 @@ tags = +gmail
 message = Personal gmail
 
 [Filter.2]
-query = to:ben.ouattara@proton.me
+query = to:ben.ouattara@proton.me OR to:ben.abubaker@proton.me OR folder:protonmail/INBOX
 tags = +protonmail
 message = Personal protonmail
 
