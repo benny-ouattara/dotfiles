@@ -192,14 +192,17 @@ Using advices doesn't work for these, it gets stuck after the first call
             (lambda ()
               (start-process "mbsync-sent" nil "mbsync" "--all")))
 
-  (add-hook 'message-send-hook
-            (lambda ()
-              (when (and (save-excursion
-                           (message-goto-body)
-                           (re-search-forward "\\battach\\(ed\\|ment\\|ing\\)\\b" nil t))
-                         (not (re-search-forward "<#part" nil t)))
-                (unless (y-or-n-p "No attachment found. Send anyway? ")
-                  (user-error "Aborted")))))
+  (defun beno-check-attachment ()
+    "Warn if message mentions attachment but has none."
+    (interactive)
+    (let ((body (save-excursion
+                  (message-goto-body)
+                  (buffer-substring-no-properties (point) (point-max)))))
+      (when (and (string-match-p "\\battach\\(ed\\|ment\\|ing\\)\\b" body)
+                 (not (string-match-p "<#part " body)))
+        (unless (y-or-n-p "No attachment found. Send anyway? ")
+          (user-error "Aborted")))))
+
 
   (setq notmuch-multipart/alternative-discouraged '("text/plain" "text/html")) ;; prefer HTML                                                       
   (setq shr-max-image-proportion 0.6)       ;; limit image size
@@ -936,6 +939,12 @@ Emacs 29+ allows you to hide the title bar, no need to compile emacs with title 
                  "e" #'verb-export-request-on-point-curl
                  "u" #'verb-export-request-on-point-verb
                  "b" #'verb-export-request-on-point-browse-url)))
+#+end_src
+
+* corfu
+#+begin_src emacs-lisp :results silent
+(after! corfu
+  (setq corfu-preselect 'first))
 #+end_src
 
 * eglot
