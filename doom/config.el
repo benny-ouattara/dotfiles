@@ -154,23 +154,91 @@
   (setq notmuch-address-command 'internal
         notmuch-address-internal-completion '(sent received nil))
 
+  (notmuch-address-setup)
+
+  (defun beno-notmuch-address-capf ()
+    "Completion-at-point for notmuch addresses, only in address headers."
+    (when (and (save-excursion
+                (beginning-of-line)
+                (re-search-forward "^\\(To\\|Cc\\|Bcc\\): " (line-end-position) t))
+              (<= (match-end 0) (point)))
+      (let* ((end (point))
+             (beg (save-excursion
+                    (re-search-backward "\\(\\`\\|[\n:,]\\)[ \t]*")
+                    (goto-char (match-end 0))
+                    (point))))
+        (list beg end
+              (completion-table-dynamic
+               (lambda (prefix)
+                 (notmuch-address-options prefix)))))))
+
   (add-hook 'notmuch-message-mode-hook
             (lambda ()
-              (setq-local completion-at-point-functions
-                          '(notmuch-address-expand-name))))
+              (add-hook 'completion-at-point-functions
+                        #'beno-notmuch-address-capf nil t)))
 
   (add-hook 'message-sent-hook
             (lambda ()
               (start-process "mbsync-sent" nil "mbsync" "--all")))
 
-  (add-hook 'message-send-hook
+  (defun beno-check-attachment ()
+    "Warn if message mentions attachment but has none."
+    (interactive)
+    (let ((body (save-excursion
+                  (message-goto-body)
+                  (buffer-substring-no-properties (point) (point-max)))))
+      (when (and (string-match-p "\\battach\\(ed\\|ment\\|ing\\)\\b" body)
+                 (not (string-match-p "<#part " body)))
+        (unless (y-or-n-p "No attachment found. Send anyway? ")
+          (user-error "Aborted")))))
+
+  (add-hook 'message-send-hook #'beno-check-attachment)
+
+  (setq mml-default-directory "~/Downloads/"
+        mm-default-directory "~/Downloads/")
+
+  (defun beno-notmuch-save-all-attachments ()
+    "Save all attachments from the current message."
+    (interactive)
+    (let ((dir (read-directory-name "Save attachments to: " "~/Downloads/"))
+          (count 0))
+      (save-excursion
+        (goto-char (point-min))
+        (while (re-search-forward "\\[ .+: \\(application\\|image\\|audio\\|video\\)/.+ \\]" nil t)
+          (goto-char (match-beginning 0))
+          (notmuch-show-apply-to-current-part-handle
+           (lambda (handle)
+             (let* ((name (or (mm-handle-filename handle)
+                              (format "attachment-%d" (cl-incf count))))
+                    (path (expand-file-name name dir)))
+               (mm-save-part-to-file handle path)
+               (cl-incf count))))
+          (goto-char (match-end 0))))
+      (message "Saved %d attachment(s) to %s" count dir)))
+
+  (defun beno-dired-attach-files ()
+    "Attach marked files in dired to the current compose buffer."
+    (interactive)
+    (let ((files (dired-get-marked-files)))
+      (other-window 1)
+      (goto-char (point-max))
+      (dolist (f files)
+        (mml-attach-file f (mm-default-file-type f) nil "attachment"))
+      (message "Attached %d file(s)" (length files))))
+
+  (add-hook 'notmuch-message-mode-hook
             (lambda ()
-              (when (and (save-excursion
-                           (message-goto-body)
-                           (re-search-forward "\\battach\\(ed\\|ment\\|ing\\)\\b" nil t))
-                         (not (re-search-forward "<#part" nil t)))
-                (unless (y-or-n-p "No attachment found. Send anyway? ")
-                  (user-error "Aborted")))))
+              (when (fboundp 'dnd-protocol-alist)
+                (setq-local dnd-protocol-alist
+                            (cons '("^file:" . beno-dnd-attach-file) dnd-protocol-alist)))))
+
+  (defun beno-dnd-attach-file (uri _action)
+    "Attach a dragged file to the compose buffer."
+    (let ((file (dnd-get-local-file-name uri t)))
+      (when file
+        (goto-char (point-max))
+        (mml-attach-file file (mm-default-file-type file) nil "attachment")
+        'private)))
 
   (setq notmuch-multipart/alternative-discouraged '("text/plain" "text/html")) ;; prefer HTML                                                       
   (setq shr-max-image-proportion 0.6)       ;; limit image size
@@ -270,7 +338,13 @@
         :desc "Archive"         "a" (cmd! (notmuch-show-tag '("-inbox")) (notmuch-show-next-open-message))
         :desc "Reply"           "R" #'notmuch-show-reply-sender
         :desc "Reply all"       "A" #'notmuch-show-reply
-        :desc "Forward"         "f" #'notmuch-show-forward-message))
+        :desc "Forward"         "f" #'notmuch-show-forward-message
+        :desc "Save attachments" "S" #'beno-notmuch-save-all-attachments))
+
+  (map! :after dired
+        :map dired-mode-map
+        :localleader
+        :desc "Attach to email" "a" #'beno-dired-attach-files)
 
 (after! (dired dired-single)
   (define-key dired-mode-map [remap dired-find-file]
@@ -748,6 +822,9 @@ With prefix ARG, reset the eshell buffer."
                  "e" #'verb-export-request-on-point-curl
                  "u" #'verb-export-request-on-point-verb
                  "b" #'verb-export-request-on-point-browse-url)))
+
+(after! corfu
+  (setq corfu-preselect 'first))
 
 (after! eglot                                                                                                                                      
   (setq eglot-connect-timeout 300
