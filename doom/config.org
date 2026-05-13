@@ -96,6 +96,18 @@ Set auto theme based on system appearance setting with default themes
  org-tags-column -80
  org-refile-targets (quote ((nil :maxlevel . 3)))
  +org-capture-todo-file "tasks.org")
+
+(after! org
+  (setq org-capture-templates
+        (append org-capture-templates
+                '(("e" "Email task" entry
+                   (file+headline +org-capture-todo-file "Email")
+                   "* TODO %? :email:\nFrom: %a\n%U"
+                   :empty-lines 1)
+                  ("n" "Email note" entry
+                   (file+headline "notes.org" "Inbox")
+                   "* %? :email:\nFrom: %a\n%U"
+                   :empty-lines 1)))))
 #+end_src
 * org journal
 #+begin_src emacs-lisp :results silent
@@ -370,7 +382,9 @@ Using advices doesn't work for these, it gets stuck after the first call
         :desc "Reply"           "R" #'notmuch-show-reply-sender
         :desc "Reply all"       "A" #'notmuch-show-reply
         :desc "Forward"         "f" #'notmuch-show-forward-message
-        :desc "Save attachments" "S" #'beno-notmuch-save-all-attachments))
+        :desc "Save attachments" "S" #'beno-notmuch-save-all-attachments
+        :desc "Capture task"    "e" (cmd! (org-capture nil "e"))
+        :desc "Capture note"    "n" (cmd! (org-capture nil "n"))))
 
   (map! :after dired
         :map dired-mode-map
