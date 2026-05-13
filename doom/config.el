@@ -151,7 +151,13 @@
                             ("sales@jaza.cash"          . "jc-sales/sent +sent")
                             ("system@jaza.cash"         . "jc-system/sent +sent")))
 
-  (setq notmuch-address-use-company t)
+  (setq notmuch-address-command 'internal
+        notmuch-address-internal-completion '(sent received nil))
+
+  (add-hook 'notmuch-message-mode-hook
+            (lambda ()
+              (setq-local completion-at-point-functions
+                          '(notmuch-address-expand-name))))
 
   (add-hook 'message-sent-hook
             (lambda ()
