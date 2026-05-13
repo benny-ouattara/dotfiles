@@ -125,7 +125,25 @@
                   ("d" "Deadline task" entry
                    (file+headline +org-capture-todo-file "Inbox")
                    "* TODO %?\nDEADLINE: %^t\n%U"
-                   :empty-lines 1)))))
+                   :empty-lines 1)
+                  ("1" "1-1 note" entry
+                   (function beno-capture-person-node)
+                   "* %U 1-1\n** Updates\n%?\n** Blockers\n\n** Priorities\n\n** Action Items\n"
+                   :empty-lines 1)
+))))
+
+(defun beno-capture-person-node ()
+  "Navigate to a person's 1-1 Meeting Notes heading for capture."
+  (let* ((node (org-roam-node-read nil
+                (lambda (node)
+                  (member "people" (org-roam-node-tags node)))))
+         (file (org-roam-node-file node)))
+    (set-buffer (org-capture-target-buffer file))
+    (goto-char (point-min))
+    (unless (re-search-forward "^\\*\\* 1-1 Meeting Notes" nil t)
+      (goto-char (point-max))
+      (insert "\n** 1-1 Meeting Notes\n"))
+    (org-narrow-to-subtree)))
 
 (after! org-journal
   (setq org-journal-enable-agenda-integration t)
