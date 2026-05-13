@@ -119,7 +119,9 @@
         notmuch-show-log nil
         notmuch-hello-sections '(notmuch-hello-insert-saved-searches
                                  notmuch-hello-insert-alltags)
+        notmuch-hello-auto-refresh t
         notmuch-message-headers-visible nil
+        notmuch-always-prompt-for-sender nil
         notmuch-identities '("Ben A. <benny.ouattara@gmail.com>"
                              "Ben A. <ben.abubaker@proton.me>"
                              "Jazafund <jazafund@proton.me>"
@@ -149,25 +151,41 @@
                             ("sales@jaza.cash"          . "jc-sales/sent +sent")
                             ("system@jaza.cash"         . "jc-system/sent +sent")))
 
+  (setq notmuch-address-use-company t)
+
+  (add-hook 'message-sent-hook
+            (lambda ()
+              (start-process "mbsync-sent" nil "mbsync" "--all")))
+
+  (add-hook 'message-send-hook
+            (lambda ()
+              (when (and (save-excursion
+                           (message-goto-body)
+                           (re-search-forward "\\battach\\(ed\\|ment\\|ing\\)\\b" nil t))
+                         (not (re-search-forward "<#part" nil t)))
+                (unless (y-or-n-p "No attachment found. Send anyway? ")
+                  (user-error "Aborted")))))
+
   (setq notmuch-multipart/alternative-discouraged '("text/plain" "text/html")) ;; prefer HTML                                                       
   (setq shr-max-image-proportion 0.6)       ;; limit image size
   (setq shr-color-visible-luminance-min 60) ;; improve readability in dark themes
   (setq shr-use-colors nil) ;; ignore email colors, use your theme instead
 
   (setq notmuch-saved-searches
-        '((:name "inbox"             :query "tag:inbox and tag:unread"        :key "i")
-          (:name "gmail"             :query "tag:gmail and tag:unread"        :key "g")
-          (:name "protonmail"        :query "tag:protonmail and tag:unread"   :key "p")
-          (:name "jc"                :query "tag:jc and tag:unread"           :key "j")
-          (:name "jfund"             :query "tag:jfund and tag:unread"        :key "f")
-          (:name "today"             :query "date:today.."                    :key "t")                                                             
-          (:name "week"              :query "date:7d.."                       :key "w")     
+        '((:name "inbox"             :query "tag:inbox and tag:unread"        :key "i" :count-query "tag:inbox and tag:unread")
+          (:name "gmail"             :query "tag:gmail and tag:unread"        :key "g" :count-query "tag:gmail and tag:unread")
+          (:name "protonmail"        :query "tag:protonmail and tag:unread"   :key "p" :count-query "tag:protonmail and tag:unread")
+          (:name "jc"                :query "tag:jc and tag:unread"           :key "j" :count-query "tag:jc and tag:unread")
+          (:name "jfund"             :query "tag:jfund and tag:unread"        :key "f" :count-query "tag:jfund and tag:unread")
+          (:name "today"             :query "date:today.."                    :key "t")
+          (:name "week"              :query "date:7d.."                       :key "w")
           (:name "all inbox"         :query "tag:inbox not tag:trash"         :key "I")
           (:name "all gmail"         :query "tag:gmail"                       :key "G")
           (:name "all protonmail"    :query "tag:protonmail"                  :key "P")
           (:name "all jc"            :query "tag:jc"                          :key "J")
           (:name "all jfund"         :query "tag:jfund"                       :key "F")
           (:name "sent"              :query "tag:sent"                        :key "e")
+          (:name "flagged"           :query "tag:flagged"                     :key "x" :count-query "tag:flagged")
           (:name "drafts"            :query "tag:draft"                       :key "d")))
 
   (set-popup-rule! "^\\*notmuch" :ignore t)
@@ -175,11 +193,25 @@
   (add-hook 'notmuch-show-hook
             (lambda () (notmuch-show-tag-all '("-unread"))))
 
+  (defun beno-notmuch-match-identity (address)
+    "Find the full identity string for ADDRESS from notmuch-identities."
+    (cl-find-if (lambda (id) (string-match-p (regexp-quote address) id))
+                notmuch-identities))
+
   (defun +notmuch/compose ()
     "Compose new mail, prompting for identity."
     (interactive)
     (let ((from (completing-read "From: " notmuch-identities nil t)))
       (notmuch-mua-mail nil nil (list (cons 'From from)))))
+
+  (advice-add 'notmuch-mua-reply :around
+              (lambda (orig-fn &rest args)
+                (apply orig-fn args)
+                (let* ((from (message-field-value "from"))
+                       (addr (and from (cadr (mail-extract-address-components from))))
+                       (identity (and addr (beno-notmuch-match-identity addr))))
+                  (when identity
+                    (message-replace-header "From" identity)))))
 
   (defun beno-notmuch-mark-read ()
     "Remove unread tag from current message or thread."
@@ -203,7 +235,8 @@
     "P" (cmd! (notmuch-search "tag:protonmail"))
     "J" (cmd! (notmuch-search "tag:jc"))
     "F" (cmd! (notmuch-search "tag:jfund"))
-    "e" (cmd! (notmuch-search "tag:sent")))
+    "e" (cmd! (notmuch-search "tag:sent"))
+    "x" (cmd! (notmuch-search "tag:flagged")))
 
   (map! :localleader
         :map (notmuch-hello-mode-map notmuch-search-mode-map
@@ -216,13 +249,18 @@
         :map notmuch-search-mode-map
         :desc "Mark as deleted" "d" #'+notmuch/search-delete
         :desc "Mark as spam"    "s" #'+notmuch/search-spam
+        :desc "Toggle flag"     "x" (cmd! (notmuch-search-tag (if (member "flagged" (notmuch-search-get-tags)) '("-flagged") '("+flagged"))))
         :desc "Archive"         "a" (cmd! (notmuch-search-tag '("-inbox")) (notmuch-search-next-thread))
         :desc "Reply"           "R" #'notmuch-search-reply-to-thread-sender
         :map notmuch-tree-mode-map
         :desc "Mark as deleted" "d" #'+notmuch/tree-delete
         :desc "Mark as spam"    "s" #'+notmuch/tree-spam
+        :desc "Toggle flag"     "x" (cmd! (notmuch-tree-tag (if (member "flagged" (notmuch-tree-get-tags)) '("-flagged") '("+flagged"))))
         :desc "Archive"         "a" (cmd! (notmuch-tree-tag '("-inbox")) (notmuch-tree-next-message))
         :map notmuch-show-mode-map
+        :desc "Mark as deleted" "d" (cmd! (notmuch-show-tag '("+deleted" "-inbox")) (notmuch-show-next-open-message))
+        :desc "Mark as spam"    "s" (cmd! (notmuch-show-tag '("+spam" "-inbox")) (notmuch-show-next-open-message))
+        :desc "Toggle flag"     "x" (cmd! (notmuch-show-tag (if (member "flagged" (notmuch-show-get-tags)) '("-flagged") '("+flagged"))))
         :desc "Archive"         "a" (cmd! (notmuch-show-tag '("-inbox")) (notmuch-show-next-open-message))
         :desc "Reply"           "R" #'notmuch-show-reply-sender
         :desc "Reply all"       "A" #'notmuch-show-reply

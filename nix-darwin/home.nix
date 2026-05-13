@@ -28,7 +28,6 @@
       capath=${pkgs.cacert}/etc/ssl/certs/
       cacert=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
     '';
-    # file.".mbsyncrc".text = dotrcs.mbsync; # superseded by ./config/isyncrc
   };
 
   programs.aichat = {
