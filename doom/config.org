@@ -183,10 +183,7 @@ Using advices doesn't work for these, it gets stuck after the first call
   (setq notmuch-address-command 'internal
         notmuch-address-internal-completion '(sent received nil))
 
-  (add-hook 'notmuch-message-mode-hook
-            (lambda ()
-              (setq-local completion-at-point-functions
-                          '(notmuch-address-expand-name))))
+  (notmuch-address-setup)
 
   (add-hook 'message-sent-hook
             (lambda ()
