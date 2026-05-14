@@ -352,6 +352,8 @@ Using advices doesn't work for these, it gets stuck after the first call
   (setq shr-max-image-proportion 0.6)       ;; limit image size
   (setq shr-color-visible-luminance-min 60) ;; improve readability in dark themes
   (setq shr-use-colors nil) ;; ignore email colors, use your theme instead
+  (setq shr-use-fonts nil)  ;; use doom font instead of variable-pitch
+  (setq shr-max-width 100)  ;; keep email body readable, not too wide
 
   (setq notmuch-saved-searches
         '((:name "inbox"             :query "tag:inbox and tag:unread"        :key "i" :count-query "tag:inbox and tag:unread")
