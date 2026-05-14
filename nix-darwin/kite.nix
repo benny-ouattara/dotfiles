@@ -4,6 +4,7 @@ let
   log-dir = home-dir + "/.logs";
   # Define a simple backup script as a Nix string
   sync-mail-job = pkgs.writeShellScript "sync-mail" ''
+    export PATH="${pkgs.pass}/bin:${pkgs.gnupg}/bin:$PATH"
     for group in jc-support jc-ops jc-compliance jc-info jc-fraud jc-hr jc-sales jc-system gmail protonmail jfund; do
       ${pkgs.isync}/bin/mbsync "$group" || true
       sleep 1

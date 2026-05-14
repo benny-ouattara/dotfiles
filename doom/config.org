@@ -285,9 +285,7 @@ Using advices doesn't work for these, it gets stuck after the first call
               (add-hook 'completion-at-point-functions
                         #'beno-notmuch-address-capf nil t)))
 
-  (add-hook 'message-sent-hook
-            (lambda ()
-              (start-process "mbsync-sent" nil "mbsync" "--all")))
+  ;; Fcc saves sent mail locally; regular sync pushes to remote
 
   (defun beno-check-attachment ()
     "Warn if message mentions attachment but has none."
@@ -375,7 +373,7 @@ Using advices doesn't work for these, it gets stuck after the first call
   (set-popup-rule! "^\\*notmuch" :ignore t)
 
   (add-hook 'notmuch-show-hook
-            (lambda () (notmuch-show-tag-all '("-unread"))))
+            (lambda () (notmuch-show-tag '("-unread"))))
 
   (defun beno-notmuch-match-identity (address)
     "Find the full identity string for ADDRESS from notmuch-identities."
@@ -433,6 +431,7 @@ Using advices doesn't work for these, it gets stuck after the first call
         :map notmuch-search-mode-map
         :desc "Mark as deleted" "d" #'+notmuch/search-delete
         :desc "Mark as spam"    "s" #'+notmuch/search-spam
+        :desc "Undo delete/spam" "u" (cmd! (notmuch-search-tag '("+inbox" "-deleted" "-spam")) (notmuch-search-next-thread))
         :desc "Toggle flag"     "x" (cmd! (notmuch-search-tag (if (member "flagged" (notmuch-search-get-tags)) '("-flagged") '("+flagged"))))
         :desc "Archive"         "a" (cmd! (notmuch-search-tag '("-inbox")) (notmuch-search-next-thread))
         :desc "Reply"           "R" #'notmuch-search-reply-to-thread-sender
@@ -444,6 +443,7 @@ Using advices doesn't work for these, it gets stuck after the first call
         :map notmuch-show-mode-map
         :desc "Mark as deleted" "d" (cmd! (notmuch-show-tag '("+deleted" "-inbox")) (notmuch-show-next-open-message))
         :desc "Mark as spam"    "s" (cmd! (notmuch-show-tag '("+spam" "-inbox")) (notmuch-show-next-open-message))
+        :desc "Undo delete/spam" "u" (cmd! (notmuch-show-tag '("+inbox" "-deleted" "-spam")))
         :desc "Toggle flag"     "x" (cmd! (notmuch-show-tag (if (member "flagged" (notmuch-show-get-tags)) '("-flagged") '("+flagged"))))
         :desc "Archive"         "a" (cmd! (notmuch-show-tag '("-inbox")) (notmuch-show-next-open-message))
         :desc "Reply"           "R" #'notmuch-show-reply-sender
