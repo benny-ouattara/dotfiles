@@ -36,7 +36,10 @@
      (org-super-agenda-groups
       '((:name "Today" :scheduled today)
         (:name "This week" :scheduled future)
-        (:name "Recurring" :anything t))))))
+        (:name "Recurring" :anything t)))))
+   ("o" "OKRs" tags-todo "okr"
+    ((org-agenda-overriding-header "OKR Tracking")
+     (org-agenda-files '("~/Sync/org/okrs.org" "~/Sync/org/tasks.org")))))
  org-super-agenda-groups '((:name "Today"
                             :time-grid t
                             :scheduled today)
