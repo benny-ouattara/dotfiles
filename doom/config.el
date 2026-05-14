@@ -30,7 +30,13 @@
                     (:name "Due" :deadline future)
                     (:name "Overdue" :deadline past)))))
      (todo "STRT" ((org-agenda-overriding-header "In Progress")))
-     (todo "WAIT" ((org-agenda-overriding-header "Waiting On"))))))
+     (todo "WAIT" ((org-agenda-overriding-header "Waiting On")))))
+   ("h" "People" tags-todo "people"
+    ((org-agenda-overriding-header "People Management")
+     (org-super-agenda-groups
+      '((:name "Today" :scheduled today)
+        (:name "This week" :scheduled future)
+        (:name "Recurring" :anything t))))))
  org-super-agenda-groups '((:name "Today"
                             :time-grid t
                             :scheduled today)
@@ -100,7 +106,8 @@
  org-tags-column -80
  org-refile-targets '(("projects.org" :maxlevel . 3)
                       ("tasks.org" :maxlevel . 2)
-                      ("notes.org" :maxlevel . 2))
+                      ("notes.org" :maxlevel . 2)
+                      ("okrs.org" :maxlevel . 3))
  +org-capture-todo-file "tasks.org")
 
 (after! org
