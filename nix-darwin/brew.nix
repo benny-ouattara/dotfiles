@@ -45,7 +45,6 @@
       "spotify"
       "vlc"
       "appcleaner"
-      "discord"
       "blender"
       "utm"
       "maccy"

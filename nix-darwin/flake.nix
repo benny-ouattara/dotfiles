@@ -17,7 +17,7 @@
       {
         # $ darwin-rebuild build --flake .#kite
         darwinConfigurations."kite" = nix-darwin.lib.darwinSystem {
-          system = "x86_64-darwin"; # Or aarch64-darwin for Silicon
+          inherit system;
           modules = [ ./kite.nix
                       ./brew.nix
                       home-manager.darwinModules.home-manager
