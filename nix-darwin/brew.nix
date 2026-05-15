@@ -70,6 +70,7 @@
 
     extraConfig = ''
       brew "emacs-plus@31", args: ["with-xwidgets"], link: true
+      cask "google-drive", args: { require_sha: false }
     '';
   };
 }

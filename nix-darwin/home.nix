@@ -80,7 +80,7 @@
 
     settings = {
       user = {
-        name = "Ben O.";
+        name = "Ben A.";
         email = "ben.ouattara@proton.me";
       };
       alias = {
@@ -100,6 +100,8 @@
             + " --abbrev-commit --date=relative --show-notes=*";
       };
 
+      gpg.format = "openpgp";
+      gpg.openpgp.program = "gpg";
       pull.rebase = true;
 
       color = {
@@ -112,7 +114,7 @@
       };
     };
 
-    ignores = [ "*.elc" ".clean" ".direnv" "TAGS" "result" "result-*" "tags" ];
+    ignores = [ "*.elc" ".clean" ".direnv" ".DS_Store" ".env" ".env.*" "node_modules/" "TAGS" "result" "result-*" "tags" ];
   };
 
   programs.fzf = {
