@@ -55,3 +55,5 @@ guix/*.log
 sketchybar/helper/helper
 sketchybar/.current-theme
 __pycache__/
+ranger/plugins/__init__.py
+zellij/config.kdl.bak
