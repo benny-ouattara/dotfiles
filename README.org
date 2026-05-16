@@ -98,17 +98,7 @@ Status bar with modules: apple menu, spaces, yabai state, front app, calendar, b
 
 * Terminal
 ** Kitty
-Primary terminal. Catppuccin Mocha theme, Iosevka Term font, image preview support.
-
-| Key       | Action           |
-|-----------+------------------|
-| Ctrl+1-5  | Go to tab        |
-| Ctrl+t    | New tab          |
-| Ctrl+n    | New window       |
-| Ctrl+s    | Vertical split   |
-| Ctrl+j/k  | Navigate splits  |
-| Ctrl+q    | Close split      |
-| Ctrl+;    | Next layout      |
+Primary terminal. Catppuccin Mocha theme, Iosevka Term font (IosevkaTerm Nerd Font Mono on macOS). Tabs/panes delegated to Zellij.
 
 ** Zsh
 Managed by Home Manager. Autosuggestion, syntax highlighting, starship prompt.
@@ -128,6 +118,7 @@ Managed by Home Manager. Autosuggestion, syntax highlighting, starship prompt.
 | ls       | eza                              |
 | r        | ranger                           |
 | lg       | lazygit                          |
+| zj       | zellij                           |
 | z        | zoxide interactive               |
 | ask      | aichat                           |
 | reload   | exec $SHELL -l                   |
@@ -137,16 +128,35 @@ Managed by Home Manager. Autosuggestion, syntax highlighting, starship prompt.
 ** Zellij
 Terminal multiplexer. Catppuccin Mocha, compact layout, vim keybindings.
 
-| Key    | Mode    | Actions                               |
-|--------+---------+---------------------------------------|
-| Ctrl+p | Pane    | n/d/r/s=new, x=close, f=fullscreen   |
-| Ctrl+t | Tab     | n=new, x=close, r=rename, 1-7=go     |
-| Ctrl+n | Resize  | h/j/k/l=grow, H/J/K/L=shrink         |
-| Ctrl+h | Move    | h/j/k/l=move pane                     |
-| Ctrl+s | Scroll  | j/k=scroll, d/u=half page, s=search   |
-| Ctrl+o | Session | d=detach, w=session manager            |
-| Ctrl+g | Lock    | Toggle locked mode                    |
-| Alt+h/j/k/l | Any | Quick pane/tab focus               |
+*** Direct shortcuts (no mode switch)
+| Key          | Action                    |
+|--------------+---------------------------|
+| Ctrl+1-5     | Jump to tab               |
+| Ctrl+t       | New tab                   |
+| Ctrl+q       | Quit                      |
+| Alt+h/l      | Focus pane/tab left/right |
+| Alt+j/k      | Focus pane down/up        |
+| Alt+n        | New pane                  |
+| Alt+d        | Split down                |
+| Alt+r        | Split right               |
+| Alt+x        | Close pane                |
+| Alt+w        | Close tab                 |
+| Alt+z        | Toggle fullscreen (zoom)  |
+| Alt+f        | Toggle floating panes     |
+| Alt+e        | Embed/float pane          |
+| Alt+/-       | Resize increase/decrease  |
+| Alt+[/]      | Previous/next layout      |
+
+*** Modal keybindings
+| Key         | Mode    | Actions                             |
+|-------------+---------+-------------------------------------|
+| Alt+t       | Tab     | n=new, x=close, r=rename, 1-7=go    |
+| Ctrl+p      | Pane    | n/d/r/s=new, x=close, f=fullscreen  |
+| Ctrl+n      | Resize  | h/j/k/l=grow, H/J/K/L=shrink        |
+| Ctrl+h      | Move    | h/j/k/l=move pane                   |
+| Ctrl+s      | Scroll  | j/k=scroll, d/u=half page, s=search |
+| Ctrl+o      | Session | d=detach, w=session manager         |
+| Ctrl+g      | Lock    | Toggle locked mode                  |
 
 * File Navigation
 ** fzf
