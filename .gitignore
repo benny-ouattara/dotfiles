@@ -54,3 +54,4 @@ broot/launcher/
 guix/*.log
 sketchybar/helper/helper
 sketchybar/.current-theme
+__pycache__/
