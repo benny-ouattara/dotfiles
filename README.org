@@ -104,13 +104,13 @@ Primary terminal. Catppuccin Mocha theme, Iosevka Term font (IosevkaTerm Nerd Fo
 Managed by Home Manager. Autosuggestion, syntax highlighting, starship prompt.
 
 *** Keybindings
-| Key    | Action                     |
-|--------+----------------------------|
-| Ctrl+F | fzf file search (fd)       |
-| Ctrl+G | fzf history search         |
-| Ctrl+B | fzf cd into directory      |
-| Ctrl+O | Open lazygit               |
-| Ctrl+X | Open broot (cd on select)  |
+| Key    | Action                    |
+|--------+---------------------------|
+| Ctrl+F | fzf file search (fd)      |
+| Ctrl+G | fzf history search        |
+| Ctrl+B | fzf cd into directory     |
+| Ctrl+O | Open lazygit              |
+| Ctrl+X | Open broot (cd on select) |
 
 *** Aliases
 | Alias    | Command                          |
@@ -123,48 +123,48 @@ Managed by Home Manager. Autosuggestion, syntax highlighting, starship prompt.
 | ask      | aichat                           |
 | reload   | exec $SHELL -l                   |
 | otter-on | SSH tunnel to otter              |
-| oc-dash  | OpenCluster dashboard via tunnel  |
+| oc-dash  | OpenCluster dashboard via tunnel |
 
 ** Zellij
 Terminal multiplexer. Catppuccin Mocha, compact layout, vim keybindings.
 
 *** Ctrl — direct actions (no mode switch)
-| Key          | Action                |
-|--------------+-----------------------|
-| Ctrl+j/k     | Focus pane/tab left/right |
-| Ctrl+h/l     | Focus pane down/up        |
-| Ctrl+1-5     | Jump to tab           |
-| Ctrl+t       | New tab               |
-| Ctrl+n       | New pane              |
-| Ctrl+s       | Split right           |
-| Ctrl+p       | Toggle floating panes |
-| Ctrl+o       | Session manager       |
-| Ctrl+q       | Quit                  |
-| Ctrl+g       | Lock                  |
+| Key      | Action                    |
+|----------+---------------------------|
+| Ctrl+j/k | Focus pane/tab left/right |
+| Ctrl+h/l | Focus pane down/up        |
+| Ctrl+1-5 | Jump to tab               |
+| Ctrl+t   | New tab                   |
+| Ctrl+n   | New pane                  |
+| Ctrl+s   | Split right               |
+| Ctrl+p   | Toggle floating panes     |
+| Ctrl+o   | Session manager           |
+| Ctrl+q   | Quit                      |
+| Ctrl+g   | Lock                      |
 
 *** Alt — direct actions
-| Key          | Action                    |
-|--------------+---------------------------|
-| Alt+h/j/k/l  | Focus pane/tab            |
-| Alt+d        | Split down                |
-| Alt+r        | Split right               |
-| Alt+x        | Close pane                |
-| Alt+w        | Close tab                 |
-| Alt+z        | Toggle fullscreen (zoom)  |
-| Alt+f        | Toggle floating panes     |
-| Alt+e        | Embed/float pane          |
-| Alt+/-       | Resize increase/decrease  |
-| Alt+[/]      | Previous/next layout      |
+| Key         | Action                   |
+|-------------+--------------------------|
+| Alt+h/j/k/l | Focus pane/tab           |
+| Alt+d       | Split down               |
+| Alt+r       | Split right              |
+| Alt+x       | Close pane               |
+| Alt+w       | Close tab                |
+| Alt+z       | Toggle fullscreen (zoom) |
+| Alt+f       | Toggle floating panes    |
+| Alt+e       | Embed/float pane         |
+| Alt+/-      | Resize increase/decrease |
+| Alt+[/]     | Previous/next layout     |
 
 *** Alt — mode leaders
-| Key         | Mode    | Actions                             |
-|-------------+---------+-------------------------------------|
-| Alt+p       | Pane    | n/d/r/s=new, x=close, f=fullscreen  |
-| Alt+t       | Tab     | n=new, x=close, r=rename, 1-7=go    |
-| Alt+n       | Resize  | h/j/k/l=grow, H/J/K/L=shrink        |
-| Alt+m       | Move    | h/j/k/l=move pane                   |
-| Alt+s       | Scroll  | j/k=scroll, d/u=half page, s=search |
-| Alt+o       | Session | d=detach, w=session manager         |
+| Key   | Mode    | Actions                             |
+|-------+---------+-------------------------------------|
+| Alt+p | Pane    | n/d/r/s=new, x=close, f=fullscreen  |
+| Alt+t | Tab     | n=new, x=close, r=rename, 1-7=go    |
+| Alt+n | Resize  | h/j/k/l=grow, H/J/K/L=shrink        |
+| Alt+m | Move    | h/j/k/l=move pane                   |
+| Alt+s | Scroll  | j/k=scroll, d/u=half page, s=search |
+| Alt+o | Session | d=detach, w=session manager         |
 
 * File Navigation
 ** fzf
