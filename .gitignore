@@ -50,7 +50,7 @@ guix/backup/*
 *.pdf
 containers/
 lnav/*
-broot/
+broot/launcher/
 guix/*.log
 sketchybar/helper/helper
 sketchybar/.current-theme

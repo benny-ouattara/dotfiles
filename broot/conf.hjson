@@ -1,0 +1,35 @@
+{
+    default_flags: "gis"
+
+    show_selection_mark: true
+
+    icon_theme: nerdfont
+
+    enable_kitty_keyboard: true
+
+    content_search_max_file_size: 10MB
+
+    lines_before_match_in_preview: 1
+    lines_after_match_in_preview: 1
+
+    special_paths: {
+        "/media": { list: "never", sum: "never" }
+        "~/.config": { show: "always" }
+        "node_modules": { list: "never", sum: "never" }
+        ".git": { list: "never", sum: "never" }
+        "target": { list: "never", sum: "never" }
+    }
+
+    imports: [
+        verbs.hjson
+
+        {
+            luma: [ dark, unknown ]
+            file: skins/catppuccin-mocha.hjson
+        }
+        {
+            luma: light
+            file: skins/white.hjson
+        }
+    ]
+}
