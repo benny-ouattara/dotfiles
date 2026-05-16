@@ -200,6 +200,13 @@
       r = "ranger";
       lg = "lazygit";
       zj = "zellij";
+      cat = "bat";
+      du = "dust";
+      ps = "procs";
+      top = "btm";
+      find = "fd";
+      diff = "difft";
+      tree = "eza --tree";
       ask = "aichat";
       think = "aichat --model ollama:mistral:latest";
       reload = "exec $SHELL -l";

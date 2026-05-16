@@ -8,7 +8,7 @@ cmd - a : emacsclient -c -e '(org-agenda)'
 # use ranger in kitty for image support
 cmd + ctrl - v : open -n /Applications/kitty.app --args command ranger
 
-cmd - i : open -a /Applications/Emacs.app
+cmd - i : /usr/local/bin/emacs
 cmd - b : open -na "Brave Browser"
 cmd - y : emacsclient -c -e '(find-file "~/Sync/org")'
 cmd + ctrl - c : ~/.emacs.d/bin/org-capture
