@@ -2,8 +2,15 @@
 
 update() {
   source "$CONFIG_DIR/icons.sh"
-  LABEL="$INFO ($(ipconfig getifaddr en0))"
-  ICON="$([ -n "$INFO" ] && echo "$WIFI_CONNECTED" || echo "$WIFI_DISCONNECTED")"
+  INFO=$(networksetup -getairportnetwork en0 | sed 's/Current Wi-Fi Network: //')
+  IP=$(ipconfig getifaddr en0)
+  if [ -n "$IP" ]; then
+    ICON="$WIFI_CONNECTED"
+    LABEL="$INFO ($IP)"
+  else
+    ICON="$WIFI_DISCONNECTED"
+    LABEL="Disconnected"
+  fi
 
   sketchybar --set $NAME icon="$ICON" label="$LABEL"
 }
@@ -20,7 +27,7 @@ click() {
 }
 
 case "$SENDER" in
-  "wifi_change") update
+  "wifi_change"|"routine"|"system_woke") update
   ;;
   "mouse.clicked") click
   ;;
