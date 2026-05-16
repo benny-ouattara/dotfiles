@@ -128,15 +128,24 @@ Managed by Home Manager. Autosuggestion, syntax highlighting, starship prompt.
 ** Zellij
 Terminal multiplexer. Catppuccin Mocha, compact layout, vim keybindings.
 
-*** Direct shortcuts (no mode switch)
+*** Ctrl — direct actions (no mode switch)
+| Key          | Action                |
+|--------------+-----------------------|
+| Ctrl+j/k     | Focus pane/tab left/right |
+| Ctrl+h/l     | Focus pane down/up        |
+| Ctrl+1-5     | Jump to tab           |
+| Ctrl+t       | New tab               |
+| Ctrl+n       | New pane              |
+| Ctrl+s       | Split right           |
+| Ctrl+p       | Toggle floating panes |
+| Ctrl+o       | Session manager       |
+| Ctrl+q       | Quit                  |
+| Ctrl+g       | Lock                  |
+
+*** Alt — direct actions
 | Key          | Action                    |
 |--------------+---------------------------|
-| Ctrl+1-5     | Jump to tab               |
-| Ctrl+t       | New tab                   |
-| Ctrl+q       | Quit                      |
-| Alt+h/l      | Focus pane/tab left/right |
-| Alt+j/k      | Focus pane down/up        |
-| Alt+n        | New pane                  |
+| Alt+h/j/k/l  | Focus pane/tab            |
 | Alt+d        | Split down                |
 | Alt+r        | Split right               |
 | Alt+x        | Close pane                |
@@ -147,16 +156,15 @@ Terminal multiplexer. Catppuccin Mocha, compact layout, vim keybindings.
 | Alt+/-       | Resize increase/decrease  |
 | Alt+[/]      | Previous/next layout      |
 
-*** Modal keybindings
+*** Alt — mode leaders
 | Key         | Mode    | Actions                             |
 |-------------+---------+-------------------------------------|
+| Alt+p       | Pane    | n/d/r/s=new, x=close, f=fullscreen  |
 | Alt+t       | Tab     | n=new, x=close, r=rename, 1-7=go    |
-| Ctrl+p      | Pane    | n/d/r/s=new, x=close, f=fullscreen  |
-| Ctrl+n      | Resize  | h/j/k/l=grow, H/J/K/L=shrink        |
-| Ctrl+h      | Move    | h/j/k/l=move pane                   |
-| Ctrl+s      | Scroll  | j/k=scroll, d/u=half page, s=search |
-| Ctrl+o      | Session | d=detach, w=session manager         |
-| Ctrl+g      | Lock    | Toggle locked mode                  |
+| Alt+n       | Resize  | h/j/k/l=grow, H/J/K/L=shrink        |
+| Alt+m       | Move    | h/j/k/l=move pane                   |
+| Alt+s       | Scroll  | j/k=scroll, d/u=half page, s=search |
+| Alt+o       | Session | d=detach, w=session manager         |
 
 * File Navigation
 ** fzf
