@@ -46,6 +46,13 @@
             leave_broot: false
         }
 
+        // Move to trash instead of permanent delete
+        {
+            invocation: rm
+            internal: trash
+            leave_broot: false
+        }
+
         // Copy file to other panel
         {
             key: F5
