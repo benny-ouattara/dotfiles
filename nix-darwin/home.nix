@@ -193,6 +193,7 @@
       aider="OLLAMA_API_BASE=\"http://otter:11434\" aider";
       snore="sudo -v; while true; do sudo -n true; sleep 60; kill -0 \"$$\" || exit; done 2>/dev/null &";
       r = "ranger";
+      lg = "lazygit";
       ask = "aichat";
       think = "aichat --model ollama:mistral:latest";
       reload = "exec $SHELL -l";
@@ -253,6 +254,20 @@
       bindkey '^F' fzf-file-widget      # Ctrl + F
       bindkey '^G' fzf-history-widget   # Ctrl + G
       bindkey '^B' fzf-cd-widget        # Ctrl + B
+
+      # Ctrl+O: open lazygit
+      function _lazygit_widget() { lazygit; zle reset-prompt }
+      zle -N _lazygit_widget
+      bindkey '^O' _lazygit_widget
+
+      # Ctrl+X: open broot and cd into selected dir
+      function _broot_widget() {
+        local dir=$(broot --only-folders --cmd ':print_path')
+        if [ -n "$dir" ]; then cd "$dir"; fi
+        zle reset-prompt
+      }
+      zle -N _broot_widget
+      bindkey '^X' _broot_widget
       '';
   };
 
