@@ -79,5 +79,5 @@ cmd - g : yabai -m space --toggle padding; yabai -m space --toggle gap
 # sketchybar
 cmd + shift - b : sketchybar --bar hidden=toggle
 cmd + shift - u : sketchybar --reload
-cmd + shift - s : sketchybar --set spotify.anchor drawing=toggle
+cmd + shift - s : sketchybar --set calendar drawing=toggle
 cmd + shift - c : sketchybar --set cpu.top drawing=toggle; sketchybar --set cpu.percent drawing=toggle; sketchybar --set cpu.sys drawing=toggle; sketchybar --set cpu.user drawing=toggle
