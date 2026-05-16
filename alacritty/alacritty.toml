@@ -100,11 +100,6 @@ key = "Q"
 mods = "Command"
 
 [[keyboard.bindings]]
-action = "Quit"
-key = "W"
-mods = "Command"
-
-[[keyboard.bindings]]
 action = "CreateNewWindow"
 key = "N"
 mods = "Command"
