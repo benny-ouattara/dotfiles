@@ -134,6 +134,13 @@ in
     pkgs.wuzz
     pkgs.hexyl
     pkgs.broot
+    pkgs.lazygit
+    pkgs.glow
+    pkgs.difftastic
+    pkgs.bandwhich
+    pkgs.zellij
+    pkgs.watchexec
+    pkgs.hyperfine
     pkgs.hey
     pkgs.restic
     pkgs.tokei
