@@ -76,6 +76,9 @@ cmd + shift - r : yabai -m space --mirror y-axis
 # Enable / Disable gaps in current workspace
 cmd - g : yabai -m space --toggle padding; yabai -m space --toggle gap
 
+# quickshade
+cmd + shift - d : open "quickshade://toggle"
+
 # sketchybar
 cmd + shift - t : ~/.config/sketchybar/theme-cycle.sh
 cmd + shift - b : sketchybar --bar hidden=toggle
