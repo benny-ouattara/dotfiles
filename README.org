@@ -1,58 +1,238 @@
-#+TITLE: 🦦 Dotfiles: The Otter-Ops Fleet
-#+DESCRIPTION: Cross-platform configuration management for Guix and Nix-Darwin
+#+title: Dotfiles
+#+author: Ben A.
+#+startup: show2levels
 
-* Introduction
-This repository manages my digital life across **GNU Guix** (Linux) and **Nix-Darwin** (macOS). Everything is driven by =make= to ensure a consistent, "up-style" workflow regardless of the kernel.
+* Overview
+Personal dotfiles managed with [[https://www.gnu.org/software/stow/][GNU Stow]] and [[https://github.com/LnL7/nix-darwin][nix-darwin]]. System configuration is declarative via Nix flakes with Home Manager.
 
-* 🚀 Quick Start
-Use the table below to map commands between your different environments.
+Hosts:
+- *kite* — macOS (x86_64-darwin), primary workstation
+- *onyx* — macOS, secondary
 
-| Action           | *Guix (Linux/Otter)*      | *Nix (macOS/Beno)* |
-|------------------+-------------------------+------------------|
-| **System Apply** | ~make system-reconfigure~ | ~make beno!~       |
-| **User Apply**     | ~make home-reconfigure~   | ~make home~        |
-| **Health Check** | ~make health~             | ~make health~      |
-| **Status/Gen**     | ~make status~             | ~make status~      |
-| **Cleanup**        | ~make gc~                 | ~make clean-safe~  |
-| **Full Reset**     | ~make ship~               | ~make reset~       |
+* System Architecture
+#+begin_example
+nix-darwin/
+  flake.nix        Entry point
+  kite.nix         System packages, services, macOS defaults
+  home.nix         Home Manager: git, zsh, fzf, ssh, direnv, starship, zoxide
+  brew.nix         Homebrew casks and formulae (GUI apps, emacs-plus)
+  overlays/        Custom Nix overlays (scripts)
+  scripts/         System scripts (mail sync, WM watchdog, GC, etc.)
+#+end_example
 
-* 🛠️ Tooling Overview
-** The ~up~ Wrapper
-On both systems, the ~up~ script acts as a sudo-aware entry point. It automatically detects if a target requires elevation and ensures environment variables like =GITHUB_TOKEN= are preserved.
+* Window Management
+** Yabai (tiling WM)
+Managed via Homebrew. BSP tiling with spaces 1-7.
 
-** Secrets & Identity
-Sensitive keys are not stored in this repo. Use the backup/restore targets to move your identity between machines:
-- ~make backup~ :: Encrypts =~/.ssh= and =~/.gnupg= into an AES-256 =.gpg= archive.
-- ~make restore FILE=...~ :: Decrypts and places keys with correct 700/600 permissions.
+** skhd (hotkey daemon)
+Managed via nix-darwin service. All keybindings below.
 
-* 🏥 Troubleshooting
-** GNU Guix
-- *Store Corruption* :: Run ~guix gc --verify=contents~.
-- *Service Hangs* :: Check ~herd status~.
-- *Rollback* :: Use ~guix system roll-back~ or select a previous generation at GRUB.
+*** App Launchers
+| Key             | Action                |
+|-----------------+-----------------------|
+| Cmd+Return      | Kitty terminal        |
+| Cmd+b           | Brave Browser         |
+| Cmd+i           | Emacs (standalone)    |
+| Cmd+d           | Emacs dired           |
+| Cmd+e           | Emacs elfeed          |
+| Cmd+a           | Emacs org-agenda      |
+| Cmd+y           | Emacs ~/Sync/org      |
+| Cmd+Ctrl+m      | Emacs mu4e (mail)     |
+| Cmd+Ctrl+f      | Google Chrome         |
+| Cmd+Ctrl+c      | Org capture           |
+| Cmd+Ctrl+v      | Ranger in Kitty       |
 
-** Nix-Darwin
-- *Daemon Issues* :: If ~make health~ shows the daemon is down, run:
-  #+begin_src shell
-  sudo launchctl load -w /Library/LaunchDaemons/org.nixos.nix-daemon.plist
-  #+end_src
-- *Rosetta* :: If x86 builds fail on Apple Silicon, run ~make rosetta~.
-- *WM Glitches* :: If ~yabai~ or ~skhd~ stop responding to config changes, run ~make reset~.
+*** Window Focus & Swap
+| Key             | Action                |
+|-----------------+-----------------------|
+| Cmd+j/k         | Focus prev/next       |
+| Cmd+Shift+j/k   | Swap west/east        |
+| Cmd+Ctrl+h/l    | Resize -5%/+5%        |
+| Cmd+Ctrl+[/]    | Focus stack prev/next |
 
-* 📁 Repository Structure
-- =/guix= :: System and Home configurations for Linux.
-- =/nix-darwin= :: Flakes and modules for macOS.
-- =/common= :: Shared scripts, templates, and themes.
-- =Makefile= :: The command center.
+*** Spaces
+| Key             | Action                 |
+|-----------------+------------------------|
+| Cmd+1-7         | Focus space 1-7        |
+| Cmd+Shift+1-7   | Send window to space   |
+| Cmd+Ctrl+n/p    | Next/prev space        |
+| Cmd+Ctrl+Tab    | Recent space           |
+| Cmd+Shift+n/p   | Send to next/prev      |
+| Cmd+Shift+Tab   | Send to recent         |
 
-* 🏷️ Machine Fleet
-- *Otter* :: Main Linux Workstation (Guix).
-- *Mink* :: Portable Linux Laptop (Guix).
-- *Beno* :: macOS Environment (Nix-Darwin).
-- *Roc* :: Headless Home Server (Nix/Guix).
+*** Layout & Windows
+| Key              | Action                |
+|------------------+-----------------------|
+| Cmd+0            | Balance windows       |
+| Cmd+8/9          | Balance + shrink/grow |
+| Cmd+r            | Rotate layout 90      |
+| Cmd+Shift+r      | Mirror layout         |
+| Cmd+g            | Toggle gaps            |
+| Cmd+Ctrl+Space   | Toggle fullscreen     |
+| Cmd+Ctrl+e       | Float layout          |
+| Cmd+Shift+e      | BSP layout            |
+| Cmd+Ctrl+w       | Close window          |
+| Cmd+Alt+h/j/k/l  | Set insertion point   |
+| Cmd+Alt+s        | Insert stack          |
 
-* 🩺 Diagnostics & Benchmarking
-- ~make health~ :: Check if the Nix daemon and Rosetta are healthy.
-- ~make dry-run~ :: See what changes will be applied before committing.
-- ~make bench-keys~ :: Verify keyboard repeat rates are at the "Otter-speed" (1/7).
-- ~make trace PKG=...~ :: Find out why a package exists in your system.
+*** Sketchybar
+| Key             | Action                |
+|-----------------+-----------------------|
+| Cmd+Shift+t     | Cycle theme           |
+| Cmd+Shift+b     | Toggle bar            |
+| Cmd+Shift+u     | Reload bar            |
+| Cmd+Shift+s     | Toggle calendar       |
+| Cmd+Shift+c     | Toggle CPU graph      |
+
+* Sketchybar
+Status bar with modules: apple menu, spaces, yabai state, front app, calendar, brew updates, wifi, GitHub notifications, battery, volume, CPU graph.
+
+** Themes
+6 themes, cycled with =Cmd+Shift+t=:
+- Catppuccin Mocha (default)
+- Tokyo Night
+- Nord
+- Dracula
+- Rose Pine
+- Gruvbox
+
+* Terminal
+** Kitty
+Primary terminal. Catppuccin Mocha theme, Iosevka Term font, image preview support.
+
+| Key       | Action           |
+|-----------+------------------|
+| Ctrl+1-5  | Go to tab        |
+| Ctrl+t    | New tab          |
+| Ctrl+n    | New window       |
+| Ctrl+s    | Vertical split   |
+| Ctrl+j/k  | Navigate splits  |
+| Ctrl+q    | Close split      |
+| Ctrl+;    | Next layout      |
+
+** Zsh
+Managed by Home Manager. Autosuggestion, syntax highlighting, starship prompt.
+
+*** Keybindings
+| Key    | Action                     |
+|--------+----------------------------|
+| Ctrl+F | fzf file search (fd)       |
+| Ctrl+G | fzf history search         |
+| Ctrl+B | fzf cd into directory      |
+| Ctrl+O | Open lazygit               |
+| Ctrl+X | Open broot (cd on select)  |
+
+*** Aliases
+| Alias    | Command                          |
+|----------+----------------------------------|
+| ls       | eza                              |
+| r        | ranger                           |
+| lg       | lazygit                          |
+| z        | zoxide interactive               |
+| ask      | aichat                           |
+| reload   | exec $SHELL -l                   |
+| otter-on | SSH tunnel to otter              |
+| oc-dash  | OpenCluster dashboard via tunnel  |
+
+** Zellij
+Terminal multiplexer. Catppuccin Mocha, compact layout, vim keybindings.
+
+| Key    | Mode    | Actions                               |
+|--------+---------+---------------------------------------|
+| Ctrl+p | Pane    | n/d/r/s=new, x=close, f=fullscreen   |
+| Ctrl+t | Tab     | n=new, x=close, r=rename, 1-7=go     |
+| Ctrl+n | Resize  | h/j/k/l=grow, H/J/K/L=shrink         |
+| Ctrl+h | Move    | h/j/k/l=move pane                     |
+| Ctrl+s | Scroll  | j/k=scroll, d/u=half page, s=search   |
+| Ctrl+o | Session | d=detach, w=session manager            |
+| Ctrl+g | Lock    | Toggle locked mode                    |
+| Alt+h/j/k/l | Any | Quick pane/tab focus               |
+
+* File Navigation
+** fzf
+Fuzzy finder powered by =fd=. Respects =.gitignore=, skips =.git=.
+- File search: bat preview
+- Dir search: eza tree preview
+- History: exact match, no preview
+- Preview scroll: Ctrl+d/u
+
+** Broot
+Tree-based fuzzy file explorer. Catppuccin Mocha, Nerd Font icons, git status.
+- Enter opens file in emacsclient at matching line
+- =:rm= moves to trash
+- =:gtr= jumps to git root
+- =Alt+g= toggles git status filter
+- Ctrl+t opens terminal at current dir
+
+** Ranger
+Three-column file manager with image preview via Kitty.
+- =ee= opens in emacsclient
+- =dD= moves to trash
+- =Ctrl+f= fzf fuzzy find
+- =gd/gs/go/gc/gD/gm= quick navigation (Downloads, Sync, org, Code, dotfiles, mail)
+- =mk/mf= mkdir/touch
+- Git-aware, hidden files shown
+
+* Email
+** Accounts
+- Gmail (=benny.ouattara@gmail.com=)
+- Proton (=ben.abubaker@proton.me=, =jazafund@proton.me=)
+- MXroute/Jaza (=support@=, =ops@=, =compliance@=, =info@=, =fraud@=, =hr@=, =sales@=, =system@jaza.cash=)
+
+** Stack
+- *isync/mbsync* — IMAP sync (11 accounts)
+- *notmuch* — indexing and search
+- *afew* — auto-tagging
+- *msmtp* — SMTP sending
+- *mcron* — sync every 5 minutes (via nix-darwin launchd)
+- *Doom Emacs notmuch* — reading and composing
+
+* Emacs (Doom)
+Literate config in =doom/config.org=, tangled to =config.el=.
+
+** Key features
+- notmuch email with shr rendering (Doom font, max-width 100)
+- org-agenda with custom views (daily, people, OKRs)
+- org-roam for knowledge management
+- org-capture templates (tasks, notes, email tasks, 1-1 meetings)
+- elfeed for RSS
+- LSP via emacs-lsp-booster
+
+* CLI Tools
+| Tool        | Purpose                          | Alias/Key |
+|-------------+----------------------------------+-----------|
+| bat         | Cat with syntax highlighting     |           |
+| eza         | Modern ls                        | ls        |
+| fd          | Modern find                      |           |
+| ripgrep     | Fast grep                        |           |
+| fzf         | Fuzzy finder                     | Ctrl+F/G/B |
+| zoxide      | Smart cd                         | z         |
+| broot       | Tree explorer                    | Ctrl+X    |
+| ranger      | File manager                     | r         |
+| lazygit     | Git TUI                          | lg, Ctrl+O |
+| bottom      | System monitor                   |           |
+| dust        | Disk usage                       |           |
+| procs       | Process viewer                   |           |
+| tokei       | Code statistics                  |           |
+| hexyl       | Hex viewer                       |           |
+| hwatch      | Watch with history               |           |
+| glow        | Markdown renderer                |           |
+| difftastic  | Structural diff                  |           |
+| bandwhich   | Network bandwidth monitor        |           |
+| zellij      | Terminal multiplexer             |           |
+| watchexec   | File watcher                     |           |
+| hyperfine   | Command benchmarking             |           |
+| tldr        | Simplified man pages             |           |
+| just        | Task runner                      |           |
+| restic      | Backups                          |           |
+
+* Nix-Darwin Services
+- *skhd* — hotkey daemon
+- *sketchybar* — status bar
+- *mcron* — cron jobs (mail sync, WM watchdog, nix GC)
+
+* Applying Changes
+#+begin_src sh
+cd ~/Code/dotfiles/nix-darwin
+darwin-rebuild switch --flake .#kite
+#+end_src
