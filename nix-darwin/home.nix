@@ -119,22 +119,27 @@
 
   programs.fzf = {
     enable = true;
+    defaultCommand = "${pkgs.fd}/bin/fd --hidden --follow --exclude .git";
     defaultOptions = [
       "--height 40%"
       "--layout=reverse"
       "--border"
-      "--bind 'ctrl-n:down,ctrl-p:up'"
-      "--preview 'bat --color=always --style=numbers --line-range=:500 {}'"
+      "--bind 'ctrl-n:down,ctrl-p:up,ctrl-d:preview-half-page-down,ctrl-u:preview-half-page-up'"
     ];
 
-    # File search: Add the preview here!
+    fileWidgetCommand = "${pkgs.fd}/bin/fd --hidden --follow --exclude .git --type f";
     fileWidgetOptions = [
       "--preview 'bat --color=always --style=numbers --line-range=:500 {}'"
     ];
 
-    # Directory search: No preview (or use 'eza' if you want to see folder contents)
+    changeDirWidgetCommand = "${pkgs.fd}/bin/fd --hidden --follow --exclude .git --type d";
     changeDirWidgetOptions = [
       "--preview 'eza --tree --level 2 --color=always {} | head -200'"
+    ];
+
+    historyWidgetOptions = [
+      "--exact"
+      "--no-preview"
     ];
   };
 
