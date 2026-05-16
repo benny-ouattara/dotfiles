@@ -77,6 +77,7 @@ cmd + shift - r : yabai -m space --mirror y-axis
 cmd - g : yabai -m space --toggle padding; yabai -m space --toggle gap
 
 # sketchybar
+cmd + shift - t : ~/.config/sketchybar/theme-cycle.sh
 cmd + shift - b : sketchybar --bar hidden=toggle
 cmd + shift - u : sketchybar --reload
 cmd + shift - s : sketchybar --set calendar drawing=toggle
