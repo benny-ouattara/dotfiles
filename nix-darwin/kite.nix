@@ -212,7 +212,6 @@ in
     pkgs.clojure
     pkgs.clj-kondo
     pkgs.cljfmt
-    # pkgs.leiningen
     (pkgs.leiningen.override { jdk = pkgs.jdk17; })
     pkgs.wireguard-tools
     pkgs.tree
@@ -223,8 +222,6 @@ in
     pkgs.gcc
     pkgs.custom-scripts
     pkgs.fontconfig
-    # pkgs.scala
-    # "pkgs.sbt@1.8.0"
     pkgs.inetutils
   ];
 
