@@ -98,10 +98,8 @@ keybinds clear-defaults=true {
         bind "Ctrl t" { NewTab; }
         bind "Ctrl n" { NewPane; }
         bind "Ctrl s" { NewPane "right"; }
-        bind "Ctrl h" { MoveFocus "down"; }
         bind "Ctrl j" { MoveFocusOrTab "left"; }
         bind "Ctrl k" { MoveFocusOrTab "right"; }
-        bind "Ctrl l" { MoveFocus "up"; }
         bind "Ctrl p" { ToggleFloatingPanes; }
         bind "Ctrl o" {
             LaunchOrFocusPlugin "session-manager" {

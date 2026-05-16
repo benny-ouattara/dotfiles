@@ -65,6 +65,7 @@
       "tableplus"
       "background-music"
       "podman-desktop"
+      "karabiner-elements"
     ];
 
     extraConfig = ''
