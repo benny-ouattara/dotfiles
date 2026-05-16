@@ -115,7 +115,14 @@ Managed by Home Manager. Autosuggestion, syntax highlighting, starship prompt.
 *** Aliases
 | Alias    | Command                          |
 |----------+----------------------------------|
+| cat      | bat                              |
 | ls       | eza                              |
+| tree     | eza --tree                       |
+| du       | dust                             |
+| ps       | procs                            |
+| top      | btm                              |
+| find     | fd                               |
+| diff     | difft                            |
 | r        | ranger                           |
 | lg       | lazygit                          |
 | zj       | zellij                           |
