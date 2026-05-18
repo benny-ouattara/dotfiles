@@ -268,11 +268,6 @@
       bindkey '^G' fzf-history-widget   # Ctrl + G
       bindkey '^B' fzf-cd-widget        # Ctrl + B
 
-      # Ctrl+O: open lazygit
-      function _lazygit_widget() { lazygit; zle reset-prompt }
-      zle -N _lazygit_widget
-      bindkey '^O' _lazygit_widget
-
       # Ctrl+X: open broot and cd into selected dir
       function _broot_widget() {
         local dir=$(broot --only-folders --cmd ':print_path')

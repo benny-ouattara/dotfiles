@@ -28,64 +28,61 @@ Managed via Homebrew. BSP tiling with spaces 1-7.
 Managed via nix-darwin service. All keybindings below.
 
 *** App Launchers
-| Key             | Action                |
-|-----------------+-----------------------|
-| Cmd+Return      | Kitty terminal        |
-| Cmd+b           | Brave Browser         |
-| Cmd+i           | Emacs (standalone)    |
-| Cmd+d           | Emacs dired           |
-| Cmd+e           | Emacs elfeed          |
-| Cmd+a           | Emacs org-agenda      |
-| Cmd+y           | Emacs ~/Sync/org      |
-| Cmd+Ctrl+m      | Emacs mu4e (mail)     |
-| Cmd+Ctrl+f      | Google Chrome         |
-| Cmd+Ctrl+c      | Org capture           |
-| Cmd+Ctrl+v      | Ranger in Kitty       |
+| Key        | Action             |
+|------------+--------------------|
+| Cmd+Return | Kitty terminal     |
+| Cmd+b      | Brave Browser      |
+| Cmd+i      | Emacs (standalone) |
+| Cmd+Ctrl+d | Emacs dired        |
+| Cmd+Ctrl+i | Emacs elfeed       |
+| Cmd+Ctrl+a | Emacs org-agenda   |
+| Cmd+Ctrl+y | Emacs ~/Sync/org   |
+| Cmd+Ctrl+m | Emacs mu4e (mail)  |
+| Cmd+Ctrl+c | Org capture        |
+| Cmd+Ctrl+v | Ranger in Kitty    |
 
 *** Window Focus & Swap
-| Key             | Action                |
-|-----------------+-----------------------|
-| Cmd+j/k         | Focus prev/next       |
-| Cmd+Shift+j/k   | Swap west/east        |
-| Cmd+Ctrl+h/l    | Resize -5%/+5%        |
-| Cmd+Ctrl+[/]    | Focus stack prev/next |
+| Key          | Action                |
+|--------------+-----------------------|
+| Cmd+j/k      | Focus prev/next       |
+| Cmd+Ctrl+j/k | Swap west/east        |
+| Cmd+Ctrl+h/l | Resize -5%/+5%        |
+| Cmd+Ctrl+[/] | Focus stack prev/next |
 
 *** Spaces
-| Key             | Action                 |
-|-----------------+------------------------|
-| Cmd+1-7         | Focus space 1-7        |
-| Cmd+Shift+1-7   | Send window to space   |
-| Cmd+Ctrl+n/p    | Next/prev space        |
-| Cmd+Ctrl+Tab    | Recent space           |
-| Cmd+Shift+n/p   | Send to next/prev      |
-| Cmd+Shift+Tab   | Send to recent         |
+| Key          | Action               |
+|--------------+----------------------|
+| Cmd+1-7      | Focus space 1-7      |
+| Cmd+Ctrl+1-7 | Send window to space |
 
 *** Layout & Windows
-| Key              | Action                |
-|------------------+-----------------------|
-| Cmd+0            | Balance windows       |
-| Cmd+8/9          | Balance + shrink/grow |
-| Cmd+r            | Rotate layout 90      |
-| Cmd+Shift+r      | Mirror layout         |
-| Cmd+g            | Toggle gaps            |
-| Cmd+Ctrl+Space   | Toggle fullscreen     |
-| Cmd+Ctrl+e       | Float layout          |
-| Cmd+Shift+e      | BSP layout            |
-| Cmd+Ctrl+w       | Close window          |
-| Cmd+Alt+h/j/k/l  | Set insertion point   |
-| Cmd+Alt+s        | Insert stack          |
+| Key            | Action                |
+|----------------+-----------------------|
+| Cmd+0          | Balance windows       |
+| Cmd+8/9        | Balance + shrink/grow |
+| Cmd+Ctrl+o     | Rotate layout 90      |
+| Cmd+Ctrl+r     | Mirror layout         |
+| Cmd+g          | Toggle gaps           |
+| Cmd+Ctrl+Space | Toggle fullscreen     |
+| Cmd+Ctrl+f     | Float layout          |
+| Cmd+Ctrl+e     | BSP layout            |
+| Cmd+Ctrl+w     | Close window          |
 
 *** Sketchybar
-| Key             | Action                |
-|-----------------+-----------------------|
-| Cmd+Shift+t     | Cycle theme           |
-| Cmd+Shift+b     | Toggle bar            |
-| Cmd+Shift+u     | Reload bar            |
-| Cmd+Shift+s     | Toggle calendar       |
-| Cmd+Shift+c     | Toggle CPU graph      |
+| Key        | Action          |
+|------------+-----------------|
+| Cmd+Ctrl+t | Cycle theme     |
+| Cmd+Ctrl+b | Toggle bar      |
+| Cmd+Ctrl+u | Reload bar      |
+| Cmd+Ctrl+s | Toggle calendar |
+
+*** Other
+| Key        | Action            |
+|------------+-------------------|
+| Cmd+Ctrl+q | Toggle Quickshade |
 
 * Sketchybar
-Status bar with modules: apple menu, spaces, yabai state, front app, calendar, brew updates, wifi, GitHub notifications, battery, volume, CPU graph.
+Status bar with modules: apple menu, spaces, yabai state, front app, spotify, calendar, brew updates, wifi, battery, volume, CPU graph.
 
 ** Themes
 6 themes, cycled with =Cmd+Shift+t=:
@@ -109,7 +106,6 @@ Managed by Home Manager. Autosuggestion, syntax highlighting, starship prompt.
 | Ctrl+F | fzf file search (fd)      |
 | Ctrl+G | fzf history search        |
 | Ctrl+B | fzf cd into directory     |
-| Ctrl+O | Open lazygit              |
 | Ctrl+X | Open broot (cd on select) |
 
 *** Aliases
@@ -139,7 +135,6 @@ Terminal multiplexer. Catppuccin Mocha, compact layout, vim keybindings.
 | Key      | Action                    |
 |----------+---------------------------|
 | Ctrl+j/k | Focus pane/tab left/right |
-| Ctrl+h/l | Focus pane down/up        |
 | Ctrl+1-5 | Jump to tab               |
 | Ctrl+t   | New tab                   |
 | Ctrl+n   | New pane                  |
