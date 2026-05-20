@@ -191,7 +191,11 @@
 (map! :n "C-d" #'beno-evil-scroll-down
       :n "C-u" #'beno-evil-scroll-up)
 
-(after! notmuch                                                                                                                                    
+(after! notmuch
+  ;; Re-apply popup rules to override Doom's notmuch module defaults
+  (setq beno-popup-rules-large-p 'reset)
+  (beno-apply-popup-rules)
+
   (setq +notmuch-sync-backend 'mbsync
         notmuch-show-log nil
         notmuch-hello-sections '(notmuch-hello-insert-saved-searches
@@ -340,8 +344,6 @@
           (:name "sent"              :query "tag:sent"                        :key "e")
           (:name "flagged"           :query "tag:flagged"                     :key "x" :count-query "tag:flagged")
           (:name "drafts"            :query "tag:draft"                       :key "d")))
-
-  (set-popup-rule! "^\\*notmuch" :ignore t)
 
   (add-hook 'notmuch-show-hook
             (lambda () (notmuch-show-tag '("-unread"))))
@@ -690,7 +692,17 @@ With prefix ARG, reset the eshell buffer."
           (dolist (pattern '("[0-9]+-[0-9]+-[0-9]+.org"
                              "journal.org"))
             (set-popup-rule! pattern :size 0.40 :vslot -4 :select t
-              :quit 'other :ttl 5 :side 'right :autosave t)))))))
+              :quit 'other :ttl 5 :side 'right :autosave t)))
+
+        ;; Notmuch — master panes as regular windows
+        (dolist (pattern '("^\\*notmuch-hello" "^\\*notmuch-search" "^\\*notmuch-saved-" "^\\*notmuch-tree"))
+          (set-popup-rule! pattern :ignore t))
+
+        ;; Notmuch — detail pane (Doom renames show buffers to *subject:...*)
+        (set-popup-rule! "^\\*subject:" :size 0.60 :side 'right :select t :quit 'other :ttl nil)
+
+        ;; Notmuch — compose at the bottom
+        (set-popup-rule! "^\\*\\(?:unsent \\)?mail" :size 0.40 :side 'bottom :select t :quit nil :ttl nil)))))
 
 (add-hook 'doom-init-ui-hook #'beno-apply-popup-rules)
 (add-hook 'move-frame-functions #'beno-apply-popup-rules)
