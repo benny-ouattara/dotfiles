@@ -116,19 +116,25 @@ in
   };
 
   environment.systemPackages = [
-    pkgs.emacs-lsp-booster
-    pkgs.openai-whisper
+    pkgs.opencode
+    pkgs.codex
+    pkgs.gemini-cli
+    pkgs.claude-code
+    pkgs.bruno
+    pkgs.mitmproxy
+    pkgs.lunar
     pkgs.hwatch
     pkgs.dust
     pkgs.xcp
     pkgs.procs
     pkgs.bottom
     pkgs.msmtp
+    pkgs.emacs-lsp-booster
     pkgs.clojure-lsp
     pkgs.lima
     pkgs.awscli
-    pkgs.claude-code
     pkgs.jet
+    pkgs.podman
     pkgs.podman-tui
     pkgs.podman-compose
     pkgs.wuzz

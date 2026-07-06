@@ -34,12 +34,13 @@
       "openjdk"
       "node"
       "aider"
-      "podman"
+      # "podman"
       # "reroutingcli"
       # "mmp"
     ];
 
     casks = [
+      "snapzy"
       "visualvm"
       "discord"
       "spotify"

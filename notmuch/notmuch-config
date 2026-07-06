@@ -31,7 +31,7 @@ path=.mail
 [user]
 name=Ben A.
 primary_email=benny.ouattara@gmail.com
-other_email=ben.ouattara@proton.me;ben.abubaker@proton.me;ben.ouattara@protonmail.com;ben.abubaker@protonmail.com;jazafund@proton.me;support@jaza.cash;ops@jaza.cash;compliance@jaza.cash;info@jaza.cash;fraud@jaza.cash;hr@jaza.cash;sales@jaza.cash;system@jaza.cash;admin@jazafund.com;ben@jazafund.com;
+other_email=ben.ouattara@proton.me;ben.abubakar@proton.me;ben.ouattara@protonmail.com;ben.abubakar@protonmail.com;jazafund@proton.me;support@jaza.cash;ops@jaza.cash;compliance@jaza.cash;info@jaza.cash;fraud@jaza.cash;hr@jaza.cash;sales@jaza.cash;system@jaza.cash;admin@jazafund.com;ben@jazafund.com;
 
 # Configuration for "notmuch new"
 #

@@ -455,7 +455,7 @@ Channel gmail-all
 IMAPAccount protonmail
 Host 127.0.0.1
 Port 1143
-User ben.abubaker@proton.me
+User ben.abubakar@proton.me
 PassCmd "pass Email/proton"
 AuthMechs LOGIN
 TLSType NONE

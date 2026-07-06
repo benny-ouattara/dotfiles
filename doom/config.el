@@ -204,7 +204,7 @@
         notmuch-message-headers-visible nil
         notmuch-always-prompt-for-sender nil
         notmuch-identities '("Ben A. <benny.ouattara@gmail.com>"
-                             "Ben A. <ben.abubaker@proton.me>"
+                             "Ben A. <ben.abubakar@proton.me>"
                              "Jazafund <jazafund@proton.me>"
                              "Jaza Support <support@jaza.cash>"
                              "Jaza Ops <ops@jaza.cash>"
@@ -221,7 +221,7 @@
         message-send-mail-function #'message-send-mail-with-sendmail)
 
   (setq notmuch-fcc-dirs '(("benny.ouattara@gmail.com"  . "gmail/sent +sent")
-                            ("ben.abubaker@proton.me"   . "protonmail/sent +sent")
+                            ("ben.abubakar@proton.me"   . "protonmail/sent +sent")
                             ("jazafund@proton.me"       . "jfund/sent +sent")
                             ("support@jaza.cash"        . "jc-support/sent +sent")
                             ("ops@jaza.cash"            . "jc-ops/sent +sent")

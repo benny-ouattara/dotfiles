@@ -196,7 +196,7 @@ Three-column file manager with image preview via Kitty.
 * Email
 ** Accounts
 - Gmail (=benny.ouattara@gmail.com=)
-- Proton (=ben.abubaker@proton.me=, =jazafund@proton.me=)
+- Proton (=ben.abubakar@proton.me=, =jazafund@proton.me=)
 - MXroute/Jaza (=support@=, =ops@=, =compliance@=, =info@=, =fraud@=, =hr@=, =sales@=, =system@jaza.cash=)
 
 ** Stack

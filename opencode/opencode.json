@@ -1,0 +1,53 @@
+{
+    "$schema": "https://opencode.ai/config.json",
+    "provider": {
+        "deepinfra": {
+            "npm": "@ai-sdk/openai-compatible",
+            "name": "DeepInfra",
+            "options": {
+                "baseURL": "https://api.deepinfra.com/v1/openai",
+                "apiKey": "{env:DEEPINFRA_API_KEY}"
+            },
+            "models": {
+                "deepseek-ai/DeepSeek-V4-Pro": { "name": "DeepSeek V4 Pro" },
+                "moonshotai/Kimi-K2.7-Code": { "name": "Kimi K2.7 Code" }
+            }
+        }
+    },
+    "agent": {
+        "plan": {
+            "model": "deepinfra/deepseek-ai/DeepSeek-V4-Pro"
+        },
+        "architect": {
+            "model": "deepinfra/deepseek-ai/DeepSeek-V4-Pro"
+        },
+        "build": {
+            "model": "deepinfra/moonshotai/Kimi-K2.7-Code"
+        },
+        "developer": {
+            "model": "deepinfra/moonshotai/Kimi-K2.7-Code"
+        },
+        "explore": {
+            "model": "deepinfra/moonshotai/Kimi-K2.7-Code"
+        },
+        "language": {
+            "description": "General programming and language questions, no codebase context needed",
+            "mode": "primary",
+            "model": "deepinfra/moonshotai/Kimi-K2.7-Code",
+            "permission": {
+                "edit": "deny",
+                "bash": "deny"
+            }
+        },
+        "review": {
+            "description": "Critiques a proposed plan for blind spots, bad assumptions, edge cases",
+            "mode": "primary",
+            "model": "deepinfra/deepseek-ai/DeepSeek-V4-Pro",
+            "permission": {
+                "edit": "deny",
+                "bash": "deny"
+            }
+        }
+    },
+    "default_agent": "build"
+}

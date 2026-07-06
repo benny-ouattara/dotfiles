@@ -233,7 +233,7 @@ Using advices doesn't work for these, it gets stuck after the first call
         notmuch-message-headers-visible nil
         notmuch-always-prompt-for-sender nil
         notmuch-identities '("Ben A. <benny.ouattara@gmail.com>"
-                             "Ben A. <ben.abubaker@proton.me>"
+                             "Ben A. <ben.abubakar@proton.me>"
                              "Jazafund <jazafund@proton.me>"
                              "Jaza Support <support@jaza.cash>"
                              "Jaza Ops <ops@jaza.cash>"
@@ -250,7 +250,7 @@ Using advices doesn't work for these, it gets stuck after the first call
         message-send-mail-function #'message-send-mail-with-sendmail)
 
   (setq notmuch-fcc-dirs '(("benny.ouattara@gmail.com"  . "gmail/sent +sent")
-                            ("ben.abubaker@proton.me"   . "protonmail/sent +sent")
+                            ("ben.abubakar@proton.me"   . "protonmail/sent +sent")
                             ("jazafund@proton.me"       . "jfund/sent +sent")
                             ("support@jaza.cash"        . "jc-support/sent +sent")
                             ("ops@jaza.cash"            . "jc-ops/sent +sent")
@@ -851,7 +851,7 @@ Emacs 29+ allows you to hide the title bar, no need to compile emacs with title 
        (tty +osc)                    ; improve the terminal Emacs experience
 
        :lang
-       (clojure +lsp)                ; java with a lisp
+       clojure                       ; java with a lisp
        common-lisp                   ; if you've seen one lisp, you've seen them all
        data                          ; config/data formats
        emacs-lisp                    ; drown in parentheses

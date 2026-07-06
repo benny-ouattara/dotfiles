@@ -65,7 +65,7 @@
        (tty +osc)                    ; improve the terminal Emacs experience
 
        :lang
-       (clojure +lsp)                ; java with a lisp
+       clojure                       ; java with a lisp
        common-lisp                   ; if you've seen one lisp, you've seen them all
        data                          ; config/data formats
        emacs-lisp                    ; drown in parentheses
