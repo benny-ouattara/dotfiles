@@ -219,32 +219,32 @@ Literate config in =doom/config.org=, tangled to =config.el=.
 - LSP via emacs-lsp-booster
 
 * CLI Tools
-| Tool        | Purpose                          | Alias/Key |
-|-------------+----------------------------------+-----------|
-| bat         | Cat with syntax highlighting     |           |
-| eza         | Modern ls                        | ls        |
-| fd          | Modern find                      |           |
-| ripgrep     | Fast grep                        |           |
-| fzf         | Fuzzy finder                     | Ctrl+F/G/B |
-| zoxide      | Smart cd                         | z         |
-| broot       | Tree explorer                    | Ctrl+X    |
-| ranger      | File manager                     | r         |
-| lazygit     | Git TUI                          | lg, Ctrl+O |
-| bottom      | System monitor                   |           |
-| dust        | Disk usage                       |           |
-| procs       | Process viewer                   |           |
-| tokei       | Code statistics                  |           |
-| hexyl       | Hex viewer                       |           |
-| hwatch      | Watch with history               |           |
-| glow        | Markdown renderer                |           |
-| difftastic  | Structural diff                  |           |
-| bandwhich   | Network bandwidth monitor        |           |
-| zellij      | Terminal multiplexer             |           |
-| watchexec   | File watcher                     |           |
-| hyperfine   | Command benchmarking             |           |
-| tldr        | Simplified man pages             |           |
-| just        | Task runner                      |           |
-| restic      | Backups                          |           |
+| Tool       | Purpose                      | Alias/Key  |
+|------------+------------------------------+------------|
+| bat        | Cat with syntax highlighting |            |
+| eza        | Modern ls                    | ls         |
+| fd         | Modern find                  |            |
+| ripgrep    | Fast grep                    |            |
+| fzf        | Fuzzy finder                 | Ctrl+F/G/B |
+| zoxide     | Smart cd                     | z          |
+| broot      | Tree explorer                | Ctrl+X     |
+| ranger     | File manager                 | r          |
+| lazygit    | Git TUI                      | lg, Ctrl+O |
+| bottom     | System monitor               |            |
+| dust       | Disk usage                   |            |
+| procs      | Process viewer               |            |
+| tokei      | Code statistics              |            |
+| hexyl      | Hex viewer                   |            |
+| hwatch     | Watch with history           |            |
+| glow       | Markdown renderer            |            |
+| difftastic | Structural diff              |            |
+| bandwhich  | Network bandwidth monitor    |            |
+| zellij     | Terminal multiplexer         |            |
+| watchexec  | File watcher                 |            |
+| hyperfine  | Command benchmarking         |            |
+| tldr       | Simplified man pages         |            |
+| just       | Task runner                  |            |
+| restic     | Backups                      |            |
 
 * Nix-Darwin Services
 - *skhd* — hotkey daemon

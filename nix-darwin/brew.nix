@@ -1,5 +1,9 @@
 { config, pkgs, ... }:
 {
+  environment.etc."homebrew/brew.env".text = ''
+    HOMEBREW_NO_REQUIRE_TAP_TRUST=1
+  '';
+
   homebrew = {
     enable = true;
     caskArgs.require_sha = true;
@@ -15,7 +19,7 @@
     taps = [
       "homebrew/bundle"
       "homebrew/services"
-      "koekeishiya/formulae"
+      "asmvik/formulae"
       "d12frosted/emacs-plus"
       "clojure/tools"
       # "homebrew/cask-versions"
@@ -28,7 +32,7 @@
 
     brews = [
       "choose-gui"
-      "yabai"
+      "asmvik/formulae/yabai"
       "sbcl"
       "btop"
       "openjdk"
@@ -46,7 +50,7 @@
       "spotify"
       "vlc"
       "appcleaner"
-      "blender"
+      # "blender"
       "utm"
       "maccy"
       "balenaetcher"

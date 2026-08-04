@@ -116,6 +116,7 @@ in
   };
 
   environment.systemPackages = [
+    pkgs.sops
     pkgs.opencode
     pkgs.codex
     pkgs.gemini-cli
