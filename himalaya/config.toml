@@ -1,0 +1,323 @@
+display-name = "Ben Ouattara"
+default-account = "gmail"
+
+################################ PERSONAL GMAIL ##############################################
+
+[accounts.gmail]
+email = "benny.ouattara@gmail.com"
+default = true
+
+[accounts.gmail.backend]
+type = "imap"
+host = "imap.gmail.com"
+port = 993
+login = "benny.ouattara@gmail.com"
+encryption = "tls"
+passwd.type = "command"
+passwd.cmd = "pass Email/gmail"
+
+[accounts.gmail.message.send]
+type = "smtp"
+host = "smtp.gmail.com"
+port = 587
+login = "benny.ouattara@gmail.com"
+encryption = "start-tls"
+passwd.type = "command"
+passwd.cmd = "pass Email/gmail"
+
+[accounts.gmail.folder.alias]
+inbox = "INBOX"
+sent = "[Gmail]/Sent Mail"
+all = "[Gmail]/All Mail"
+
+################################# PROTONMAIL ##############################################
+
+[accounts.protonmail]
+email = "ben.abubakar@proton.me"
+
+[accounts.protonmail.backend]
+type = "imap"
+host = "127.0.0.1"
+port = 1143
+login = "ben.abubakar@proton.me"
+encryption = "none"
+passwd.type = "command"
+passwd.cmd = "pass Email/proton"
+
+[accounts.protonmail.message.send]
+type = "smtp"
+host = "127.0.0.1"
+port = 1025
+login = "ben.abubakar@proton.me"
+encryption = "start-tls"
+passwd.type = "command"
+passwd.cmd = "pass Email/proton"
+
+[accounts.protonmail.folder.alias]
+inbox = "INBOX"
+sent = "Sent"
+drafts = "Drafts"
+trash = "Trash"
+spam = "Spam"
+
+################################# JFUND ##############################################
+
+[accounts.jfund]
+email = "jazafund@proton.me"
+
+[accounts.jfund.backend]
+type = "imap"
+host = "127.0.0.1"
+port = 1143
+login = "jazafund@proton.me"
+encryption = "none"
+passwd.type = "command"
+passwd.cmd = "pass Email/jfund"
+
+[accounts.jfund.message.send]
+type = "smtp"
+host = "127.0.0.1"
+port = 1025
+login = "jazafund@proton.me"
+encryption = "start-tls"
+passwd.type = "command"
+passwd.cmd = "pass Email/jfund"
+
+[accounts.jfund.folder.alias]
+inbox = "INBOX"
+sent = "Sent"
+drafts = "Drafts"
+trash = "Trash"
+spam = "Spam"
+
+################################ JC SUPPORT ##############################################
+
+[accounts.jc-support]
+email = "support@jaza.cash"
+
+[accounts.jc-support.backend]
+type = "imap"
+host = "heracles.mxrouting.net"
+port = 993
+login = "support@jaza.cash"
+encryption = "tls"
+passwd.type = "command"
+passwd.cmd = "pass Email/heracles"
+
+[accounts.jc-support.message.send]
+type = "smtp"
+host = "heracles.mxrouting.net"
+port = 587
+login = "support@jaza.cash"
+encryption = "start-tls"
+passwd.type = "command"
+passwd.cmd = "pass Email/heracles"
+
+[accounts.jc-support.folder.alias]
+inbox = "INBOX"
+sent = "Sent"
+drafts = "Drafts"
+trash = "Trash"
+
+################################ JC OPS ##############################################
+
+[accounts.jc-ops]
+email = "ops@jaza.cash"
+
+[accounts.jc-ops.backend]
+type = "imap"
+host = "heracles.mxrouting.net"
+port = 993
+login = "ops@jaza.cash"
+encryption = "tls"
+passwd.type = "command"
+passwd.cmd = "pass Email/heracles"
+
+[accounts.jc-ops.message.send]
+type = "smtp"
+host = "heracles.mxrouting.net"
+port = 587
+login = "ops@jaza.cash"
+encryption = "start-tls"
+passwd.type = "command"
+passwd.cmd = "pass Email/heracles"
+
+[accounts.jc-ops.folder.alias]
+inbox = "INBOX"
+sent = "Sent"
+drafts = "Drafts"
+trash = "Trash"
+
+################################ JC COMPLIANCE ##############################################
+
+[accounts.jc-compliance]
+email = "compliance@jaza.cash"
+
+[accounts.jc-compliance.backend]
+type = "imap"
+host = "heracles.mxrouting.net"
+port = 993
+login = "compliance@jaza.cash"
+encryption = "tls"
+passwd.type = "command"
+passwd.cmd = "pass Email/heracles"
+
+[accounts.jc-compliance.message.send]
+type = "smtp"
+host = "heracles.mxrouting.net"
+port = 587
+login = "compliance@jaza.cash"
+encryption = "start-tls"
+passwd.type = "command"
+passwd.cmd = "pass Email/heracles"
+
+[accounts.jc-compliance.folder.alias]
+inbox = "INBOX"
+sent = "Sent"
+drafts = "Drafts"
+trash = "Trash"
+
+################################ JC INFO ##############################################
+
+[accounts.jc-info]
+email = "info@jaza.cash"
+
+[accounts.jc-info.backend]
+type = "imap"
+host = "heracles.mxrouting.net"
+port = 993
+login = "info@jaza.cash"
+encryption = "tls"
+passwd.type = "command"
+passwd.cmd = "pass Email/heracles"
+
+[accounts.jc-info.message.send]
+type = "smtp"
+host = "heracles.mxrouting.net"
+port = 587
+login = "info@jaza.cash"
+encryption = "start-tls"
+passwd.type = "command"
+passwd.cmd = "pass Email/heracles"
+
+[accounts.jc-info.folder.alias]
+inbox = "INBOX"
+sent = "Sent"
+drafts = "Drafts"
+trash = "Trash"
+
+################################ JC FRAUD ##############################################
+
+[accounts.jc-fraud]
+email = "fraud@jaza.cash"
+
+[accounts.jc-fraud.backend]
+type = "imap"
+host = "heracles.mxrouting.net"
+port = 993
+login = "fraud@jaza.cash"
+encryption = "tls"
+passwd.type = "command"
+passwd.cmd = "pass Email/heracles"
+
+[accounts.jc-fraud.message.send]
+type = "smtp"
+host = "heracles.mxrouting.net"
+port = 587
+login = "fraud@jaza.cash"
+encryption = "start-tls"
+passwd.type = "command"
+passwd.cmd = "pass Email/heracles"
+
+[accounts.jc-fraud.folder.alias]
+inbox = "INBOX"
+sent = "Sent"
+drafts = "Drafts"
+trash = "Trash"
+
+################################ JC HR ##############################################
+
+[accounts.jc-hr]
+email = "hr@jaza.cash"
+
+[accounts.jc-hr.backend]
+type = "imap"
+host = "heracles.mxrouting.net"
+port = 993
+login = "hr@jaza.cash"
+encryption = "tls"
+passwd.type = "command"
+passwd.cmd = "pass Email/heracles"
+
+[accounts.jc-hr.message.send]
+type = "smtp"
+host = "heracles.mxrouting.net"
+port = 587
+login = "hr@jaza.cash"
+encryption = "start-tls"
+passwd.type = "command"
+passwd.cmd = "pass Email/heracles"
+
+[accounts.jc-hr.folder.alias]
+inbox = "INBOX"
+sent = "Sent"
+drafts = "Drafts"
+trash = "Trash"
+
+################################ JC SALES ##############################################
+
+[accounts.jc-sales]
+email = "sales@jaza.cash"
+
+[accounts.jc-sales.backend]
+type = "imap"
+host = "heracles.mxrouting.net"
+port = 993
+login = "sales@jaza.cash"
+encryption = "tls"
+passwd.type = "command"
+passwd.cmd = "pass Email/heracles"
+
+[accounts.jc-sales.message.send]
+type = "smtp"
+host = "heracles.mxrouting.net"
+port = 587
+login = "sales@jaza.cash"
+encryption = "start-tls"
+passwd.type = "command"
+passwd.cmd = "pass Email/heracles"
+
+[accounts.jc-sales.folder.alias]
+inbox = "INBOX"
+sent = "Sent"
+drafts = "Drafts"
+trash = "Trash"
+
+################################ JC SYSTEM ##############################################
+
+[accounts.jc-system]
+email = "system@jaza.cash"
+
+[accounts.jc-system.backend]
+type = "imap"
+host = "heracles.mxrouting.net"
+port = 993
+login = "system@jaza.cash"
+encryption = "tls"
+passwd.type = "command"
+passwd.cmd = "pass Email/heracles"
+
+[accounts.jc-system.message.send]
+type = "smtp"
+host = "heracles.mxrouting.net"
+port = 587
+login = "system@jaza.cash"
+encryption = "start-tls"
+passwd.type = "command"
+passwd.cmd = "pass Email/heracles"
+
+[accounts.jc-system.folder.alias]
+inbox = "INBOX"
+sent = "Sent"
+drafts = "Drafts"
+trash = "Trash"

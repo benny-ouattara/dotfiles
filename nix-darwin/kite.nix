@@ -116,6 +116,7 @@ in
   };
 
   environment.systemPackages = [
+    pkgs.himalaya
     pkgs.sops
     pkgs.opencode
     pkgs.codex
@@ -230,6 +231,7 @@ in
     pkgs.custom-scripts
     pkgs.fontconfig
     pkgs.inetutils
+    pkgs.nodejs
   ];
 
   fonts.packages = with pkgs; [
