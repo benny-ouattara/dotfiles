@@ -283,67 +283,61 @@
     enable = true;
     enableDefaultConfig = false;
 
-    matchBlocks = {
+    # Upstream ssh_config directive names; `matchBlocks` and its camelCase
+    # options are deprecated in favour of this freeform `settings` attrset.
+    settings = {
       "*" = {
-        # Fix: Move these here from the top level
-        controlMaster = "auto";
-        controlPath = "~/.ssh/master-%r@%h:%p";
-        controlPersist = "yes";
-        
-        # Your existing global settings
-        hashKnownHosts = true;
-        forwardAgent = true;
-        serverAliveInterval = 60;
-        
-        extraOptions = {
-          "UseKeychain" = "no";
-          "AddKeysToAgent" = "no";
-        };
+        ControlMaster = "auto";
+        ControlPath = "~/.ssh/master-%r@%h:%p";
+        ControlPersist = "yes";
+
+        HashKnownHosts = true;
+        ForwardAgent = true;
+        ServerAliveInterval = 60;
+
+        UseKeychain = "no";
+        AddKeysToAgent = "no";
       };
 
       "github.com" = {
-        controlMaster = "no";
+        ControlMaster = "no";
       };
 
       "otter" = {
-        user = "ben";
-        compression = true;
-        extraOptions = { 
-          "ServerAliveInterval" = "15";
-          "ServerAliveCountMax" = "3";
-        };
+        User = "ben";
+        Compression = true;
+        ServerAliveInterval = 15;
+        ServerAliveCountMax = 3;
       };
 
       "dev" = {
-        user = "root";
-        compression = true;
-        controlMaster = "no";
+        User = "root";
+        Compression = true;
+        ControlMaster = "no";
       };
 
       "ops" = {
-        user = "root";
-        compression = true;
-        controlMaster = "no";
+        User = "root";
+        Compression = true;
+        ControlMaster = "no";
       };
 
       "prod" = {
-        user = "root";
-        compression = true;
-        controlMaster = "no";
+        User = "root";
+        Compression = true;
+        ControlMaster = "no";
       };
 
       "oc-tunnel" = {
-        hostname = "otter";
-        user = "ben";
-        localForwards = [{
+        HostName = "otter";
+        User = "ben";
+        LocalForward = [{
           bind.port = 18789;
           host.address = "127.0.0.1";
           host.port = 18789;
         }];
-        extraOptions = {
-          "RequestTTY" = "no";
-          "RemoteCommand" = "/run/current-system/profile/bin/sleep infinity";
-        };
+        RequestTTY = "no";
+        RemoteCommand = "/run/current-system/profile/bin/sleep infinity";
       };
     };
   };
