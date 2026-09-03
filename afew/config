@@ -1,7 +1,3 @@
-[FolderNameFilter]
-folder_explicit_list = gmail protonmail jfund jcash-support jcash-ops jcash-compliance jcash-info jcash-fraud jcash-hr jcash-sales jcash-system jgroup-ben jgroup-system
-folder_lowercases = true
-
 [SpamFilter]
 [KillThreadsFilter]
 [ListMailsFilter]
