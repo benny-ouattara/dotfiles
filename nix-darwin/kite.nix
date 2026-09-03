@@ -186,7 +186,6 @@ in
     pkgs.poppler
     pkgs.termshark
     pkgs.nmap
-    pkgs.hugo
     pkgs.guile
     pkgs.micro
     pkgs.ammonite
