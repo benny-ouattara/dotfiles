@@ -1,5 +1,4 @@
-display-name = "Ben Ouattara"
-default-account = "gmail"
+display-name = "Ben A."
 
 ################################ PERSONAL GMAIL ##############################################
 
@@ -12,18 +11,18 @@ type = "imap"
 host = "imap.gmail.com"
 port = 993
 login = "benny.ouattara@gmail.com"
-encryption = "tls"
-passwd.type = "command"
-passwd.cmd = "pass Email/gmail"
+encryption.type = "tls"
+auth.type = "password"
+auth.cmd = "pass Email/gmail"
 
 [accounts.gmail.message.send]
 type = "smtp"
 host = "smtp.gmail.com"
 port = 587
 login = "benny.ouattara@gmail.com"
-encryption = "start-tls"
-passwd.type = "command"
-passwd.cmd = "pass Email/gmail"
+encryption.type = "start-tls"
+auth.type = "password"
+auth.cmd = "pass Email/gmail"
 
 [accounts.gmail.folder.alias]
 inbox = "INBOX"
@@ -40,18 +39,18 @@ type = "imap"
 host = "127.0.0.1"
 port = 1143
 login = "ben.abubakar@proton.me"
-encryption = "none"
-passwd.type = "command"
-passwd.cmd = "pass Email/proton"
+encryption.type = "none"
+auth.type = "password"
+auth.cmd = "pass Email/proton"
 
 [accounts.protonmail.message.send]
 type = "smtp"
 host = "127.0.0.1"
 port = 1025
 login = "ben.abubakar@proton.me"
-encryption = "start-tls"
-passwd.type = "command"
-passwd.cmd = "pass Email/proton"
+encryption.type = "start-tls"
+auth.type = "password"
+auth.cmd = "pass Email/proton"
 
 [accounts.protonmail.folder.alias]
 inbox = "INBOX"
@@ -70,18 +69,18 @@ type = "imap"
 host = "127.0.0.1"
 port = 1143
 login = "jazafund@proton.me"
-encryption = "none"
-passwd.type = "command"
-passwd.cmd = "pass Email/jfund"
+encryption.type = "none"
+auth.type = "password"
+auth.cmd = "pass Email/jfund"
 
 [accounts.jfund.message.send]
 type = "smtp"
 host = "127.0.0.1"
 port = 1025
 login = "jazafund@proton.me"
-encryption = "start-tls"
-passwd.type = "command"
-passwd.cmd = "pass Email/jfund"
+encryption.type = "start-tls"
+auth.type = "password"
+auth.cmd = "pass Email/jfund"
 
 [accounts.jfund.folder.alias]
 inbox = "INBOX"
@@ -100,18 +99,18 @@ type = "imap"
 host = "heracles.mxrouting.net"
 port = 993
 login = "support@jaza.cash"
-encryption = "tls"
-passwd.type = "command"
-passwd.cmd = "pass Email/heracles"
+encryption.type = "tls"
+auth.type = "password"
+auth.cmd = "pass Email/heracles"
 
 [accounts.jc-support.message.send]
 type = "smtp"
 host = "heracles.mxrouting.net"
 port = 587
 login = "support@jaza.cash"
-encryption = "start-tls"
-passwd.type = "command"
-passwd.cmd = "pass Email/heracles"
+encryption.type = "start-tls"
+auth.type = "password"
+auth.cmd = "pass Email/heracles"
 
 [accounts.jc-support.folder.alias]
 inbox = "INBOX"
@@ -129,18 +128,18 @@ type = "imap"
 host = "heracles.mxrouting.net"
 port = 993
 login = "ops@jaza.cash"
-encryption = "tls"
-passwd.type = "command"
-passwd.cmd = "pass Email/heracles"
+encryption.type = "tls"
+auth.type = "password"
+auth.cmd = "pass Email/heracles"
 
 [accounts.jc-ops.message.send]
 type = "smtp"
 host = "heracles.mxrouting.net"
 port = 587
 login = "ops@jaza.cash"
-encryption = "start-tls"
-passwd.type = "command"
-passwd.cmd = "pass Email/heracles"
+encryption.type = "start-tls"
+auth.type = "password"
+auth.cmd = "pass Email/heracles"
 
 [accounts.jc-ops.folder.alias]
 inbox = "INBOX"
@@ -158,18 +157,18 @@ type = "imap"
 host = "heracles.mxrouting.net"
 port = 993
 login = "compliance@jaza.cash"
-encryption = "tls"
-passwd.type = "command"
-passwd.cmd = "pass Email/heracles"
+encryption.type = "tls"
+auth.type = "password"
+auth.cmd = "pass Email/heracles"
 
 [accounts.jc-compliance.message.send]
 type = "smtp"
 host = "heracles.mxrouting.net"
 port = 587
 login = "compliance@jaza.cash"
-encryption = "start-tls"
-passwd.type = "command"
-passwd.cmd = "pass Email/heracles"
+encryption.type = "start-tls"
+auth.type = "password"
+auth.cmd = "pass Email/heracles"
 
 [accounts.jc-compliance.folder.alias]
 inbox = "INBOX"
@@ -187,18 +186,18 @@ type = "imap"
 host = "heracles.mxrouting.net"
 port = 993
 login = "info@jaza.cash"
-encryption = "tls"
-passwd.type = "command"
-passwd.cmd = "pass Email/heracles"
+encryption.type = "tls"
+auth.type = "password"
+auth.cmd = "pass Email/heracles"
 
 [accounts.jc-info.message.send]
 type = "smtp"
 host = "heracles.mxrouting.net"
 port = 587
 login = "info@jaza.cash"
-encryption = "start-tls"
-passwd.type = "command"
-passwd.cmd = "pass Email/heracles"
+encryption.type = "start-tls"
+auth.type = "password"
+auth.cmd = "pass Email/heracles"
 
 [accounts.jc-info.folder.alias]
 inbox = "INBOX"
@@ -216,18 +215,18 @@ type = "imap"
 host = "heracles.mxrouting.net"
 port = 993
 login = "fraud@jaza.cash"
-encryption = "tls"
-passwd.type = "command"
-passwd.cmd = "pass Email/heracles"
+encryption.type = "tls"
+auth.type = "password"
+auth.cmd = "pass Email/heracles"
 
 [accounts.jc-fraud.message.send]
 type = "smtp"
 host = "heracles.mxrouting.net"
 port = 587
 login = "fraud@jaza.cash"
-encryption = "start-tls"
-passwd.type = "command"
-passwd.cmd = "pass Email/heracles"
+encryption.type = "start-tls"
+auth.type = "password"
+auth.cmd = "pass Email/heracles"
 
 [accounts.jc-fraud.folder.alias]
 inbox = "INBOX"
@@ -245,18 +244,18 @@ type = "imap"
 host = "heracles.mxrouting.net"
 port = 993
 login = "hr@jaza.cash"
-encryption = "tls"
-passwd.type = "command"
-passwd.cmd = "pass Email/heracles"
+encryption.type = "tls"
+auth.type = "password"
+auth.cmd = "pass Email/heracles"
 
 [accounts.jc-hr.message.send]
 type = "smtp"
 host = "heracles.mxrouting.net"
 port = 587
 login = "hr@jaza.cash"
-encryption = "start-tls"
-passwd.type = "command"
-passwd.cmd = "pass Email/heracles"
+encryption.type = "start-tls"
+auth.type = "password"
+auth.cmd = "pass Email/heracles"
 
 [accounts.jc-hr.folder.alias]
 inbox = "INBOX"
@@ -274,18 +273,18 @@ type = "imap"
 host = "heracles.mxrouting.net"
 port = 993
 login = "sales@jaza.cash"
-encryption = "tls"
-passwd.type = "command"
-passwd.cmd = "pass Email/heracles"
+encryption.type = "tls"
+auth.type = "password"
+auth.cmd = "pass Email/heracles"
 
 [accounts.jc-sales.message.send]
 type = "smtp"
 host = "heracles.mxrouting.net"
 port = 587
 login = "sales@jaza.cash"
-encryption = "start-tls"
-passwd.type = "command"
-passwd.cmd = "pass Email/heracles"
+encryption.type = "start-tls"
+auth.type = "password"
+auth.cmd = "pass Email/heracles"
 
 [accounts.jc-sales.folder.alias]
 inbox = "INBOX"
@@ -303,18 +302,18 @@ type = "imap"
 host = "heracles.mxrouting.net"
 port = 993
 login = "system@jaza.cash"
-encryption = "tls"
-passwd.type = "command"
-passwd.cmd = "pass Email/heracles"
+encryption.type = "tls"
+auth.type = "password"
+auth.cmd = "pass Email/heracles"
 
 [accounts.jc-system.message.send]
 type = "smtp"
 host = "heracles.mxrouting.net"
 port = 587
 login = "system@jaza.cash"
-encryption = "start-tls"
-passwd.type = "command"
-passwd.cmd = "pass Email/heracles"
+encryption.type = "start-tls"
+auth.type = "password"
+auth.cmd = "pass Email/heracles"
 
 [accounts.jc-system.folder.alias]
 inbox = "INBOX"
