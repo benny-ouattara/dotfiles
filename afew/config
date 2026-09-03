@@ -24,7 +24,12 @@ message = JazaFund mail
 
 [Filter.4]
 query = to:support@jaza.cash OR to:ops@jaza.cash OR to:compliance@jaza.cash OR to:info@jaza.cash OR to:fraud@jaza.cash OR to:hr@jaza.cash OR to:sales@jaza.cash OR to:system@jaza.cash
-tags = +jc
+tags = +jcash
 message = Jaza Cash mail
+
+[Filter.5]
+query = to:ben@jazagroup.com OR to:system@jazagroup.com
+tags = +jgroup
+message = JazaGroup mail
 
 [InboxFilter]
