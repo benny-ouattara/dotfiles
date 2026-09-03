@@ -5,12 +5,76 @@ let
   # Define a simple backup script as a Nix string
   sync-mail-job = pkgs.writeShellScript "sync-mail" ''
     export PATH="${pkgs.pass}/bin:${pkgs.gnupg}/bin:$PATH"
-    for group in jcash-support jcash-ops jcash-compliance jcash-info jcash-fraud jcash-hr jcash-sales jcash-system  jgroup-ben jgroup-system jfund gmail protonmail; do
-      ${pkgs.isync}/bin/mbsync "$group" || true
+
+    coreutils=${pkgs.coreutils}/bin
+    lock_dir="$HOME/.cache/mail-sync.lock"
+    # Kept outside ~/.mail so that notmuch does not index the dumps as mail.
+    backup_dir="$HOME/.local/state/notmuch/tag-backups"
+
+    # mcron fires every 5 minutes; skip if the previous run is still going,
+    # otherwise two mbsync processes race on the same maildirs and state files.
+    "$coreutils/mkdir" -p "$HOME/.cache"
+    if ! "$coreutils/mkdir" "$lock_dir" 2>/dev/null; then
+      if [ -r "$lock_dir/pid" ] && ! kill -0 "$("$coreutils/cat" "$lock_dir/pid")" 2>/dev/null; then
+        "$coreutils/rm" -rf "$lock_dir"
+        "$coreutils/mkdir" "$lock_dir" || exit 0
+      else
+        echo "mail-sync: previous run still active, skipping" >&2
+        exit 0
+      fi
+    fi
+    echo $$ > "$lock_dir/pid"
+    trap '"$coreutils/rm" -rf "$lock_dir"' EXIT
+
+    failed=""
+    synced=0
+    for group in jcash-support jcash-ops jcash-compliance jcash-info jcash-fraud jcash-hr jcash-sales jcash-system jgroup-ben jgroup-system jfund gmail protonmail; do
+      err=$("$coreutils/mktemp")
+      if ${pkgs.isync}/bin/mbsync "$group" 2>"$err"; then
+        synced=$((synced + 1))
+      else
+        failed="$failed $group"
+      fi
+      # The Proton Bridge channels talk cleartext to 127.0.0.1 by design; that
+      # warning alone accounted for ~32k lines of the error log.
+      ${pkgs.gnugrep}/bin/grep -v 'Password is being sent in the clear' "$err" >&2 || true
+      "$coreutils/rm" -f "$err"
       sleep 1
     done
+
+    if [ -n "$failed" ]; then
+      echo "mail-sync: FAILED groups:$failed" >&2
+    fi
+
+    if [ "$synced" -eq 0 ]; then
+      echo "mail-sync: every group failed, skipping notmuch/afew" >&2
+      exit 1
+    fi
+
     ${pkgs.notmuch}/bin/notmuch new
     ${pkgs.afew}/bin/afew -n -t
+
+    # Tags live only in the Xapian DB and are not re-downloadable; keep 14 days.
+    today=$("$coreutils/date" +%F)
+    "$coreutils/mkdir" -p "$backup_dir"
+    if [ ! -f "$backup_dir/tags-$today.dump" ]; then
+      ${pkgs.notmuch}/bin/notmuch dump --output="$backup_dir/tags-$today.dump"
+      "$coreutils/ls" -1t "$backup_dir"/tags-*.dump | "$coreutils/tail" -n +15 | while read -r stale; do
+        "$coreutils/rm" -f "$stale"
+      done
+    fi
+
+    # launchd holds these open in append mode, so truncate in place rather than
+    # renaming: a rotated-away inode would keep receiving all future output.
+    for logf in "${log-dir}/mcron.err.log" "${log-dir}/mcron.out.log"; do
+      if [ -f "$logf" ] && [ "$("$coreutils/stat" -c%s "$logf")" -gt 10485760 ]; then
+        "$coreutils/tail" -c 2097152 "$logf" > "$logf.tmp" \
+          && "$coreutils/cat" "$logf.tmp" > "$logf"
+        "$coreutils/rm" -f "$logf.tmp"
+      fi
+    done
+
+    [ -z "$failed" ]
   '';
   watchdog-script = pkgs.writeShellScript "wm-watchdog" (builtins.readFile ./scripts/wm-watchdog.sh);
   nix-gc = pkgs.writeShellScript "nix-gc" (builtins.readFile ./scripts/nix-gc.sh);
