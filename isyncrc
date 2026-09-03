@@ -439,17 +439,15 @@ Create Both
 Expunge Both
 SyncState *
 
-Channel gmail-all
-Far :gmail-remote:"[Gmail]/All Mail"
-Near :gmail-local:"all"
-Create Both
-Expunge Both
-SyncState *
+# The [Gmail]/All Mail channel was removed: with the local mirror capped at
+# 1000 messages per folder it held no message that INBOX or sent did not
+# already have, so it only cost ~1000 duplicate files on disk. If the local
+# gmail history is ever un-truncated, re-add it -- All Mail is what would
+# carry archived mail that never hit the INBOX.
 
 Group gmail
 Channel gmail-inbox
 Channel gmail-sent
-Channel gmail-all
 
 ################################# PROTONMAIL ##############################################
 IMAPAccount protonmail
