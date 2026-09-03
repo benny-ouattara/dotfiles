@@ -1,5 +1,6 @@
 # Paths and Binaries
 FLAKE_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
+GIT_HOOKS := $(shell git -C $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST)))) rev-parse --absolute-git-dir)/hooks
 LOG_FILE  := $(HOME)/.logs/nix_telemetry.csv
 LOGS := $(HOME)/.logs/mcron.out.log $(HOME)/.logs/mcron.err.log /tmp/yabai.err.log /tmp/skhd.err.log
 
@@ -148,9 +149,9 @@ why: ## Explain why a path is in the store (Usage: make why PKG=...)
 
 install-hooks: ## Install git pre-commit hooks
 	@echo "Installing git hooks..."
-	@ln -sf $(HERE)/scripts/validate.sh .git/hooks/pre-commit
-	@chmod +x .git/hooks/pre-commit
-	@echo "✅ Hooks installed."
+	@chmod +x $(FLAKE_DIR)/scripts/validate.sh
+	@ln -sf $(FLAKE_DIR)/scripts/validate.sh $(GIT_HOOKS)/pre-commit
+	@echo "✅ Hooks installed to $(GIT_HOOKS)/pre-commit"
 
 dry-run: ## Show what would change in the next switch
 	@echo "$(CYAN)>>> Building new derivation (without activating)...$(RESET)"
