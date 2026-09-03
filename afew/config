@@ -28,4 +28,9 @@ query = to:ben@jazagroup.com OR to:system@jazagroup.com
 tags = +jgroup
 message = JazaGroup mail
 
+[Filter.6]
+query = folder:/spam/
+tags = +spam; -inbox
+message = Spam folders (InboxFilter blacklists the spam tag, so these stay out of the inbox)
+
 [InboxFilter]

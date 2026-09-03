@@ -44,11 +44,19 @@ Create Both
 Expunge Both
 SyncState *
 
+Channel jcash-support-spam
+Far :jcash-support-remote:"Junk"
+Near :jcash-support-local:"spam"
+Create Both
+Expunge Both
+SyncState *
+
 Group jcash-support
 Channel jcash-support-inbox
 Channel jcash-support-sent
 Channel jcash-support-drafts
 Channel jcash-support-trash
+Channel jcash-support-spam
 
 IMAPAccount jcash-ops
 Host heracles.mxrouting.net
@@ -95,11 +103,19 @@ Create Both
 Expunge Both
 SyncState *
 
+Channel jcash-ops-spam
+Far :jcash-ops-remote:"Junk"
+Near :jcash-ops-local:"spam"
+Create Both
+Expunge Both
+SyncState *
+
 Group jcash-ops
 Channel jcash-ops-inbox
 Channel jcash-ops-sent
 Channel jcash-ops-drafts
 Channel jcash-ops-trash
+Channel jcash-ops-spam
 
 IMAPAccount jcash-compliance
 Host heracles.mxrouting.net
@@ -146,11 +162,19 @@ Create Both
 Expunge Both
 SyncState *
 
+Channel jcash-compliance-spam
+Far :jcash-compliance-remote:"Junk"
+Near :jcash-compliance-local:"spam"
+Create Both
+Expunge Both
+SyncState *
+
 Group jcash-compliance
 Channel jcash-compliance-inbox
 Channel jcash-compliance-sent
 Channel jcash-compliance-drafts
 Channel jcash-compliance-trash
+Channel jcash-compliance-spam
 
 IMAPAccount jcash-info
 Host heracles.mxrouting.net
@@ -197,11 +221,19 @@ Create Both
 Expunge Both
 SyncState *
 
+Channel jcash-info-spam
+Far :jcash-info-remote:"Junk"
+Near :jcash-info-local:"spam"
+Create Both
+Expunge Both
+SyncState *
+
 Group jcash-info
 Channel jcash-info-inbox
 Channel jcash-info-sent
 Channel jcash-info-drafts
 Channel jcash-info-trash
+Channel jcash-info-spam
 
 IMAPAccount jcash-fraud
 Host heracles.mxrouting.net
@@ -248,11 +280,19 @@ Create Both
 Expunge Both
 SyncState *
 
+Channel jcash-fraud-spam
+Far :jcash-fraud-remote:"Junk"
+Near :jcash-fraud-local:"spam"
+Create Both
+Expunge Both
+SyncState *
+
 Group jcash-fraud
 Channel jcash-fraud-inbox
 Channel jcash-fraud-sent
 Channel jcash-fraud-drafts
 Channel jcash-fraud-trash
+Channel jcash-fraud-spam
 
 IMAPAccount jcash-hr
 Host heracles.mxrouting.net
@@ -299,11 +339,19 @@ Create Both
 Expunge Both
 SyncState *
 
+Channel jcash-hr-spam
+Far :jcash-hr-remote:"Junk"
+Near :jcash-hr-local:"spam"
+Create Both
+Expunge Both
+SyncState *
+
 Group jcash-hr
 Channel jcash-hr-inbox
 Channel jcash-hr-sent
 Channel jcash-hr-drafts
 Channel jcash-hr-trash
+Channel jcash-hr-spam
 
 IMAPAccount jcash-sales
 Host heracles.mxrouting.net
@@ -350,11 +398,19 @@ Create Both
 Expunge Both
 SyncState *
 
+Channel jcash-sales-spam
+Far :jcash-sales-remote:"Junk"
+Near :jcash-sales-local:"spam"
+Create Both
+Expunge Both
+SyncState *
+
 Group jcash-sales
 Channel jcash-sales-inbox
 Channel jcash-sales-sent
 Channel jcash-sales-drafts
 Channel jcash-sales-trash
+Channel jcash-sales-spam
 
 IMAPAccount jcash-system
 Host heracles.mxrouting.net
@@ -401,11 +457,19 @@ Create Both
 Expunge Both
 SyncState *
 
+Channel jcash-system-spam
+Far :jcash-system-remote:"Junk"
+Near :jcash-system-local:"spam"
+Create Both
+Expunge Both
+SyncState *
+
 Group jcash-system
 Channel jcash-system-inbox
 Channel jcash-system-sent
 Channel jcash-system-drafts
 Channel jcash-system-trash
+Channel jcash-system-spam
 
 ################################ PERSONAL GMAIL ##############################################
 IMAPAccount gmail
@@ -495,9 +559,17 @@ Create Both
 Expunge Both
 SyncState *
 
+Channel pm-drafts
+Far :pm-remote:"Drafts"
+Near :pm-local:"drafts"
+Create Both
+Expunge Both
+SyncState *
+
 Group protonmail
 Channel pm-inbox
 Channel pm-sent
+Channel pm-drafts
 Channel pm-trash
 Channel pm-spam
 
@@ -547,9 +619,17 @@ Create Both
 Expunge Both
 SyncState *
 
+Channel jfund-drafts
+Far :jfund-remote:"Drafts"
+Near :jfund-local:"drafts"
+Create Both
+Expunge Both
+SyncState *
+
 Group jfund
 Channel jfund-inbox
 Channel jfund-sent
+Channel jfund-drafts
 Channel jfund-trash
 Channel jfund-spam
 
@@ -599,11 +679,19 @@ Create Both
 Expunge Both
 SyncState *
 
+Channel jgroup-ben-spam
+Far :jgroup-ben-remote:"Junk"
+Near :jgroup-ben-local:"spam"
+Create Both
+Expunge Both
+SyncState *
+
 Group jgroup-ben
 Channel jgroup-ben-inbox
 Channel jgroup-ben-sent
 Channel jgroup-ben-drafts
 Channel jgroup-ben-trash
+Channel jgroup-ben-spam
 
 IMAPAccount jgroup-system
 Host heracles.mxrouting.net
@@ -650,11 +738,19 @@ Create Both
 Expunge Both
 SyncState *
 
+Channel jgroup-system-spam
+Far :jgroup-system-remote:"Junk"
+Near :jgroup-system-local:"spam"
+Create Both
+Expunge Both
+SyncState *
+
 Group jgroup-system
 Channel jgroup-system-inbox
 Channel jgroup-system-sent
 Channel jgroup-system-drafts
 Channel jgroup-system-trash
+Channel jgroup-system-spam
 
 ################################# SPOTIFY (ARCHIVE, NOT SYNCED) ##############################
 # ~/.mail/spotify is a retained archive from a former employer (2019-12 to
