@@ -1,411 +1,411 @@
-################################ JC ##############################################
-IMAPAccount jc-support
+################################ JCash ##############################################
+IMAPAccount jcash-support
 Host heracles.mxrouting.net
 User support@jaza.cash
-PassCmd "pass Email/heracles"
+PassCmd "pass Email/jcash"
 AuthMechs LOGIN
 TLSType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
 
-IMAPStore jc-support-remote
-Account jc-support
+IMAPStore jcash-support-remote
+Account jcash-support
 
-MaildirStore jc-support-local
-Path ~/.mail/jc-support/
-Inbox ~/.mail/jc-support/INBOX
+MaildirStore jcash-support-local
+Path ~/.mail/jcash-support/
+Inbox ~/.mail/jcash-support/INBOX
 SubFolders Verbatim
 
-Channel jc-support-inbox
-Far :jc-support-remote:
-Near :jc-support-local:
+Channel jcash-support-inbox
+Far :jcash-support-remote:
+Near :jcash-support-local:
 Patterns "INBOX"
 Create Both
 Expunge Both
 SyncState *
 
-Channel jc-support-sent
-Far :jc-support-remote:"Sent"
-Near :jc-support-local:"sent"
+Channel jcash-support-sent
+Far :jcash-support-remote:"Sent"
+Near :jcash-support-local:"sent"
 Create Both
 Expunge Both
 SyncState *
 
-Channel jc-support-drafts
-Far :jc-support-remote:"Drafts"
-Near :jc-support-local:"drafts"
+Channel jcash-support-drafts
+Far :jcash-support-remote:"Drafts"
+Near :jcash-support-local:"drafts"
 Create Both
 Expunge Both
 SyncState *
 
-Channel jc-support-trash
-Far :jc-support-remote:"Trash"
-Near :jc-support-local:"trash"
+Channel jcash-support-trash
+Far :jcash-support-remote:"Trash"
+Near :jcash-support-local:"trash"
 Create Both
 Expunge Both
 SyncState *
 
-Group jc-support
-Channel jc-support-inbox
-Channel jc-support-sent
-Channel jc-support-drafts
-Channel jc-support-trash
+Group jcash-support
+Channel jcash-support-inbox
+Channel jcash-support-sent
+Channel jcash-support-drafts
+Channel jcash-support-trash
 
-IMAPAccount jc-ops
+IMAPAccount jcash-ops
 Host heracles.mxrouting.net
 User ops@jaza.cash
-PassCmd "pass Email/heracles"
+PassCmd "pass Email/jcash"
 AuthMechs LOGIN
 TLSType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
 
-IMAPStore jc-ops-remote
-Account jc-ops
+IMAPStore jcash-ops-remote
+Account jcash-ops
 
-MaildirStore jc-ops-local
-Path ~/.mail/jc-ops/
-Inbox ~/.mail/jc-ops/INBOX
+MaildirStore jcash-ops-local
+Path ~/.mail/jcash-ops/
+Inbox ~/.mail/jcash-ops/INBOX
 SubFolders Verbatim
 
-Channel jc-ops-inbox
-Far :jc-ops-remote:
-Near :jc-ops-local:
+Channel jcash-ops-inbox
+Far :jcash-ops-remote:
+Near :jcash-ops-local:
 Patterns "INBOX"
 Create Both
 Expunge Both
 SyncState *
 
-Channel jc-ops-sent
-Far :jc-ops-remote:"Sent"
-Near :jc-ops-local:"sent"
+Channel jcash-ops-sent
+Far :jcash-ops-remote:"Sent"
+Near :jcash-ops-local:"sent"
 Create Both
 Expunge Both
 SyncState *
 
-Channel jc-ops-drafts
-Far :jc-ops-remote:"Drafts"
-Near :jc-ops-local:"drafts"
+Channel jcash-ops-drafts
+Far :jcash-ops-remote:"Drafts"
+Near :jcash-ops-local:"drafts"
 Create Both
 Expunge Both
 SyncState *
 
-Channel jc-ops-trash
-Far :jc-ops-remote:"Trash"
-Near :jc-ops-local:"trash"
+Channel jcash-ops-trash
+Far :jcash-ops-remote:"Trash"
+Near :jcash-ops-local:"trash"
 Create Both
 Expunge Both
 SyncState *
 
-Group jc-ops
-Channel jc-ops-inbox
-Channel jc-ops-sent
-Channel jc-ops-drafts
-Channel jc-ops-trash
+Group jcash-ops
+Channel jcash-ops-inbox
+Channel jcash-ops-sent
+Channel jcash-ops-drafts
+Channel jcash-ops-trash
 
-IMAPAccount jc-compliance
+IMAPAccount jcash-compliance
 Host heracles.mxrouting.net
 User compliance@jaza.cash
-PassCmd "pass Email/heracles"
+PassCmd "pass Email/jcash"
 AuthMechs LOGIN
 TLSType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
 
-IMAPStore jc-compliance-remote
-Account jc-compliance
+IMAPStore jcash-compliance-remote
+Account jcash-compliance
 
-MaildirStore jc-compliance-local
-Path ~/.mail/jc-compliance/
-Inbox ~/.mail/jc-compliance/INBOX
+MaildirStore jcash-compliance-local
+Path ~/.mail/jcash-compliance/
+Inbox ~/.mail/jcash-compliance/INBOX
 SubFolders Verbatim
 
-Channel jc-compliance-inbox
-Far :jc-compliance-remote:
-Near :jc-compliance-local:
+Channel jcash-compliance-inbox
+Far :jcash-compliance-remote:
+Near :jcash-compliance-local:
 Patterns "INBOX"
 Create Both
 Expunge Both
 SyncState *
 
-Channel jc-compliance-sent
-Far :jc-compliance-remote:"Sent"
-Near :jc-compliance-local:"sent"
+Channel jcash-compliance-sent
+Far :jcash-compliance-remote:"Sent"
+Near :jcash-compliance-local:"sent"
 Create Both
 Expunge Both
 SyncState *
 
-Channel jc-compliance-drafts
-Far :jc-compliance-remote:"Drafts"
-Near :jc-compliance-local:"drafts"
+Channel jcash-compliance-drafts
+Far :jcash-compliance-remote:"Drafts"
+Near :jcash-compliance-local:"drafts"
 Create Both
 Expunge Both
 SyncState *
 
-Channel jc-compliance-trash
-Far :jc-compliance-remote:"Trash"
-Near :jc-compliance-local:"trash"
+Channel jcash-compliance-trash
+Far :jcash-compliance-remote:"Trash"
+Near :jcash-compliance-local:"trash"
 Create Both
 Expunge Both
 SyncState *
 
-Group jc-compliance
-Channel jc-compliance-inbox
-Channel jc-compliance-sent
-Channel jc-compliance-drafts
-Channel jc-compliance-trash
+Group jcash-compliance
+Channel jcash-compliance-inbox
+Channel jcash-compliance-sent
+Channel jcash-compliance-drafts
+Channel jcash-compliance-trash
 
-IMAPAccount jc-info
+IMAPAccount jcash-info
 Host heracles.mxrouting.net
 User info@jaza.cash
-PassCmd "pass Email/heracles"
+PassCmd "pass Email/jcash"
 AuthMechs LOGIN
 TLSType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
 
-IMAPStore jc-info-remote
-Account jc-info
+IMAPStore jcash-info-remote
+Account jcash-info
 
-MaildirStore jc-info-local
-Path ~/.mail/jc-info/
-Inbox ~/.mail/jc-info/INBOX
+MaildirStore jcash-info-local
+Path ~/.mail/jcash-info/
+Inbox ~/.mail/jcash-info/INBOX
 SubFolders Verbatim
 
-Channel jc-info-inbox
-Far :jc-info-remote:
-Near :jc-info-local:
+Channel jcash-info-inbox
+Far :jcash-info-remote:
+Near :jcash-info-local:
 Patterns "INBOX"
 Create Both
 Expunge Both
 SyncState *
 
-Channel jc-info-sent
-Far :jc-info-remote:"Sent"
-Near :jc-info-local:"sent"
+Channel jcash-info-sent
+Far :jcash-info-remote:"Sent"
+Near :jcash-info-local:"sent"
 Create Both
 Expunge Both
 SyncState *
 
-Channel jc-info-drafts
-Far :jc-info-remote:"Drafts"
-Near :jc-info-local:"drafts"
+Channel jcash-info-drafts
+Far :jcash-info-remote:"Drafts"
+Near :jcash-info-local:"drafts"
 Create Both
 Expunge Both
 SyncState *
 
-Channel jc-info-trash
-Far :jc-info-remote:"Trash"
-Near :jc-info-local:"trash"
+Channel jcash-info-trash
+Far :jcash-info-remote:"Trash"
+Near :jcash-info-local:"trash"
 Create Both
 Expunge Both
 SyncState *
 
-Group jc-info
-Channel jc-info-inbox
-Channel jc-info-sent
-Channel jc-info-drafts
-Channel jc-info-trash
+Group jcash-info
+Channel jcash-info-inbox
+Channel jcash-info-sent
+Channel jcash-info-drafts
+Channel jcash-info-trash
 
-IMAPAccount jc-fraud
+IMAPAccount jcash-fraud
 Host heracles.mxrouting.net
 User fraud@jaza.cash
-PassCmd "pass Email/heracles"
+PassCmd "pass Email/jcash"
 AuthMechs LOGIN
 TLSType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
 
-IMAPStore jc-fraud-remote
-Account jc-fraud
+IMAPStore jcash-fraud-remote
+Account jcash-fraud
 
-MaildirStore jc-fraud-local
-Path ~/.mail/jc-fraud/
-Inbox ~/.mail/jc-fraud/INBOX
+MaildirStore jcash-fraud-local
+Path ~/.mail/jcash-fraud/
+Inbox ~/.mail/jcash-fraud/INBOX
 SubFolders Verbatim
 
-Channel jc-fraud-inbox
-Far :jc-fraud-remote:
-Near :jc-fraud-local:
+Channel jcash-fraud-inbox
+Far :jcash-fraud-remote:
+Near :jcash-fraud-local:
 Patterns "INBOX"
 Create Both
 Expunge Both
 SyncState *
 
-Channel jc-fraud-sent
-Far :jc-fraud-remote:"Sent"
-Near :jc-fraud-local:"sent"
+Channel jcash-fraud-sent
+Far :jcash-fraud-remote:"Sent"
+Near :jcash-fraud-local:"sent"
 Create Both
 Expunge Both
 SyncState *
 
-Channel jc-fraud-drafts
-Far :jc-fraud-remote:"Drafts"
-Near :jc-fraud-local:"drafts"
+Channel jcash-fraud-drafts
+Far :jcash-fraud-remote:"Drafts"
+Near :jcash-fraud-local:"drafts"
 Create Both
 Expunge Both
 SyncState *
 
-Channel jc-fraud-trash
-Far :jc-fraud-remote:"Trash"
-Near :jc-fraud-local:"trash"
+Channel jcash-fraud-trash
+Far :jcash-fraud-remote:"Trash"
+Near :jcash-fraud-local:"trash"
 Create Both
 Expunge Both
 SyncState *
 
-Group jc-fraud
-Channel jc-fraud-inbox
-Channel jc-fraud-sent
-Channel jc-fraud-drafts
-Channel jc-fraud-trash
+Group jcash-fraud
+Channel jcash-fraud-inbox
+Channel jcash-fraud-sent
+Channel jcash-fraud-drafts
+Channel jcash-fraud-trash
 
-IMAPAccount jc-hr
+IMAPAccount jcash-hr
 Host heracles.mxrouting.net
 User hr@jaza.cash
-PassCmd "pass Email/heracles"
+PassCmd "pass Email/jcash"
 AuthMechs LOGIN
 TLSType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
 
-IMAPStore jc-hr-remote
-Account jc-hr
+IMAPStore jcash-hr-remote
+Account jcash-hr
 
-MaildirStore jc-hr-local
-Path ~/.mail/jc-hr/
-Inbox ~/.mail/jc-hr/INBOX
+MaildirStore jcash-hr-local
+Path ~/.mail/jcash-hr/
+Inbox ~/.mail/jcash-hr/INBOX
 SubFolders Verbatim
 
-Channel jc-hr-inbox
-Far :jc-hr-remote:
-Near :jc-hr-local:
+Channel jcash-hr-inbox
+Far :jcash-hr-remote:
+Near :jcash-hr-local:
 Patterns "INBOX"
 Create Both
 Expunge Both
 SyncState *
 
-Channel jc-hr-sent
-Far :jc-hr-remote:"Sent"
-Near :jc-hr-local:"sent"
+Channel jcash-hr-sent
+Far :jcash-hr-remote:"Sent"
+Near :jcash-hr-local:"sent"
 Create Both
 Expunge Both
 SyncState *
 
-Channel jc-hr-drafts
-Far :jc-hr-remote:"Drafts"
-Near :jc-hr-local:"drafts"
+Channel jcash-hr-drafts
+Far :jcash-hr-remote:"Drafts"
+Near :jcash-hr-local:"drafts"
 Create Both
 Expunge Both
 SyncState *
 
-Channel jc-hr-trash
-Far :jc-hr-remote:"Trash"
-Near :jc-hr-local:"trash"
+Channel jcash-hr-trash
+Far :jcash-hr-remote:"Trash"
+Near :jcash-hr-local:"trash"
 Create Both
 Expunge Both
 SyncState *
 
-Group jc-hr
-Channel jc-hr-inbox
-Channel jc-hr-sent
-Channel jc-hr-drafts
-Channel jc-hr-trash
+Group jcash-hr
+Channel jcash-hr-inbox
+Channel jcash-hr-sent
+Channel jcash-hr-drafts
+Channel jcash-hr-trash
 
-IMAPAccount jc-sales
+IMAPAccount jcash-sales
 Host heracles.mxrouting.net
 User sales@jaza.cash
-PassCmd "pass Email/heracles"
+PassCmd "pass Email/jcash"
 AuthMechs LOGIN
 TLSType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
 
-IMAPStore jc-sales-remote
-Account jc-sales
+IMAPStore jcash-sales-remote
+Account jcash-sales
 
-MaildirStore jc-sales-local
-Path ~/.mail/jc-sales/
-Inbox ~/.mail/jc-sales/INBOX
+MaildirStore jcash-sales-local
+Path ~/.mail/jcash-sales/
+Inbox ~/.mail/jcash-sales/INBOX
 SubFolders Verbatim
 
-Channel jc-sales-inbox
-Far :jc-sales-remote:
-Near :jc-sales-local:
+Channel jcash-sales-inbox
+Far :jcash-sales-remote:
+Near :jcash-sales-local:
 Patterns "INBOX"
 Create Both
 Expunge Both
 SyncState *
 
-Channel jc-sales-sent
-Far :jc-sales-remote:"Sent"
-Near :jc-sales-local:"sent"
+Channel jcash-sales-sent
+Far :jcash-sales-remote:"Sent"
+Near :jcash-sales-local:"sent"
 Create Both
 Expunge Both
 SyncState *
 
-Channel jc-sales-drafts
-Far :jc-sales-remote:"Drafts"
-Near :jc-sales-local:"drafts"
+Channel jcash-sales-drafts
+Far :jcash-sales-remote:"Drafts"
+Near :jcash-sales-local:"drafts"
 Create Both
 Expunge Both
 SyncState *
 
-Channel jc-sales-trash
-Far :jc-sales-remote:"Trash"
-Near :jc-sales-local:"trash"
+Channel jcash-sales-trash
+Far :jcash-sales-remote:"Trash"
+Near :jcash-sales-local:"trash"
 Create Both
 Expunge Both
 SyncState *
 
-Group jc-sales
-Channel jc-sales-inbox
-Channel jc-sales-sent
-Channel jc-sales-drafts
-Channel jc-sales-trash
+Group jcash-sales
+Channel jcash-sales-inbox
+Channel jcash-sales-sent
+Channel jcash-sales-drafts
+Channel jcash-sales-trash
 
-IMAPAccount jc-system
+IMAPAccount jcash-system
 Host heracles.mxrouting.net
 User system@jaza.cash
-PassCmd "pass Email/heracles"
+PassCmd "pass Email/jcash"
 AuthMechs LOGIN
 TLSType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
 
-IMAPStore jc-system-remote
-Account jc-system
+IMAPStore jcash-system-remote
+Account jcash-system
 
-MaildirStore jc-system-local
-Path ~/.mail/jc-system/
-Inbox ~/.mail/jc-system/INBOX
+MaildirStore jcash-system-local
+Path ~/.mail/jcash-system/
+Inbox ~/.mail/jcash-system/INBOX
 SubFolders Verbatim
 
-Channel jc-system-inbox
-Far :jc-system-remote:
-Near :jc-system-local:
+Channel jcash-system-inbox
+Far :jcash-system-remote:
+Near :jcash-system-local:
 Patterns "INBOX"
 Create Both
 Expunge Both
 SyncState *
 
-Channel jc-system-sent
-Far :jc-system-remote:"Sent"
-Near :jc-system-local:"sent"
+Channel jcash-system-sent
+Far :jcash-system-remote:"Sent"
+Near :jcash-system-local:"sent"
 Create Both
 Expunge Both
 SyncState *
 
-Channel jc-system-drafts
-Far :jc-system-remote:"Drafts"
-Near :jc-system-local:"drafts"
+Channel jcash-system-drafts
+Far :jcash-system-remote:"Drafts"
+Near :jcash-system-local:"drafts"
 Create Both
 Expunge Both
 SyncState *
 
-Channel jc-system-trash
-Far :jc-system-remote:"Trash"
-Near :jc-system-local:"trash"
+Channel jcash-system-trash
+Far :jcash-system-remote:"Trash"
+Near :jcash-system-local:"trash"
 Create Both
 Expunge Both
 SyncState *
 
-Group jc-system
-Channel jc-system-inbox
-Channel jc-system-sent
-Channel jc-system-drafts
-Channel jc-system-trash
+Group jcash-system
+Channel jcash-system-inbox
+Channel jcash-system-sent
+Channel jcash-system-drafts
+Channel jcash-system-trash
 
 ################################ PERSONAL GMAIL ##############################################
 IMAPAccount gmail
@@ -554,3 +554,106 @@ Channel jfund-inbox
 Channel jfund-sent
 Channel jfund-trash
 Channel jfund-spam
+
+################################# JGROUP ##############################################
+IMAPAccount jgroup-ben
+Host heracles.mxrouting.net
+User ben@jazagroup.com
+PassCmd "pass Email/jgroup"
+AuthMechs LOGIN
+TLSType IMAPS
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+IMAPStore jgroup-ben-remote
+Account jgroup-ben
+
+MaildirStore jgroup-ben-local
+Path ~/.mail/jgroup-ben/
+Inbox ~/.mail/jgroup-ben/INBOX
+SubFolders Verbatim
+
+Channel jgroup-ben-inbox
+Far :jgroup-ben-remote:
+Near :jgroup-ben-local:
+Patterns "INBOX"
+Create Both
+Expunge Both
+SyncState *
+
+Channel jgroup-ben-sent
+Far :jgroup-ben-remote:"Sent"
+Near :jgroup-ben-local:"sent"
+Create Both
+Expunge Both
+SyncState *
+
+Channel jgroup-ben-drafts
+Far :jgroup-ben-remote:"Drafts"
+Near :jgroup-ben-local:"drafts"
+Create Both
+Expunge Both
+SyncState *
+
+Channel jgroup-ben-trash
+Far :jgroup-ben-remote:"Trash"
+Near :jgroup-ben-local:"trash"
+Create Both
+Expunge Both
+SyncState *
+
+Group jgroup-ben
+Channel jgroup-ben-inbox
+Channel jgroup-ben-sent
+Channel jgroup-ben-drafts
+Channel jgroup-ben-trash
+
+IMAPAccount jgroup-system
+Host heracles.mxrouting.net
+User system@jazagroup.com
+PassCmd "pass Email/jgroup"
+AuthMechs LOGIN
+TLSType IMAPS
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+IMAPStore jgroup-system-remote
+Account jgroup-system
+
+MaildirStore jgroup-system-local
+Path ~/.mail/jgroup-system/
+Inbox ~/.mail/jgroup-system/INBOX
+SubFolders Verbatim
+
+Channel jgroup-system-inbox
+Far :jgroup-system-remote:
+Near :jgroup-system-local:
+Patterns "INBOX"
+Create Both
+Expunge Both
+SyncState *
+
+Channel jgroup-system-sent
+Far :jgroup-system-remote:"Sent"
+Near :jgroup-system-local:"sent"
+Create Both
+Expunge Both
+SyncState *
+
+Channel jgroup-system-drafts
+Far :jgroup-system-remote:"Drafts"
+Near :jgroup-system-local:"drafts"
+Create Both
+Expunge Both
+SyncState *
+
+Channel jgroup-system-trash
+Far :jgroup-system-remote:"Trash"
+Near :jgroup-system-local:"trash"
+Create Both
+Expunge Both
+SyncState *
+
+Group jgroup-system
+Channel jgroup-system-inbox
+Channel jgroup-system-sent
+Channel jgroup-system-drafts
+Channel jgroup-system-trash

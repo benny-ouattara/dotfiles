@@ -91,28 +91,28 @@ spam = "Spam"
 
 ################################ JC SUPPORT ##############################################
 
-[accounts.jc-support]
+[accounts.jcash-support]
 email = "support@jaza.cash"
 
-[accounts.jc-support.backend]
+[accounts.jcash-support.backend]
 type = "imap"
 host = "heracles.mxrouting.net"
 port = 993
 login = "support@jaza.cash"
 encryption.type = "tls"
 auth.type = "password"
-auth.cmd = "pass Email/heracles"
+auth.cmd = "pass Email/jcash"
 
-[accounts.jc-support.message.send]
+[accounts.jcash-support.message.send]
 type = "smtp"
 host = "heracles.mxrouting.net"
 port = 587
 login = "support@jaza.cash"
 encryption.type = "start-tls"
 auth.type = "password"
-auth.cmd = "pass Email/heracles"
+auth.cmd = "pass Email/jcash"
 
-[accounts.jc-support.folder.alias]
+[accounts.jcash-support.folder.alias]
 inbox = "INBOX"
 sent = "Sent"
 drafts = "Drafts"
@@ -120,28 +120,28 @@ trash = "Trash"
 
 ################################ JC OPS ##############################################
 
-[accounts.jc-ops]
+[accounts.jcash-ops]
 email = "ops@jaza.cash"
 
-[accounts.jc-ops.backend]
+[accounts.jcash-ops.backend]
 type = "imap"
 host = "heracles.mxrouting.net"
 port = 993
 login = "ops@jaza.cash"
 encryption.type = "tls"
 auth.type = "password"
-auth.cmd = "pass Email/heracles"
+auth.cmd = "pass Email/jcash"
 
-[accounts.jc-ops.message.send]
+[accounts.jcash-ops.message.send]
 type = "smtp"
 host = "heracles.mxrouting.net"
 port = 587
 login = "ops@jaza.cash"
 encryption.type = "start-tls"
 auth.type = "password"
-auth.cmd = "pass Email/heracles"
+auth.cmd = "pass Email/jcash"
 
-[accounts.jc-ops.folder.alias]
+[accounts.jcash-ops.folder.alias]
 inbox = "INBOX"
 sent = "Sent"
 drafts = "Drafts"
@@ -149,28 +149,28 @@ trash = "Trash"
 
 ################################ JC COMPLIANCE ##############################################
 
-[accounts.jc-compliance]
+[accounts.jcash-compliance]
 email = "compliance@jaza.cash"
 
-[accounts.jc-compliance.backend]
+[accounts.jcash-compliance.backend]
 type = "imap"
 host = "heracles.mxrouting.net"
 port = 993
 login = "compliance@jaza.cash"
 encryption.type = "tls"
 auth.type = "password"
-auth.cmd = "pass Email/heracles"
+auth.cmd = "pass Email/jcash"
 
-[accounts.jc-compliance.message.send]
+[accounts.jcash-compliance.message.send]
 type = "smtp"
 host = "heracles.mxrouting.net"
 port = 587
 login = "compliance@jaza.cash"
 encryption.type = "start-tls"
 auth.type = "password"
-auth.cmd = "pass Email/heracles"
+auth.cmd = "pass Email/jcash"
 
-[accounts.jc-compliance.folder.alias]
+[accounts.jcash-compliance.folder.alias]
 inbox = "INBOX"
 sent = "Sent"
 drafts = "Drafts"
@@ -178,28 +178,28 @@ trash = "Trash"
 
 ################################ JC INFO ##############################################
 
-[accounts.jc-info]
+[accounts.jcash-info]
 email = "info@jaza.cash"
 
-[accounts.jc-info.backend]
+[accounts.jcash-info.backend]
 type = "imap"
 host = "heracles.mxrouting.net"
 port = 993
 login = "info@jaza.cash"
 encryption.type = "tls"
 auth.type = "password"
-auth.cmd = "pass Email/heracles"
+auth.cmd = "pass Email/jcash"
 
-[accounts.jc-info.message.send]
+[accounts.jcash-info.message.send]
 type = "smtp"
 host = "heracles.mxrouting.net"
 port = 587
 login = "info@jaza.cash"
 encryption.type = "start-tls"
 auth.type = "password"
-auth.cmd = "pass Email/heracles"
+auth.cmd = "pass Email/jcash"
 
-[accounts.jc-info.folder.alias]
+[accounts.jcash-info.folder.alias]
 inbox = "INBOX"
 sent = "Sent"
 drafts = "Drafts"
@@ -207,28 +207,28 @@ trash = "Trash"
 
 ################################ JC FRAUD ##############################################
 
-[accounts.jc-fraud]
+[accounts.jcash-fraud]
 email = "fraud@jaza.cash"
 
-[accounts.jc-fraud.backend]
+[accounts.jcash-fraud.backend]
 type = "imap"
 host = "heracles.mxrouting.net"
 port = 993
 login = "fraud@jaza.cash"
 encryption.type = "tls"
 auth.type = "password"
-auth.cmd = "pass Email/heracles"
+auth.cmd = "pass Email/jcash"
 
-[accounts.jc-fraud.message.send]
+[accounts.jcash-fraud.message.send]
 type = "smtp"
 host = "heracles.mxrouting.net"
 port = 587
 login = "fraud@jaza.cash"
 encryption.type = "start-tls"
 auth.type = "password"
-auth.cmd = "pass Email/heracles"
+auth.cmd = "pass Email/jcash"
 
-[accounts.jc-fraud.folder.alias]
+[accounts.jcash-fraud.folder.alias]
 inbox = "INBOX"
 sent = "Sent"
 drafts = "Drafts"
@@ -236,28 +236,28 @@ trash = "Trash"
 
 ################################ JC HR ##############################################
 
-[accounts.jc-hr]
+[accounts.jcash-hr]
 email = "hr@jaza.cash"
 
-[accounts.jc-hr.backend]
+[accounts.jcash-hr.backend]
 type = "imap"
 host = "heracles.mxrouting.net"
 port = 993
 login = "hr@jaza.cash"
 encryption.type = "tls"
 auth.type = "password"
-auth.cmd = "pass Email/heracles"
+auth.cmd = "pass Email/jcash"
 
-[accounts.jc-hr.message.send]
+[accounts.jcash-hr.message.send]
 type = "smtp"
 host = "heracles.mxrouting.net"
 port = 587
 login = "hr@jaza.cash"
 encryption.type = "start-tls"
 auth.type = "password"
-auth.cmd = "pass Email/heracles"
+auth.cmd = "pass Email/jcash"
 
-[accounts.jc-hr.folder.alias]
+[accounts.jcash-hr.folder.alias]
 inbox = "INBOX"
 sent = "Sent"
 drafts = "Drafts"
@@ -265,28 +265,28 @@ trash = "Trash"
 
 ################################ JC SALES ##############################################
 
-[accounts.jc-sales]
+[accounts.jcash-sales]
 email = "sales@jaza.cash"
 
-[accounts.jc-sales.backend]
+[accounts.jcash-sales.backend]
 type = "imap"
 host = "heracles.mxrouting.net"
 port = 993
 login = "sales@jaza.cash"
 encryption.type = "tls"
 auth.type = "password"
-auth.cmd = "pass Email/heracles"
+auth.cmd = "pass Email/jcash"
 
-[accounts.jc-sales.message.send]
+[accounts.jcash-sales.message.send]
 type = "smtp"
 host = "heracles.mxrouting.net"
 port = 587
 login = "sales@jaza.cash"
 encryption.type = "start-tls"
 auth.type = "password"
-auth.cmd = "pass Email/heracles"
+auth.cmd = "pass Email/jcash"
 
-[accounts.jc-sales.folder.alias]
+[accounts.jcash-sales.folder.alias]
 inbox = "INBOX"
 sent = "Sent"
 drafts = "Drafts"
@@ -294,28 +294,86 @@ trash = "Trash"
 
 ################################ JC SYSTEM ##############################################
 
-[accounts.jc-system]
+[accounts.jcash-system]
 email = "system@jaza.cash"
 
-[accounts.jc-system.backend]
+[accounts.jcash-system.backend]
 type = "imap"
 host = "heracles.mxrouting.net"
 port = 993
 login = "system@jaza.cash"
 encryption.type = "tls"
 auth.type = "password"
-auth.cmd = "pass Email/heracles"
+auth.cmd = "pass Email/jcash"
 
-[accounts.jc-system.message.send]
+[accounts.jcash-system.message.send]
 type = "smtp"
 host = "heracles.mxrouting.net"
 port = 587
 login = "system@jaza.cash"
 encryption.type = "start-tls"
 auth.type = "password"
-auth.cmd = "pass Email/heracles"
+auth.cmd = "pass Email/jcash"
 
-[accounts.jc-system.folder.alias]
+[accounts.jcash-system.folder.alias]
+inbox = "INBOX"
+sent = "Sent"
+drafts = "Drafts"
+trash = "Trash"
+
+################################ JGROUP BEN ##############################################
+
+[accounts.jgroup-ben]
+email = "ben@jazagroup.com"
+
+[accounts.jgroup-ben.backend]
+type = "imap"
+host = "heracles.mxrouting.net"
+port = 993
+login = "ben@jazagroup.com"
+encryption.type = "tls"
+auth.type = "password"
+auth.cmd = "pass Email/jgroup"
+
+[accounts.jgroup-ben.message.send]
+type = "smtp"
+host = "heracles.mxrouting.net"
+port = 587
+login = "ben@jazagroup.com"
+encryption.type = "start-tls"
+auth.type = "password"
+auth.cmd = "pass Email/jgroup"
+
+[accounts.jgroup-ben.folder.alias]
+inbox = "INBOX"
+sent = "Sent"
+drafts = "Drafts"
+trash = "Trash"
+
+################################ JGROUP SYSTEM ##############################################
+
+[accounts.jgroup-system]
+email = "system@jazagroup.com"
+
+[accounts.jgroup-system.backend]
+type = "imap"
+host = "heracles.mxrouting.net"
+port = 993
+login = "system@jazagroup.com"
+encryption.type = "tls"
+auth.type = "password"
+auth.cmd = "pass Email/jgroup"
+
+[accounts.jgroup-system.message.send]
+type = "smtp"
+host = "heracles.mxrouting.net"
+port = 587
+login = "system@jazagroup.com"
+encryption.type = "start-tls"
+auth.type = "password"
+auth.cmd = "pass Email/jgroup"
+
+[accounts.jgroup-system.folder.alias]
 inbox = "INBOX"
 sent = "Sent"
 drafts = "Drafts"

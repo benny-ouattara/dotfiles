@@ -5,7 +5,7 @@ let
   # Define a simple backup script as a Nix string
   sync-mail-job = pkgs.writeShellScript "sync-mail" ''
     export PATH="${pkgs.pass}/bin:${pkgs.gnupg}/bin:$PATH"
-    for group in jc-support jc-ops jc-compliance jc-info jc-fraud jc-hr jc-sales jc-system gmail protonmail jfund; do
+    for group in jcash-support jcash-ops jcash-compliance jcash-info jcash-fraud jcash-hr jcash-sales jcash-system  jgroup-ben jgroup-system jfund gmail protonmail; do
       ${pkgs.isync}/bin/mbsync "$group" || true
       sleep 1
     done

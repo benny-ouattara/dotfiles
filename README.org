@@ -200,7 +200,7 @@ Three-column file manager with image preview via Kitty.
 - MXroute/Jaza (=support@=, =ops@=, =compliance@=, =info@=, =fraud@=, =hr@=, =sales@=, =system@jaza.cash=)
 
 ** Stack
-- *isync/mbsync* — IMAP sync (11 accounts)
+- *isync/mbsync* — IMAP sync (13 accounts)
 - *notmuch* — indexing and search
 - *afew* — auto-tagging
 - *msmtp* — SMTP sending
