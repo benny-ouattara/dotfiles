@@ -345,6 +345,7 @@
           (:name "all jcash"         :query "tag:jcash"                       :key "J")
           (:name "all jfund"         :query "tag:jfund"                       :key "F")
           (:name "all jgroup"        :query "tag:jgroup"                      :key "R")
+          (:name "spotify archive"   :query "tag:spotify"                     :key "s")
           (:name "sent"              :query "tag:sent"                        :key "e")
           (:name "flagged"           :query "tag:flagged"                     :key "x" :count-query "tag:flagged")
           (:name "drafts"            :query "tag:draft"                       :key "d")))
@@ -396,6 +397,7 @@
     "J" (cmd! (notmuch-search "tag:jcash"))
     "F" (cmd! (notmuch-search "tag:jfund"))
     "R" (cmd! (notmuch-search "tag:jgroup"))
+    "s" (cmd! (notmuch-search "tag:spotify"))
     "e" (cmd! (notmuch-search "tag:sent"))
     "x" (cmd! (notmuch-search "tag:flagged")))
 

@@ -657,3 +657,9 @@ Channel jgroup-system-inbox
 Channel jgroup-system-sent
 Channel jgroup-system-drafts
 Channel jgroup-system-trash
+
+################################# SPOTIFY (ARCHIVE, NOT SYNCED) ##############################
+# ~/.mail/spotify is a retained archive from a former employer (2019-12 to
+# 2025-02, ~1100 messages). The account is gone, so there is deliberately no
+# IMAPAccount/Channel/Group for it here and no future sync. It stays indexed by
+# notmuch under tag:spotify -- do not delete the maildir as an orphan.
