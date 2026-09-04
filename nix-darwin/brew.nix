@@ -43,6 +43,9 @@
     ];
 
     casks = [
+      # Menu bar system monitor. Covers GPU, which btop cannot on this Intel
+      # Mac -- btop's macOS GPU support is Apple Silicon only.
+      "stats"
       "snapzy"
       "visualvm"
       "discord"
