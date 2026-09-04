@@ -503,11 +503,16 @@ Create Both
 Expunge Both
 SyncState *
 
-# The [Gmail]/All Mail channel was removed: with the local mirror capped at
-# 1000 messages per folder it held no message that INBOX or sent did not
-# already have, so it only cost ~1000 duplicate files on disk. If the local
-# gmail history is ever un-truncated, re-add it -- All Mail is what would
-# carry archived mail that never hit the INBOX.
+# Gmail exposes exactly 1000 messages per IMAP folder here -- INBOX and Sent
+# Mail both report 1000 far-side, while every other account reports its true
+# size. That is Gmail's "Folder size limits" IMAP setting, not a local cap;
+# mbsync mirrors everything the server offers (near side == far side).
+#
+# The [Gmail]/All Mail channel was removed because of it: All Mail's 1000 were
+# all present in INBOX or sent already, so it added no unique message and cost
+# ~1000 duplicate files. If that Gmail setting is ever raised, re-add the
+# channel -- All Mail is what would then carry archived mail that never hit
+# the INBOX.
 
 Group gmail
 Channel gmail-inbox
