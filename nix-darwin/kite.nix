@@ -3,9 +3,17 @@ let
   home-dir = config.users.users.benouattara.home;
   log-dir = home-dir + "/.logs";
   sync-mail-job = pkgs.writeShellScript "sync-mail" ''
-    export PATH="${pkgs.lib.makeBinPath [
-      pkgs.pass pkgs.gnupg pkgs.isync pkgs.notmuch pkgs.afew pkgs.coreutils pkgs.gnugrep
-    ]}:$PATH"
+    export PATH="${
+      pkgs.lib.makeBinPath [
+        pkgs.pass
+        pkgs.gnupg
+        pkgs.isync
+        pkgs.notmuch
+        pkgs.afew
+        pkgs.coreutils
+        pkgs.gnugrep
+      ]
+    }:$PATH"
     export MAIL_LOG_DIR="${log-dir}"
     ${builtins.readFile ./scripts/sync-mail.sh}
   '';
@@ -113,6 +121,7 @@ in
   };
 
   environment.systemPackages = [
+    pkgs.pi-coding-agent
     pkgs.himalaya
     pkgs.sops
     pkgs.opencode
