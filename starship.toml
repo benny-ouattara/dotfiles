@@ -1,22 +1,26 @@
+# Colors are names from the palette at the bottom. theme-switch (guix/scripts)
+# writes a copy with the current theme's palette to
+# ~/.config/theme/current/starship.toml, which .zshrc points STARSHIP_CONFIG at.
+palette = "theme"
 scan_timeout = 500
 add_newline = false
 
 [character]
-success_symbol = "[>](bold #A6E3A1)"
-error_symbol = "[x](bold #F38BA8)"
-vicmd_symbol = "[V](bold #89B4FA)"
+success_symbol = "[>](bold green)"
+error_symbol = "[x](bold red)"
+vicmd_symbol = "[V](bold blue)"
 
 [directory]
-style = "bold #89B4FA"
+style = "bold blue"
 read_only = " ro"
 truncation_length = 3
 
 [git_branch]
-style = "bold #CBA6F7"
+style = "bold purple"
 
 [git_status]
 disabled = false
-style = "#F9E2AF"
+style = "yellow"
 
 [git_commit]
 commit_hash_length = 7
@@ -26,8 +30,8 @@ only_detached = false
 [git_metrics]
 disabled = false
 format = '([+$added]($added_style)) ([-$deleted]($deleted_style)) '
-added_style = "#A6E3A1"
-deleted_style = "#F38BA8"
+added_style = "green"
+deleted_style = "red"
 
 [battery]
 disabled = true
@@ -43,4 +47,13 @@ disabled = true
 
 [nix_shell]
 symbol = " "
-style = "#94E2D5"
+style = "cyan"
+
+# Catppuccin Mocha defaults. Keep this table last: theme-switch replaces it.
+[palettes.theme]
+green = "#A6E3A1"
+red = "#F38BA8"
+blue = "#89B4FA"
+purple = "#CBA6F7"
+yellow = "#F9E2AF"
+cyan = "#94E2D5"

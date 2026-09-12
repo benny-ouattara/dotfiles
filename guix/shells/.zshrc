@@ -181,6 +181,12 @@ _up() {
 }
 compctl -K _up up
 
+# Prompt colors follow the desktop theme (guix/scripts/theme-switch)
+if [[ -f ~/.config/theme/current/starship.toml ]]; then
+    export STARSHIP_CONFIG=~/.config/theme/current/starship.toml
+else
+    export STARSHIP_CONFIG=~/Code/dotfiles/starship.toml
+fi
 eval "$(starship init zsh)"
 eval "$(zoxide init zsh)"
 
