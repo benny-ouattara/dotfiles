@@ -16,7 +16,7 @@ DEPLOY_CONF  := $(HERE)/deploy.scm
 
 # Standard Guix flags
 GUIX_OPTS    := --cores=20 --max-jobs=10
-TIME_MACHINE := guix time-machine -C $(CHANNELS) --
+TIME_MACHINE := guix time-machine --unsafe-channel-evaluation -C $(CHANNELS) --
 
 # Default action when running just 'make'
 .DEFAULT_GOAL := help
@@ -35,7 +35,7 @@ help: ## Display this help screen
 # -- Core Operations --
 
 pull: ## Update channels and pull the latest Guix
-	cd $(HERE) && $(TIME_MACHINE) pull -C $(CHANNELS)
+	cd $(HERE) && $(TIME_MACHINE) pull --unsafe-channel-evaluation -C $(CHANNELS)
 
 system-build: ## Build the system derivation without installing
 	cd $(HERE) && $(TIME_MACHINE) system build -L $(SYSTEM_MOD) $(SYSTEM)
@@ -186,7 +186,7 @@ bootstrap: ## Provision a new machine (Usage: make bootstrap REMOTE_HOST=192.168
 	rsync -avz --exclude '.git' $(HERE) $(USER)@$(REMOTE_HOST):~/Code/dotfiles/
 	# 2. Run the remote pull and reconfigure
 	ssh $(USER)@$(REMOTE_HOST) "cd ~/Code/dotfiles/guix && \
-		guix pull -C channels.scm && \
+		guix pull --unsafe-channel-evaluation -C channels.scm && \
 		sudo guix system reconfigure otter-system.scm"
 	@echo "✅ System provisioned. Now run 'make restore' on the new machine."
 
