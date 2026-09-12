@@ -41,7 +41,8 @@
   (when (> (length addr) (length "unix:path="))
     (sb-posix:setenv "DBUS_SESSION_BUS_ADDRESS" addr 1)))
 
-;; Theme colors, rewritten by guix/scripts/theme-switch
+;; Default theme colors; guix/scripts/theme-switch writes the current theme's
+;; values to ~/.config/theme/current/stumpwm.lisp, loaded below
 (defparameter *theme-fg* "#CDD6F4")
 (defparameter *theme-bg* "#1E1E2E")
 (defparameter *theme-bg-alt* "#313244")
@@ -61,6 +62,11 @@
                        *theme-blue* *theme-purple* *theme-cyan* *theme-fg*))
   (update-color-map (current-screen)))
 
+;; Regenerate the theme files (outside git) so polybar, rofi, kitty and dunst
+;; find them, then take StumpWM's colors from the current theme
+(run-shell-command "/home/ben/Code/dotfiles/guix/scripts/theme-switch --refresh" t)
+(load (merge-pathnames ".config/theme/current/stumpwm.lisp" (user-homedir-pathname))
+      :if-does-not-exist nil)
 (apply-theme-colors)
 
 ;; define commands
@@ -500,7 +506,8 @@ restart-hard reloads this file, which would otherwise stack duplicates."
 (spawn-once "-f '[c]lipmenud'" "clipmenud")
 (run-shell-command "xsetroot -cursor_name left_ptr")
 (run-shell-command "mkdir -p ~/Screenshots")
-(spawn-once "-x dunst" "dunst -config /home/ben/Code/dotfiles/dunst/dunstrc")
+;; theme-switch generates this from dunst/dunstrc with the theme's colors
+(spawn-once "-x dunst" "dunst -config /home/ben/.config/theme/current/dunstrc")
 (spawn-once "-f '[n]m-applet'" "nm-applet")
 
 ;; gaps

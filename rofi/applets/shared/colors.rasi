@@ -16,3 +16,6 @@
 /* Import color-scheme from `colors` directory */
 
 @import "~/.config/rofi/colors/catppuccin.rasi"
+
+/* Current desktop theme from theme-switch (guix/scripts); ignored if missing */
+@import "~/.config/theme/current/rofi.rasi"

@@ -77,6 +77,11 @@
             doom-big-font (font-spec :family "Iosevka" :size 29)
             doom-theme 'modus-operandi)))
 
+;; The desktop theme picked with theme-switch (guix/scripts), where it has run
+(let ((theme-file (expand-file-name "~/.config/theme/current/emacs.el")))
+  (when (file-exists-p theme-file)
+    (load theme-file nil t)))
+
 (setq
  mac-command-modifier 'meta
  ns-command-modifier 'meta
