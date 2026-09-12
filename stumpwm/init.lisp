@@ -23,8 +23,23 @@
  *transient-border-width* 2
  stumpwm::*float-window-border* 4
  stumpwm::*float-window-title-height* 20
- *debug-level* 10)
+ ;; Level 10 traces every X event (the log reached hundreds of MB)
+ *debug-level* 1)
 (redirect-all-output (data-dir-file "debug" "log"))
+
+;; Lisp systems from the Guix home profile (swm-gaps, clx-truetype, ...)
+(asdf:initialize-source-registry
+ '(:source-registry
+   (:include "/home/ben/.guix-home/profile/etc/common-lisp/source-registry.conf.d/")
+   :inherit-configuration))
+
+;; Set DBUS_SESSION_BUS_ADDRESS for nix apps (jeepney can't handle autolaunch:)
+;; Done before any process is started so they all inherit it.
+(let ((addr (string-trim '(#\Newline #\Space)
+                         (run-shell-command
+                          "ss -xlp 2>/dev/null | grep dbus-daemon | grep -oP '/tmp/dbus-\\S+' | head -1 | xargs -I{} echo 'unix:path={}'" t))))
+  (when (> (length addr) (length "unix:path="))
+    (sb-posix:setenv "DBUS_SESSION_BUS_ADDRESS" addr 1)))
 
 ;; Message bar - Catppuccin Mocha
 (set-fg-color "#CDD6F4")
@@ -52,26 +67,31 @@
   (vsplit)
   (move-focus :down))
 
+(defun emacs-window-p (win)
+  "True when WIN is an Emacs window. WIN is nil in an empty frame."
+  (and win (string-equal (window-class win) "Emacs")))
+
 (defcommand unified-copy () ()
   "Copy: in Emacs send M-w, otherwise promote X PRIMARY selection to CLIPBOARD."
   (let ((win (current-window)))
-    (if (string-equal (window-class win) "Emacs")
+    (if (emacs-window-p win)
         (send-fake-key win (kbd "M-w"))
         (run-shell-command "xclip -selection primary -o | xclip -selection clipboard -i"))))
 
 (defcommand unified-cut () ()
   "Cut: send C-w to Emacs, copy PRIMARY to CLIPBOARD for everything else."
   (let ((win (current-window)))
-    (if (string-equal (window-class win) "Emacs")
+    (if (emacs-window-p win)
         (send-fake-key win (kbd "C-w"))
         (run-shell-command "xclip -selection primary -o | xclip -selection clipboard -i"))))
 
 (defcommand unified-paste () ()
-  "Paste: send C-y to Emacs, type CLIPBOARD contents for everything else."
+  "Paste: send C-y to Emacs, type CLIPBOARD contents for everything else.
+Command substitution drops trailing newlines but keeps the ones inside."
   (let ((win (current-window)))
-    (if (string-equal (window-class win) "Emacs")
+    (if (emacs-window-p win)
         (send-fake-key win (kbd "C-y"))
-        (run-shell-command "xdotool type --clearmodifiers -- \"$(xclip -selection clipboard -o | tr -d '\\n')\""))))
+        (run-shell-command "xdotool type --clearmodifiers -- \"$(xclip -selection clipboard -o)\""))))
 
 (defcommand clipboard-history () ()
   "Show clipboard history via clipmenu with rofi."
@@ -80,6 +100,14 @@
 (defcommand cycle-wallpaper () ()
   "Set a random wallpaper."
   (run-shell-command "feh --randomize --bg-fill ~/Sync/wallpapers/*"))
+
+(defcommand toggle-float () ()
+  "Toggle the current window between floating and tiled."
+  (let ((win (current-window)))
+    (when win
+      (if (typep win 'float-window)
+          (unfloat-this)
+          (float-this)))))
 
 (defcommand audio-switch () ()
   "Switch audio sink via rofi."
@@ -92,17 +120,27 @@
                 "[ -n \"$sink\" ] && pactl set-default-sink \"$sink\" && "
                 "notify-send -h string:x-dunst-stack-tag:audio 'Audio Output' \"$(pactl list sinks | grep -A1 \"$sink\" | grep Description | sed 's/.*: //')\"")))
 
+(defcommand volume-adjust (delta) ((:string "Volume change (e.g. +5%): "))
+  "Change the default sink volume by DELTA and show a notification."
+  (run-shell-command
+   (format nil "pactl set-sink-volume @DEFAULT_SINK@ ~a && notify-send -h string:x-dunst-stack-tag:volume \"Volume\" \"$(pactl get-sink-volume @DEFAULT_SINK@ | grep -oP '\\d+%' | head -1)\""
+           delta)))
+
 (defcommand vol-up () ()
   "Raise volume and show notification."
-  (run-shell-command "pactl set-sink-volume @DEFAULT_SINK@ +5% && notify-send -h string:x-dunst-stack-tag:volume \"Volume\" \"$(pactl get-sink-volume @DEFAULT_SINK@ | grep -oP '\\d+%' | head -1)\""))
+  (volume-adjust "+5%"))
 
 (defcommand vol-down () ()
   "Lower volume and show notification."
-  (run-shell-command "pactl set-sink-volume @DEFAULT_SINK@ -5% && notify-send -h string:x-dunst-stack-tag:volume \"Volume\" \"$(pactl get-sink-volume @DEFAULT_SINK@ | grep -oP '\\d+%' | head -1)\""))
+  (volume-adjust "-5%"))
 
 (defcommand vol-toggle () ()
   "Toggle mute and show notification."
   (run-shell-command "pactl set-sink-mute @DEFAULT_SINK@ toggle && notify-send -h string:x-dunst-stack-tag:volume \"Volume\" \"$(pactl get-sink-mute @DEFAULT_SINK@ | cut -d: -f2)\""))
+
+(defcommand mic-toggle () ()
+  "Toggle microphone mute and show notification."
+  (run-shell-command "pactl set-source-mute @DEFAULT_SOURCE@ toggle && notify-send -h string:x-dunst-stack-tag:mic \"Microphone\" \"$(pactl get-source-mute @DEFAULT_SOURCE@ | cut -d: -f2)\""))
 
 (defcommand bright-up () ()
   "Raise brightness and show notification."
@@ -112,51 +150,78 @@
   "Lower brightness and show notification."
   (run-shell-command "brightnessctl set 10%- && notify-send -h string:x-dunst-stack-tag:brightness \"Brightness\" \"$(brightnessctl -m | cut -d, -f4)\""))
 
+(defcommand notifications-toggle-silence () ()
+  "Pause or resume dunst notifications."
+  (run-shell-command "dunstctl set-paused toggle" t)
+  (message "Notifications ~a"
+           (if (search "true" (run-shell-command "dunstctl is-paused" t))
+               "silenced"
+               "on")))
+
 (defcommand screenshot-screen () ()
-  "Take a fullscreen screenshot."
-  (run-shell-command "maim ~/Screenshots/$(date +%Y%m%d-%H%M%S).png && notify-send 'Screenshot saved'"))
+  "Take a fullscreen screenshot, save it and copy it to the clipboard."
+  (run-shell-command "f=~/Screenshots/$(date +%Y%m%d-%H%M%S).png; maim \"$f\" && xclip -selection clipboard -t image/png -i \"$f\" && notify-send 'Screenshot saved' \"$f\""))
 
 (defcommand screenshot-region () ()
-  "Take a screenshot of a selected region."
-  (run-shell-command "maim -s ~/Screenshots/$(date +%Y%m%d-%H%M%S).png && notify-send 'Screenshot saved'"))
+  "Screenshot a selected region, save it and copy it to the clipboard."
+  (run-shell-command "f=~/Screenshots/$(date +%Y%m%d-%H%M%S).png; maim -s \"$f\" && xclip -selection clipboard -t image/png -i \"$f\" && notify-send 'Screenshot saved' \"$f\""))
 
 (defcommand show-keybindings () ()
   "Display keybindings via rofi."
   (run-shell-command
    (concatenate 'string
                 "echo -e '"
-                "s-RET        Terminal\\n"
-                "s-S-RET      Brave browser\\n"
-                "s-D          Discord\\n"
-                "s-SPC        App launcher\\n"
-                "s-e          Emacs\\n"
-                "s-o / s-O    Edit system / home config\\n"
-                "s-c          Copy\\n"
-                "s-x          Cut\\n"
-                "s-v          Paste\\n"
-                "s-C-v        Clipboard history\\n"
-                "s-a          Switch audio output\\n"
-                "s-b          Random wallpaper\\n"
-                "s-Tab        Cycle windows\\n"
-                "s-d          Window list\\n"
-                "C-s-l        Lock screen\\n"
-                "s-p / s-P    Screenshot / region\\n"
-                "s-j/k/h/l    Focus direction\\n"
-                "s-C-j/k/h/l  Move window\\n"
-                "M-j/k/h/l    Resize direction\\n"
-                "s-s / s-S    HSplit / VSplit\\n"
-                "s-f          Fullscreen\\n"
-                "s-q          Close window\\n"
-                "s-r          Remove frame\\n"
-                "C-Left/Right Prev/next workspace\\n"
-                "s-1..5       Switch workspace\\n"
-                "C-s-1..5     Move to workspace\\n"
-                "s-g / s-G    Guix system / home\\n"
-                "s-;          System menu\\n"
-                "s-:          Command prompt\\n"
-                "s-R          Restart StumpWM\\n"
-                "s-Q          Quit StumpWM\\n"
-                "s-K          This help"
+                "s-RET            Terminal\\n"
+                "s-S-RET / s-B    Brave browser\\n"
+                "s-D              Discord\\n"
+                "s-e              Emacs\\n"
+                "s-y / s-F        Yazi file manager\\n"
+                "s-SPC            App launcher\\n"
+                "s-o / s-O        Edit home / system config\\n"
+                "s-c / s-v        Copy / paste\\n"
+                "s-x              Cut (copy outside Emacs)\\n"
+                "s-C-v            Clipboard history\\n"
+                "s-w / s-q        Close window\\n"
+                "s-j/k/h/l        Focus left/right/down/up\\n"
+                "s-Arrows         Focus direction\\n"
+                "s-C-j/k/h/l      Move window left/right/down/up\\n"
+                "s-S-Arrows       Swap window\\n"
+                "s-- / s-=        Narrower / wider\\n"
+                "s-_ / s-+        Shorter / taller\\n"
+                "C-s-r            Interactive resize\\n"
+                "s-V              Float / tile window\\n"
+                "s-f              Fullscreen\\n"
+                "s-s / s-S        HSplit / VSplit\\n"
+                "s-r              Remove frame\\n"
+                "s-d              Window list\\n"
+                "M-Tab / M-S-Tab  Next / previous window\\n"
+                "s-1..5           Switch workspace\\n"
+                "s-S-1..5         Move window and follow\\n"
+                "C-s-1..5         Move window\\n"
+                "s-Tab / s-S-Tab  Next / previous workspace\\n"
+                "C-s-Tab          Last workspace\\n"
+                "s-Esc / s-;      System menu\\n"
+                "s-:              Command prompt\\n"
+                "s-g / s-G        Guix system / home\\n"
+                "C-s-l            Lock screen\\n"
+                "s-p / S-Print    Screenshot screen\\n"
+                "s-P / Print      Screenshot region\\n"
+                "s-a / s-Mute     Switch audio output\\n"
+                "M-Vol keys       Volume by 1%\\n"
+                "C-s-a            Audio mixer\\n"
+                "C-s-b            Bluetooth\\n"
+                "C-s-w            Network\\n"
+                "C-s-t            Activity (btop)\\n"
+                "s-, / s-S-,      Dismiss / dismiss all notifications\\n"
+                "C-s-,            Silence notifications\\n"
+                "M-s-,            Notification action\\n"
+                "M-s-S-,          Restore last notification\\n"
+                "s-b / C-s-SPC    Random wallpaper\\n"
+                "C-s-S-SPC        Switch theme\\n"
+                "s-S-BackSpace    Toggle gaps\\n"
+                "s-S-SPC          Toggle bar\\n"
+                "s-R / s-Q        Restart / quit StumpWM\\n"
+                "s-K              This help"
                 "' | rofi -dmenu -i -p 'Keys' -theme ~/.config/rofi/launchers/type-1/style-8.rasi")))
 
 (defcommand system-menu () ()
@@ -243,21 +308,20 @@
 
 
 ;; define keybindings
-(define-key *top-map* (kbd "M-k") "resize-direction Right")
-(define-key *top-map* (kbd "M-j") "resize-direction Left")
-(define-key *top-map* (kbd "M-l") "resize-direction Up")
-(define-key *top-map* (kbd "M-h") "resize-direction Down")
 
+;; Apps
 (define-key *top-map* (kbd "s-RET") "exec kitty --directory=/home/ben/Code/dotfiles/guix")
 (define-key *top-map* (kbd "s-o") "exec kitty --directory=/home/ben/Code/dotfiles/guix emacsclient -t home/config.scm")
 (define-key *top-map* (kbd "s-O") "exec kitty --directory=/home/ben/Code/dotfiles/guix emacsclient -t system/config.scm")
 (define-key *top-map* (kbd "s-g") "guix-system")
 (define-key *top-map* (kbd "s-G") "guix-home")
-(define-key *top-map* (kbd "s-w") "exec brave")
 (define-key *top-map* (kbd "s-S-RET") "exec brave")
+(define-key *top-map* (kbd "s-B") "exec brave")
 (define-key *top-map* (kbd "s-D") "exec discord")
 (define-key *top-map* (kbd "s-y") "exec kitty yazi")
+(define-key *top-map* (kbd "s-F") "exec kitty yazi")
 (define-key *top-map* (kbd "s-e") "emacs")
+(define-key *top-map* (kbd "s-SPC") "launch-rofi")
 
 ;; Omarchy-style clipboard
 (define-key *top-map* (kbd "s-c") "unified-copy")
@@ -267,40 +331,63 @@
 
 (define-key *top-map* (kbd "s-a") "audio-switch")
 (define-key *top-map* (kbd "s-b") "cycle-wallpaper")
-(define-key *top-map* (kbd "s-Tab") "pull-hidden-next")
 (define-key *top-map* (kbd "s-d") "rofi-window")
 (define-key *top-map* (kbd "C-s-l") "exec slock")
 (define-key *top-map* (kbd "s-p") "screenshot-screen")
 (define-key *top-map* (kbd "s-P") "screenshot-region")
+(define-key *top-map* (kbd "Print") "screenshot-region")
+(define-key *top-map* (kbd "S-Print") "screenshot-screen")
 
 ;; System menu and keybinding help
 (define-key *top-map* (kbd "s-;") "system-menu")
+(define-key *top-map* (kbd "s-Escape") "system-menu")
 (define-key *top-map* (kbd "s-:") "colon")
 (define-key *top-map* (kbd "s-K") "show-keybindings")
 
+;; Focus, move and swap (hjkl: j=left, k=right, h=down, l=up)
 (define-key *top-map* (kbd "s-j") "move-focus left")
 (define-key *top-map* (kbd "s-k") "move-focus right")
 (define-key *top-map* (kbd "s-h") "move-focus down")
 (define-key *top-map* (kbd "s-l") "move-focus up")
+(define-key *top-map* (kbd "s-Left") "move-focus left")
+(define-key *top-map* (kbd "s-Right") "move-focus right")
+(define-key *top-map* (kbd "s-Up") "move-focus up")
+(define-key *top-map* (kbd "s-Down") "move-focus down")
 
-(define-key *top-map* (kbd "s-C-h") "move-window left")
-(define-key *top-map* (kbd "s-C-l") "move-window right")
-(define-key *top-map* (kbd "s-C-j") "move-window down")
-(define-key *top-map* (kbd "s-C-k") "move-window up")
+(define-key *top-map* (kbd "s-C-j") "move-window left")
+(define-key *top-map* (kbd "s-C-k") "move-window right")
+(define-key *top-map* (kbd "s-C-h") "move-window down")
+(define-key *top-map* (kbd "s-C-l") "move-window up")
 
-(define-key *top-map* (kbd "s-Q") "quit")
-(define-key *top-map* (kbd "s-R") "restart-hard")
-(define-key *top-map* (kbd "s-q") "delete")
-(define-key *top-map* (kbd "s-r") "remove")
+(define-key *top-map* (kbd "s-S-Left") "exchange-direction left")
+(define-key *top-map* (kbd "s-S-Right") "exchange-direction right")
+(define-key *top-map* (kbd "s-S-Up") "exchange-direction up")
+(define-key *top-map* (kbd "s-S-Down") "exchange-direction down")
 
-(define-key *top-map* (kbd "s-f") "fullscreen")
-(define-key *top-map* (kbd "s-s") "hsplit-and-focus")
-(define-key *top-map* (kbd "s-S") "vsplit-and-focus")
-(define-key *top-map* (kbd "s-SPC") "launch-rofi")
+;; Resize (Omarchy: SUPER -/= width, SUPER SHIFT -/= height)
+(define-key *top-map* (kbd "s-minus") "resize -50 0")
+(define-key *top-map* (kbd "s-equal") "resize 50 0")
+(define-key *top-map* (kbd "s-underscore") "resize 0 -50")
+(define-key *top-map* (kbd "s-plus") "resize 0 50")
 (define-key *top-map* (kbd "C-s-r") "iresize")
 
-(define-key *top-map* (kbd "C-Left") "gprev")
-(define-key *top-map* (kbd "C-Right") "gnext")
+;; Windows and frames
+(define-key *top-map* (kbd "s-Q") "quit")
+(define-key *top-map* (kbd "s-R") "restart-hard")
+(define-key *top-map* (kbd "s-w") "delete")
+(define-key *top-map* (kbd "s-q") "delete")
+(define-key *top-map* (kbd "s-r") "remove")
+(define-key *top-map* (kbd "s-f") "fullscreen")
+(define-key *top-map* (kbd "s-V") "toggle-float")
+(define-key *top-map* (kbd "s-s") "hsplit-and-focus")
+(define-key *top-map* (kbd "s-S") "vsplit-and-focus")
+(define-key *top-map* (kbd "M-Tab") "pull-hidden-next")
+(define-key *top-map* (kbd "M-ISO_Left_Tab") "pull-hidden-previous")
+
+;; Workspaces
+(define-key *top-map* (kbd "s-Tab") "gnext")
+(define-key *top-map* (kbd "s-ISO_Left_Tab") "gprev")
+(define-key *top-map* (kbd "C-s-Tab") "gother")
 
 (define-key *top-map* (kbd "s-1") "gselect dev")
 (define-key *top-map* (kbd "s-2") "gselect web")
@@ -308,18 +395,51 @@
 (define-key *top-map* (kbd "s-4") "gselect mail")
 (define-key *top-map* (kbd "s-5") "gselect sys")
 
+;; Super+Shift+digit produces the shifted keysym on a US layout
+(define-key *top-map* (kbd "s-exclam") "gmove-and-follow dev")
+(define-key *top-map* (kbd "s-at") "gmove-and-follow web")
+(define-key *top-map* (kbd "s-numbersign") "gmove-and-follow term")
+(define-key *top-map* (kbd "s-dollar") "gmove-and-follow mail")
+(define-key *top-map* (kbd "s-percent") "gmove-and-follow sys")
+
 (define-key *top-map* (kbd "C-s-1") "gmove dev")
 (define-key *top-map* (kbd "C-s-2") "gmove web")
 (define-key *top-map* (kbd "C-s-3") "gmove term")
 (define-key *top-map* (kbd "C-s-4") "gmove mail")
 (define-key *top-map* (kbd "C-s-5") "gmove sys")
 
+;; Notifications
+(define-key *top-map* (kbd "s-comma") "exec dunstctl close")
+(define-key *top-map* (kbd "s-less") "exec dunstctl close-all")
+(define-key *top-map* (kbd "C-s-comma") "notifications-toggle-silence")
+(define-key *top-map* (kbd "M-s-comma") "exec dunstctl action")
+(define-key *top-map* (kbd "M-s-less") "exec dunstctl history-pop")
+
+;; Look and controls
+(define-key *top-map* (kbd "s-S-BackSpace") "toggle-gaps")
+(define-key *top-map* (kbd "s-S-SPC") "exec polybar-msg cmd toggle")
+(define-key *top-map* (kbd "C-s-SPC") "cycle-wallpaper")
+(define-key *top-map* (kbd "C-s-S-SPC") "exec /home/ben/Code/dotfiles/guix/scripts/theme-switch")
+(define-key *top-map* (kbd "C-s-a") "exec pavucontrol")
+(define-key *top-map* (kbd "C-s-b") "exec blueman-manager")
+(define-key *top-map* (kbd "C-s-w") "exec kitty nmtui")
+(define-key *top-map* (kbd "C-s-t") "exec kitty btop")
+
+;; Hardware keys
 (define-key *top-map* (kbd "XF86MonBrightnessUp") "bright-up")
 (define-key *top-map* (kbd "XF86MonBrightnessDown") "bright-down")
 
 (define-key *top-map* (kbd "XF86AudioRaiseVolume") "vol-up")
 (define-key *top-map* (kbd "XF86AudioLowerVolume") "vol-down")
+(define-key *top-map* (kbd "M-XF86AudioRaiseVolume") "volume-adjust +1%")
+(define-key *top-map* (kbd "M-XF86AudioLowerVolume") "volume-adjust -1%")
 (define-key *top-map* (kbd "XF86AudioMute") "vol-toggle")
+(define-key *top-map* (kbd "s-XF86AudioMute") "audio-switch")
+(define-key *top-map* (kbd "XF86AudioMicMute") "mic-toggle")
+(define-key *top-map* (kbd "XF86AudioPlay") "exec playerctl play-pause")
+(define-key *top-map* (kbd "XF86AudioPause") "exec playerctl play-pause")
+(define-key *top-map* (kbd "XF86AudioNext") "exec playerctl next")
+(define-key *top-map* (kbd "XF86AudioPrev") "exec playerctl previous")
 
 (set-msg-border-width 2)
 
@@ -332,18 +452,23 @@
   (2 t t :class "discord"))
 
 ;; start processes
+(defun spawn-once (pgrep-args command)
+  "Run COMMAND unless `pgrep PGREP-ARGS' finds it already running.
+restart-hard reloads this file, which would otherwise stack duplicates."
+  (run-shell-command (format nil "pgrep ~a >/dev/null || exec ~a" pgrep-args command)))
+
 (run-commands
  "start-polybar"
  "gselect dev")
-(run-shell-command "setxkbmap us -option 'caps:ctrl_modifier'")
-(run-shell-command "xcape -e 'Caps_Lock=Escape'")
-(run-shell-command "xset r rate 100 100")
+(run-shell-command "setxkbmap -option '' -option caps:ctrl_modifier us && xset r rate 100 100 && { pgrep -x xcape >/dev/null || exec xcape -e 'Caps_Lock=Escape'; }")
 (run-shell-command "feh --randomize --bg-fill ~/Sync/wallpapers/*")
-(run-shell-command "picom --config /home/ben/Code/dotfiles/picom/picom.conf")
-(run-shell-command "clipmenud")
+(spawn-once "-x picom" "picom --config /home/ben/Code/dotfiles/picom/picom.conf")
+;; Guix wraps these, so match the command line; [x] keeps pgrep from matching this shell
+(spawn-once "-f '[c]lipmenud'" "clipmenud")
 (run-shell-command "xsetroot -cursor_name left_ptr")
 (run-shell-command "mkdir -p ~/Screenshots")
-(run-shell-command "dunst -config /home/ben/Code/dotfiles/dunst/dunstrc")
+(spawn-once "-x dunst" "dunst -config /home/ben/Code/dotfiles/dunst/dunstrc")
+(spawn-once "-f '[n]m-applet'" "nm-applet")
 
 ;; gaps
 (asdf:load-system :swm-gaps)
@@ -355,16 +480,16 @@
 (defun icon-by-group (name)
   (cond
     ((string-equal name "dev")
-     "")
+     "")
     ((string-equal name "web")
-     "")
+     "")
     ((string-equal name "term")
-     "")
+     "")
     ((string-equal name "mail")
-     "")
+     "")
     ((string-equal name "sys")
-     "")
-    (t (concat ""))))
+     "")
+    (t (concat ""))))
 
 (defun polybar-groups ()
   "Return string representation for polybar stumpgroups module"
@@ -386,31 +511,38 @@
   (run-shell-command (concat "polybar-msg action stumpwmgroups send '"
                              (polybar-groups) "'")))
 
-(add-hook *new-window-hook* (lambda (win) (polybar-update-groups)))
-(add-hook *destroy-window-hook* (lambda (win) (polybar-update-groups)))
-(add-hook *focus-window-hook* (lambda (win lastw) (polybar-update-groups)))
-(add-hook *focus-group-hook* (lambda (grp lastg) (polybar-update-groups)))
+;; Named hook functions: reloading this file replaces them instead of adding copies
+(defun polybar-on-window (win)
+  (declare (ignore win))
+  (polybar-update-groups))
+
+(defun polybar-on-focus (new old)
+  (declare (ignore new old))
+  (polybar-update-groups))
+
+(remove-hook *new-window-hook* 'polybar-on-window)
+(add-hook *new-window-hook* 'polybar-on-window)
+(remove-hook *destroy-window-hook* 'polybar-on-window)
+(add-hook *destroy-window-hook* 'polybar-on-window)
+(remove-hook *focus-window-hook* 'polybar-on-focus)
+(add-hook *focus-window-hook* 'polybar-on-focus)
+(remove-hook *focus-group-hook* 'polybar-on-focus)
+(add-hook *focus-group-hook* 'polybar-on-focus)
+
+;; Polybar starts in the background; fill the groups module once it is up
+(run-with-timer 2 nil 'polybar-update-groups)
 
 ;; TTF fonts
-(asdf:initialize-source-registry
- '(:source-registry
-   (:include "/home/ben/.guix-home/profile/etc/common-lisp/source-registry.conf.d/")
-   :inherit-configuration))
 (asdf:load-system :clx-truetype)
 (asdf:load-system :ttf-fonts)
 (setf xft:*font-dirs* '("/home/ben/.guix-home/profile/share/fonts/truetype/"
                         "/home/ben/.guix-home/profile/share/fonts/opentype/"))
+;; clx-truetype fixes its cache path at build time, which points into the
+;; read-only store; cache-fonts would fail and abort the rest of this file.
+(setf xft:+font-cache-filename+
+      (merge-pathnames ".cache/stumpwm/font-cache.sexp" (user-homedir-pathname)))
 (xft:cache-fonts)
 (set-font (make-instance 'xft:font :family "Iosevka Term" :subfamily "Regular" :size 14))
-
-;; Set DBUS_SESSION_BUS_ADDRESS for nix apps (jeepney can't handle autolaunch:)
-(let ((addr (string-trim '(#\Newline #\Space)
-                         (run-shell-command
-                          "ss -xlp 2>/dev/null | grep dbus-daemon | grep -oP '/tmp/dbus-\\S+' | head -1 | xargs -I{} echo 'unix:path={}'" t))))
-  (when (> (length addr) (length "unix:path="))
-    (sb-posix:setenv "DBUS_SESSION_BUS_ADDRESS" addr 1)))
-
-(run-shell-command "nm-applet")
 
 ;; Slynk REPL (uncomment to connect Sly/Slime to StumpWM)
 ;; (require :slynk)
