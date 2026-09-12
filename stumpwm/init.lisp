@@ -85,13 +85,28 @@
         (send-fake-key win (kbd "C-w"))
         (run-shell-command "xclip -selection primary -o | xclip -selection clipboard -i"))))
 
+(defun super-held-p ()
+  "True while a Super key is physically down."
+  (let ((mask (nth-value 4 (xlib:query-pointer (screen-root (current-screen))))))
+    (intersection (modifiers-super *modifiers*) (xlib:make-state-keys mask))))
+
+(defun type-clipboard (&optional (tries 50))
+  "Type CLIPBOARD once Super is released, polling every 20ms for about a second.
+Typing while Super is held would fire s- bindings, and xdotool's
+--clearmodifiers re-presses Super afterwards, leaving it stuck (Enter
+then runs s-RET). Command substitution drops trailing newlines."
+  (cond ((not (super-held-p))
+         (run-shell-command "xdotool type -- \"$(xclip -selection clipboard -o)\""))
+        ((plusp tries)
+         (run-with-timer 0.02 nil #'type-clipboard (1- tries)))
+        (t (message "Paste skipped: Super still held"))))
+
 (defcommand unified-paste () ()
-  "Paste: send C-y to Emacs, type CLIPBOARD contents for everything else.
-Command substitution drops trailing newlines but keeps the ones inside."
+  "Paste: send C-y to Emacs, type CLIPBOARD contents for everything else."
   (let ((win (current-window)))
     (if (emacs-window-p win)
         (send-fake-key win (kbd "C-y"))
-        (run-shell-command "xdotool type --clearmodifiers -- \"$(xclip -selection clipboard -o)\""))))
+        (type-clipboard))))
 
 (defcommand clipboard-history () ()
   "Show clipboard history via clipmenu with rofi."
