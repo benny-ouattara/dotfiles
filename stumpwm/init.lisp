@@ -41,20 +41,27 @@
   (when (> (length addr) (length "unix:path="))
     (sb-posix:setenv "DBUS_SESSION_BUS_ADDRESS" addr 1)))
 
-;; Message bar - Catppuccin Mocha
-(set-fg-color "#CDD6F4")
-(set-bg-color "#1E1E2E")
-(set-border-color "#89B4FA")
-(setf *colors*
-      '("#1E1E2E"   ; 0 black  (Base)
-        "#F38BA8"   ; 1 red
-        "#A6E3A1"   ; 2 green
-        "#F9E2AF"   ; 3 yellow
-        "#89B4FA"   ; 4 blue
-        "#CBA6F7"   ; 5 magenta (Mauve)
-        "#94E2D5"   ; 6 cyan   (Teal)
-        "#CDD6F4")) ; 7 white  (Text)
-(update-color-map (current-screen))
+;; Theme colors, rewritten by guix/scripts/theme-switch
+(defparameter *theme-fg* "#CDD6F4")
+(defparameter *theme-bg* "#1E1E2E")
+(defparameter *theme-bg-alt* "#313244")
+(defparameter *theme-red* "#F38BA8")
+(defparameter *theme-green* "#A6E3A1")
+(defparameter *theme-yellow* "#F9E2AF")
+(defparameter *theme-blue* "#89B4FA")
+(defparameter *theme-purple* "#CBA6F7")
+(defparameter *theme-cyan* "#94E2D5")
+
+(defun apply-theme-colors ()
+  "Apply the *theme-...* colors to the message bar and ^0-^7 color codes."
+  (set-fg-color *theme-fg*)
+  (set-bg-color *theme-bg*)
+  (set-border-color *theme-blue*)
+  (setf *colors* (list *theme-bg* *theme-red* *theme-green* *theme-yellow*
+                       *theme-blue* *theme-purple* *theme-cyan* *theme-fg*))
+  (update-color-map (current-screen)))
+
+(apply-theme-colors)
 
 ;; define commands
 (defcommand hsplit-and-focus () ()
@@ -218,7 +225,7 @@ then runs s-RET). Command substitution drops trailing newlines."
                 "s-Esc / s-;      System menu\\n"
                 "s-:              Command prompt\\n"
                 "s-g / s-G        Guix system / home\\n"
-                "C-s-l            Lock screen\\n"
+                "s-L              Lock screen\\n"
                 "s-p / S-Print    Screenshot screen\\n"
                 "s-P / Print      Screenshot region\\n"
                 "s-a / s-Mute     Switch audio output\\n"
@@ -287,9 +294,20 @@ then runs s-RET). Command substitution drops trailing newlines."
      (slynk:create-server :port (parse-integer port) :dont-close t))
    :name "manual-slynk-stumpwm"))
 
+(defun forget-dock-mode-lines ()
+  "Drop StumpWM's mode-line entries for dock windows (they have no gcontext).
+A restarted polybar reuses its X window id, so the old bar's entry keeps the
+head and StumpWM never maps the new bar."
+  (setf *mode-lines* (remove-if-not #'mode-line-cc *mode-lines*)))
+
 (defcommand start-polybar () ()
-  "Kill existing polybar and start fresh."
-  (run-shell-command "polybar-msg cmd quit 2>/dev/null; sleep 0.5; polybar --config=/home/ben/Code/dotfiles/polybar/tokyo/config.ini main &"))
+  "Kill existing polybar, start fresh, and fill the groups module once it is up."
+  (run-shell-command
+   (concat "polybar-msg cmd quit 2>/dev/null; "
+           "while pgrep -x polybar >/dev/null; do sleep 0.1; done; "
+           "stumpish eval '(forget-dock-mode-lines)' >/dev/null; "
+           "polybar --config=/home/ben/Code/dotfiles/polybar/tokyo/config.ini main &"))
+  (run-with-timer 2 nil 'polybar-update-groups))
 
 (defun rofi (mode)
   (run-shell-command (concat "rofi -show " mode " -m " (write-to-string (head-number (current-head))) " -theme ~/.config/rofi/launchers/type-1/style-8.rasi")))
@@ -347,7 +365,7 @@ then runs s-RET). Command substitution drops trailing newlines."
 (define-key *top-map* (kbd "s-a") "audio-switch")
 (define-key *top-map* (kbd "s-b") "cycle-wallpaper")
 (define-key *top-map* (kbd "s-d") "rofi-window")
-(define-key *top-map* (kbd "C-s-l") "exec slock")
+(define-key *top-map* (kbd "s-L") "exec slock")
 (define-key *top-map* (kbd "s-p") "screenshot-screen")
 (define-key *top-map* (kbd "s-P") "screenshot-region")
 (define-key *top-map* (kbd "Print") "screenshot-region")
@@ -515,11 +533,13 @@ restart-hard reloads this file, which would otherwise stack duplicates."
                    (number (write-to-string (group-number g)))
                    (n-win (write-to-string (length (group-windows g))))
                    (icon (icon-by-group name))
-                   (text (concat " %{F#89B4FA}" icon "%{F-} " number ":" name " ")))
+                   (text (concat " %{F" *theme-blue* "}" icon "%{F-} " number ":" name " ")))
               (cond
-                ((eq g (current-group)) (concat "%{F#CDD6F4 B#313244 u#89B4FA +u}" text "[" n-win "] " "%{F- B- u- -u}"))
+                ((eq g (current-group))
+                 (concat "%{F" *theme-fg* " B" *theme-bg-alt* " u" *theme-blue* " +u}"
+                         text "[" n-win "] " "%{F- B- u- -u}"))
                 ((string-equal n-win "0") "")
-                (t (concat "%{F#CDD6F4}" text "[" n-win "] " "%{F-}")))))
+                (t (concat "%{F" *theme-fg* "}" text "[" n-win "] " "%{F-}")))))
           (sort (screen-groups (current-screen)) #'< :key #'group-number))))
 
 (defun polybar-update-groups ()
@@ -543,9 +563,6 @@ restart-hard reloads this file, which would otherwise stack duplicates."
 (add-hook *focus-window-hook* 'polybar-on-focus)
 (remove-hook *focus-group-hook* 'polybar-on-focus)
 (add-hook *focus-group-hook* 'polybar-on-focus)
-
-;; Polybar starts in the background; fill the groups module once it is up
-(run-with-timer 2 nil 'polybar-update-groups)
 
 ;; TTF fonts
 (asdf:load-system :clx-truetype)

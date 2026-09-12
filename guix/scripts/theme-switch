@@ -85,7 +85,7 @@ BG[everforest]="#2d353b"; BG_ALT[everforest]="#3d484d"; FG[everforest]="#d3c6aa"
 SELECTED[everforest]="#7fbbb3"; RED[everforest]="#e67e80"; GREEN[everforest]="#a7c080"
 YELLOW[everforest]="#dbbc7f"; BLUE[everforest]="#7fbbb3"; PURPLE[everforest]="#d699b6"
 CYAN[everforest]="#83c092"
-DOOM_THEME[everforest]="doom-everforest"
+DOOM_THEME[everforest]=""  # no everforest Emacs theme installed; Emacs is left alone
 C0[everforest]="#343f44"; C1[everforest]="#e67e80"; C2[everforest]="#a7c080"; C3[everforest]="#dbbc7f"
 C4[everforest]="#7fbbb3"; C5[everforest]="#d699b6"; C6[everforest]="#83c092"; C7[everforest]="#d3c6aa"
 C8[everforest]="#475258"; C9[everforest]="#e67e80"; C10[everforest]="#a7c080"; C11[everforest]="#dbbc7f"
@@ -226,9 +226,14 @@ cat > "$DOTFILES/dunst/dunstrc" << DUNSTEOF
 DUNSTEOF
 
 # --- Apply to StumpWM ---
-sed -i "s/^(set-fg-color .*)/(set-fg-color \"${FG[$THEME]}\")/" "$DOTFILES/stumpwm/init.lisp"
-sed -i "s/^(set-bg-color .*)/(set-bg-color \"${BG[$THEME]}\")/" "$DOTFILES/stumpwm/init.lisp"
-sed -i "s/^(set-border-color .*)/(set-border-color \"${BLUE[$THEME]}\")/" "$DOTFILES/stumpwm/init.lisp"
+# Each *theme-NAME* defparameter takes its value from the matching color array
+STUMP_SET=""
+for pair in fg:FG bg:BG bg-alt:BG_ALT red:RED green:GREEN yellow:YELLOW blue:BLUE purple:PURPLE cyan:CYAN; do
+    name="${pair%%:*}"
+    ref="${pair#*:}[$THEME]"
+    sed -i "s/^(defparameter \*theme-${name}\* .*)/(defparameter *theme-${name}* \"${!ref}\")/" "$DOTFILES/stumpwm/init.lisp"
+    STUMP_SET+=" *theme-${name}* \"${!ref}\""
+done
 
 # --- Apply to Starship ---
 cat > "$DOTFILES/starship.toml" << EOF
@@ -281,12 +286,10 @@ style = "${CYAN[$THEME]}"
 EOF
 
 # --- Apply to Emacs (doom) ---
+# Only this machine's doom-theme line; [^)]* stops before the closing parens
 DOOM_T="${DOOM_THEME[$THEME]}"
-sed -i "s/doom-theme '.*)/doom-theme '${DOOM_T})/" "$DOTFILES/doom/config.el"
-if [[ "$THEME" == "catppuccin" ]]; then
-    sed -i "s/(consult-theme '.*))/(consult-theme '${DOOM_T}))/" "$DOTFILES/doom/config.el"
-else
-    sed -i "s/(consult-theme '.*))/(consult-theme '${DOOM_T}))/" "$DOTFILES/doom/config.el"
+if [[ -n "$DOOM_T" ]]; then
+    sed -i "/(\"${HOSTNAME}\"/,/doom-theme/ s/doom-theme '[^)]*/doom-theme '${DOOM_T}/" "$DOTFILES/doom/config.el"
 fi
 
 # --- Reload running applications ---
@@ -297,15 +300,14 @@ stumpish start-polybar 2>/dev/null
 kill -SIGUSR1 $(pgrep kitty) 2>/dev/null || true
 
 # StumpWM (update colors live)
-stumpish eval "(set-fg-color \"${FG[$THEME]}\")" 2>/dev/null
-stumpish eval "(set-bg-color \"${BG[$THEME]}\")" 2>/dev/null
-stumpish eval "(set-border-color \"${BLUE[$THEME]}\")" 2>/dev/null
-stumpish eval "(update-color-map (current-screen))" 2>/dev/null
+stumpish eval "(progn (setf${STUMP_SET}) (apply-theme-colors) (polybar-update-groups))" 2>/dev/null
 
 # Dunst (restart to pick up new config)
 killall dunst 2>/dev/null; dunst -config "$DOTFILES/dunst/dunstrc" &
 
 # Emacs (reload theme)
-emacsclient -e "(load-theme '${DOOM_T} t)" 2>/dev/null || true
+if [[ -n "$DOOM_T" ]]; then
+    emacsclient -e "(progn (mapc #'disable-theme custom-enabled-themes) (load-theme '${DOOM_T} t))" 2>/dev/null || true
+fi
 
 echo "Switched to: $THEME"
