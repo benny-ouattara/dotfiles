@@ -480,16 +480,16 @@ restart-hard reloads this file, which would otherwise stack duplicates."
 (defun icon-by-group (name)
   (cond
     ((string-equal name "dev")
-     "")
+     "")
     ((string-equal name "web")
-     "")
+     "")
     ((string-equal name "term")
-     "")
+     "")
     ((string-equal name "mail")
-     "")
+     "")
     ((string-equal name "sys")
-     "")
-    (t (concat ""))))
+     "")
+    (t (concat ""))))
 
 (defun polybar-groups ()
   "Return string representation for polybar stumpgroups module"
