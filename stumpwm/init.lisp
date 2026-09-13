@@ -260,7 +260,13 @@ head and StumpWM never maps the new bar."
   (run-with-timer 2 nil 'polybar-update-groups))
 
 (defun rofi (mode)
-  (run-shell-command (concat "rofi -show " mode " -m " (write-to-string (head-number (current-head))) " -theme ~/.config/rofi/launcher.rasi")))
+  "Show rofi MODE on the current head. rofi numbers monitors from 0 while
+head-number starts at 1, so pass the head's position instead."
+  (run-shell-command
+   (format nil "rofi -show ~a -m ~d -theme ~~/.config/rofi/launcher.rasi 2>>~a"
+           mode
+           (or (position (current-head) (screen-heads (current-screen))) 0)
+           (namestring (merge-pathnames ".cache/stumpwm/rofi.log" (user-homedir-pathname))))))
 
 (defcommand launch-rofi () ()
   "Launch an application with rofi."

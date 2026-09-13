@@ -1,5 +1,5 @@
-/* Catppuccin Mocha defaults, overridden by the current desktop theme from
-   guix/scripts/theme-switch (rofi ignores the import where it is missing) */
+/* Catppuccin Mocha defaults, overridden by the current desktop theme that
+   guix/scripts/theme-switch generates (rofi shows an error if it is missing) */
 * {
     background:     #1E1E2EFF;
     background-alt: #313244FF;

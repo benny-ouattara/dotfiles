@@ -11,5 +11,7 @@
     font: "Iosevka Term 16";
 }
 
-/* Font picked with theme-switch --font (guix/scripts); ignored if missing */
+/* Font picked with theme-switch --font (guix/scripts). theme-switch --refresh
+   (run at StumpWM startup) always writes this file: rofi shows an error dialog
+   when an import is missing */
 @import "~/.config/theme/current/rofi-font.rasi"
