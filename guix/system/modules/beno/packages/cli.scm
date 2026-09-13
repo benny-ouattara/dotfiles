@@ -20,19 +20,16 @@
       #~(begin
           (use-modules (guix build utils))
           (let* ((bin (string-append #$output "/bin"))
-                 (script (string-append bin "/up"))
-                 (manifest "/home/ben/Code/dotfiles/guix/guix.scm")
-                 (makefile "/home/ben/Code/dotfiles/guix/Makefile"))
+                 (script (string-append bin "/up")))
             (mkdir-p bin)
             (call-with-output-file script
               (lambda (port)
-                ;; We wrap the make command in 'guix shell' using the manifest
-                (format port "#!~a/bin/bash~%~%guix shell -m ~a -- make -f ~a \"$@\"~%"
+                ;; Run make from the store directly; targets needing extra
+                ;; tools (entr, graphviz) pull them from guix.scm themselves
+                (format port "#!~a/bin/bash~%~%exec ~a/bin/make -f \"${DOTFILES:-$HOME/Code/dotfiles}/guix/Makefile\" \"$@\"~%"
                         #$(specification->package "bash-minimal")
-                        manifest
-                        makefile)))
+                        #$(specification->package "make"))))
             (chmod script #o555)))))
-    (inputs (list (specification->package "guix"))) ; Ensure guix is available
     (home-page #f)
     (synopsis "Context-aware wrapper for Guix dotfiles")
     (description "Runs Makefile targets inside a dedicated Guix shell environment.")

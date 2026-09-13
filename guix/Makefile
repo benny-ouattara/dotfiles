@@ -1,9 +1,15 @@
-# Resolve the absolute directory of THIS Makefile
-HERE         := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
+# Resolve THIS Makefile before anything else can change MAKEFILE_LIST
+SELF         := $(realpath $(lastword $(MAKEFILE_LIST)))
+HERE         := $(patsubst %/,%,$(dir $(SELF)))
 
-# Include environment variables from your .envrc
-# Make automatically exports these to the shell commands below
--include $(HERE)/../.envrc
+# The private jazacash channel needs GITHUB_TOKEN. Prefer the environment
+# (direnv); otherwise source .envrc with a real shell, since Make would
+# mangle values containing $
+ENVRC        := $(HERE)/../.envrc
+ifndef GITHUB_TOKEN
+GITHUB_TOKEN := $(shell [ -f $(ENVRC) ] && . $(ENVRC) >/dev/null 2>&1 && printf '%s' "$$GITHUB_TOKEN")
+endif
+export GITHUB_TOKEN
 
 # File and Directory definitions
 CHANNELS     := $(HERE)/channels.scm
@@ -15,8 +21,10 @@ REPL_INIT    := $(HERE)/repl-init.scm
 DEPLOY_CONF  := $(HERE)/deploy.scm
 
 # Standard Guix flags
-GUIX_OPTS    := --cores=20 --max-jobs=10
+GUIX_OPTS    := --cores=$(shell nproc) --max-jobs=4
 TIME_MACHINE := guix time-machine --unsafe-channel-evaluation -C $(CHANNELS) --
+# Extra tools (entr, graphviz) for the few targets that need them
+TOOLS        := guix shell -m $(HERE)/guix.scm --
 
 # Default action when running just 'make'
 .DEFAULT_GOAL := help
@@ -24,18 +32,21 @@ TIME_MACHINE := guix time-machine --unsafe-channel-evaluation -C $(CHANNELS) --
 # --- TARGETS ---
 
 .PHONY: help pull system-build system-reconfigure system-container \
-        home-reconfigure repl lint gc size graph deploy offload-check debug check \
-        nix-install nix-update nix-gc
+        home-build home-container home-reconfigure deploy up \
+        gc gc-safe size size-home why why-full watch lint graph repl shell \
+        offload-check gc-links news debug health blast-radius rollback \
+        service-log status history check backup restore bootstrap \
+        install-hooks nix-install nix-update nix-gc
 
 help: ## Display this help screen
 	@echo "Guix Management Makefile"
 	@echo "========================"
-	@awk 'BEGIN {FS = ":.*##"; printf "\033[36m%-20s\033[0m %s\n", "Target", "Description"} /^[a-zA-Z_-]+:.*?##/ { printf "\033[36m%-20s\033[0m %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
+	@awk 'BEGIN {FS = ":.*##"; printf "\033[36m%-20s\033[0m %s\n", "Target", "Description"} /^[a-zA-Z_-]+:.*?##/ { printf "\033[36m%-20s\033[0m %s\n", $$1, $$2 }' $(SELF)
 
 # -- Core Operations --
 
-pull: ## Update channels and pull the latest Guix
-	cd $(HERE) && $(TIME_MACHINE) pull --unsafe-channel-evaluation -C $(CHANNELS)
+pull: ## Pull Guix using the channels in channels.scm
+	guix pull --unsafe-channel-evaluation -C $(CHANNELS)
 
 system-build: ## Build the system derivation without installing
 	cd $(HERE) && $(TIME_MACHINE) system build -L $(SYSTEM_MOD) $(SYSTEM)
@@ -46,21 +57,35 @@ system-reconfigure: ## Apply system configuration to the local machine
 system-container: ## Spawn a guix system container for testing
 	cd $(HERE) && $(TIME_MACHINE) system container -L $(SYSTEM_MOD) $(SYSTEM)
 
-home-build: ## Apply home configuration to the local user
+home-build: ## Build the home configuration without activating it
 	cd $(HERE) && $(TIME_MACHINE) home build -L $(HOME_MOD) $(HOME_CFG) $(GUIX_OPTS)
 
-home-container: ## Apply home configuration to the local user
+home-container: ## Spawn a container running the home configuration
 	cd $(HERE) && $(TIME_MACHINE) home container -L $(HOME_MOD) $(HOME_CFG) $(GUIX_OPTS)
 
 home-reconfigure: ## Apply home configuration to the local user
 	cd $(HERE) && $(TIME_MACHINE) home reconfigure -L $(HOME_MOD) $(HOME_CFG) $(GUIX_OPTS)
 
-deploy: ## Push configuration to a remote machine via SSH
-	cd $(HERE) && $(TIME_MACHINE) deploy -L $(SYSTEM_MOD) $(DEPLOY_CONF)
+# The remote needs root SSH access and this machine's signing key authorized
+# (guix archive --authorize). system/config.scm is otter-specific (hostname,
+# root disk UUID), so point DEPLOY_OS at a config written for the target.
+deploy: ## Deploy an OS config over SSH (usage: make deploy REMOTE_HOST=1.2.3.4 DEPLOY_OS=machine.scm)
+	$(if $(REMOTE_HOST),,$(error Set REMOTE_HOST=host))
+	$(if $(DEPLOY_OS),,$(error Set DEPLOY_OS=path/to/machine.scm))
+	cd $(HERE) && DEPLOY_HOST=$(REMOTE_HOST) DEPLOY_OS=$(abspath $(DEPLOY_OS)) $(TIME_MACHINE) deploy -L $(SYSTEM_MOD) $(DEPLOY_CONF)
+
+up: ## Reconfigure the system and notify on success or failure
+	@if $(MAKE) -f $(SELF) system-reconfigure; then \
+		notify-send "Guix System" "Reconfigure on $$(hostname) complete! 🦦" --icon=system-software-update; \
+	else \
+		notify-send -u critical "Guix System" "Reconfigure on $$(hostname) failed"; exit 1; \
+	fi
 
 # -- Maintenance & Inspection --
 
-gc: ## Delete old generations (System, Home, User) and run garbage collector
+gc: ## Delete ALL old generations (System, Home, User) and run garbage collector
+	@printf "Delete every old generation? Rollback will no longer be possible. [y/N] "; \
+		read ans; [ "$$ans" = y ] || [ "$$ans" = Y ] || { echo "Aborted."; exit 1; }
 	@echo "Cleaning up old generations..."
 	guix package --delete-generations
 	guix home delete-generations
@@ -69,8 +94,8 @@ gc: ## Delete old generations (System, Home, User) and run garbage collector
 
 gc-safe: ## Delete generations older than 30 days and GC
 	guix package --delete-generations=30d
-	guix home delete-generations=30d
-	sudo guix system delete-generations=30d
+	guix home delete-generations 30d
+	sudo guix system delete-generations 30d
 	guix gc
 
 size: ## Show disk space occupied by the current system profile
@@ -79,21 +104,22 @@ size: ## Show disk space occupied by the current system profile
 size-home: ## Show space occupied by the home profile
 	guix size $(shell readlink ~/.guix-home/profile)
 
-why: ## Find why a store item is being kept (usage: make why PATH=/gnu/store/...)
-	guix gc --referrers $(PATH)
+why: ## Find why a store item is being kept (usage: make why ITEM=/gnu/store/...)
+	guix gc --referrers $(ITEM)
 
-why-full: ## Trace the full dependency chain for a store item
-	guix gc --referrers --recursive $(PATH)
+why-full: ## Trace the full dependency chain for a store item (usage: make why-full ITEM=/gnu/store/...)
+	guix gc --referrers --recursive $(ITEM)
 
 watch: ## Automatically lint and build when .scm files change
 	@echo "Watching for changes in .scm files..."
-	@find $(HERE) -name "*.scm" | entr -c $(MAKE) -f $(lastword $(MAKEFILE_LIST)) check
+	@find $(HERE) -name "*.scm" | $(TOOLS) entr -c $(MAKE) -f $(SELF) check
 
-lint: ## Check system and home configs for common errors
-	cd $(HERE) && $(TIME_MACHINE) lint -L $(SYSTEM_MOD) $(SYSTEM) $(HOME_CFG)
+lint: ## Dry-run the system and home builds to catch config errors
+	cd $(HERE) && $(TIME_MACHINE) system build -n -L $(SYSTEM_MOD) $(SYSTEM)
+	cd $(HERE) && $(TIME_MACHINE) home build -n -L $(HOME_MOD) $(HOME_CFG)
 
 graph: ## Generate a PDF visualization of service extensions
-	cd $(HERE) && $(TIME_MACHINE) system extension-graph -L $(SYSTEM_MOD) $(SYSTEM) | dot -Tpdf > system-graph.pdf
+	cd $(HERE) && $(TIME_MACHINE) system extension-graph -L $(SYSTEM_MOD) $(SYSTEM) | $(TOOLS) dot -Tpdf > system-graph.pdf
 	@echo "Graph saved to system-graph.pdf"
 
 repl: ## Open a Guix REPL with local modules pre-loaded
@@ -122,22 +148,27 @@ debug: ## Print internal Makefile variables for troubleshooting
 	@echo "--- Environment Check ---"
 	@echo "PATH:       $(shell echo $$PATH | cut -d: -f1-3)..."
 
-health: ## Check the status of all Shepherd services and system logs
+health: ## Check the status of system and user Shepherd services and system logs
 	@echo "--- Checking Shepherd Services ---"
-	@herd status | grep "stopped" && echo "⚠️  Warning: Some services are stopped!" || echo "✅ All services are running."
+	@for herd in "sudo herd" herd; do \
+		if ! out=$$($$herd status 2>&1); then echo "⚠️  Warning: could not query $$herd"; continue; fi; \
+		stopped=$$(printf '%s\n' "$$out" | awk '/^Stopped:/ {s=1; next} /^[^ ]/ {s=0} s'); \
+		if [ -n "$$stopped" ]; then echo "⚠️  Warning: stopped services ($$herd):"; echo "$$stopped"; \
+		else echo "✅ All services are running ($$herd)."; fi; \
+	done
 	@echo ""
 	@echo "--- Recent System Errors (Last 20 lines) ---"
 	@sudo tail -n 20 /var/log/messages | grep -iE "error|fail|panic" || echo "✅ No recent errors found in /var/log/messages."
 
 blast-radius: ## Show what depends on a specific service
 	@echo "Generating dependency graph for services..."
-	guix system shepherd-graph -L $(SYSTEM_MOD) $(SYSTEM) | dot -Tpdf > shepherd-deps.pdf
+	guix system shepherd-graph -L $(SYSTEM_MOD) $(SYSTEM) | $(TOOLS) dot -Tpdf > shepherd-deps.pdf
 	@echo "Open shepherd-deps.pdf to see the 'Blast Radius' of your services."
 
 rollback: ## Roll back to the previous system generation
 	sudo guix system roll-back
 	@echo "--- System Rolled Back ---"
-	@$(MAKE) -f $(lastword $(MAKEFILE_LIST)) health
+	@$(MAKE) -f $(SELF) health
 
 service-log: ## Tail logs for a specific shepherd service (usage: make service-log S=my-watcher)
 	@echo "Tailing logs for service: $(S)..."
@@ -178,29 +209,22 @@ restore: ## Decrypt and restore secrets from a backup file (usage: make restore 
 
 # -- Bootstrap --
 
-REMOTE_HOST := "new-machine"
-
-bootstrap: ## Provision a new machine (Usage: make bootstrap REMOTE_HOST=192.168.1.50)
+bootstrap: ## Provision a new machine (usage: make bootstrap REMOTE_HOST=192.168.1.50 DEPLOY_OS=machine.scm)
+	$(if $(REMOTE_HOST),,$(error Set REMOTE_HOST=host))
+	$(if $(DEPLOY_OS),,$(error Set DEPLOY_OS=path/to/machine.scm))
 	@echo "--- Initializing Remote Guix System ---"
 	# 1. Copy the current dotfiles to the new machine
 	rsync -avz --exclude '.git' $(HERE) $(USER)@$(REMOTE_HOST):~/Code/dotfiles/
-	# 2. Run the remote pull and reconfigure
-	ssh $(USER)@$(REMOTE_HOST) "cd ~/Code/dotfiles/guix && \
-		guix pull --unsafe-channel-evaluation -C channels.scm && \
-		sudo guix system reconfigure otter-system.scm"
+	# 2. Build here (channels and token stay local) and push the system over SSH
+	$(MAKE) -f $(SELF) deploy
 	@echo "✅ System provisioned. Now run 'make restore' on the new machine."
 
 install-hooks: ## Install git pre-commit hooks
 	@echo "Installing git hooks..."
-	@ln -sf $(HERE)/scripts/validate.sh .git/hooks/pre-commit
-	@chmod +x .git/hooks/pre-commit
+	@hooks=$$(git -C $(HERE) rev-parse --path-format=absolute --git-path hooks) && \
+		mkdir -p "$$hooks" && ln -sf $(HERE)/scripts/validate.sh "$$hooks/pre-commit"
+	@chmod +x $(HERE)/scripts/validate.sh
 	@echo "✅ Hooks installed."
-
-# Add libnotify to your manifest to ensure notify-send is available
-done: ## Send a desktop notification
-	@notify-send "Guix System" "Deployment on $(NAME) complete! 🦦" --icon=system-software-update
-
-up: system-reconfigure done ## Reconfigure and notify when finished
 
 # -- Nix --
 
