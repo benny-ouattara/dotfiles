@@ -2,15 +2,6 @@
 SELF         := $(realpath $(lastword $(MAKEFILE_LIST)))
 HERE         := $(patsubst %/,%,$(dir $(SELF)))
 
-# The private jazacash channel needs GITHUB_TOKEN. Prefer the environment
-# (direnv); otherwise source .envrc with a real shell, since Make would
-# mangle values containing $
-ENVRC        := $(HERE)/../.envrc
-ifndef GITHUB_TOKEN
-GITHUB_TOKEN := $(shell [ -f $(ENVRC) ] && . $(ENVRC) >/dev/null 2>&1 && printf '%s' "$$GITHUB_TOKEN")
-endif
-export GITHUB_TOKEN
-
 # File and Directory definitions
 CHANNELS     := $(HERE)/channels.scm
 SYSTEM_MOD   := $(HERE)/system/modules
@@ -22,7 +13,10 @@ DEPLOY_CONF  := $(HERE)/deploy.scm
 
 # Standard Guix flags
 GUIX_OPTS    := --cores=$(shell nproc) --max-jobs=4
-TIME_MACHINE := guix time-machine --unsafe-channel-evaluation -C $(CHANNELS) --
+# jazacash is fetched over SSH; Guix only authenticates via an ssh-agent
+WITH_KEY     := $(HERE)/scripts/with-jazacash-key
+GUIX_TM      := guix time-machine -C $(CHANNELS) --
+TIME_MACHINE := $(WITH_KEY) $(GUIX_TM)
 # Extra tools (entr, graphviz) for the few targets that need them
 TOOLS        := guix shell -m $(HERE)/guix.scm --
 
@@ -46,13 +40,13 @@ help: ## Display this help screen
 # -- Core Operations --
 
 pull: ## Pull Guix using the channels in channels.scm
-	guix pull --unsafe-channel-evaluation -C $(CHANNELS)
+	$(WITH_KEY) guix pull -C $(CHANNELS)
 
 system-build: ## Build the system derivation without installing
 	cd $(HERE) && $(TIME_MACHINE) system build -L $(SYSTEM_MOD) $(SYSTEM)
 
 system-reconfigure: ## Apply system configuration to the local machine
-	cd $(HERE) && sudo GITHUB_TOKEN=$(GITHUB_TOKEN) $(TIME_MACHINE) system reconfigure -L $(SYSTEM_MOD) $(SYSTEM) $(GUIX_OPTS)
+	cd $(HERE) && $(WITH_KEY) sudo --preserve-env=SSH_AUTH_SOCK $(GUIX_TM) system reconfigure -L $(SYSTEM_MOD) $(SYSTEM) $(GUIX_OPTS)
 
 system-container: ## Spawn a guix system container for testing
 	cd $(HERE) && $(TIME_MACHINE) system container -L $(SYSTEM_MOD) $(SYSTEM)
@@ -214,7 +208,7 @@ bootstrap: ## Provision a new machine (usage: make bootstrap REMOTE_HOST=192.168
 	@echo "--- Initializing Remote Guix System ---"
 	# 1. Copy the current dotfiles to the new machine
 	rsync -avz --exclude '.git' $(HERE) $(USER)@$(REMOTE_HOST):~/Code/dotfiles/
-	# 2. Build here (channels and token stay local) and push the system over SSH
+	# 2. Build here (the SSH key stays local) and push the system over SSH
 	$(MAKE) -f $(SELF) deploy
 	@echo "✅ System provisioned. Now run 'make restore' on the new machine."
 

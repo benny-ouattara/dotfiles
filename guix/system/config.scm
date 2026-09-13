@@ -62,9 +62,6 @@
  databases
  linux)
 
-(define %token (getenv "GITHUB_TOKEN"))
-(define %repo (string-append "https://jazafund:" %token "@github.com/jazafund/jazacash.git"))
-
 (define nonguix
   (channel
    (name 'nonguix)
@@ -80,7 +77,7 @@
 (define jazacash
   (channel
    (name 'jazacash)
-   (url %repo)
+   (url "ssh://git@github.com/jazafund/jazacash.git")
    (branch "develop")))
 
 (define panther

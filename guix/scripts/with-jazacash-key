@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Run a command with a private ssh-agent holding only the jazacash key.
+# Guix fetches channels via libssh2, which authenticates only through an
+# agent, and GitHub stops at the first accepted key, so the main agent's
+# key order can't be relied on.
+set -euo pipefail
+dir=$(mktemp -d "${XDG_RUNTIME_DIR:-/tmp}/jazacash-agent.XXXXXX")
+eval "$(ssh-agent -s -a "$dir/agent.sock")" >/dev/null
+trap 'ssh-agent -k >/dev/null 2>&1; rm -rf "$dir"' EXIT
+ssh-add -q "${JAZACASH_KEY:-$HOME/.ssh/jazacash}"
+"$@"

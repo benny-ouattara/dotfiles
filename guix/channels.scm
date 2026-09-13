@@ -9,11 +9,10 @@
          "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
          (openpgp-fingerprint
           "2A39 3FFF 68F4 EF7A 3D29  12AF 6F51 20A0 22FB B2D5"))))
-      ;; Guix sandboxes channel files; getenv needs --unsafe-channel-evaluation
+      ;; SSH needs the jazacash key in an agent (scripts/with-jazacash-key)
       (channel
        (name 'jazacash)
-       (url (string-append "https://jazafund:" (getenv "GITHUB_TOKEN")
-                           "@github.com/jazafund/jazacash.git"))
+       (url "ssh://git@github.com/jazafund/jazacash.git")
        (branch "develop"))
       (channel
        (name 'pantherx)
