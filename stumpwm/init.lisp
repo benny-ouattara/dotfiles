@@ -23,6 +23,8 @@
  *transient-border-width* 2
  stumpwm::*float-window-border* 4
  stumpwm::*float-window-title-height* 20
+ ;; No "Current Frame" popup when switching frames; the border shows focus
+ *suppress-frame-indicator* t
  ;; Level 10 traces every X event (the log reached hundreds of MB)
  *debug-level* 1)
 ;; Start a fresh debug log once the old one passes 10 MB
@@ -492,6 +494,27 @@ line contains X, so pgrep matched the shell itself and nothing ever started."
 ;; X screensaver and DPMS timeouts that xss-lock reacts to
 (run-shell-command "/home/ben/Code/dotfiles/guix/scripts/idle on")
 (spawn-once "-f '[x]ss-lock'" "xss-lock -- /home/ben/Code/dotfiles/guix/scripts/lock --wait")
+
+;; Browsers ask for idle inhibition over D-Bus, which nothing answers on this
+;; desktop, so reset the X idle timer ourselves while something is playing
+(defun media-playing-p ()
+  "True while a PulseAudio stream plays or records (video, music, calls, record)."
+  (search "\"corked\":false"
+          (run-shell-command
+           "timeout 2 pactl -f json list sink-inputs; timeout 2 pactl -f json list source-outputs" t)))
+
+(defun keep-awake-if-busy ()
+  "Reset the X idle timer while the current window is fullscreen or media plays,
+so xss-lock doesn't lock (or DPMS blank) in the middle of a video."
+  (let ((window (current-window)))
+    (when (or (and window (window-fullscreen window))
+              (media-playing-p))
+      (run-shell-command "xset s reset"))))
+
+(defvar *keep-awake-timer* nil)
+(when (timer-p *keep-awake-timer*)
+  (cancel-timer *keep-awake-timer*))
+(setf *keep-awake-timer* (run-with-timer 30 30 'keep-awake-if-busy))
 
 ;; gaps
 (asdf:load-system :swm-gaps)

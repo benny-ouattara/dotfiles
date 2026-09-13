@@ -2,6 +2,8 @@
 # Idle lock, after Omarchy's hypridle: lock after 5 idle minutes and turn the
 # monitor off a minute later. xss-lock (started by stumpwm/init.lisp) runs
 # guix/scripts/lock when the X screensaver activates and before suspend.
+# keep-awake-if-busy in stumpwm/init.lisp resets the idle timer every 30s while
+# audio plays or records or the current window is fullscreen.
 # Usage: idle on|off|toggle   turn locking and screen-off when idle on or off
 #        idle status          succeed while idle locking is on
 #        idle indicator       polybar idle module: an icon while idle locking is off
