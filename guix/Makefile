@@ -122,8 +122,8 @@ graph: ## Generate a PDF visualization of service extensions
 	cd $(HERE) && $(TIME_MACHINE) system extension-graph -L $(SYSTEM_MOD) $(SYSTEM) | $(TOOLS) dot -Tpdf > system-graph.pdf
 	@echo "Graph saved to system-graph.pdf"
 
-repl: ## Open a Guix REPL with local modules pre-loaded
-	cd $(HERE) && guix shell -m guix.scm -- guix repl -L $(SYSTEM_MOD) -i $(REPL_INIT)
+repl: ## Open a Guix REPL (pinned channels) with local modules pre-loaded
+	cd $(HERE) && $(TIME_MACHINE) repl -L $(SYSTEM_MOD) -L $(HOME_MOD) -i $(REPL_INIT)
 
 shell: ## Enter a shell with all tools needed for this Makefile
 	cd $(HERE) && guix shell -m guix.scm
@@ -136,9 +136,8 @@ offload-check: ## Verify connectivity to remote build machines
 gc-links: ## Remove temporary failed build links and unreachable roots
 	guix gc --list-dead
 
-news: ## Display news from all configured channels
-	cd $(HERE) && $(TIME_MACHINE) extension-graph --version > /dev/null 2>&1 || true # Warm up the time machine
-	guix pull -C $(CHANNELS) --news
+news: ## Display channel news brought in by the last 'pull'
+	guix pull --news
 
 debug: ## Print internal Makefile variables for troubleshooting
 	@echo "--- Makefile Variables ---"
@@ -162,8 +161,8 @@ health: ## Check the status of system and user Shepherd services and system logs
 
 blast-radius: ## Show what depends on a specific service
 	@echo "Generating dependency graph for services..."
-	guix system shepherd-graph -L $(SYSTEM_MOD) $(SYSTEM) | $(TOOLS) dot -Tpdf > shepherd-deps.pdf
-	@echo "Open shepherd-deps.pdf to see the 'Blast Radius' of your services."
+	cd $(HERE) && $(TIME_MACHINE) system shepherd-graph -L $(SYSTEM_MOD) $(SYSTEM) | $(TOOLS) dot -Tpdf > shepherd-deps.pdf
+	@echo "Open $(HERE)/shepherd-deps.pdf to see the 'Blast Radius' of your services."
 
 rollback: ## Roll back to the previous system generation
 	sudo guix system roll-back

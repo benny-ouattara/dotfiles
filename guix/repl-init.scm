@@ -4,8 +4,7 @@
  (guix store)
  (guix monads)
  (srfi srfi-1)
- (gnu packages base)
- (ice-9 readline))
+ (gnu packages base))
 
 (cond ((false-if-exception (resolve-interface '(ice-9 readline)))
        =>
