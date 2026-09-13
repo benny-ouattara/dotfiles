@@ -207,4 +207,12 @@
    (simple-service 'nix-fonts-service
                    home-fontconfig-service-type
                    (list "~/.nix-profile/share/fonts"))
+   ;; Nix apps (kitty) keep a stale font cache otherwise; see nix-fc-cache in flake.nix
+   (simple-service 'nix-font-cache-service
+                   home-run-on-change-service-type
+                   `(("profile/share/fonts"
+                      ,#~(let ((fc-cache (string-append (getenv "HOME")
+                                                        "/.nix-profile/bin/nix-fc-cache")))
+                           (when (file-exists? fc-cache)
+                             (system* fc-cache))))))
    %base-home-services)))

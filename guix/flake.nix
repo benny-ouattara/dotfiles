@@ -43,6 +43,12 @@
           proton-pass
           lazygit
           nerd-fonts.hack
+          # Guix profile font dirs have mtime 1, so Nix's fontconfig never
+          # notices new fonts; guix home runs this when fonts change
+          (pkgs.writeShellScriptBin "nix-fc-cache" ''
+            FONTCONFIG_FILE=${pkgs.fontconfig.out}/etc/fonts/fonts.conf \
+              exec ${pkgs.fontconfig.bin}/bin/fc-cache -f "$@"
+          '')
           yazi
           protonmail-bridge
           (pkgs.symlinkJoin {
