@@ -496,7 +496,7 @@ line contains X, so pgrep matched the shell itself and nothing ever started."
 ;; theme-switch generates this from dunst/dunstrc with the theme's colors
 (spawn-once "-x dunst" "dunst -config /home/ben/.config/theme/current/dunstrc")
 (spawn-once "-f '[n]m-applet'" "nm-applet")
-;; Lock after 5 idle minutes and before suspend; guix/scripts/idle sets the
+;; Lock after 30 idle minutes and before suspend; guix/scripts/idle sets the
 ;; X screensaver and DPMS timeouts that xss-lock reacts to
 (run-shell-command "/home/ben/Code/dotfiles/guix/scripts/idle on")
 (spawn-once "-f '[x]ss-lock'" "xss-lock -- /home/ben/Code/dotfiles/guix/scripts/lock --wait")
