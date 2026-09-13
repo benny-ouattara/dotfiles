@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Lock the screen the way Omarchy's hyprlock looks: the desktop blurred, a ring in
 # the theme's accent color and "Enter Password" in the theme font.
-# Usage: lock [COMMAND...]   lock, then run COMMAND (e.g. lock loginctl suspend)
+# Usage: lock [COMMAND...]          lock, then run COMMAND (e.g. lock loginctl suspend)
+#        lock --wait [COMMAND...]   stay running until unlocked (xss-lock needs this)
 #
 # i3lock-color can only unlock with the PAM entry from screen-locker-service-type
 # in guix/system/config.scm, so until that exists this falls back to slock.
@@ -44,15 +45,23 @@ i3lock_args() {
     )
 }
 
+WAIT=
+if [[ "$1" == --wait ]]; then
+    WAIT=1
+    shift
+fi
+
 # Already locked
 pgrep -x 'i3lock|slock' >/dev/null && exit 0
 
 if [[ -f /etc/pam.d/i3lock ]] && command -v i3lock >/dev/null; then
     i3lock_args
-    # i3lock forks once the screen is locked, so COMMAND runs behind the lock
-    i3lock "${LOCK_ARGS[@]}" || exit 1
+    # Without --wait, i3lock forks once the screen is locked, so COMMAND runs
+    # behind the lock; with it, i3lock stays in the foreground until unlock
+    i3lock ${WAIT:+--nofork} "${LOCK_ARGS[@]}" || exit 1
     [[ $# -gt 0 ]] && exec "$@"
     exit 0
 fi
 
+# slock stays in the foreground until unlock either way
 exec slock "$@"

@@ -1,14 +1,17 @@
 #!/usr/bin/env bash
 # Screen recording with ffmpeg, after Omarchy's omarchy-capture-screenrecording.
 # Running it while a recording is in progress stops that recording instead.
-# Usage: record region|screen [none|desktop|mic|both]   start or stop a recording
-#        record stop                                    stop and save
-#        record status                                  succeed while recording
-#        record indicator                               polybar recording module
+# Usage: record region|screen [none|desktop|mic|both] [webcam]
+#                             start or stop a recording; webcam overlays the
+#                             camera in the bottom-right corner
+#        record stop          stop and save
+#        record status        succeed while recording
+#        record indicator     polybar recording module
 #
 # Recordings go to ~/Videos/screenrecording-YYYY-MM-DD_HH-MM-SS.mp4. Omarchy's
 # gpu-screen-recorder can't load EGL on this system, so this uses x11grab with
-# VAAPI H.264 (libx264 without a render node) and AAC audio.
+# VAAPI H.264 (libx264 without a render node) and AAC audio. Unlike Omarchy the
+# webcam is composited into the video, with no on-screen preview window.
 
 DIR="${XDG_VIDEOS_DIR:-$HOME/Videos}"
 STATE="${XDG_RUNTIME_DIR:-/tmp}/record"
@@ -16,6 +19,7 @@ PID_FILE="$STATE.pid"
 OUT_FILE="$STATE.file"
 LOG_FILE="$STATE.log"
 RENDER_NODE=/dev/dri/renderD128
+WEBCAM_DEVICE="${RECORD_WEBCAM:-/dev/video0}"
 
 recording() {
     [[ -f "$PID_FILE" ]] && kill -0 "$(cat "$PID_FILE")" 2>/dev/null
@@ -38,12 +42,13 @@ mic_source() {
     if [[ "$source" == *.monitor ]]; then
         source=$(pactl list short sources | awk '$2 !~ /\.monitor$/ { print $2; exit }')
     fi
+    [[ -n "$source" ]] || fail "No microphone found"
     echo "$source"
 }
 
 start() {
-    local target="$1" audio="$2" geometry w h x y file monitor
-    local args=() audio_args=() video_args=()
+    local target="$1" audio="$2" webcam="$3" geometry w h x y file monitor mic
+    local inputs=() filters=() maps=() codec=() next=1 cam="" video="[0:v]" size
 
     command -v ffmpeg >/dev/null || fail "ffmpeg is not installed (run guix home reconfigure)"
     if [[ "$target" == region ]]; then
@@ -59,40 +64,63 @@ start() {
     h=$((h / 2 * 2))
     ((w > 0 && h > 0)) || exit 0
 
-    args=(-thread_queue_size 512 -f x11grab -framerate 60 -draw_mouse 1
-          -video_size "${w}x${h}" -i "${DISPLAY:-:0}+$x,$y")
+    inputs=(-thread_queue_size 512 -f x11grab -framerate 60 -draw_mouse 1
+            -video_size "${w}x${h}" -i "${DISPLAY:-:0}+$x,$y")
+
+    if [[ "$webcam" == webcam ]]; then
+        [[ -e "$WEBCAM_DEVICE" ]] || fail "No webcam at $WEBCAM_DEVICE"
+        inputs+=(-thread_queue_size 512 -f v4l2 -framerate 30 -i "$WEBCAM_DEVICE")
+        cam=$next
+        next=$((next + 1))
+    elif [[ -n "$webcam" ]]; then
+        fail "Unknown option: $webcam"
+    fi
+
     monitor="$(pactl get-default-sink).monitor"
     case "$audio" in
         none) ;;
         desktop)
-            args+=(-thread_queue_size 512 -f pulse -i "$monitor")
-            audio_args=(-c:a aac -b:a 160k)
+            inputs+=(-thread_queue_size 512 -f pulse -i "$monitor")
+            maps=(-map "$next:a")
             ;;
         mic)
-            args+=(-thread_queue_size 512 -f pulse -i "$(mic_source)")
-            audio_args=(-c:a aac -b:a 160k)
+            mic=$(mic_source) || exit 1
+            inputs+=(-thread_queue_size 512 -f pulse -i "$mic")
+            maps=(-map "$next:a")
             ;;
         both)
-            args+=(-thread_queue_size 512 -f pulse -i "$monitor"
-                   -thread_queue_size 512 -f pulse -i "$(mic_source)")
-            audio_args=(-filter_complex "[1:a][2:a]amix=inputs=2:duration=first[a]"
-                        -map 0:v -map "[a]" -c:a aac -b:a 160k)
+            mic=$(mic_source) || exit 1
+            inputs+=(-thread_queue_size 512 -f pulse -i "$monitor"
+                     -thread_queue_size 512 -f pulse -i "$mic")
+            filters+=("[$next:a][$((next + 1)):a]amix=inputs=2:duration=first[a]")
+            maps=(-map "[a]")
             ;;
         *) fail "Unknown audio option: $audio" ;;
     esac
+    [[ "$audio" != none ]] && codec+=(-c:a aac -b:a 160k)
 
+    if [[ -n "$cam" ]]; then
+        # A square of the camera, a quarter of the recording's height
+        size=$((h / 4 / 2 * 2))
+        filters+=("[$cam:v]scale=-2:$size,crop=$size:$size[cam]"
+                  "[0:v][cam]overlay=W-w-24:H-h-24[screen]")
+        video="[screen]"
+    fi
     if [[ -e "$RENDER_NODE" ]]; then
-        video_args=(-vaapi_device "$RENDER_NODE" -vf "format=nv12,hwupload" -c:v h264_vaapi -qp 24)
+        inputs+=(-vaapi_device "$RENDER_NODE")
+        filters+=("${video}format=nv12,hwupload[v]")
+        codec+=(-c:v h264_vaapi -qp 24)
     else
-        video_args=(-c:v libx264 -preset veryfast -crf 23 -pix_fmt yuv420p)
+        filters+=("${video}format=yuv420p[v]")
+        codec+=(-c:v libx264 -preset veryfast -crf 23)
     fi
 
     mkdir -p "$DIR"
     file="$DIR/screenrecording-$(date +%Y-%m-%d_%H-%M-%S).mp4"
     # setsid keeps ffmpeg running after StumpWM's shell or the menu exits
-    setsid ffmpeg -nostdin -hide_banner -loglevel error -y \
-        "${args[@]}" "${audio_args[@]}" "${video_args[@]}" "$file" \
-        > "$LOG_FILE" 2>&1 < /dev/null &
+    setsid ffmpeg -nostdin -hide_banner -loglevel error -y "${inputs[@]}" \
+        -filter_complex "$(IFS=';'; echo "${filters[*]}")" -map "[v]" "${maps[@]}" \
+        "${codec[@]}" "$file" > "$LOG_FILE" 2>&1 < /dev/null &
     echo $! > "$PID_FILE"
     echo "$file" > "$OUT_FILE"
 
@@ -123,7 +151,7 @@ case "${1:-}" in
         if recording; then
             stop
         else
-            start "$1" "${2:-none}"
+            start "$1" "${2:-none}" "${3:-}"
         fi
         ;;
     stop) recording && stop ;;
@@ -133,7 +161,7 @@ case "${1:-}" in
         exit 0
         ;;
     *)
-        echo "Usage: record region|screen [none|desktop|mic|both] | stop | status | indicator" >&2
+        echo "Usage: record region|screen [none|desktop|mic|both] [webcam] | stop | status | indicator" >&2
         exit 1
         ;;
 esac

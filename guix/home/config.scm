@@ -118,6 +118,7 @@
      "font-atui-feather"
      "clipmenu"
      "slock"
+     "xss-lock"                 ; guix/scripts/idle
      "tmux"
      "maim"
      "ffmpeg"                   ; guix/scripts/record

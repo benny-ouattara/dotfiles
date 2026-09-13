@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+# Idle lock, after Omarchy's hypridle: lock after 5 idle minutes and turn the
+# monitor off a minute later. xss-lock (started by stumpwm/init.lisp) runs
+# guix/scripts/lock when the X screensaver activates and before suspend.
+# Usage: idle on|off|toggle   turn locking and screen-off when idle on or off
+#        idle status          succeed while idle locking is on
+#        idle indicator       polybar idle module: an icon while idle locking is off
+
+LOCK_AFTER=300
+SCREEN_OFF_AFTER=360
+
+enabled() {
+    [[ "$(xset q | awk '/timeout:/ { print $2; exit }')" != 0 ]]
+}
+
+on() {
+    # No cycle: xss-lock locks as soon as the screensaver activates
+    xset s "$LOCK_AFTER" 0
+    xset +dpms dpms 0 0 "$SCREEN_OFF_AFTER"
+}
+
+off() {
+    xset s off -dpms
+}
+
+refresh_bar() {
+    polybar-msg action idle hook 0 >/dev/null 2>&1
+}
+
+case "${1:-}" in
+    on)
+        on
+        refresh_bar
+        ;;
+    off)
+        off
+        refresh_bar
+        ;;
+    toggle)
+        if enabled; then
+            off
+            notify-send -h string:x-dunst-stack-tag:idle "Idle lock" "Off until turned back on"
+        else
+            on
+            notify-send -h string:x-dunst-stack-tag:idle "Idle lock" "On"
+        fi
+        refresh_bar
+        ;;
+    status) enabled ;;
+    indicator)
+        enabled || echo "%{A1:~/Code/dotfiles/guix/scripts/idle toggle:}"$'\U000f0176'"%{A}"
+        exit 0
+        ;;
+    *)
+        echo "Usage: idle on|off|toggle|status|indicator" >&2
+        exit 1
+        ;;
+esac

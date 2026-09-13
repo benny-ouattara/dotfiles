@@ -81,21 +81,25 @@ screenrecord_menu() {
         return
     fi
     case "$(pick "Screenrecord" "Region" "Region with desktop audio" "Screen" \
-                 "Screen with desktop audio" "Screen with desktop + microphone")" in
+                 "Screen with desktop audio" "Screen with desktop + microphone" \
+                 "Screen with desktop + microphone + webcam")" in
         Region) "$record" region ;;
         "Region with desktop audio") "$record" region desktop ;;
         Screen) "$record" screen ;;
         "Screen with desktop audio") "$record" screen desktop ;;
         "Screen with desktop + microphone") "$record" screen both ;;
+        "Screen with desktop + microphone + webcam") "$record" screen both webcam ;;
         *) back ;;
     esac
 }
 
 toggle_menu() {
-    local dnd="Do not disturb"
+    local dnd="Do not disturb" idle="Idle lock"
     [[ "$(dunstctl is-paused 2>/dev/null)" == true ]] && dnd="Do not disturb (on)"
-    case "$(pick "Toggle" "$dnd" "Top bar" "Gaps")" in
+    "$DOTFILES/guix/scripts/idle" status || idle="Idle lock (off)"
+    case "$(pick "Toggle" "$dnd" "$idle" "Top bar" "Gaps")" in
         "Do not disturb"*) stumpish notifications-toggle-silence ;;
+        "Idle lock"*) "$DOTFILES/guix/scripts/idle" toggle ;;
         "Top bar") polybar-msg cmd toggle ;;
         Gaps) stumpish toggle-gaps ;;
         *) back ;;
