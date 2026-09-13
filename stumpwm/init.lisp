@@ -469,8 +469,11 @@ head and StumpWM never maps the new bar."
 ;; start processes
 (defun spawn-once (pgrep-args command)
   "Run COMMAND unless `pgrep PGREP-ARGS' finds it already running.
-restart-hard reloads this file, which would otherwise stack duplicates."
-  (run-shell-command (format nil "pgrep ~a >/dev/null || exec ~a" pgrep-args command)))
+restart-hard reloads this file, which would otherwise stack duplicates. The
+check runs in its own shell: in `pgrep -f X || exec X' that shell's command
+line contains X, so pgrep matched the shell itself and nothing ever started."
+  (when (string= "" (run-shell-command (format nil "pgrep ~a" pgrep-args) t))
+    (run-shell-command (format nil "exec ~a" command))))
 
 (run-commands
  "start-polybar"
