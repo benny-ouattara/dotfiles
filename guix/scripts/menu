@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Omarchy-style menu for StumpWM, shown with rofi.
-# Usage: menu [learn|capture|style|setup|config|update|system]
+# Usage: menu [learn|capture|screenrecord|toggle|style|setup|config|update|system]
 #
 # StumpWM runs it for M-s-SPC and s-; (main menu) and s-Escape (system); the
 # polybar menu button sends M-s-SPC with xdotool. WM actions use stumpish,
@@ -14,6 +14,7 @@ DIRECT="${1:-}"
 I_APPS=$'\U000f003b'
 I_LEARN=$'\U000f09d1'
 I_CAPTURE=$'\U000f14de'
+I_TOGGLE=$'\U000f0521'
 I_STYLE=$'\U000f03d8'
 I_SETUP=$'\U000f0493'
 I_UPDATE=$'\U000f06b0'
@@ -41,11 +42,12 @@ back() {
 }
 
 main_menu() {
-    case "$(pick "Menu" "$I_APPS  Apps" "$I_LEARN  Learn" "$I_CAPTURE  Capture" \
+    case "$(pick "Menu" "$I_APPS  Apps" "$I_LEARN  Learn" "$I_CAPTURE  Capture" "$I_TOGGLE  Toggle" \
                  "$I_STYLE  Style" "$I_SETUP  Setup" "$I_UPDATE  Update" "$I_SYSTEM  System")" in
         *Apps) rofi -show drun -theme "$HOME/.config/rofi/launcher.rasi" ;;
         *Learn) learn_menu ;;
         *Capture) capture_menu ;;
+        *Toggle) toggle_menu ;;
         *Style) style_menu ;;
         *Setup) setup_menu ;;
         *Update) update_menu ;;
@@ -63,21 +65,48 @@ learn_menu() {
 }
 
 capture_menu() {
-    case "$(pick "Capture" "Screenshot region" "Screenshot screen" "Clipboard history")" in
+    case "$(pick "Capture" "Screenshot region" "Screenshot screen" "Screenrecord" "Clipboard history")" in
         "Screenshot region") stumpish screenshot-region ;;
         "Screenshot screen") stumpish screenshot-screen ;;
+        Screenrecord) screenrecord_menu ;;
         "Clipboard history") stumpish clipboard-history ;;
         *) back ;;
     esac
 }
 
+screenrecord_menu() {
+    local record="$DOTFILES/guix/scripts/record"
+    if "$record" status; then
+        [[ "$(pick "Recording" "Stop recording")" == "Stop recording" ]] && "$record" stop
+        return
+    fi
+    case "$(pick "Screenrecord" "Region" "Region with desktop audio" "Screen" \
+                 "Screen with desktop audio" "Screen with desktop + microphone")" in
+        Region) "$record" region ;;
+        "Region with desktop audio") "$record" region desktop ;;
+        Screen) "$record" screen ;;
+        "Screen with desktop audio") "$record" screen desktop ;;
+        "Screen with desktop + microphone") "$record" screen both ;;
+        *) back ;;
+    esac
+}
+
+toggle_menu() {
+    local dnd="Do not disturb"
+    [[ "$(dunstctl is-paused 2>/dev/null)" == true ]] && dnd="Do not disturb (on)"
+    case "$(pick "Toggle" "$dnd" "Top bar" "Gaps")" in
+        "Do not disturb"*) stumpish notifications-toggle-silence ;;
+        "Top bar") polybar-msg cmd toggle ;;
+        Gaps) stumpish toggle-gaps ;;
+        *) back ;;
+    esac
+}
+
 style_menu() {
-    case "$(pick "Style" "Theme" "Font" "Next background" "Toggle bar" "Toggle gaps")" in
+    case "$(pick "Style" "Theme" "Font" "Next background")" in
         Theme) "$DOTFILES/guix/scripts/theme-switch" ;;
         Font) "$DOTFILES/guix/scripts/theme-switch" --font ;;
         "Next background") "$DOTFILES/guix/scripts/wallpaper" next ;;
-        "Toggle bar") polybar-msg cmd toggle ;;
-        "Toggle gaps") stumpish toggle-gaps ;;
         *) back ;;
     esac
 }
@@ -136,6 +165,8 @@ case "$DIRECT" in
     "") main_menu ;;
     learn) learn_menu ;;
     capture) capture_menu ;;
+    screenrecord) screenrecord_menu ;;
+    toggle) toggle_menu ;;
     style) style_menu ;;
     setup) setup_menu ;;
     config) config_menu ;;

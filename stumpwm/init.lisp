@@ -188,6 +188,8 @@ then runs s-RET). Command substitution drops trailing newlines."
 (defcommand notifications-toggle-silence () ()
   "Pause or resume dunst notifications."
   (run-shell-command "dunstctl set-paused toggle" t)
+  ;; Refresh the do-not-disturb indicator on the bar
+  (run-shell-command "polybar-msg action dnd hook 0")
   (message "Notifications ~a"
            (if (search "true" (run-shell-command "dunstctl is-paused" t))
                "silenced"
@@ -196,6 +198,14 @@ then runs s-RET). Command substitution drops trailing newlines."
 (defcommand screenshot-screen () ()
   "Take a fullscreen screenshot, save it and copy it to the clipboard."
   (run-shell-command "f=~/Screenshots/$(date +%Y%m%d-%H%M%S).png; maim \"$f\" && xclip -selection clipboard -t image/png -i \"$f\" && notify-send 'Screenshot saved' \"$f\""))
+
+(defcommand screenrecord-region () ()
+  "Record a screen region with guix/scripts/record; press again to stop."
+  (run-shell-command "/home/ben/Code/dotfiles/guix/scripts/record region"))
+
+(defcommand screenrecord-screen () ()
+  "Record the screen with desktop audio; press again to stop."
+  (run-shell-command "/home/ben/Code/dotfiles/guix/scripts/record screen desktop"))
 
 (defcommand screenshot-region () ()
   "Screenshot a selected region, save it and copy it to the clipboard."
@@ -339,6 +349,8 @@ head and StumpWM never maps the new bar."
 (define-key *top-map* (kbd "s-P") "screenshot-region")
 (define-key *top-map* (kbd "Print") "screenshot-region")
 (define-key *top-map* (kbd "S-Print") "screenshot-screen")
+(define-key *top-map* (kbd "M-Print") "screenrecord-region")
+(define-key *top-map* (kbd "C-M-Print") "screenrecord-screen")
 
 ;; Menu (Omarchy: Super+Alt+Space main menu, Super+Escape system) and keybinding help
 (define-key *top-map* (kbd "M-s-SPC") "menu")

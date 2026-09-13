@@ -120,6 +120,8 @@
      "slock"
      "tmux"
      "maim"
+     "ffmpeg"                   ; guix/scripts/record
+     "slop"
      "libnotify"
      "dunst"
      "pavucontrol"
