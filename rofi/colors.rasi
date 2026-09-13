@@ -1,0 +1,12 @@
+/* Catppuccin Mocha defaults, overridden by the current desktop theme from
+   guix/scripts/theme-switch (rofi ignores the import where it is missing) */
+* {
+    background:     #1E1E2EFF;
+    background-alt: #313244FF;
+    foreground:     #CDD6F4FF;
+    selected:       #89B4FAFF;
+    active:         #A6E3A1FF;
+    urgent:         #F38BA8FF;
+}
+
+@import "~/.config/theme/current/rofi.rasi"

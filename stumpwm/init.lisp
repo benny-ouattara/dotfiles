@@ -25,6 +25,11 @@
  stumpwm::*float-window-title-height* 20
  ;; Level 10 traces every X event (the log reached hundreds of MB)
  *debug-level* 1)
+;; Start a fresh debug log once the old one passes 10 MB
+(let ((log (data-dir-file "debug" "log")))
+  (when (and (probe-file log)
+             (> (with-open-file (in log) (file-length in)) (* 10 1024 1024)))
+    (delete-file log)))
 (redirect-all-output (data-dir-file "debug" "log"))
 
 ;; Lisp systems from the Guix home profile (swm-gaps, clx-truetype, ...)
@@ -52,6 +57,7 @@
 (defparameter *theme-blue* "#89B4FA")
 (defparameter *theme-purple* "#CBA6F7")
 (defparameter *theme-cyan* "#94E2D5")
+(defparameter *theme-muted* "#585B70")
 
 (defun apply-theme-colors ()
   "Apply the *theme-...* colors to the message bar and ^0-^7 color codes."
@@ -123,11 +129,11 @@ then runs s-RET). Command substitution drops trailing newlines."
 
 (defcommand clipboard-history () ()
   "Show clipboard history via clipmenu with rofi."
-  (run-shell-command "CM_LAUNCHER=rofi clipmenu -theme ~/.config/rofi/launchers/type-1/style-8.rasi"))
+  (run-shell-command "CM_LAUNCHER=rofi clipmenu -theme ~/.config/rofi/menu.rasi"))
 
 (defcommand cycle-wallpaper () ()
-  "Set a random wallpaper."
-  (run-shell-command "feh --randomize --bg-fill ~/Sync/wallpapers/*"))
+  "Next wallpaper for the current theme."
+  (run-shell-command "/home/ben/Code/dotfiles/guix/scripts/wallpaper next"))
 
 (defcommand toggle-float () ()
   "Toggle the current window between floating and tiled."
@@ -143,7 +149,7 @@ then runs s-RET). Command substitution drops trailing newlines."
    (concatenate 'string
                 "sink=$(pactl list sinks | grep -E 'Name:|Description:' | paste - - | "
                 "sed 's/.*Name: //;s/\\t.*Description: / ➜ /' | "
-                "rofi -dmenu -p 'Audio' -theme ~/.config/rofi/launchers/type-1/style-8.rasi | "
+                "rofi -dmenu -p 'Audio' -theme ~/.config/rofi/menu.rasi | "
                 "cut -d' ' -f1); "
                 "[ -n \"$sink\" ] && pactl set-default-sink \"$sink\" && "
                 "notify-send -h string:x-dunst-stack-tag:audio 'Audio Output' \"$(pactl list sinks | grep -A1 \"$sink\" | grep Description | sed 's/.*: //')\"")))
@@ -194,105 +200,30 @@ then runs s-RET). Command substitution drops trailing newlines."
   "Screenshot a selected region, save it and copy it to the clipboard."
   (run-shell-command "f=~/Screenshots/$(date +%Y%m%d-%H%M%S).png; maim -s \"$f\" && xclip -selection clipboard -t image/png -i \"$f\" && notify-send 'Screenshot saved' \"$f\""))
 
-(defcommand show-keybindings () ()
-  "Display keybindings via rofi."
-  (run-shell-command
-   (concatenate 'string
-                "echo -e '"
-                "s-RET            Terminal\\n"
-                "s-S-RET / s-B    Brave browser\\n"
-                "s-D              Discord\\n"
-                "s-e              Emacs\\n"
-                "s-y / s-F        Yazi file manager\\n"
-                "s-SPC            App launcher\\n"
-                "s-o / s-O        Edit home / system config\\n"
-                "s-c / s-v        Copy / paste\\n"
-                "s-x              Cut (copy outside Emacs)\\n"
-                "s-C-v            Clipboard history\\n"
-                "s-w / s-q        Close window\\n"
-                "s-j/k/h/l        Focus left/right/down/up\\n"
-                "s-Arrows         Focus direction\\n"
-                "s-C-j/k/h/l      Move window left/right/down/up\\n"
-                "s-S-Arrows       Swap window\\n"
-                "s-- / s-=        Narrower / wider\\n"
-                "s-_ / s-+        Shorter / taller\\n"
-                "C-s-r            Interactive resize\\n"
-                "s-V              Float / tile window\\n"
-                "s-f              Fullscreen\\n"
-                "s-s / s-S        HSplit / VSplit\\n"
-                "s-r              Remove frame\\n"
-                "s-d              Window list\\n"
-                "M-Tab / M-S-Tab  Next / previous window\\n"
-                "s-1..5           Switch workspace\\n"
-                "s-S-1..5         Move window and follow\\n"
-                "C-s-1..5         Move window\\n"
-                "s-Tab / s-S-Tab  Next / previous workspace\\n"
-                "C-s-Tab          Last workspace\\n"
-                "s-Esc / s-;      System menu\\n"
-                "s-:              Command prompt\\n"
-                "s-g / s-G        Guix system / home\\n"
-                "s-L              Lock screen\\n"
-                "s-p / S-Print    Screenshot screen\\n"
-                "s-P / Print      Screenshot region\\n"
-                "s-a / s-Mute     Switch audio output\\n"
-                "M-Vol keys       Volume by 1%\\n"
-                "C-s-a            Audio mixer\\n"
-                "C-s-b            Bluetooth\\n"
-                "C-s-w            Network\\n"
-                "C-s-t            Activity (btop)\\n"
-                "s-, / s-S-,      Dismiss / dismiss all notifications\\n"
-                "C-s-,            Silence notifications\\n"
-                "M-s-,            Notification action\\n"
-                "M-s-S-,          Restore last notification\\n"
-                "s-b / C-s-SPC    Random wallpaper\\n"
-                "C-s-S-SPC        Switch theme\\n"
-                "s-S-BackSpace    Toggle gaps\\n"
-                "s-S-SPC          Toggle bar\\n"
-                "s-R / s-Q        Restart / quit StumpWM\\n"
-                "s-K              This help"
-                "' | rofi -dmenu -i -p 'Keys' -theme ~/.config/rofi/launchers/type-1/style-8.rasi")))
+(defun binding-description (command)
+  "Readable text for a key binding's COMMAND string: `Run ...' for exec, the
+first docstring line for commands without arguments, else the command itself."
+  (let* ((space (position #\Space command))
+         (name (subseq command 0 space))
+         (symbol (find-symbol (string-upcase name) :stumpwm))
+         (doc (and symbol (fboundp symbol) (documentation symbol 'function))))
+    (cond ((string= name "exec") (concat "Run " (subseq command (1+ space))))
+          ((and doc (not space)) (subseq doc 0 (position #\Newline doc)))
+          (t command))))
 
-(defcommand system-menu () ()
-  "Show system menu via rofi."
-  (run-shell-command
-   (concatenate 'string
-                "choice=$(echo -e "
-                "'Guix System Reconfigure\\n"
-                "Guix Home Reconfigure\\n"
-                "Guix Pull\\n"
-                "Guix Garbage Collect\\n"
-                "Guix Rollback\\n"
-                "Guix Status\\n"
-                "Guix Health\\n"
-                "Switch Theme\\n"
-                "Restart StumpWM\\n"
-                "Quit StumpWM\\n"
-                "Lock Screen\\n"
-                "Edit System Config\\n"
-                "Edit Home Config' "
-                "| rofi -dmenu -p 'System' -theme ~/.config/rofi/launchers/type-1/style-8.rasi); "
-                "case \"$choice\" in "
-                "'Guix System Reconfigure') "
-                "exec kitty zsh -c 'up system-reconfigure; exec zsh;' ;; "
-                "'Guix Home Reconfigure') "
-                "exec kitty zsh -c 'up home-reconfigure; exec zsh;' ;; "
-                "'Guix Pull') "
-                "exec kitty zsh -c 'up pull; exec zsh;' ;; "
-                "'Guix Garbage Collect') "
-                "exec kitty zsh -c 'up gc-safe; exec zsh;' ;; "
-                "'Guix Rollback') "
-                "exec kitty zsh -c 'up rollback; exec zsh;' ;; "
-                "'Guix Status') "
-                "exec kitty zsh -c 'up status; exec zsh;' ;; "
-                "'Guix Health') "
-                "exec kitty zsh -c 'up health; exec zsh;' ;; "
-                "'Switch Theme') /home/ben/Code/dotfiles/guix/scripts/theme-switch ;; "
-                "'Restart StumpWM') stumpish restart-hard ;; "
-                "'Quit StumpWM') stumpish quit ;; "
-                "'Lock Screen') slock ;; "
-                "'Edit System Config') emacsclient -c /home/ben/Code/dotfiles/guix/system/config.scm ;; "
-                "'Edit Home Config') emacsclient -c /home/ben/Code/dotfiles/guix/home/config.scm ;; "
-                "esac")))
+(defcommand show-keybindings () ()
+  "Show the key bindings, generated from *top-map*."
+  (let ((file (merge-pathnames ".cache/stumpwm/keys.txt" (user-homedir-pathname))))
+    (ensure-directories-exist file)
+    (with-open-file (out file :direction :output :if-exists :supersede)
+      (dolist (binding (kmap-bindings *top-map*))
+        (let ((command (binding-command binding)))
+          (when (stringp command)
+            (format out "~22a ~a~%" (print-key (binding-key binding))
+                    (binding-description command))))))
+    (run-shell-command
+     (format nil "rofi -dmenu -i -no-custom -p Keys -theme ~~/.config/rofi/menu.rasi -theme-str 'window {width: 1000px;}' < ~a"
+             (namestring file)))))
 
 (defcommand start-slynk (port) ((:string "Port number: "))
   (sb-thread:make-thread
@@ -316,25 +247,56 @@ head and StumpWM never maps the new bar."
   (run-with-timer 2 nil 'polybar-update-groups))
 
 (defun rofi (mode)
-  (run-shell-command (concat "rofi -show " mode " -m " (write-to-string (head-number (current-head))) " -theme ~/.config/rofi/launchers/type-1/style-8.rasi")))
+  (run-shell-command (concat "rofi -show " mode " -m " (write-to-string (head-number (current-head))) " -theme ~/.config/rofi/launcher.rasi")))
 
 (defcommand launch-rofi () ()
+  "Launch an application with rofi."
   (rofi "drun"))
 
 (defcommand rofi-window () ()
+  "Switch to a window with rofi."
   (rofi "window"))
+
+(defcommand menu (&optional section) (:rest)
+  "Open the system menu (guix/scripts/menu), or one SECTION of it."
+  (run-shell-command
+   (format nil "/home/ben/Code/dotfiles/guix/scripts/menu ~@[~a~]" section)))
 
 (defun guix-run (cmd)
   (gselect "sys")
   (run-shell-command cmd))
 
+(defcommand guix-up (target) ((:string "up target: "))
+  "Run an `up' (guix/Makefile) target in a terminal on sys, notifying when done."
+  (guix-run
+   (format nil "exec kitty zsh -c 'up ~a && notify-send Guix \"~:*~a finished\" || notify-send -u critical Guix \"~:*~a failed\"; exec zsh'"
+           target)))
+
 (defcommand guix-system () ()
   "Reconfigure guix system."
-  (guix-run "exec kitty zsh -c 'up system-reconfigure; exec zsh;'"))
+  (guix-up "system-reconfigure"))
 
 (defcommand guix-home () ()
   "Reconfigure guix home."
-  (guix-run "exec kitty zsh -c 'up home-reconfigure; exec zsh;'"))
+  (guix-up "home-reconfigure"))
+
+(defparameter *config-files*
+  '(("home" . "guix/home/config.scm")
+    ("system" . "guix/system/config.scm")
+    ("stumpwm" . "stumpwm/init.lisp")
+    ("polybar" . "polybar/tokyo/modules.ini")
+    ("rofi" . "rofi/launcher.rasi")
+    ("kitty" . "kitty/kitty.conf")
+    ("theme" . "guix/scripts/theme-switch"))
+  "Configs `edit-config' opens, relative to the dotfiles checkout.")
+
+(defcommand edit-config (name) ((:string "Config: "))
+  "Open a dotfiles config (see *config-files*) in terminal Emacs."
+  (let ((file (cdr (assoc name *config-files* :test #'string-equal))))
+    (if file
+        (run-shell-command
+         (format nil "exec kitty --directory=/home/ben/Code/dotfiles emacsclient -t ~a" file))
+        (message "No config named ~a" name))))
 
 ;; enable which-key-mode
 (which-key-mode)
@@ -350,8 +312,8 @@ head and StumpWM never maps the new bar."
 
 ;; Apps
 (define-key *top-map* (kbd "s-RET") "exec kitty --directory=/home/ben/Code/dotfiles/guix")
-(define-key *top-map* (kbd "s-o") "exec kitty --directory=/home/ben/Code/dotfiles/guix emacsclient -t home/config.scm")
-(define-key *top-map* (kbd "s-O") "exec kitty --directory=/home/ben/Code/dotfiles/guix emacsclient -t system/config.scm")
+(define-key *top-map* (kbd "s-o") "edit-config home")
+(define-key *top-map* (kbd "s-O") "edit-config system")
 (define-key *top-map* (kbd "s-g") "guix-system")
 (define-key *top-map* (kbd "s-G") "guix-home")
 (define-key *top-map* (kbd "s-S-RET") "exec brave")
@@ -377,9 +339,10 @@ head and StumpWM never maps the new bar."
 (define-key *top-map* (kbd "Print") "screenshot-region")
 (define-key *top-map* (kbd "S-Print") "screenshot-screen")
 
-;; System menu and keybinding help
-(define-key *top-map* (kbd "s-;") "system-menu")
-(define-key *top-map* (kbd "s-Escape") "system-menu")
+;; Menu (Omarchy: Super+Alt+Space main menu, Super+Escape system) and keybinding help
+(define-key *top-map* (kbd "M-s-SPC") "menu")
+(define-key *top-map* (kbd "s-;") "menu")
+(define-key *top-map* (kbd "s-Escape") "menu system")
 (define-key *top-map* (kbd "s-:") "colon")
 (define-key *top-map* (kbd "s-K") "show-keybindings")
 
@@ -500,7 +463,7 @@ restart-hard reloads this file, which would otherwise stack duplicates."
  "start-polybar"
  "gselect dev")
 (run-shell-command "setxkbmap -option '' -option caps:ctrl_modifier us && xset r rate 100 100 && { pgrep -x xcape >/dev/null || exec xcape -e 'Caps_Lock=Escape'; }")
-(run-shell-command "feh --randomize --bg-fill ~/Sync/wallpapers/*")
+(run-shell-command "/home/ben/Code/dotfiles/guix/scripts/wallpaper restore")
 (spawn-once "-x picom" "picom --config /home/ben/Code/dotfiles/picom/picom.conf")
 ;; Guix wraps these, so match the command line; [x] keeps pgrep from matching this shell
 (spawn-once "-f '[c]lipmenud'" "clipmenud")
@@ -517,40 +480,26 @@ restart-hard reloads this file, which would otherwise stack duplicates."
 (swm-gaps:toggle-gaps-on)
 
 ;; Polybar
-(defun icon-by-group (name)
-  (cond
-    ((string-equal name "dev")
-     "")
-    ((string-equal name "web")
-     "")
-    ((string-equal name "term")
-     "")
-    ((string-equal name "mail")
-     "")
-    ((string-equal name "sys")
-     "")
-    (t (concat ""))))
-
 (defun polybar-groups ()
-  "Return string representation for polybar stumpgroups module"
-  (apply #'concatenate 'string
-         (mapcar
-          (lambda (g)
-            (let* ((name (group-name g))
-                   (number (write-to-string (group-number g)))
-                   (n-win (write-to-string (length (group-windows g))))
-                   (icon (icon-by-group name))
-                   (text (concat " %{F" *theme-blue* "}" icon "%{F-} " number ":" name " ")))
-              (cond
-                ((eq g (current-group))
-                 (concat "%{F" *theme-fg* " B" *theme-bg-alt* " u" *theme-blue* " +u}"
-                         text "[" n-win "] " "%{F- B- u- -u}"))
-                ((string-equal n-win "0") "")
-                (t (concat "%{F" *theme-fg* "}" text "[" n-win "] " "%{F-}")))))
-          (sort (screen-groups (current-screen)) #'< :key #'group-number))))
+  "Workspace numbers for the polybar workspaces module: the current one in the
+accent color and underlined, occupied ones in the foreground color, empty ones
+muted. A click switches workspace with xdotool (StumpWM handles
+_NET_CURRENT_DESKTOP); stumpish can't reach StumpWM from polybar."
+  (let ((groups (sort (copy-list (screen-groups (current-screen))) #'< :key #'group-number)))
+    (format nil "~{~a~}"
+            (loop for group in groups
+                  for index from 0
+                  collect (format nil "%{A1:xdotool set_desktop ~d:}~a ~d %{F- -u}%{A}"
+                                  index
+                                  (cond ((eq group (current-group))
+                                         (format nil "%{F~a u~a +u}" *theme-blue* *theme-blue*))
+                                        ((group-windows group)
+                                         (format nil "%{F~a}" *theme-fg*))
+                                        (t (format nil "%{F~a}" *theme-muted*)))
+                                  (group-number group))))))
 
 (defun polybar-update-groups ()
-  (run-shell-command (concat "polybar-msg action stumpwmgroups send '"
+  (run-shell-command (concat "polybar-msg action workspaces send '"
                              (polybar-groups) "'")))
 
 ;; Named hook functions: reloading this file replaces them instead of adding copies

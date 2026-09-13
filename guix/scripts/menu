@@ -1,0 +1,147 @@
+#!/usr/bin/env bash
+# Omarchy-style menu for StumpWM, shown with rofi.
+# Usage: menu [learn|capture|style|setup|config|update|system]
+#
+# StumpWM runs it for M-s-SPC and s-; (main menu) and s-Escape (system); the
+# polybar menu button sends M-s-SPC with xdotool. WM actions use stumpish,
+# which only finds StumpWM from processes StumpWM started.
+
+DOTFILES="$HOME/Code/dotfiles"
+ROFI_THEME="$HOME/.config/rofi/menu.rasi"
+DIRECT="${1:-}"
+
+# Symbols Nerd Font icons
+I_APPS=$'\U000f003b'
+I_LEARN=$'\U000f09d1'
+I_CAPTURE=$'\U000f14de'
+I_STYLE=$'\U000f03d8'
+I_SETUP=$'\U000f0493'
+I_UPDATE=$'\U000f06b0'
+I_SYSTEM=$'\U000f0425'
+I_LOCK=$'\U000f033e'
+I_SUSPEND=$'\U000f04b2'
+I_RESTART=$'\U000f0709'
+I_LOGOUT=$'\U000f0343'
+I_REBOOT=$'\U000f0453'
+
+pick() {
+    # pick PROMPT OPTION...: print the chosen option (empty on Escape)
+    local prompt="$1"
+    shift
+    printf '%s\n' "$@" | rofi -dmenu -i -no-custom -p "$prompt" -theme "$ROFI_THEME"
+}
+
+confirm() {
+    [[ "$(pick "$1" "Yes" "No")" == "Yes" ]]
+}
+
+back() {
+    # Escape in a submenu returns to the main menu unless it was opened directly
+    [[ -n "$DIRECT" ]] || main_menu
+}
+
+main_menu() {
+    case "$(pick "Menu" "$I_APPS  Apps" "$I_LEARN  Learn" "$I_CAPTURE  Capture" \
+                 "$I_STYLE  Style" "$I_SETUP  Setup" "$I_UPDATE  Update" "$I_SYSTEM  System")" in
+        *Apps) rofi -show drun -theme "$HOME/.config/rofi/launcher.rasi" ;;
+        *Learn) learn_menu ;;
+        *Capture) capture_menu ;;
+        *Style) style_menu ;;
+        *Setup) setup_menu ;;
+        *Update) update_menu ;;
+        *System) system_menu ;;
+    esac
+}
+
+learn_menu() {
+    case "$(pick "Learn" "Keybindings" "StumpWM manual" "Guix manual")" in
+        Keybindings) stumpish show-keybindings ;;
+        "StumpWM manual") xdg-open https://stumpwm.github.io/git/stumpwm-git.html ;;
+        "Guix manual") xdg-open https://guix.gnu.org/manual/en/html_node/ ;;
+        *) back ;;
+    esac
+}
+
+capture_menu() {
+    case "$(pick "Capture" "Screenshot region" "Screenshot screen" "Clipboard history")" in
+        "Screenshot region") stumpish screenshot-region ;;
+        "Screenshot screen") stumpish screenshot-screen ;;
+        "Clipboard history") stumpish clipboard-history ;;
+        *) back ;;
+    esac
+}
+
+style_menu() {
+    case "$(pick "Style" "Theme" "Next background" "Toggle bar" "Toggle gaps")" in
+        Theme) "$DOTFILES/guix/scripts/theme-switch" ;;
+        "Next background") "$DOTFILES/guix/scripts/wallpaper" next ;;
+        "Toggle bar") polybar-msg cmd toggle ;;
+        "Toggle gaps") stumpish toggle-gaps ;;
+        *) back ;;
+    esac
+}
+
+setup_menu() {
+    case "$(pick "Setup" "Audio" "Wifi" "Bluetooth" "Config")" in
+        Audio) pavucontrol & ;;
+        Wifi) kitty nmtui & ;;
+        Bluetooth) blueman-manager & ;;
+        Config) config_menu ;;
+        *) back ;;
+    esac
+}
+
+config_menu() {
+    # Names match *config-files* in stumpwm/init.lisp
+    local choice
+    choice=$(pick "Config" "home" "system" "stumpwm" "polybar" "rofi" "kitty" "theme")
+    if [[ -n "$choice" ]]; then
+        stumpish "edit-config $choice"
+    else
+        back
+    fi
+}
+
+update_menu() {
+    local target
+    case "$(pick "Update" "Guix pull" "Home reconfigure" "System reconfigure" \
+                 "Garbage collect" "Rollback" "Status" "Health")" in
+        "Guix pull") target=pull ;;
+        "Home reconfigure") target=home-reconfigure ;;
+        "System reconfigure") target=system-reconfigure ;;
+        "Garbage collect") target=gc-safe ;;
+        Rollback) confirm "Roll back the system?" && target=rollback ;;
+        Status) target=status ;;
+        Health) target=health ;;
+        *) back ;;
+    esac
+    [[ -n "$target" ]] && stumpish "guix-up $target"
+}
+
+system_menu() {
+    case "$(pick "System" "$I_LOCK  Lock" "$I_SUSPEND  Suspend" "$I_RESTART  Restart StumpWM" \
+                 "$I_LOGOUT  Log out" "$I_REBOOT  Reboot" "$I_SYSTEM  Shut down")" in
+        *Lock) slock ;;
+        *Suspend) slock loginctl suspend ;;
+        *"Restart StumpWM") stumpish restart-hard ;;
+        *"Log out") confirm "Log out?" && stumpish quit ;;
+        *Reboot) confirm "Reboot?" && loginctl reboot ;;
+        *"Shut down") confirm "Shut down?" && loginctl poweroff ;;
+        *) back ;;
+    esac
+}
+
+case "$DIRECT" in
+    "") main_menu ;;
+    learn) learn_menu ;;
+    capture) capture_menu ;;
+    style) style_menu ;;
+    setup) setup_menu ;;
+    config) config_menu ;;
+    update) update_menu ;;
+    system) system_menu ;;
+    *)
+        echo "Unknown menu: $DIRECT" >&2
+        exit 1
+        ;;
+esac

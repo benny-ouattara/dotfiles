@@ -84,6 +84,7 @@
      "qemu"
      "polybar"
      "rofi"
+     "papirus-icon-theme"
      "unzip"
      "the-silver-searcher"
      "ack"

@@ -1,0 +1,19 @@
+/* Menus and pickers (rofi -dmenu): the launcher look with a prompt, no mode
+   switcher and no icons, sized for short lists */
+@import "launcher.rasi"
+
+configuration {
+    show-icons: false;
+}
+window {
+    width: 600px;
+}
+inputbar {
+    children: [ "prompt", "entry" ];
+}
+custombox {
+    children: [ "listview" ];
+}
+listview {
+    lines: 10;
+}

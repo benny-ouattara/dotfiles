@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# Desktop wallpaper, set with feh.
+# Usage: wallpaper next     random wallpaper for the current theme
+#        wallpaper restore  the last wallpaper (~/.fehbg), or a random one
+#        wallpaper themed   succeed when the current theme has its own folder
+#
+# A theme uses ~/Sync/wallpapers/themes/<theme>/ when that folder has images,
+# otherwise every image in ~/Sync/wallpapers.
+
+WALLPAPERS="$HOME/Sync/wallpapers"
+THEME=$(cat "$HOME/.config/theme/current/name" 2>/dev/null)
+
+theme_dir() {
+    local dir="$WALLPAPERS/themes/$THEME"
+    if [[ -n "$THEME" ]] && compgen -G "$dir/*.[jJpP][pPnN]*" >/dev/null; then
+        echo "$dir"
+    else
+        echo "$WALLPAPERS"
+    fi
+}
+
+next() {
+    local dir current images=()
+    dir=$(theme_dir)
+    # feh shows the first image quoted in ~/.fehbg
+    current=$(grep -o "'[^']*'" "$HOME/.fehbg" 2>/dev/null | head -1 | tr -d "'")
+    while IFS= read -r -d '' image; do
+        [[ "$image" != "$current" ]] && images+=("$image")
+    done < <(find "$dir" -maxdepth 1 -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' \) -print0)
+    [[ ${#images[@]} -eq 0 ]] && exit 1
+    feh --bg-fill "${images[RANDOM % ${#images[@]}]}"
+}
+
+case "${1:-next}" in
+    next) next ;;
+    restore)
+        if [[ -x "$HOME/.fehbg" ]]; then
+            "$HOME/.fehbg"
+        else
+            next
+        fi
+        ;;
+    themed) [[ "$(theme_dir)" != "$WALLPAPERS" ]] ;;
+    *)
+        echo "Usage: wallpaper [next|restore|themed]" >&2
+        exit 1
+        ;;
+esac
