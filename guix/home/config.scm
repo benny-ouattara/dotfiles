@@ -114,6 +114,7 @@
      "xclip"
      "font-google-material-design-icons"
      "font-nerd-symbols"
+     "font-google-noto-emoji"   ; color emoji for starship module symbols in kitty
      "sbcl-stumpwm-ttf-fonts"
      "font-atui-feather"
      "clipmenu"
