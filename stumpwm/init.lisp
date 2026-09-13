@@ -58,6 +58,7 @@
 (defparameter *theme-purple* "#CBA6F7")
 (defparameter *theme-cyan* "#94E2D5")
 (defparameter *theme-muted* "#585B70")
+(defparameter *theme-font* "Iosevka Term")
 
 (defun apply-theme-colors ()
   "Apply the *theme-...* colors to the message bar and ^0-^7 color codes."
@@ -333,7 +334,7 @@ head and StumpWM never maps the new bar."
 (define-key *top-map* (kbd "s-a") "audio-switch")
 (define-key *top-map* (kbd "s-b") "cycle-wallpaper")
 (define-key *top-map* (kbd "s-d") "rofi-window")
-(define-key *top-map* (kbd "s-L") "exec slock")
+(define-key *top-map* (kbd "s-L") "exec /home/ben/Code/dotfiles/guix/scripts/lock")
 (define-key *top-map* (kbd "s-p") "screenshot-screen")
 (define-key *top-map* (kbd "s-P") "screenshot-region")
 (define-key *top-map* (kbd "Print") "screenshot-region")
@@ -530,7 +531,15 @@ _NET_CURRENT_DESKTOP); stumpish can't reach StumpWM from polybar."
 (setf xft:+font-cache-filename+
       (merge-pathnames ".cache/stumpwm/font-cache.sexp" (user-homedir-pathname)))
 (xft:cache-fonts)
-(set-font (make-instance 'xft:font :family "Iosevka Term" :subfamily "Regular" :size 14))
+(defun apply-theme-font ()
+  "Use *theme-font* for StumpWM messages. xft only sees fonts in the Guix home
+profile, so a family it can't load keeps the current font."
+  (handler-case
+      (set-font (make-instance 'xft:font :family *theme-font* :subfamily "Regular" :size 14))
+    (error ()
+      (dformat 1 "StumpWM can't load font ~a~%" *theme-font*))))
+
+(apply-theme-font)
 
 ;; Slynk REPL (uncomment to connect Sly/Slime to StumpWM)
 ;; (require :slynk)

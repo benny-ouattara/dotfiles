@@ -10,3 +10,6 @@
 * {
     font: "Iosevka Term 16";
 }
+
+/* Font picked with theme-switch --font (guix/scripts); ignored if missing */
+@import "~/.config/theme/current/rofi-font.rasi"

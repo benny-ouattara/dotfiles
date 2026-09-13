@@ -72,8 +72,9 @@ capture_menu() {
 }
 
 style_menu() {
-    case "$(pick "Style" "Theme" "Next background" "Toggle bar" "Toggle gaps")" in
+    case "$(pick "Style" "Theme" "Font" "Next background" "Toggle bar" "Toggle gaps")" in
         Theme) "$DOTFILES/guix/scripts/theme-switch" ;;
+        Font) "$DOTFILES/guix/scripts/theme-switch" --font ;;
         "Next background") "$DOTFILES/guix/scripts/wallpaper" next ;;
         "Toggle bar") polybar-msg cmd toggle ;;
         "Toggle gaps") stumpish toggle-gaps ;;
@@ -121,8 +122,8 @@ update_menu() {
 system_menu() {
     case "$(pick "System" "$I_LOCK  Lock" "$I_SUSPEND  Suspend" "$I_RESTART  Restart StumpWM" \
                  "$I_LOGOUT  Log out" "$I_REBOOT  Reboot" "$I_SYSTEM  Shut down")" in
-        *Lock) slock ;;
-        *Suspend) slock loginctl suspend ;;
+        *Lock) "$DOTFILES/guix/scripts/lock" ;;
+        *Suspend) "$DOTFILES/guix/scripts/lock" loginctl suspend ;;
         *"Restart StumpWM") stumpish restart-hard ;;
         *"Log out") confirm "Log out?" && stumpish quit ;;
         *Reboot) confirm "Reboot?" && loginctl reboot ;;

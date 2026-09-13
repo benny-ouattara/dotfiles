@@ -178,6 +178,7 @@ ben ALL=(root) NOPASSWD: ALL\n"))
             sbcl-stumpwm-pass
             sbcl-stumpwm-pamixer
 	        stumpish
+            i3lock-color               ; guix/scripts/lock
             podman
             nix
             tailscale
@@ -233,6 +234,12 @@ ben ALL=(root) NOPASSWD: ALL\n"))
             (qemu-binfmt-configuration
              (platforms (lookup-qemu-platforms "arm" "aarch64"))))
    (service bluetooth-service-type)
+   ;; PAM entry so i3lock-color can unlock; guix/scripts/lock uses slock until it exists
+   (service screen-locker-service-type
+            (screen-locker-configuration
+             (name "i3lock")
+             (program (file-append i3lock-color "/bin/i3lock"))
+             (using-setuid? #f)))
    (udev-rules-service 'brightness brightnessctl)
    (service openssh-service-type
             (openssh-configuration
