@@ -168,18 +168,33 @@
                      (name "*")
                      (extra-content "  StrictHostKeyChecking no"))
                     (openssh-host
-                     (name "ops 10.0.0.86")
+                     (name "ops 100.114.170.29")
+                     (host-name "100.114.170.29")
+                     (identity-file (string-append (getenv "HOME") "/.ssh/jazacash"))
+                     (user "root"))
+                    (openssh-host
+                     (name "dev 100.78.28.10")
+                     (host-name "100.78.28.10")
+                     (identity-file (string-append (getenv "HOME") "/.ssh/jazacash"))
+                     (user "root"))
+                    (openssh-host
+                     (name "prod 100.66.6.63")
+                     (host-name "100.66.6.63")
+                     (identity-file (string-append (getenv "HOME") "/.ssh/jazacash"))
+                     (user "root"))
+                    (openssh-host
+                     (name "ops-public 10.0.0.86")
                      (host-name "10.0.0.86")
                      (identity-file (string-append (getenv "HOME") "/.ssh/jazacash"))
                      (user "root")
                      (proxy (proxy-command "ssh -W %h:%p root@44.201.64.217")))
                     (openssh-host
-                     (name "dev 44.201.64.217")
+                     (name "dev-public 44.201.64.217")
                      (host-name "44.201.64.217")
                      (identity-file (string-append (getenv "HOME") "/.ssh/jazacash"))
                      (user "root"))
                     (openssh-host
-                     (name "prod 13.246.2.37")
+                     (name "prod-public 13.246.2.37")
                      (host-name "13.246.2.37")
                      (identity-file (string-append (getenv "HOME") "/.ssh/jazacash"))
                      (user "root"))))))
