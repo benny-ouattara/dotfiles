@@ -194,8 +194,8 @@
                      (identity-file (string-append (getenv "HOME") "/.ssh/jazacash"))
                      (user "root"))
                     (openssh-host
-                     (name "prod-public 13.246.2.37")
-                     (host-name "13.246.2.37")
+                     (name "prod-public 13.245.76.39")
+                     (host-name "13.245.76.39")
                      (identity-file (string-append (getenv "HOME") "/.ssh/jazacash"))
                      (user "root"))))))
    (service home-ssh-agent-service-type
