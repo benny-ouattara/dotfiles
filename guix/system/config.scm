@@ -130,14 +130,19 @@ ben ALL=(root) NOPASSWD: ALL\n"))
                                                           (channels %channels)
                                                           (guix (guix-for-channels %channels))
                                                           (substitute-urls
-                                                           (cons* "https://substitutes.nonguix.org"
-                                                                  "https://substitutes.guix.gofranz.com"
-                                                                  ;; "http://substitutes.jazacash.com"
-                                                                  %default-substitute-urls))
+                                                           (append (list "https://substitutes.nonguix.org"
+                                                                         "https://substitutes.guix.gofranz.com")
+                                                                   %default-substitute-urls
+                                                                   ;; ops over the tailnet, queried last: it is the
+                                                                   ;; only source for private jazacash closures, which
+                                                                   ;; no public mirror has, and guix falls through to
+                                                                   ;; it for those without paying a round trip on
+                                                                   ;; every other lookup
+                                                                   (list "http://100.114.170.29")))
                                                           (authorized-keys
                                                            (cons* (local-file "../keys/nonguix-key.pub")
                                                                   (local-file "../keys/pantherx-key.pub")
-                                                                  (local-file "../keys/cuirass-key.pub")
+                                                                  (local-file "../keys/ops.pub")
                                                                   %default-authorized-guix-keys))))))
 
 (operating-system
