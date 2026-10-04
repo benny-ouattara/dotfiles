@@ -28,7 +28,8 @@
   #:use-module (gnu home services fontutils)
   #:use-module (guix packages)
   #:use-module (guix build-system trivial)
-  #:use-module (beno packages lnav))
+  #:use-module (beno packages lnav)
+  #:use-module (beno packages zellij))
 
 (home-environment
  (packages
@@ -106,7 +107,6 @@
      "babashka"
      "awscli"
      "podman-compose"
-     "jtools"
      "sops"
      "github-cli"
      "zoxide"
@@ -122,6 +122,7 @@
      "slock"
      "xss-lock"                 ; guix/scripts/idle
      "tmux"
+     "zellij"
      "maim"
      "ffmpeg"                   ; guix/scripts/record
      "slop"
@@ -135,6 +136,7 @@
      "jq"
      "ncdu"
      "git-delta"
+     "emacs-lsp-booster"
      "mu"
      "isync"
      "msmtp"
