@@ -225,7 +225,7 @@ in
     pkgs.clojure
     pkgs.clj-kondo
     pkgs.cljfmt
-    (pkgs.leiningen.override { jdk = pkgs.jdk17; })
+    (pkgs.leiningen.override { jdk = pkgs.jdk25; })
     pkgs.wireguard-tools
     pkgs.tree
     pkgs.tcpdump

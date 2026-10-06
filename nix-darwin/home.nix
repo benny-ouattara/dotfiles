@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 {
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
@@ -95,9 +100,10 @@
         ds = "diff --staged";
         undo = "reset --soft HEAD^";
         w = "status -sb";
-        l = "log --graph --pretty=format:'%Cred%h%Creset"
-            + " —%Cblue%d%Creset %s %Cgreen(%cr)%Creset'"
-            + " --abbrev-commit --date=relative --show-notes=*";
+        l =
+          "log --graph --pretty=format:'%Cred%h%Creset"
+          + " —%Cblue%d%Creset %s %Cgreen(%cr)%Creset'"
+          + " --abbrev-commit --date=relative --show-notes=*";
       };
 
       gpg.format = "openpgp";
@@ -114,7 +120,19 @@
       };
     };
 
-    ignores = [ "*.elc" ".clean" ".direnv" ".DS_Store" ".env" ".env.*" "node_modules/" "TAGS" "result" "result-*" "tags" ];
+    ignores = [
+      "*.elc"
+      ".clean"
+      ".direnv"
+      ".DS_Store"
+      ".env"
+      ".env.*"
+      "node_modules/"
+      "TAGS"
+      "result"
+      "result-*"
+      "tags"
+    ];
   };
 
   programs.fzf = {
@@ -195,8 +213,8 @@
     };
 
     shellAliases = {
-      aider="OLLAMA_API_BASE=\"http://otter:11434\" aider";
-      snore="sudo -v; while true; do sudo -n true; sleep 60; kill -0 \"$$\" || exit; done 2>/dev/null &";
+      aider = "OLLAMA_API_BASE=\"http://otter:11434\" aider";
+      snore = "sudo -v; while true; do sudo -n true; sleep 60; kill -0 \"$$\" || exit; done 2>/dev/null &";
       r = "ranger";
       lg = "lazygit";
       zj = "zellij";
@@ -218,9 +236,9 @@
       sbcl = "${pkgs.rlwrap}/bin/rlwrap sbcl";
       guile = "${pkgs.rlwrap}/bin/rlwrap guile";
       info = "info --vi-keys";
-      oc-on="ssh -f oc-tunnel";
-      oc-off="pkill -f oc-tunnel";
-      oc-dash="ssh -f oc-tunnel && open http://localhost:18789";
+      oc-on = "ssh -f oc-tunnel";
+      oc-off = "pkill -f oc-tunnel";
+      oc-dash = "ssh -f oc-tunnel && open http://localhost:18789";
       # ls = "${pkgs.coreutils}/bin/ls --color=auto -alhrt";
       # l = "${pkgs.coreutils}/bin/ls --color=auto -alhrt";
       # rX = "${pkgs.coreutils}/bin/chmod -R ugo+rX";
@@ -276,7 +294,7 @@
       }
       zle -N _broot_widget
       bindkey '^X' _broot_widget
-      '';
+    '';
   };
 
   programs.ssh = {
@@ -287,10 +305,6 @@
     # options are deprecated in favour of this freeform `settings` attrset.
     settings = {
       "*" = {
-        ControlMaster = "auto";
-        ControlPath = "~/.ssh/master-%r@%h:%p";
-        ControlPersist = "yes";
-
         HashKnownHosts = true;
         ForwardAgent = true;
         ServerAliveInterval = 60;
@@ -331,11 +345,16 @@
       "oc-tunnel" = {
         HostName = "otter";
         User = "ben";
-        LocalForward = [{
-          bind.port = 18789;
-          host.address = "127.0.0.1";
-          host.port = 18789;
-        }];
+        ControlMaster = "auto";
+        ControlPath = "~/.ssh/master-%r@%h:%p";
+        ControlPersist = "yes";
+        LocalForward = [
+          {
+            bind.port = 18789;
+            host.address = "127.0.0.1";
+            host.port = 18789;
+          }
+        ];
         RequestTTY = "no";
         RemoteCommand = "/run/current-system/profile/bin/sleep infinity";
       };

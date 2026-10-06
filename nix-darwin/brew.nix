@@ -63,7 +63,7 @@
       "sf-symbols"
       "wezterm"
       "monitorcontrol"
-      "corretto@17"
+      "corretto@25"
       "tableplus"
       "background-music"
       "podman-desktop"
