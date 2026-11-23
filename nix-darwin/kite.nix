@@ -121,13 +121,17 @@ in
   };
 
   environment.systemPackages = [
+    pkgs.mqttx-cli
+    pkgs.esptool
+    pkgs.tio
+    pkgs.platformio
+    pkgs.gradle
     pkgs.pi-coding-agent
     pkgs.himalaya
     pkgs.sops
     pkgs.opencode
     pkgs.codex
     pkgs.gemini-cli
-    pkgs.claude-code
     pkgs.bruno
     pkgs.mitmproxy
     pkgs.lunar
