@@ -21,7 +21,7 @@
       "homebrew/bundle"
       "homebrew/services"
       "asmvik/formulae"
-      "d12frosted/emacs-plus"
+      "jimeh/emacs-builds"
       "clojure/tools"
       # "homebrew/cask-versions"
       # "homebrew/cask-fonts"
@@ -37,6 +37,7 @@
       "btop"
       "aider"
       "dnstwist"
+      "cloudflared"
       # "podman"
       # "reroutingcli"
       # "mmp"
@@ -45,6 +46,7 @@
     casks = [
       # Menu bar system monitor. Covers GPU, which btop cannot on this Intel
       # Mac -- btop's macOS GPU support is Apple Silicon only.
+      "claude-code"
       "stats"
       "snapzy"
       "visualvm"
@@ -68,10 +70,10 @@
       "background-music"
       "podman-desktop"
       "karabiner-elements"
+      "emacs-app"
     ];
 
     extraConfig = ''
-      brew "emacs-plus@31", args: ["with-xwidgets"], link: true
       cask "google-drive", args: { require_sha: false }
     '';
   };
