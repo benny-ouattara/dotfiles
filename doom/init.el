@@ -83,6 +83,7 @@
        sh                            ; she sells {ba,z,fi}sh shells on the C xor
        web                           ; the tubes
        yaml                          ; JSON, but readable
+       kotlin
 
        :email
        ;; (mu4e +gmail)
