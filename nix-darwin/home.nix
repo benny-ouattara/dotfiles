@@ -257,8 +257,8 @@
          eval "$(jenv init -)"
       fi
 
-      export EDITOR=emacs
-      export VISUAL=emacs
+      export EDITOR=nvim
+      export VISUAL=nvim
 
       source ${pkgs.nix-index}/etc/profile.d/command-not-found.sh
 
