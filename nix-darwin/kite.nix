@@ -121,6 +121,7 @@ in
   };
 
   environment.systemPackages = [
+    pkgs.tree-sitter
     pkgs.mqttx-cli
     pkgs.esptool
     pkgs.tio
