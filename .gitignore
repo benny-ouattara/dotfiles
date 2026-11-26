@@ -59,3 +59,4 @@ ranger/plugins/__init__.py
 zellij/config.kdl.bak
 .claude/settings.local.json
 .android/
+homebrew/trust.json.lock

@@ -1,0 +1,5 @@
+{
+  "trustedcasks": [
+    "jimeh/emacs-builds/emacs-app"
+  ]
+}
