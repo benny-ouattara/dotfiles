@@ -7,15 +7,10 @@ local options = {
       dark = "macchiato",
   },
   transparent_background = true,
-  compile = {
-    enabled = true,
-    path = vim.fn.stdpath "cache" .. "/catppuccin"
-  },
+  compile_path = vim.fn.stdpath "cache" .. "/catppuccin",
   integrations = {
-    dap = {
-      enabled = true,
-      enable_ui = true,
-    },
+    dap = true,
+    dap_ui = true,
     cmp = true,
     leap = true,
   },
@@ -42,35 +37,20 @@ local options = {
     Typedef = { fg = colors.yellow }, --  A typedef
     Special = { fg = colors.peach }, -- (preferred) any special symbol
     Type = { fg = colors.teal }, -- (preferred) int, long, char, etcp.
-    TSInclude = { fg = colors.peach, style = { "italic" } },
-    ["@include"] = { fg = colors.peach, style = { "italic" } },
-    TSField = { fg = colors.blue }, -- For fields.
-    ["@field"] = { fg = colors.blue }, -- For fields.
-    TSProperty = { fg = colors.blue }, -- Same as TSField.
-    ["@property"] = { fg = colors.blue }, -- Same as TSField.
-    TSConstant = { fg = colors.maroon }, -- For constants
+    ["@keyword.import"] = { fg = colors.peach, style = { "italic" } },
+    ["@variable.member"] = { fg = colors.blue }, -- For fields.
+    ["@property"] = { fg = colors.blue }, -- Same as @variable.member.
     ["@constant.builtin"] = { fg = colors.maroon }, -- For constants
-    TSParameter = { fg = colors.text, style = { "italic" } }, -- For parameters of a function.
-    ["@parameter"] = { fg = colors.text, style = { "italic" } }, -- For parameters of a function.
-    TSOperator = { fg = colors.text },
+    ["@variable.parameter"] = { fg = colors.text, style = { "italic" } }, -- For parameters of a function.
     ["@operator"] = { fg = colors.text },
-    TSKeywordFunction = { fg = colors.peach }, -- For keywords used to define a fuction.
     ["@keyword.function"] = { fg = colors.peach }, -- For keywords used to define a fuction.
-    TSKeyword = { fg = colors.peach }, -- For keywords that don't fall in previous categories.
     ["@keyword"] = { fg = colors.peach }, -- For keywords that don't fall in previous categories.
-    TSKeywordReturn = { fg = colors.peach },
     ["@keyword.return"] = { fg = colors.peach },
-    TSType = { fg = colors.teal }, -- For types.
     ["@type"] = { fg = colors.teal }, -- For types.
-    TSTypeBuiltin = { fg = colors.teal, style = { "italic" } }, -- For builtin types.
     ["@type.builtin"] = { fg = colors.teal, style = { "italic" } }, -- For builtin types.
-    TSVariableBuiltin = { fg = colors.red }, -- Variable names that are defined by the languages, like this or self.
     ["@variable.builtin"] = { fg = colors.red }, -- Variable names that are defined by the languages, like this or self.
-    TSFunction = { fg = colors.green }, -- For function (calls and definitions).
     ["@function.builtin"] = { fg = colors.green }, -- For function (calls and definitions).
-    TSMethod = { fg = colors.green }, -- For method calls and definitions.
     ["@function"] = { fg = colors.green }, -- For method calls and definitions.
-    TSString = { fg = colors.yellow, style = { "italic" } }, -- For strings.
     ["@string"] = { fg = colors.yellow, style = { "italic" } }, -- For strings.
     BufferLineSeparator = { fg = colors.peach, bg = "NONE" },
     BufferLineBufferVisible = { fg = colors.surface1, bg = "NONE" },

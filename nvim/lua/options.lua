@@ -17,12 +17,12 @@ vim.opt.cmdheight = 1
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
-vim.bo.softtabstop = 2
+vim.opt.softtabstop = 2
 
-vim.cmd("set foldcolumn=0")
-vim.cmd("set foldenable")
-vim.cmd("set foldlevel=99")
-vim.cmd("set foldmethod=indent")
-vim.cmd("set foldnestmax=1")
-vim.cmd("set termguicolors")
-vim.cmd("set colorcolumn=80")
+vim.opt.foldcolumn = "0"
+vim.opt.foldenable = true
+vim.opt.foldlevel = 99
+vim.opt.foldmethod = "indent"
+vim.opt.foldnestmax = 1
+vim.opt.termguicolors = true
+vim.opt.colorcolumn = "80"

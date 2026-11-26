@@ -1,44 +1,17 @@
-local capabilities = vim.lsp.protocol.make_client_capabilities()
+-- Nvim 0.11+ owns LSP configuration: nvim-lspconfig now only ships `lsp/<name>.lua`
+-- definitions, and mason-lspconfig calls vim.lsp.enable() for what's installed.
+-- Server-specific overrides go through vim.lsp.config().
 
-capabilities.textDocument.completion.completionItem = {
-  documentationFormat = { "markdown", "plaintext" },
-  snippetSupport = true,
-  preselectSupport = true,
-  insertReplaceSupport = true,
-  labelDetailsSupport = true,
-  deprecatedSupport = true,
-  commitCharactersSupport = true,
-  tagSupport = { valueSet = { 1 } },
-  resolveSupport = {
-    properties = {
-      "documentation",
-      "detail",
-      "additionalTextEdits",
-    },
-  },
-}
+vim.lsp.config("*", {
+  capabilities = require("cmp_nvim_lsp").default_capabilities(),
+})
 
-
-local servers = { "pyright", "texlab", "clangd", "rust_analyzer" }
-
-vim.g.rust_recommended_style = false
-
-for _, lsp in ipairs(servers) do
-  require("lspconfig")[lsp].setup {
-    on_attach = on_attach,
-    capabilities = capabilities,
-  }
-end
-
-require("lspconfig")["lua_ls"].setup {
-  on_attach = on_attach,
-  capabilities = capabilities,
+vim.lsp.config("lua_ls", {
   settings = {
     Lua = {
       diagnostics = {
-        globals = { "vim", "on_attach" },
+        globals = { "vim" },
       },
-    }
-  }
-}
-
+    },
+  },
+})

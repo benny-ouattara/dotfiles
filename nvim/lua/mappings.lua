@@ -19,19 +19,17 @@ vim.keymap.set("n", "<C-Up>", "<C-w>k", opts)
 vim.keymap.set("n", "<C-Right>", "<C-w>l", opts)
 
 -- Telescope
-vim.keymap.set("n", "<leader>fw", ':lua require("telescope")<CR> <cmd>Telescope live_grep<cr>', opts)
+vim.keymap.set("n", "<leader>/", "<cmd>Telescope live_grep<CR>", opts)
 
 -- Bufferline
 vim.keymap.set("n", "<TAB>", ":BufferLineCycleNext<CR>", opts)
 vim.keymap.set("n", "<S-TAB>", ":BufferLineCyclePrev<CR>", opts)
 
--- nnn
-vim.keymap.set("n", "<leader>n", ':lua require("nnn")<CR> :NnnPicker<CR>', opts)
-vim.keymap.set("n", "<leader>N", ':lua require("nnn")<CR> :NnnExplorer<CR>', opts)
-
--- Leap
-vim.keymap.set("n", "f", ':lua require("leap")<CR> <Plug>(leap-forward)', opts)
-vim.keymap.set("n", "F", ':lua require("leap")<CR> <Plug>(leap-backward)', opts)
+-- Leap (<Plug> keys need remap to expand)
+local plug = { remap = true, silent = true }
+vim.keymap.set({ "n", "x", "o" }, "f", "<Plug>(leap-forward)", plug)
+vim.keymap.set({ "n", "x", "o" }, "F", "<Plug>(leap-backward)", plug)
+vim.keymap.set({ "n", "x", "o" }, "gs", "<Plug>(leap-from-window)", plug)
 
 -- nvim-spider (w,e,b replacement)
 vim.keymap.set({"n", "o", "x"}, "w", "<cmd>lua require('spider').motion('w')<CR>", opts)
@@ -39,9 +37,9 @@ vim.keymap.set({"n", "o", "x"}, "e", "<cmd>lua require('spider').motion('e')<CR>
 vim.keymap.set({"n", "o", "x"}, "b", "<cmd>lua require('spider').motion('b')<CR>", opts)
 vim.keymap.set({"n", "o", "x"}, "ge", "<cmd>lua require('spider').motion('ge')<CR>", opts)
 
--- Comment
-vim.keymap.set("n", "<leader>c", "<cmd> :lua require('Comment.api').toggle.linewise.current()<CR>", opts)
-vim.keymap.set("v", "<leader>c", "<esc><cmd> :lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>", opts)
+-- Comment (built-in gc/gcc operators)
+vim.keymap.set("n", "<leader>c", "gcc", { remap = true, silent = true })
+vim.keymap.set("x", "<leader>c", "gc", { remap = true, silent = true })
 
 -- EasyAlign
 vim.keymap.set("v", "<leader>a", ":EasyAlign<CR>", opts)

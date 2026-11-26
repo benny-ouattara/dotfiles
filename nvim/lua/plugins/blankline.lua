@@ -1,21 +1,27 @@
-local options = {
-  indentLine_enabled = 1,
-  filetype_exclude = {
-    "help",
-    "terminal",
-    "packer",
-    "lspinfo",
-    "TelescopePrompt",
-    "TelescopeResults",
-    "lsp-installer",
-    "",
+-- indent-blankline v3 ("ibl"); the v2 `indent_blankline` API is gone.
+require("ibl").setup {
+  indent = {
+    char = "│",
   },
-  buftype_exclude = { "terminal" },
-  show_trailing_blankline_indent = true,
-  show_first_indent_level = true,
-  show_current_context = true,
-  show_current_context_start = false,
-  show_end_of_line = true,
+  whitespace = {
+    remove_blankline_trail = false,
+  },
+  scope = {
+    enabled = true,
+    show_start = false,
+    show_end = false,
+  },
+  exclude = {
+    filetypes = {
+      "help",
+      "terminal",
+      "lspinfo",
+      "TelescopePrompt",
+      "TelescopeResults",
+      "lazy",
+      "mason",
+      "",
+    },
+    buftypes = { "terminal" },
+  },
 }
-
-require("indent_blankline").setup(options)

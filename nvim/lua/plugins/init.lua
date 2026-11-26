@@ -1,5 +1,5 @@
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
   vim.fn.system({
     "git",
     "clone",
@@ -20,7 +20,11 @@ return require("lazy").setup(
   "hrsh7th/cmp-path",
   "junegunn/vim-easy-align",
   {
+    -- The `main` branch is a from-scratch rewrite: it only installs parsers and
+    -- ships queries, Neovim owns the features. It cannot be lazy-loaded.
     "nvim-treesitter/nvim-treesitter",
+    branch = "main",
+    lazy = false,
     build = ":TSUpdate",
     config = function()
       require "plugins.treesitter"
@@ -33,22 +37,17 @@ return require("lazy").setup(
     end,
   },
   {
-    "williamboman/mason.nvim",
+    -- mason moved to the mason-org organisation.
+    "mason-org/mason.nvim",
     config = function()
       require "plugins.mason"
     end,
   },
   {
-    "williamboman/mason-lspconfig.nvim",
+    "mason-org/mason-lspconfig.nvim",
+    dependencies = { "mason-org/mason.nvim", "neovim/nvim-lspconfig" },
     config = function()
       require "plugins.mason_lspconfig"
-    end,
-  },
-  {
-    event = "BufEnter *.rs",
-    "simrat39/rust-tools.nvim",
-    config = function()
-      require "rust-tools".setup()
     end,
   },
   {
@@ -60,7 +59,7 @@ return require("lazy").setup(
   {
     "L3MON4D3/LuaSnip",
     dependencies = "onsails/lspkind.nvim",
-    run = "make install_jsregexp",
+    build = "make install_jsregexp",
     config = function()
       require "plugins.luasnip"
     end,
@@ -94,36 +93,23 @@ return require("lazy").setup(
   {
     lazy = true,
     "rcarriga/nvim-dap-ui",
+    dependencies = "nvim-neotest/nvim-nio",
     config = function()
       require "plugins.dapui"
     end,
   },
   {
-    lazy = true,
-    "numToStr/Comment.nvim",
-    config = function()
-        require "Comment".setup()
-    end
-  },
-  {
-    "norcalli/nvim-colorizer.lua",
+    -- norcalli's original is dormant; this fork is the maintained continuation.
+    "catgoose/nvim-colorizer.lua",
     config = function()
       require "colorizer".setup()
     end
   },
   {
     "akinsho/bufferline.nvim",
-    version = "v2.*",
-    dependencies = "kyazdani42/nvim-web-devicons",
+    dependencies = "nvim-tree/nvim-web-devicons",
     config = function()
       require "plugins.bufferline"
-    end
-  },
-  {
-    lazy = true,
-    "luukvbaal/nnn.nvim",
-    config = function()
-      require("nnn").setup()
     end
   },
   {
@@ -134,16 +120,14 @@ return require("lazy").setup(
     end
   },
   {
-    lazy = true,
-    "ggandor/leap.nvim",
-    config = function()
-      require("leap").add_default_mappings()
-      vim.keymap.set("n", "f", "<Plug>(leap-forward)", {})
-      vim.keymap.set("n", "F", "<Plug>(leap-backward)", {})
-    end,
+    -- Development moved off GitHub; the GitHub repo is now an empty stub.
+    -- Leap lazy-loads itself, so don't let lazy.nvim defer it.
+    "leap.nvim",
+    url = "https://codeberg.org/andyg/leap.nvim",
+    lazy = false,
   },
   {
-    lazy = true,
+    cmd = "Telescope",
     "nvim-telescope/telescope.nvim",
     dependencies = "nvim-lua/plenary.nvim",
     config = function()
@@ -160,6 +144,12 @@ return require("lazy").setup(
   {
     lazy = true,
     "chrisgrieser/nvim-spider"
+  },
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    config = function()
+      require "plugins.blankline"
+    end,
   },
   {
     priority = 1000,
